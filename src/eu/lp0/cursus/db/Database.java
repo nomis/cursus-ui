@@ -74,12 +74,19 @@ public abstract class Database {
 			List<Cursus> rs = tq.getResultList();
 
 			if (rs.isEmpty()) {
+				log.info("Database \"" + name + "\" has no version record, setting to " + DatabaseVersion.getLatest()); //$NON-NLS-1$ //$NON-NLS-2$
+
 				Cursus cursus = new Cursus();
-				cursus.setVersion(DatabaseVersion.getLatest());
+				cursus.setVersion(DatabaseVersion.getLatest().asLong());
 				cursus.setDescription(Constants.APP_DESC);
 				em.persist(cursus);
-			} else if (rs.get(0).getVersion() != DatabaseVersion.getLatest()) {
+			} else if (rs.get(0).getVersion() != DatabaseVersion.getLatest().asLong()) {
+				// TODO support upgrading
+				log.info("Database \"" + name + "\" has version "); //$NON-NLS-1$ //$NON-NLS-2$
 				throw new DatabaseVersionException(rs.get(0));
+			} else {
+				// TODO need to parse the actual version
+				log.info("Database \"" + name + "\" has version " + DatabaseVersion.getLatest()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			em.getTransaction().commit();

@@ -25,7 +25,7 @@ public enum DatabaseVersion {
 		return Long.valueOf(ver[1]) << 32 + Long.valueOf(ver[2]) << 16 + Long.valueOf(ver[3]);
 	}
 
-	public static long getLatest() {
-		return values()[values().length - 1].asLong();
+	public static DatabaseVersion getLatest() {
+		return values()[values().length - 1];
 	}
 }
