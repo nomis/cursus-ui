@@ -18,7 +18,6 @@
 package eu.lp0.cursus.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -36,7 +35,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListModel;
@@ -52,11 +53,11 @@ public class MainWindow extends JFrame {
 	private final Main main;
 
 	private JMenuItem aboutMenuItem;
-	private Canvas pilotsTab;
+	private JPanel pilotsTab;
 	private JTabbedPane mainTabs;
 	private JMenu helpMenu;
-	private Canvas lapsTab;
-	private Canvas resultsTab;
+	private JPanel lapsTab;
+	private JPanel resultsTab;
 	private JList raceList;
 	private JMenuItem exitMenuItem;
 	private JSeparator jSeparator2;
@@ -67,6 +68,10 @@ public class MainWindow extends JFrame {
 	private JMenuItem newFileMenuItem;
 	private JMenu fileMenu;
 	private JMenuBar menuBar;
+	private JPanel classesTab;
+	private JSplitPane splitPane;
+	private JPanel raceLaps;
+	private ListModel raceListModel;
 
 	public MainWindow(Main main, final String[] args) {
 		super();
@@ -122,23 +127,33 @@ public class MainWindow extends JFrame {
 		mainTabs = new JTabbedPane();
 		getContentPane().add(mainTabs, BorderLayout.CENTER);
 
-		pilotsTab = new Canvas();
+		pilotsTab = new JPanel();
 		mainTabs.addTab(Messages.getString("tab.pilots"), null, pilotsTab, null); //$NON-NLS-1$
 		mainTabs.setMnemonicAt(0, Messages.getKeyEvent("tab.pilots")); //$NON-NLS-1$
 
-		lapsTab = new Canvas();
-		mainTabs.addTab(Messages.getString("tab.laps"), null, lapsTab, null); //$NON-NLS-1$
-		mainTabs.setMnemonicAt(1, Messages.getKeyEvent("tab.laps")); //$NON-NLS-1$
+		classesTab = new JPanel();
+		mainTabs.addTab(Messages.getString("tab.classes"), null, classesTab, null); //$NON-NLS-1$
+		classesTab.setLayout(new BorderLayout(0, 0));
 
-		resultsTab = new Canvas();
-		mainTabs.addTab(Messages.getString("tab.results"), null, resultsTab, null); //$NON-NLS-1$
-		mainTabs.setMnemonicAt(2, Messages.getKeyEvent("tab.results")); //$NON-NLS-1$
-
-		ListModel raceListModel = new DefaultComboBoxModel(new String[] { "Item One", "Item Two" }); //$NON-NLS-1$ //$NON-NLS-2$
+		splitPane = new JSplitPane();
+		classesTab.add(splitPane);
 		raceList = new JList();
-		raceList.setMinimumSize(new Dimension(200, 0));
-		getContentPane().add(raceList, BorderLayout.WEST);
+		splitPane.setLeftComponent(raceList);
+		raceList.setMinimumSize(new Dimension(150, 0));
+		raceListModel = new DefaultComboBoxModel(new String[] { "Item One", "Item Two" }); //$NON-NLS-1$ //$NON-NLS-2$
 		raceList.setModel(raceListModel);
+
+		raceLaps = new JPanel();
+		splitPane.setRightComponent(raceLaps);
+		mainTabs.setMnemonicAt(1, Messages.getKeyEvent("tab.classes")); //$NON-NLS-1$
+
+		lapsTab = new JPanel();
+		mainTabs.addTab(Messages.getString("tab.laps"), null, lapsTab, null); //$NON-NLS-1$
+		mainTabs.setMnemonicAt(2, Messages.getKeyEvent("tab.laps")); //$NON-NLS-1$
+
+		resultsTab = new JPanel();
+		mainTabs.addTab(Messages.getString("tab.results"), null, resultsTab, null); //$NON-NLS-1$
+		mainTabs.setMnemonicAt(3, Messages.getKeyEvent("tab.results")); //$NON-NLS-1$
 
 		setSize(800, 600);
 

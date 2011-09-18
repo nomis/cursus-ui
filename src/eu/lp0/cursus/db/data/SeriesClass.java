@@ -17,21 +17,23 @@
  */
 package eu.lp0.cursus.db.data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
 /**
- * Pilot (person competing in the race)
+ * Pilot class groupings within series (to segregate race scores)
  */
-@Entity(name = "pilot")
-public class Pilot extends AbstractEntity {
+@Entity(name = "class")
+public class SeriesClass extends AbstractEntity {
 	private String name;
+
+	public SeriesClass(String name) {
+		setName(name);
+	}
 
 	@Column(nullable = false)
 	public String getName() {
@@ -42,48 +44,14 @@ public class Pilot extends AbstractEntity {
 		this.name = name;
 	}
 
-	private Gender gender;
-
-	@Enumerated(EnumType.STRING)
-	public Gender getGender() {
-		return gender;
-	}
-
-	public void setGender(Gender gender) {
-		this.gender = gender;
-	}
-
-	private String country;
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	private Set<RaceNumber> numbers;
-
-	@OneToMany
-	public Set<RaceNumber> getRaceNumbers() {
-		return numbers;
-	}
-
-	public void setRaceNumbers(Set<RaceNumber> numbers) {
-		this.numbers = numbers;
-	}
-
-	private Set<SeriesClass> classes;
+	private Set<Pilot> pilots = new HashSet<Pilot>();
 
 	@ManyToMany
-	public Set<SeriesClass> getClasses() {
-		return classes;
+	public Set<Pilot> getPilots() {
+		return pilots;
 	}
 
-	public void setClasses(Set<SeriesClass> classes) {
-		this.classes = classes;
+	public void setPilots(Set<Pilot> pilots) {
+		this.pilots = pilots;
 	}
-
-	// TODO class
 }
