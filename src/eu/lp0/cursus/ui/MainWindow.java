@@ -52,26 +52,28 @@ import eu.lp0.cursus.util.Messages;
 public class MainWindow extends JFrame {
 	private final Main main;
 
-	private JMenuItem aboutMenuItem;
-	private JPanel pilotsTab;
+	private JMenuBar menuBar;
+	private JMenu mnuFile;
+	private JMenuItem mnuFileNew;
+	private JMenuItem mnuFileOpen;
+	private JMenuItem mnuFileSave;
+	private JMenuItem mnuFileSaveAs;
+	private JMenuItem mnuFileClose;
+	private JSeparator mnuFileSeparator1;
+	private JMenuItem mnuFileExit;
+	private JMenu mnuHelp;
+	private JMenuItem mnuHelpAbout;
+
 	private JTabbedPane mainTabs;
-	private JMenu helpMenu;
+	private JPanel pilotsTab;
+	private JPanel classesTab;
 	private JPanel lapsTab;
 	private JPanel resultsTab;
+
+	private JSplitPane lapsSplitPane;
 	private JList raceList;
-	private JMenuItem exitMenuItem;
-	private JSeparator jSeparator2;
-	private JMenuItem closeFileMenuItem;
-	private JMenuItem saveAsMenuItem;
-	private JMenuItem saveMenuItem;
-	private JMenuItem openFileMenuItem;
-	private JMenuItem newFileMenuItem;
-	private JMenu fileMenu;
-	private JMenuBar menuBar;
-	private JPanel classesTab;
-	private JSplitPane splitPane;
-	private JPanel raceLaps;
 	private ListModel raceListModel;
+	private JPanel raceLaps;
 
 	public MainWindow(Main main, final String[] args) {
 		super();
@@ -135,16 +137,16 @@ public class MainWindow extends JFrame {
 		mainTabs.addTab(Messages.getString("tab.classes"), null, classesTab, null); //$NON-NLS-1$
 		classesTab.setLayout(new BorderLayout(0, 0));
 
-		splitPane = new JSplitPane();
-		classesTab.add(splitPane);
+		lapsSplitPane = new JSplitPane();
+		classesTab.add(lapsSplitPane);
 		raceList = new JList();
-		splitPane.setLeftComponent(raceList);
+		lapsSplitPane.setLeftComponent(raceList);
 		raceList.setMinimumSize(new Dimension(150, 0));
 		raceListModel = new DefaultComboBoxModel(new String[] { "Item One", "Item Two" }); //$NON-NLS-1$ //$NON-NLS-2$
 		raceList.setModel(raceListModel);
 
 		raceLaps = new JPanel();
-		splitPane.setRightComponent(raceLaps);
+		lapsSplitPane.setRightComponent(raceLaps);
 		mainTabs.setMnemonicAt(1, Messages.getKeyEvent("tab.classes")); //$NON-NLS-1$
 
 		lapsTab = new JPanel();
@@ -160,14 +162,14 @@ public class MainWindow extends JFrame {
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
-		fileMenu = new JMenu();
-		menuBar.add(fileMenu);
-		fileMenu.setText(Messages.getString("menu.file")); //$NON-NLS-1$
-		fileMenu.setMnemonic(Messages.getKeyEvent("menu.file")); //$NON-NLS-1$
+		mnuFile = new JMenu();
+		menuBar.add(mnuFile);
+		mnuFile.setText(Messages.getString("menu.file")); //$NON-NLS-1$
+		mnuFile.setMnemonic(Messages.getKeyEvent("menu.file")); //$NON-NLS-1$
 
-		newFileMenuItem = new JMenuItem();
-		newFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
-		newFileMenuItem.addActionListener(new ActionListener() {
+		mnuFileNew = new JMenuItem();
+		mnuFileNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
+		mnuFileNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
@@ -177,12 +179,12 @@ public class MainWindow extends JFrame {
 				});
 			}
 		});
-		fileMenu.add(newFileMenuItem);
-		newFileMenuItem.setText(Messages.getString("menu.file.new")); //$NON-NLS-1$
-		newFileMenuItem.setMnemonic(Messages.getKeyEvent("menu.file.new")); //$NON-NLS-1$
+		mnuFile.add(mnuFileNew);
+		mnuFileNew.setText(Messages.getString("menu.file.new")); //$NON-NLS-1$
+		mnuFileNew.setMnemonic(Messages.getKeyEvent("menu.file.new")); //$NON-NLS-1$
 
-		openFileMenuItem = new JMenuItem();
-		openFileMenuItem.addActionListener(new ActionListener() {
+		mnuFileOpen = new JMenuItem();
+		mnuFileOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
@@ -192,13 +194,13 @@ public class MainWindow extends JFrame {
 				});
 			}
 		});
-		openFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
-		fileMenu.add(openFileMenuItem);
-		openFileMenuItem.setText(Messages.getString("menu.file.open")); //$NON-NLS-1$
-		openFileMenuItem.setMnemonic(Messages.getKeyEvent("menu.file.open")); //$NON-NLS-1$
+		mnuFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
+		mnuFile.add(mnuFileOpen);
+		mnuFileOpen.setText(Messages.getString("menu.file.open")); //$NON-NLS-1$
+		mnuFileOpen.setMnemonic(Messages.getKeyEvent("menu.file.open")); //$NON-NLS-1$
 
-		saveMenuItem = new JMenuItem();
-		saveMenuItem.addActionListener(new ActionListener() {
+		mnuFileSave = new JMenuItem();
+		mnuFileSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
@@ -208,13 +210,13 @@ public class MainWindow extends JFrame {
 				});
 			}
 		});
-		saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-		fileMenu.add(saveMenuItem);
-		saveMenuItem.setText(Messages.getString("menu.file.save")); //$NON-NLS-1$
-		saveMenuItem.setMnemonic(Messages.getKeyEvent("menu.file.save")); //$NON-NLS-1$
+		mnuFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+		mnuFile.add(mnuFileSave);
+		mnuFileSave.setText(Messages.getString("menu.file.save")); //$NON-NLS-1$
+		mnuFileSave.setMnemonic(Messages.getKeyEvent("menu.file.save")); //$NON-NLS-1$
 
-		saveAsMenuItem = new JMenuItem();
-		saveAsMenuItem.addActionListener(new ActionListener() {
+		mnuFileSaveAs = new JMenuItem();
+		mnuFileSaveAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
@@ -224,14 +226,14 @@ public class MainWindow extends JFrame {
 				});
 			}
 		});
-		saveAsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
-		fileMenu.add(saveAsMenuItem);
-		saveAsMenuItem.setText(Messages.getString("menu.file.save-as")); //$NON-NLS-1$
-		saveAsMenuItem.setMnemonic(Messages.getKeyEvent("menu.file.save-as")); //$NON-NLS-1$
+		mnuFileSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
+		mnuFile.add(mnuFileSaveAs);
+		mnuFileSaveAs.setText(Messages.getString("menu.file.save-as")); //$NON-NLS-1$
+		mnuFileSaveAs.setMnemonic(Messages.getKeyEvent("menu.file.save-as")); //$NON-NLS-1$
 
-		closeFileMenuItem = new JMenuItem();
-		closeFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK));
-		closeFileMenuItem.addActionListener(new ActionListener() {
+		mnuFileClose = new JMenuItem();
+		mnuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK));
+		mnuFileClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
@@ -241,34 +243,34 @@ public class MainWindow extends JFrame {
 				});
 			}
 		});
-		fileMenu.add(closeFileMenuItem);
-		closeFileMenuItem.setText(Messages.getString("menu.file.close")); //$NON-NLS-1$
-		closeFileMenuItem.setMnemonic(Messages.getKeyEvent("menu.file.close")); //$NON-NLS-1$
+		mnuFile.add(mnuFileClose);
+		mnuFileClose.setText(Messages.getString("menu.file.close")); //$NON-NLS-1$
+		mnuFileClose.setMnemonic(Messages.getKeyEvent("menu.file.close")); //$NON-NLS-1$
 
-		jSeparator2 = new JSeparator();
-		fileMenu.add(jSeparator2);
+		mnuFileSeparator1 = new JSeparator();
+		mnuFile.add(mnuFileSeparator1);
 
-		exitMenuItem = new JMenuItem();
-		exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
-		exitMenuItem.addActionListener(new ActionListener() {
+		mnuFileExit = new JMenuItem();
+		mnuFileExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
+		mnuFileExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				WindowEvent wev = new WindowEvent(MainWindow.this, WindowEvent.WINDOW_CLOSING);
 				Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
 			}
 		});
-		fileMenu.add(exitMenuItem);
-		exitMenuItem.setText(Messages.getString("menu.file.exit")); //$NON-NLS-1$
-		exitMenuItem.setMnemonic(Messages.getKeyEvent("menu.file.exit")); //$NON-NLS-1$
+		mnuFile.add(mnuFileExit);
+		mnuFileExit.setText(Messages.getString("menu.file.exit")); //$NON-NLS-1$
+		mnuFileExit.setMnemonic(Messages.getKeyEvent("menu.file.exit")); //$NON-NLS-1$
 
-		helpMenu = new JMenu();
-		menuBar.add(helpMenu);
-		helpMenu.setText(Messages.getString("menu.help")); //$NON-NLS-1$
-		helpMenu.setMnemonic(Messages.getKeyEvent("menu.help")); //$NON-NLS-1$
+		mnuHelp = new JMenu();
+		menuBar.add(mnuHelp);
+		mnuHelp.setText(Messages.getString("menu.help")); //$NON-NLS-1$
+		mnuHelp.setMnemonic(Messages.getKeyEvent("menu.help")); //$NON-NLS-1$
 
-		aboutMenuItem = new JMenuItem();
-		helpMenu.add(aboutMenuItem);
-		aboutMenuItem.setText(Messages.getString("menu.help.about")); //$NON-NLS-1$
-		aboutMenuItem.setMnemonic(Messages.getKeyEvent("menu.help.about")); //$NON-NLS-1$
+		mnuHelpAbout = new JMenuItem();
+		mnuHelp.add(mnuHelpAbout);
+		mnuHelpAbout.setText(Messages.getString("menu.help.about")); //$NON-NLS-1$
+		mnuHelpAbout.setMnemonic(Messages.getKeyEvent("menu.help.about")); //$NON-NLS-1$
 	}
 
 	/**
@@ -343,15 +345,19 @@ public class MainWindow extends JFrame {
 
 	public synchronized void databaseOpened() {
 		setTitle(Constants.APP_NAME + Constants.EN_DASH + main.getDatabase().getName());
-		raceList.setVisible(true);
-		mainTabs.setVisible(true);
-		getRootPane().validate();
+		syncGUI(true);
 	}
 
 	public synchronized void databaseClosed() {
-		raceList.setVisible(false);
-		mainTabs.setVisible(false);
-		getRootPane().validate();
+		syncGUI(false);
 		setTitle(Constants.APP_DESC);
+	}
+
+	private void syncGUI(boolean open) {
+		mainTabs.setVisible(open);
+		mnuFileSave.setEnabled(open);
+		mnuFileSaveAs.setEnabled(open);
+		mnuFileClose.setEnabled(open);
+		getRootPane().validate();
 	}
 }
