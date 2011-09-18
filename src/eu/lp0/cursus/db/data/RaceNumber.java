@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.db.data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -32,6 +33,7 @@ public class RaceNumber extends AbstractEntity {
 		setNumber(number);
 	}
 
+	@Column(nullable = false)
 	public String getOrganisation() {
 		return organisation;
 	}
@@ -40,7 +42,8 @@ public class RaceNumber extends AbstractEntity {
 		this.organisation = organisation;
 	}
 
-	public int getNumber() {
+	@Column(nullable = false)
+	public Integer getNumber() {
 		return number;
 	}
 
