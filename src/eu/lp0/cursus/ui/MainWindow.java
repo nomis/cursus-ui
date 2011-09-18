@@ -127,6 +127,11 @@ public class MainWindow extends JFrame {
 		newFileMenuItem.setText("New");
 
 		openFileMenuItem = new JMenuItem();
+		openFileMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openDatabase();
+			}
+		});
 		openFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		fileMenu.add(openFileMenuItem);
 		openFileMenuItem.setText("Open");
@@ -149,7 +154,7 @@ public class MainWindow extends JFrame {
 		});
 		saveAsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
 		fileMenu.add(saveAsMenuItem);
-		saveAsMenuItem.setText("Save As ...");
+		saveAsMenuItem.setText("Save As...");
 
 		closeFileMenuItem = new JMenuItem();
 		closeFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK));
@@ -228,15 +233,21 @@ public class MainWindow extends JFrame {
 		}
 	}
 
+	private synchronized boolean openDatabase() {
+		// TODO open database
+		JOptionPane.showMessageDialog(this, "Feature not implemented.", Constants.APP_NAME + Constants.EN_DASH + "Open", JOptionPane.ERROR_MESSAGE);
+		return false;
+	}
+
 	private synchronized boolean saveDatabase() {
 		// TODO save database to current or new file
-		JOptionPane.showMessageDialog(this, "Feature not implemented.", Constants.APP_NAME, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, "Feature not implemented.", Constants.APP_NAME + Constants.EN_DASH + "Save", JOptionPane.ERROR_MESSAGE);
 		return false;
 	}
 
 	private synchronized boolean saveAsDatabase() {
 		// TODO save database to new file
-		JOptionPane.showMessageDialog(this, "Feature not implemented.", Constants.APP_NAME, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, "Feature not implemented.", Constants.APP_NAME + Constants.EN_DASH + "Save As", JOptionPane.ERROR_MESSAGE);
 		return false;
 	}
 
