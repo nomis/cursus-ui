@@ -21,6 +21,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 
 /**
@@ -37,6 +39,17 @@ public class Pilot extends AbstractEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	private Gender gender;
+
+	@Enumerated(EnumType.STRING)
+	public Gender getGender() {
+		return gender;
+	}
+
+	public void setGender(Gender gender) {
+		this.gender = gender;
 	}
 
 	private String country;
