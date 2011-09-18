@@ -73,7 +73,7 @@ public class MainWindow extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				if (trySaveDatabase("Exit")) {
+				if (trySaveDatabase(Messages.getString("menu.file.exit"))) { //$NON-NLS-1$
 					dispose();
 				}
 			}
@@ -91,17 +91,15 @@ public class MainWindow extends JFrame {
 		getContentPane().add(mainTabs, BorderLayout.CENTER);
 
 		pilotsTab = new Canvas();
-		mainTabs.addTab("Pilots", null, pilotsTab, null);
-		pilotsTab.setName("pilotsTab");
+		mainTabs.addTab(Messages.getString("tab.pilots"), null, pilotsTab, null); //$NON-NLS-1$
 
 		lapsTab = new Canvas();
-		mainTabs.addTab("Laps", null, lapsTab, null);
-		lapsTab.setName("lapsTab");
+		mainTabs.addTab(Messages.getString("tab.laps"), null, lapsTab, null); //$NON-NLS-1$
 
 		resultsTab = new Canvas();
-		mainTabs.addTab("Results", null, resultsTab, null);
+		mainTabs.addTab(Messages.getString("tab.results"), null, resultsTab, null); //$NON-NLS-1$
 
-		ListModel raceListModel = new DefaultComboBoxModel(new String[] { "Item One", "Item Two" });
+		ListModel raceListModel = new DefaultComboBoxModel(new String[] { "Item One", "Item Two" }); //$NON-NLS-1$ //$NON-NLS-2$
 		raceList = new JList();
 		raceList.setMinimumSize(new Dimension(200, 0));
 		getContentPane().add(raceList, BorderLayout.WEST);
@@ -114,7 +112,7 @@ public class MainWindow extends JFrame {
 
 		fileMenu = new JMenu();
 		menuBar.add(fileMenu);
-		fileMenu.setText("File");
+		fileMenu.setText(Messages.getString("menu.file")); //$NON-NLS-1$
 
 		newFileMenuItem = new JMenuItem();
 		newFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
@@ -124,7 +122,7 @@ public class MainWindow extends JFrame {
 			}
 		});
 		fileMenu.add(newFileMenuItem);
-		newFileMenuItem.setText("New");
+		newFileMenuItem.setText(Messages.getString("menu.file.new")); //$NON-NLS-1$
 
 		openFileMenuItem = new JMenuItem();
 		openFileMenuItem.addActionListener(new ActionListener() {
@@ -134,7 +132,7 @@ public class MainWindow extends JFrame {
 		});
 		openFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		fileMenu.add(openFileMenuItem);
-		openFileMenuItem.setText("Open");
+		openFileMenuItem.setText(Messages.getString("menu.file.open")); //$NON-NLS-1$
 
 		saveMenuItem = new JMenuItem();
 		saveMenuItem.addActionListener(new ActionListener() {
@@ -144,7 +142,7 @@ public class MainWindow extends JFrame {
 		});
 		saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		fileMenu.add(saveMenuItem);
-		saveMenuItem.setText("Save");
+		saveMenuItem.setText(Messages.getString("menu.file.save")); //$NON-NLS-1$
 
 		saveAsMenuItem = new JMenuItem();
 		saveAsMenuItem.addActionListener(new ActionListener() {
@@ -154,7 +152,7 @@ public class MainWindow extends JFrame {
 		});
 		saveAsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
 		fileMenu.add(saveAsMenuItem);
-		saveAsMenuItem.setText("Save As...");
+		saveAsMenuItem.setText(Messages.getString("menu.file.save-as")); //$NON-NLS-1$
 
 		closeFileMenuItem = new JMenuItem();
 		closeFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK));
@@ -164,7 +162,7 @@ public class MainWindow extends JFrame {
 			}
 		});
 		fileMenu.add(closeFileMenuItem);
-		closeFileMenuItem.setText("Close");
+		closeFileMenuItem.setText(Messages.getString("menu.file.close")); //$NON-NLS-1$
 
 		jSeparator2 = new JSeparator();
 		fileMenu.add(jSeparator2);
@@ -178,15 +176,15 @@ public class MainWindow extends JFrame {
 			}
 		});
 		fileMenu.add(exitMenuItem);
-		exitMenuItem.setText("Exit");
+		exitMenuItem.setText(Messages.getString("menu.file.exit")); //$NON-NLS-1$
 
 		helpMenu = new JMenu();
 		menuBar.add(helpMenu);
-		helpMenu.setText("Help");
+		helpMenu.setText(Messages.getString("menu.help")); //$NON-NLS-1$
 
 		aboutMenuItem = new JMenuItem();
 		helpMenu.add(aboutMenuItem);
-		aboutMenuItem.setText("About");
+		aboutMenuItem.setText(Messages.getString("menu.help.about")); //$NON-NLS-1$
 	}
 
 	/**
@@ -198,8 +196,7 @@ public class MainWindow extends JFrame {
 	 */
 	private boolean trySaveDatabase(String action) {
 		if (main.isOpen() && !main.getDatabase().isSaved()) {
-			switch (JOptionPane.showConfirmDialog(this,
-					String.format("The current race series \"%1$s\" has not been saved.\nDo you want to save your changes?", main.getDatabase().getName()),
+			switch (JOptionPane.showConfirmDialog(this, String.format(Messages.getString("warn.current-db-not-saved"), main.getDatabase().getName()), //$NON-NLS-1$
 					Constants.APP_NAME + Constants.EN_DASH + action, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE)) {
 			case JOptionPane.YES_OPTION:
 				if (saveDatabase()) {
@@ -216,7 +213,7 @@ public class MainWindow extends JFrame {
 	}
 
 	private synchronized void newDatabase() {
-		if (trySaveDatabase("New")) {
+		if (trySaveDatabase(Messages.getString("menu.file.new"))) { //$NON-NLS-1$
 			boolean ok = true;
 			try {
 				ok = main.open();
@@ -228,31 +225,34 @@ public class MainWindow extends JFrame {
 				ok = false;
 			}
 			if (!ok) {
-				JOptionPane.showMessageDialog(this, "Unable to create new database.", Constants.APP_NAME, JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, Messages.getString("err.unable-to-create-new-db"), Constants.APP_NAME, JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 			}
 		}
 	}
 
 	private synchronized boolean openDatabase() {
 		// TODO open database
-		JOptionPane.showMessageDialog(this, "Feature not implemented.", Constants.APP_NAME + Constants.EN_DASH + "Open", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, Messages.getString("err.feat-not-impl"), //$NON-NLS-1$
+				Constants.APP_NAME + Constants.EN_DASH + Messages.getString("menu.file.open"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 		return false;
 	}
 
 	private synchronized boolean saveDatabase() {
 		// TODO save database to current or new file
-		JOptionPane.showMessageDialog(this, "Feature not implemented.", Constants.APP_NAME + Constants.EN_DASH + "Save", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, Messages.getString("err.feat-not-impl"), //$NON-NLS-1$
+				Constants.APP_NAME + Constants.EN_DASH + Messages.getString("menu.file.save"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 		return false;
 	}
 
 	private synchronized boolean saveAsDatabase() {
 		// TODO save database to new file
-		JOptionPane.showMessageDialog(this, "Feature not implemented.", Constants.APP_NAME + Constants.EN_DASH + "Save As", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, Messages.getString("err.feat-not-impl"), //$NON-NLS-1$
+				Constants.APP_NAME + Constants.EN_DASH + Messages.getString("menu.file.save-as"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 		return false;
 	}
 
 	private synchronized void closeDatabase() {
-		if (trySaveDatabase("Close")) {
+		if (trySaveDatabase(Messages.getString("menu.file.close"))) { //$NON-NLS-1$
 			main.close();
 		}
 	}

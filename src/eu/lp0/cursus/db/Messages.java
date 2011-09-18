@@ -17,23 +17,22 @@
  */
 package eu.lp0.cursus.db;
 
-import java.sql.SQLException;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
-public class MemoryDatabase extends Database {
-	private static final AtomicLong untitled = new AtomicLong();
+public class Messages {
+	private static final String BUNDLE_NAME = "eu.lp0.cursus.db.messages"; //$NON-NLS-1$
 
-	public MemoryDatabase() throws SQLException, DatabaseVersionException {
-		super(String.format(Messages.getString("MemoryDatabase.untitled"), untitled.incrementAndGet()), "jdbc:hsqldb:mem:" + UUID.randomUUID(), "SA", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
+
+	private Messages() {
 	}
 
-	@Override
-	public boolean isSaved() {
-		return false;
-	}
-
-	public synchronized void save() {
-
+	public static String getString(String key) {
+		try {
+			return RESOURCE_BUNDLE.getString(key);
+		} catch (MissingResourceException e) {
+			return '!' + key + '!';
+		}
 	}
 }

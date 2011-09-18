@@ -36,6 +36,7 @@ public abstract class AbstractEntity {
 		return id;
 	}
 
+	@SuppressWarnings("unused")
 	private void setId(long id) {
 		this.id = id;
 	}
