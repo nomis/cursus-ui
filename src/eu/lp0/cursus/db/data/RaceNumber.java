@@ -48,8 +48,6 @@ public class RaceNumber extends AbstractEntity {
 		this.number = number;
 	}
 
-	// TODO class
-
 	@Override
 	public String toString() {
 		return String.format("%s%02d", getOrganisation(), getNumber()); //$NON-NLS-1$

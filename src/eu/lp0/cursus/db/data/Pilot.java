@@ -59,4 +59,6 @@ public class Pilot extends AbstractEntity {
 	public void setRaceNumbers(Set<RaceNumber> numbers) {
 		this.numbers = numbers;
 	}
+
+	// TODO class
 }
