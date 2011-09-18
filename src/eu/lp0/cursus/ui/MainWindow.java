@@ -40,6 +40,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import eu.lp0.cursus.app.Main;
@@ -66,22 +67,52 @@ public class MainWindow extends JFrame {
 	private JMenu fileMenu;
 	private JMenuBar menuBar;
 
-	public MainWindow(Main main) {
+	public MainWindow(Main main, final String[] args) {
 		super();
 		this.main = main;
 
 		addWindowListener(new WindowAdapter() {
+			// FIXME this is called too early; before the window components get rendered
+			@Override
+			public void windowOpened(WindowEvent e) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						MainWindow.this.startup(args);
+					}
+				});
+			}
+
 			@Override
 			public void windowClosing(WindowEvent e) {
-				if (trySaveDatabase(Messages.getString("menu.file.exit"))) { //$NON-NLS-1$
-					dispose();
-				}
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						shutdown();
+					}
+				});
 			}
 		});
 
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		initGUI();
 		databaseClosed();
+	}
+
+	private synchronized void startup(String[] args) {
+		if (args.length == 0) {
+			newDatabase();
+		} else if (args.length == 1) {
+			// TODO open file
+		} else {
+			// TODO error message
+		}
+	}
+
+	private synchronized void shutdown() {
+		if (trySaveDatabase(Messages.getString("menu.file.exit"))) { //$NON-NLS-1$
+			dispose();
+		}
 	}
 
 	private void initGUI() {
@@ -122,7 +153,12 @@ public class MainWindow extends JFrame {
 		newFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		newFileMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				newDatabase();
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						newDatabase();
+					}
+				});
 			}
 		});
 		fileMenu.add(newFileMenuItem);
@@ -132,7 +168,12 @@ public class MainWindow extends JFrame {
 		openFileMenuItem = new JMenuItem();
 		openFileMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				openDatabase();
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						openDatabase();
+					}
+				});
 			}
 		});
 		openFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
@@ -143,7 +184,12 @@ public class MainWindow extends JFrame {
 		saveMenuItem = new JMenuItem();
 		saveMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				saveDatabase();
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						saveDatabase();
+					}
+				});
 			}
 		});
 		saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
@@ -154,7 +200,12 @@ public class MainWindow extends JFrame {
 		saveAsMenuItem = new JMenuItem();
 		saveAsMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				saveAsDatabase();
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						saveAsDatabase();
+					}
+				});
 			}
 		});
 		saveAsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
@@ -166,7 +217,12 @@ public class MainWindow extends JFrame {
 		closeFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK));
 		closeFileMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				closeDatabase();
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						closeDatabase();
+					}
+				});
 			}
 		});
 		fileMenu.add(closeFileMenuItem);

@@ -28,7 +28,7 @@ import eu.lp0.cursus.db.MemoryDatabase;
 import eu.lp0.cursus.ui.MainWindow;
 
 public class Main implements Runnable {
-	private final MainWindow win = new MainWindow(this);
+	private final MainWindow win;
 	private Database db = null;
 
 	public static void main(String[] args) {
@@ -37,7 +37,11 @@ public class Main implements Runnable {
 		} catch (Exception e) {
 		}
 
-		SwingUtilities.invokeLater(new Main());
+		SwingUtilities.invokeLater(new Main(args));
+	}
+
+	public Main(String[] args) {
+		win = new MainWindow(this, args);
 	}
 
 	@Override
@@ -45,18 +49,6 @@ public class Main implements Runnable {
 		win.setLocationRelativeTo(null);
 		// TODO start maximised
 		win.setVisible(true);
-
-		// FIXME why are the window components not already rendered here?
-
-		try {
-			open();
-		} catch (SQLException e) {
-			// TODO handle unhandled exceptions
-			throw new RuntimeException(e);
-		} catch (DatabaseVersionException e) {
-			// TODO handle unhandled exceptions
-			throw new RuntimeException(e);
-		}
 	}
 
 	public synchronized boolean isOpen() {
