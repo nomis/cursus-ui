@@ -46,6 +46,7 @@ import javax.swing.WindowConstants;
 import eu.lp0.cursus.app.Main;
 import eu.lp0.cursus.db.DatabaseVersionException;
 import eu.lp0.cursus.util.Constants;
+import eu.lp0.cursus.util.Messages;
 
 public class MainWindow extends JFrame {
 	private final Main main;

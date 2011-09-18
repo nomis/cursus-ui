@@ -15,8 +15,9 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.db;
+package eu.lp0.cursus.util;
 
+import java.awt.event.KeyEvent;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -30,6 +31,22 @@ public class Messages {
 			return RESOURCE_BUNDLE.getString(key);
 		} catch (MissingResourceException e) {
 			return '!' + key + '!';
+		}
+	}
+
+	public static int getKeyEvent(String key) {
+		try {
+			return KeyEvent.class.getDeclaredField("VK_" + RESOURCE_BUNDLE.getString(key + '&')).getInt(KeyEvent.class); //$NON-NLS-1$
+		} catch (MissingResourceException e) {
+			return 0;
+		} catch (IllegalArgumentException e) {
+			return 0;
+		} catch (SecurityException e) {
+			return 0;
+		} catch (IllegalAccessException e) {
+			return 0;
+		} catch (NoSuchFieldException e) {
+			return 0;
 		}
 	}
 }

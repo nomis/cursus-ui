@@ -21,6 +21,8 @@ import java.sql.SQLException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
+import eu.lp0.cursus.util.Messages;
+
 public class MemoryDatabase extends Database {
 	private static final AtomicLong untitled = new AtomicLong();
 
