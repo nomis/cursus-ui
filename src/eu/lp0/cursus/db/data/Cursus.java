@@ -23,9 +23,17 @@ import javax.persistence.Entity;
 /**
  * Database identifier
  */
-@Entity
+@Entity(name = "cursus")
 public class Cursus extends AbstractEntity {
 	private Long version;
+
+	public Cursus() {
+	}
+
+	public Cursus(long version, String description) {
+		setVersion(version);
+		setDescription(description);
+	}
 
 	@Column(nullable = false)
 	public Long getVersion() {
