@@ -25,7 +25,7 @@ public class MemoryDatabase extends Database {
 	private static final AtomicLong untitled = new AtomicLong();
 
 	public MemoryDatabase() throws SQLException, DatabaseVersionException {
-		super(String.format(Messages.getString("MemoryDatabase.untitled"), untitled.incrementAndGet()), "jdbc:hsqldb:mem:" + UUID.randomUUID(), "SA", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		super(String.format(Messages.getString("db.untitled"), untitled.incrementAndGet()), "jdbc:hsqldb:mem:" + UUID.randomUUID(), "SA", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	@Override

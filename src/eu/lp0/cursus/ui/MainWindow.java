@@ -92,12 +92,15 @@ public class MainWindow extends JFrame {
 
 		pilotsTab = new Canvas();
 		mainTabs.addTab(Messages.getString("tab.pilots"), null, pilotsTab, null); //$NON-NLS-1$
+		mainTabs.setMnemonicAt(0, Messages.getKeyEvent("tab.pilots")); //$NON-NLS-1$
 
 		lapsTab = new Canvas();
 		mainTabs.addTab(Messages.getString("tab.laps"), null, lapsTab, null); //$NON-NLS-1$
+		mainTabs.setMnemonicAt(1, Messages.getKeyEvent("tab.laps")); //$NON-NLS-1$
 
 		resultsTab = new Canvas();
 		mainTabs.addTab(Messages.getString("tab.results"), null, resultsTab, null); //$NON-NLS-1$
+		mainTabs.setMnemonicAt(2, Messages.getKeyEvent("tab.results")); //$NON-NLS-1$
 
 		ListModel raceListModel = new DefaultComboBoxModel(new String[] { "Item One", "Item Two" }); //$NON-NLS-1$ //$NON-NLS-2$
 		raceList = new JList();
@@ -113,6 +116,7 @@ public class MainWindow extends JFrame {
 		fileMenu = new JMenu();
 		menuBar.add(fileMenu);
 		fileMenu.setText(Messages.getString("menu.file")); //$NON-NLS-1$
+		fileMenu.setMnemonic(Messages.getKeyEvent("menu.file")); //$NON-NLS-1$
 
 		newFileMenuItem = new JMenuItem();
 		newFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
@@ -123,6 +127,7 @@ public class MainWindow extends JFrame {
 		});
 		fileMenu.add(newFileMenuItem);
 		newFileMenuItem.setText(Messages.getString("menu.file.new")); //$NON-NLS-1$
+		newFileMenuItem.setMnemonic(Messages.getKeyEvent("menu.file.new")); //$NON-NLS-1$
 
 		openFileMenuItem = new JMenuItem();
 		openFileMenuItem.addActionListener(new ActionListener() {
@@ -133,6 +138,7 @@ public class MainWindow extends JFrame {
 		openFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		fileMenu.add(openFileMenuItem);
 		openFileMenuItem.setText(Messages.getString("menu.file.open")); //$NON-NLS-1$
+		openFileMenuItem.setMnemonic(Messages.getKeyEvent("menu.file.open")); //$NON-NLS-1$
 
 		saveMenuItem = new JMenuItem();
 		saveMenuItem.addActionListener(new ActionListener() {
@@ -143,6 +149,7 @@ public class MainWindow extends JFrame {
 		saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		fileMenu.add(saveMenuItem);
 		saveMenuItem.setText(Messages.getString("menu.file.save")); //$NON-NLS-1$
+		saveMenuItem.setMnemonic(Messages.getKeyEvent("menu.file.save")); //$NON-NLS-1$
 
 		saveAsMenuItem = new JMenuItem();
 		saveAsMenuItem.addActionListener(new ActionListener() {
@@ -153,6 +160,7 @@ public class MainWindow extends JFrame {
 		saveAsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
 		fileMenu.add(saveAsMenuItem);
 		saveAsMenuItem.setText(Messages.getString("menu.file.save-as")); //$NON-NLS-1$
+		saveAsMenuItem.setMnemonic(Messages.getKeyEvent("menu.file.save-as")); //$NON-NLS-1$
 
 		closeFileMenuItem = new JMenuItem();
 		closeFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK));
@@ -163,6 +171,7 @@ public class MainWindow extends JFrame {
 		});
 		fileMenu.add(closeFileMenuItem);
 		closeFileMenuItem.setText(Messages.getString("menu.file.close")); //$NON-NLS-1$
+		closeFileMenuItem.setMnemonic(Messages.getKeyEvent("menu.file.close")); //$NON-NLS-1$
 
 		jSeparator2 = new JSeparator();
 		fileMenu.add(jSeparator2);
@@ -177,14 +186,17 @@ public class MainWindow extends JFrame {
 		});
 		fileMenu.add(exitMenuItem);
 		exitMenuItem.setText(Messages.getString("menu.file.exit")); //$NON-NLS-1$
+		exitMenuItem.setMnemonic(Messages.getKeyEvent("menu.file.exit")); //$NON-NLS-1$
 
 		helpMenu = new JMenu();
 		menuBar.add(helpMenu);
 		helpMenu.setText(Messages.getString("menu.help")); //$NON-NLS-1$
+		helpMenu.setMnemonic(Messages.getKeyEvent("menu.help")); //$NON-NLS-1$
 
 		aboutMenuItem = new JMenuItem();
 		helpMenu.add(aboutMenuItem);
 		aboutMenuItem.setText(Messages.getString("menu.help.about")); //$NON-NLS-1$
+		aboutMenuItem.setMnemonic(Messages.getKeyEvent("menu.help.about")); //$NON-NLS-1$
 	}
 
 	/**
