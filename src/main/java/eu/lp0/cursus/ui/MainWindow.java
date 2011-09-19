@@ -27,6 +27,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
@@ -41,7 +43,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import eu.lp0.cursus.app.Main;
@@ -50,6 +51,7 @@ import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
 public class MainWindow extends JFrame {
+	private final Executor background = Executors.newSingleThreadExecutor();
 	private final Main main;
 
 	private JMenuBar menuBar;
@@ -80,10 +82,9 @@ public class MainWindow extends JFrame {
 		this.main = main;
 
 		addWindowListener(new WindowAdapter() {
-			// FIXME this is called too early; before the window components get rendered
 			@Override
 			public void windowOpened(WindowEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
+				background.execute(new Runnable() {
 					@Override
 					public void run() {
 						MainWindow.this.startup(args);
@@ -93,7 +94,7 @@ public class MainWindow extends JFrame {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
+				background.execute(new Runnable() {
 					@Override
 					public void run() {
 						shutdown();
@@ -107,7 +108,7 @@ public class MainWindow extends JFrame {
 		databaseClosed();
 	}
 
-	private synchronized void startup(String[] args) {
+	private void startup(String[] args) {
 		if (args.length == 0) {
 			newDatabase();
 		} else if (args.length == 1) {
@@ -117,7 +118,7 @@ public class MainWindow extends JFrame {
 		}
 	}
 
-	private synchronized void shutdown() {
+	private void shutdown() {
 		if (trySaveDatabase(Messages.getString("menu.file.exit"))) { //$NON-NLS-1$
 			dispose();
 		}
@@ -171,7 +172,7 @@ public class MainWindow extends JFrame {
 		mnuFileNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		mnuFileNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
+				background.execute(new Runnable() {
 					@Override
 					public void run() {
 						newDatabase();
@@ -186,7 +187,7 @@ public class MainWindow extends JFrame {
 		mnuFileOpen = new JMenuItem();
 		mnuFileOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
+				background.execute(new Runnable() {
 					@Override
 					public void run() {
 						openDatabase();
@@ -202,7 +203,7 @@ public class MainWindow extends JFrame {
 		mnuFileSave = new JMenuItem();
 		mnuFileSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
+				background.execute(new Runnable() {
 					@Override
 					public void run() {
 						saveDatabase();
@@ -218,7 +219,7 @@ public class MainWindow extends JFrame {
 		mnuFileSaveAs = new JMenuItem();
 		mnuFileSaveAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
+				background.execute(new Runnable() {
 					@Override
 					public void run() {
 						saveAsDatabase();
@@ -235,7 +236,7 @@ public class MainWindow extends JFrame {
 		mnuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK));
 		mnuFileClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
+				background.execute(new Runnable() {
 					@Override
 					public void run() {
 						closeDatabase();
@@ -298,7 +299,7 @@ public class MainWindow extends JFrame {
 		return true;
 	}
 
-	private synchronized void newDatabase() {
+	private void newDatabase() {
 		if (trySaveDatabase(Messages.getString("menu.file.new"))) { //$NON-NLS-1$
 			boolean ok = true;
 			try {
@@ -316,39 +317,39 @@ public class MainWindow extends JFrame {
 		}
 	}
 
-	private synchronized boolean openDatabase() {
+	private boolean openDatabase() {
 		// TODO open database
 		JOptionPane.showMessageDialog(this, Messages.getString("err.feat-not-impl"), //$NON-NLS-1$
 				Constants.APP_NAME + Constants.EN_DASH + Messages.getString("menu.file.open"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 		return false;
 	}
 
-	private synchronized boolean saveDatabase() {
+	private boolean saveDatabase() {
 		// TODO save database to current or new file
 		JOptionPane.showMessageDialog(this, Messages.getString("err.feat-not-impl"), //$NON-NLS-1$
 				Constants.APP_NAME + Constants.EN_DASH + Messages.getString("menu.file.save"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 		return false;
 	}
 
-	private synchronized boolean saveAsDatabase() {
+	private boolean saveAsDatabase() {
 		// TODO save database to new file
 		JOptionPane.showMessageDialog(this, Messages.getString("err.feat-not-impl"), //$NON-NLS-1$
 				Constants.APP_NAME + Constants.EN_DASH + Messages.getString("menu.file.save-as"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 		return false;
 	}
 
-	private synchronized void closeDatabase() {
+	private void closeDatabase() {
 		if (trySaveDatabase(Messages.getString("menu.file.close"))) { //$NON-NLS-1$
 			main.close();
 		}
 	}
 
-	public synchronized void databaseOpened() {
+	public void databaseOpened() {
 		setTitle(Constants.APP_NAME + Constants.EN_DASH + main.getDatabase().getName());
 		syncGUI(true);
 	}
 
-	public synchronized void databaseClosed() {
+	public void databaseClosed() {
 		syncGUI(false);
 		setTitle(Constants.APP_DESC);
 	}
