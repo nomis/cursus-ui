@@ -103,6 +103,4 @@ public class Pilot extends AbstractEntity {
 	public void setClasses(Set<SeriesClass> classes) {
 		this.classes = classes;
 	}
-
-	// TODO class
 }
