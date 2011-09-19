@@ -1,0 +1,16 @@
+File name    : 103_2818.JPG
+File size    : 5703762 bytes
+File date    : 2011:09:09 11:56:56
+Camera make  : Canon
+Camera model : Canon EOS 550D
+Date/Time    : 2011:09:09 11:56:56
+Resolution   : 5184 x 3456
+Flash used   : No
+Focal length : 80.0mm  (35mm equivalent: 125mm)
+CCD width    : 22.99mm
+Exposure time: 0.0040 s  (1/250)
+Aperture     : f/8.0
+ISO equiv.   : 100
+Whitebalance : Auto
+Metering Mode: matrix
+Exposure     : program (auto)

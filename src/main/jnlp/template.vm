@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<jnlp spec="1.0+" codebase="http://jnlp.s85.org/cursus" href="$outputFile">
+<jnlp spec="1.5+" codebase="http://jnlp.s85.org/cursus" href="$outputFile">
 	<information>
 		<title>$project.Name</title>
 		<vendor>$project.Organization.Name</vendor>
 		<description>$project.Description</description>
 		<homepage href="$project.Url"/>
-		<!-- <icon href="icon.gif" kind="default"/> -->
+		<icon href="103_2818__16.jpg" width="16" height="16"/>
+		<icon href="103_2818__32.jpg" width="32" height="32"/>
+		<icon href="103_2818__48.jpg" width="48" height="48"/>
+		<icon href="103_2818__64.jpg" width="64" height="64"/>
+		<icon href="103_2818__128.jpg" width="128" height="128"/>
+		<icon href="103_2818__256.jpg" width="256" height="256"/>
 		<offline-allowed/>
 		<shortcut online="false">
 			<desktop/>
