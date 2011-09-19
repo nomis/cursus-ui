@@ -31,6 +31,9 @@ import javax.persistence.ManyToMany;
 public class SeriesClass extends AbstractEntity {
 	private String name;
 
+	SeriesClass() {
+	}
+
 	public SeriesClass(String name) {
 		setName(name);
 	}

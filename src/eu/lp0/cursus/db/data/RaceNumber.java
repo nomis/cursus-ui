@@ -29,6 +29,9 @@ public class RaceNumber extends AbstractEntity {
 	private String organisation;
 	private int number;
 
+	RaceNumber() {
+	}
+
 	public RaceNumber(String organisation, int number) {
 		setOrganisation(organisation);
 		setNumber(number);
