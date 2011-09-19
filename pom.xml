@@ -53,4 +53,67 @@
 			<version>3.6.7.Final</version>
 		</dependency>
 	</dependencies>
+	<build>
+  <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.5</version>
+        <configuration>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+    <plugin>
+       <groupId>org.codehaus.mojo.webstart</groupId>
+       <artifactId>webstart-maven-plugin</artifactId>
+       	<executions>
+			<execution>
+				<goals>
+					<goal>jnlp</goal>
+				</goals>
+				<phase>package</phase>
+			</execution>
+		</executions>
+   </plugin>
+ </plugins>
+ <pluginManagement>
+    <plugins>
+       <plugin>
+          <groupId>org.codehaus.mojo.webstart</groupId>
+          <artifactId>webstart-maven-plugin</artifactId>
+          <version>1.0-beta-1</version>
+        <configuration>
+           <jnlp>
+            <mainClass>eu.lp0.cursus.app.Main</mainClass>
+           </jnlp>
+          <sign>
+           <keystore>${user.home}/.keystore-cursus.jks</keystore>
+           <keypass>password</keypass>
+           <storepass>password</storepass>
+           <storetype>jks</storetype>
+           <alias>cursus</alias>
+           <verify>true</verify>
+         </sign>
+         <pack200>true</pack200>
+		<gzip>true</gzip>
+        <unsign>true</unsign>
+      </configuration>
+     </plugin>
+   </plugins>
+  </pluginManagement>
+ </build>
+	<organization>
+		<name>Simon Arlott</name>
+	</organization>
+	<url>http://cursus.lp0.eu/</url>
 </project>
