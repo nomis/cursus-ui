@@ -19,12 +19,14 @@ package eu.lp0.cursus.db.data;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  * Pilot (person competing in the race)
@@ -63,9 +65,26 @@ public class Pilot extends AbstractEntity {
 		this.country = country;
 	}
 
+	private RaceNumber number;
+
+	/**
+	 * Primary race number
+	 */
+	@OneToOne(cascade = CascadeType.ALL)
+	public RaceNumber getRaceNumber() {
+		return number;
+	}
+
+	public void setRaceNumber(RaceNumber number) {
+		this.number = number;
+	}
+
+	/**
+	 * Pilot's race numbers
+	 */
 	private Set<RaceNumber> numbers;
 
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot", orphanRemoval = true)
 	public Set<RaceNumber> getRaceNumbers() {
 		return numbers;
 	}
@@ -76,7 +95,7 @@ public class Pilot extends AbstractEntity {
 
 	private Set<SeriesClass> classes;
 
-	@ManyToMany
+	@ManyToMany(mappedBy = "pilots")
 	public Set<SeriesClass> getClasses() {
 		return classes;
 	}

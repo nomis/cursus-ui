@@ -22,6 +22,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 /**
@@ -50,6 +51,7 @@ public class SeriesClass extends AbstractEntity {
 	private Set<Pilot> pilots = new HashSet<Pilot>();
 
 	@ManyToMany
+	@JoinTable
 	public Set<Pilot> getPilots() {
 		return pilots;
 	}

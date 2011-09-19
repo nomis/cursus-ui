@@ -19,6 +19,7 @@ package eu.lp0.cursus.db.data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -27,7 +28,7 @@ import javax.persistence.UniqueConstraint;
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "organisation", "number" }) })
 public class RaceNumber extends AbstractEntity {
 	private String organisation;
-	private int number;
+	private Integer number;
 
 	RaceNumber() {
 	}
@@ -47,7 +48,7 @@ public class RaceNumber extends AbstractEntity {
 	}
 
 	@Column(nullable = false)
-	public Integer getNumber() {
+	public int getNumber() {
 		return number;
 	}
 
@@ -57,7 +58,8 @@ public class RaceNumber extends AbstractEntity {
 
 	private Pilot pilot;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
+	@JoinColumn(nullable = false)
 	public Pilot getPilot() {
 		return pilot;
 	}
