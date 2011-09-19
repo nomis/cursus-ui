@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.app;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 
 import javax.swing.SwingUtilities;
@@ -31,13 +32,13 @@ public class Main implements Runnable {
 	private final MainWindow win;
 	private Database db = null;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException, InvocationTargetException {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
 		}
 
-		SwingUtilities.invokeLater(new Main(args));
+		SwingUtilities.invokeAndWait(new Main(args));
 	}
 
 	public Main(String[] args) {
