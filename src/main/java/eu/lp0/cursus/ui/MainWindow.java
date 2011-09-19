@@ -105,16 +105,22 @@ public class MainWindow extends JFrame {
 
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		initGUI();
+
 		databaseClosed();
+		enableStartupGUI(false);
 	}
 
 	private void startup(String[] args) {
-		if (args.length == 0) {
-			newDatabase();
-		} else if (args.length == 1) {
-			// TODO open file
-		} else {
-			// TODO error message
+		try {
+			if (args.length == 0) {
+				newDatabase();
+			} else if (args.length == 1) {
+				// TODO open file
+			} else {
+				// TODO error message
+			}
+		} finally {
+			enableStartupGUI(true);
 		}
 	}
 
@@ -354,8 +360,14 @@ public class MainWindow extends JFrame {
 		setTitle(Constants.APP_DESC);
 	}
 
+	private void enableStartupGUI(boolean enabled) {
+		mnuFileNew.setEnabled(enabled);
+		mnuFileOpen.setEnabled(enabled);
+	}
+
 	private void syncGUI(boolean open) {
 		mainTabs.setVisible(open);
+		enableStartupGUI(true);
 		mnuFileSave.setEnabled(open);
 		mnuFileSaveAs.setEnabled(open);
 		mnuFileClose.setEnabled(open);
