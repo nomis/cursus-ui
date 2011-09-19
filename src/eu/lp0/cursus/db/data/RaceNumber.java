@@ -19,6 +19,7 @@ package eu.lp0.cursus.db.data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -49,6 +50,17 @@ public class RaceNumber extends AbstractEntity {
 
 	public void setNumber(int number) {
 		this.number = number;
+	}
+
+	private Pilot pilot;
+
+	@ManyToOne
+	public Pilot getPilot() {
+		return pilot;
+	}
+
+	public void setPilot(Pilot pilot) {
+		this.pilot = pilot;
 	}
 
 	@Override
