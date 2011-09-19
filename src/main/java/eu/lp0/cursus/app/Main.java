@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.app;
 
+import java.awt.Frame;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 
@@ -48,8 +49,8 @@ public class Main implements Runnable {
 	@Override
 	public void run() {
 		win.setLocationRelativeTo(null);
-		// TODO start maximised
 		win.setVisible(true);
+		win.setExtendedState(win.getExtendedState() | Frame.MAXIMIZED_BOTH);
 	}
 
 	public synchronized boolean isOpen() {
