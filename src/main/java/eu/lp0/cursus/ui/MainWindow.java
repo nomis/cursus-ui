@@ -38,6 +38,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -76,6 +77,10 @@ public class MainWindow extends JFrame {
 	private JList raceList;
 	private ListModel raceListModel;
 	private JPanel raceLaps;
+	private JSplitPane classesSplitPane;
+	private JList classesList;
+	private JScrollPane classesScrollPane;
+	private JPanel classPilots;
 
 	public MainWindow(Main main, final String[] args) {
 		super();
@@ -144,6 +149,19 @@ public class MainWindow extends JFrame {
 		mainTabs.addTab(Messages.getString("tab.classes"), null, classesTab, null); //$NON-NLS-1$
 		mainTabs.setMnemonicAt(1, Messages.getKeyEvent("tab.classes")); //$NON-NLS-1$
 		classesTab.setLayout(new BorderLayout(0, 0));
+
+		classesSplitPane = new JSplitPane();
+		classesTab.add(classesSplitPane, BorderLayout.CENTER);
+
+		classesList = new JList();
+		classesList.setMinimumSize(new Dimension(150, 0));
+		classesSplitPane.setLeftComponent(classesList);
+
+		classesScrollPane = new JScrollPane();
+		classesSplitPane.setRightComponent(classesScrollPane);
+
+		classPilots = new JPanel();
+		classesScrollPane.setViewportView(classPilots);
 		raceListModel = new DefaultComboBoxModel(new String[] { "Item One", "Item Two" }); //$NON-NLS-1$ //$NON-NLS-2$
 
 		lapsTab = new JPanel();
