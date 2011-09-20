@@ -142,23 +142,24 @@ public class MainWindow extends JFrame {
 
 		classesTab = new JPanel();
 		mainTabs.addTab(Messages.getString("tab.classes"), null, classesTab, null); //$NON-NLS-1$
-		classesTab.setLayout(new BorderLayout(0, 0));
-
-		lapsSplitPane = new JSplitPane();
-		classesTab.add(lapsSplitPane);
-		raceList = new JList();
-		lapsSplitPane.setLeftComponent(raceList);
-		raceList.setMinimumSize(new Dimension(150, 0));
-		raceListModel = new DefaultComboBoxModel(new String[] { "Item One", "Item Two" }); //$NON-NLS-1$ //$NON-NLS-2$
-		raceList.setModel(raceListModel);
-
-		raceLaps = new JPanel();
-		lapsSplitPane.setRightComponent(raceLaps);
 		mainTabs.setMnemonicAt(1, Messages.getKeyEvent("tab.classes")); //$NON-NLS-1$
+		classesTab.setLayout(new BorderLayout(0, 0));
+		raceListModel = new DefaultComboBoxModel(new String[] { "Item One", "Item Two" }); //$NON-NLS-1$ //$NON-NLS-2$
 
 		lapsTab = new JPanel();
 		mainTabs.addTab(Messages.getString("tab.laps"), null, lapsTab, null); //$NON-NLS-1$
 		mainTabs.setMnemonicAt(2, Messages.getKeyEvent("tab.laps")); //$NON-NLS-1$
+		lapsTab.setLayout(new BorderLayout(0, 0));
+
+		lapsSplitPane = new JSplitPane();
+		lapsTab.add(lapsSplitPane);
+		raceList = new JList();
+		lapsSplitPane.setLeftComponent(raceList);
+		raceList.setMinimumSize(new Dimension(150, 0));
+		raceList.setModel(raceListModel);
+
+		raceLaps = new JPanel();
+		lapsSplitPane.setRightComponent(raceLaps);
 
 		resultsTab = new JPanel();
 		mainTabs.addTab(Messages.getString("tab.results"), null, resultsTab, null); //$NON-NLS-1$
