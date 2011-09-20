@@ -52,9 +52,10 @@ import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements Executor {
 	private final Executor background = Executors.newSingleThreadExecutor();
 	private final Main main;
+
 	private final DatabaseManager dbMgr = new DatabaseManager(this);
 
 	private JMenuBar menuBar;
@@ -124,6 +125,11 @@ public class MainWindow extends JFrame {
 
 	Database getDatabase() {
 		return main.getDatabase();
+	}
+
+	@Override
+	public void execute(Runnable command) {
+		background.execute(command);
 	}
 
 	private void startup(String[] args) {
@@ -227,84 +233,44 @@ public class MainWindow extends JFrame {
 		mnuFile.setMnemonic(Messages.getKeyEvent("menu.file")); //$NON-NLS-1$
 
 		mnuFileNew = new JMenuItem();
-		mnuFileNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
-		mnuFileNew.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				background.execute(new Runnable() {
-					@Override
-					public void run() {
-						dbMgr.newDatabase();
-					}
-				});
-			}
-		});
 		mnuFile.add(mnuFileNew);
+		mnuFileNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		mnuFileNew.setText(Messages.getString("menu.file.new")); //$NON-NLS-1$
 		mnuFileNew.setMnemonic(Messages.getKeyEvent("menu.file.new")); //$NON-NLS-1$
+		mnuFileNew.setActionCommand(DatabaseManager.Commands.NEW.toString());
+		mnuFileNew.addActionListener(dbMgr);
 
 		mnuFileOpen = new JMenuItem();
-		mnuFileOpen.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				background.execute(new Runnable() {
-					@Override
-					public void run() {
-						dbMgr.openDatabase();
-					}
-				});
-			}
-		});
-		mnuFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		mnuFile.add(mnuFileOpen);
+		mnuFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		mnuFileOpen.setText(Messages.getString("menu.file.open")); //$NON-NLS-1$
 		mnuFileOpen.setMnemonic(Messages.getKeyEvent("menu.file.open")); //$NON-NLS-1$
+		mnuFileOpen.setActionCommand(DatabaseManager.Commands.OPEN.toString());
+		mnuFileOpen.addActionListener(dbMgr);
 
 		mnuFileSave = new JMenuItem();
-		mnuFileSave.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				background.execute(new Runnable() {
-					@Override
-					public void run() {
-						dbMgr.saveDatabase();
-					}
-				});
-			}
-		});
-		mnuFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		mnuFile.add(mnuFileSave);
+		mnuFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		mnuFileSave.setText(Messages.getString("menu.file.save")); //$NON-NLS-1$
 		mnuFileSave.setMnemonic(Messages.getKeyEvent("menu.file.save")); //$NON-NLS-1$
+		mnuFileSave.setActionCommand(DatabaseManager.Commands.SAVE.toString());
+		mnuFileSave.addActionListener(dbMgr);
 
 		mnuFileSaveAs = new JMenuItem();
-		mnuFileSaveAs.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				background.execute(new Runnable() {
-					@Override
-					public void run() {
-						dbMgr.saveAsDatabase();
-					}
-				});
-			}
-		});
-		mnuFileSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
 		mnuFile.add(mnuFileSaveAs);
+		mnuFileSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
 		mnuFileSaveAs.setText(Messages.getString("menu.file.save-as")); //$NON-NLS-1$
 		mnuFileSaveAs.setMnemonic(Messages.getKeyEvent("menu.file.save-as")); //$NON-NLS-1$
+		mnuFileSaveAs.setActionCommand(DatabaseManager.Commands.SAVE_AS.toString());
+		mnuFileSaveAs.addActionListener(dbMgr);
 
 		mnuFileClose = new JMenuItem();
-		mnuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK));
-		mnuFileClose.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				background.execute(new Runnable() {
-					@Override
-					public void run() {
-						dbMgr.closeDatabase();
-					}
-				});
-			}
-		});
 		mnuFile.add(mnuFileClose);
+		mnuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK));
 		mnuFileClose.setText(Messages.getString("menu.file.close")); //$NON-NLS-1$
 		mnuFileClose.setMnemonic(Messages.getKeyEvent("menu.file.close")); //$NON-NLS-1$
+		mnuFileClose.setActionCommand(DatabaseManager.Commands.CLOSE.toString());
+		mnuFileClose.addActionListener(dbMgr);
 
 		mnuFileSeparator1 = new JSeparator();
 		mnuFile.add(mnuFileSeparator1);

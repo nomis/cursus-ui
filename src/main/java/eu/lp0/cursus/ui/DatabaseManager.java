@@ -17,6 +17,8 @@
  */
 package eu.lp0.cursus.ui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
@@ -25,11 +27,41 @@ import eu.lp0.cursus.db.DatabaseVersionException;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-class DatabaseManager {
+class DatabaseManager implements ActionListener {
+	public enum Commands {
+		NEW, OPEN, SAVE, SAVE_AS, CLOSE;
+	}
+
 	private final MainWindow win;
 
 	DatabaseManager(MainWindow win) {
 		this.win = win;
+	}
+
+	@Override
+	public void actionPerformed(final ActionEvent ae) {
+		win.execute(new Runnable() {
+			@Override
+			public void run() {
+				switch (Commands.valueOf(ae.getActionCommand())) {
+				case NEW:
+					newDatabase();
+					break;
+				case OPEN:
+					openDatabase();
+					break;
+				case SAVE:
+					saveDatabase();
+					break;
+				case SAVE_AS:
+					saveAsDatabase();
+					break;
+				case CLOSE:
+					closeDatabase();
+					break;
+				}
+			}
+		});
 	}
 
 	/**
