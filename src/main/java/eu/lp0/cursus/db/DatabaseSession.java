@@ -1,0 +1,57 @@
+/*
+	cursus - Race series management program
+	Copyright 2011  Simon Arlott
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package eu.lp0.cursus.db;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+
+public class DatabaseSession {
+	private static final ThreadLocal<EntityManager> threads = new ThreadLocal<EntityManager>();
+	private final Database database;
+
+	DatabaseSession(Database database) {
+		this.database = database;
+	}
+
+	void startSession() {
+		if (threads.get() != null) {
+			throw new IllegalStateException("Session already open"); //$NON-NLS-1$
+		}
+		threads.set(database.createEntityManager());
+	}
+
+	public static EntityManager getEntityManager() {
+		EntityManager em = threads.get();
+		if (em == null) {
+			throw new IllegalStateException("Session not open"); //$NON-NLS-1$
+		}
+		return em;
+	}
+
+	public static EntityTransaction getTransaction() {
+		return getEntityManager().getTransaction();
+	}
+
+	void endSession() {
+		if (threads.get() == null) {
+			throw new IllegalStateException("Session not open"); //$NON-NLS-1$
+		}
+		threads.get().close();
+		threads.set(null);
+	}
+}

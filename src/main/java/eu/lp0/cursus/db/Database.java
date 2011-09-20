@@ -18,20 +18,16 @@
 package eu.lp0.cursus.db;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Properties;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.lp0.cursus.db.dao.CursusDAO;
 import eu.lp0.cursus.db.data.Cursus;
 import eu.lp0.cursus.util.Constants;
 
@@ -39,13 +35,13 @@ public abstract class Database {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final String name;
 	private final EntityManagerFactory emf;
+	private final DatabaseSession session;
 
-	public String getName() {
-		return name;
-	}
+	private static final CursusDAO cursusDAO = new CursusDAO();
 
 	protected Database(String name, String url, String user, String password) throws SQLException, DatabaseVersionException {
 		this.name = name;
+		this.session = new DatabaseSession(this);
 
 		log.info("Connecting to database \"" + name + "\" at \"" + url + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
@@ -58,45 +54,50 @@ public abstract class Database {
 		initDatabase();
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	EntityManager createEntityManager() {
+		return emf.createEntityManager();
+	}
+
+	public void startSession() {
+		session.startSession();
+	}
+
+	public void endSession() {
+		session.endSession();
+	}
+
 	private void initDatabase() throws DatabaseVersionException {
-		EntityManager em = getEM();
+		startSession();
 		try {
-			em.getTransaction().begin();
+			DatabaseSession.getTransaction().begin();
 
-			CriteriaBuilder cb = em.getCriteriaBuilder();
+			Cursus cursus = cursusDAO.findSingleton();
 
-			CriteriaQuery<Cursus> q = cb.createQuery(Cursus.class);
-			Root<Cursus> c = q.from(Cursus.class);
-			q.select(c);
-			q.orderBy(cb.desc(c.get("version"))); //$NON-NLS-1$
-
-			TypedQuery<Cursus> tq = em.createQuery(q);
-			List<Cursus> rs = tq.getResultList();
-
-			if (rs.isEmpty()) {
+			if (cursus == null) {
 				log.info("Database \"" + name + "\" has no version record, setting to " + DatabaseVersion.getLatest()); //$NON-NLS-1$ //$NON-NLS-2$
 
-				Cursus cursus = new Cursus();
+				cursus = new Cursus();
 				cursus.setVersion(DatabaseVersion.getLatest().asLong());
 				cursus.setDescription(Constants.APP_DESC);
-				em.persist(cursus);
-			} else if (rs.get(0).getVersion() != DatabaseVersion.getLatest().asLong()) {
+
+				cursusDAO.persist(cursus);
+			} else if (cursus.getVersion() != DatabaseVersion.getLatest().asLong()) {
 				// TODO support upgrading
 				log.info("Database \"" + name + "\" has version "); //$NON-NLS-1$ //$NON-NLS-2$
-				throw new DatabaseVersionException(rs.get(0));
+				throw new DatabaseVersionException(cursus);
 			} else {
 				// TODO need to parse the actual version
 				log.info("Database \"" + name + "\" has version " + DatabaseVersion.getLatest()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			em.getTransaction().commit();
+			DatabaseSession.getTransaction().commit();
 		} finally {
-			em.close();
+			endSession();
 		}
-	}
-
-	public EntityManager getEM() {
-		return emf.createEntityManager();
 	}
 
 	public abstract boolean isSaved();
