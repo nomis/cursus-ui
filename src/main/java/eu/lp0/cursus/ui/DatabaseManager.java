@@ -47,6 +47,7 @@ class DatabaseManager {
 				if (saveDatabase()) {
 					return win.getMain().close();
 				}
+				return false;
 			case JOptionPane.NO_OPTION:
 				win.getDatabase().close(true);
 				break;
