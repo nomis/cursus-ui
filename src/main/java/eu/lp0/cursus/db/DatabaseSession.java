@@ -47,6 +47,18 @@ public class DatabaseSession {
 		return getEntityManager().getTransaction();
 	}
 
+	public static void begin() {
+		getTransaction().begin();
+	}
+
+	public static void commit() {
+		getTransaction().commit();
+	}
+
+	public static void rollback() {
+		getTransaction().rollback();
+	}
+
 	void endSession() {
 		if (threads.get() == null) {
 			throw new IllegalStateException("Session not open"); //$NON-NLS-1$

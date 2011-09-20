@@ -30,7 +30,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenu;
@@ -43,7 +43,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
-import javax.swing.ListModel;
 import javax.swing.WindowConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -57,7 +56,8 @@ public class MainWindow extends JFrame implements Executor {
 	private final ExecutorService background = Executors.newSingleThreadExecutor();
 	private final Main main;
 
-	private final DatabaseManager dbMgr = new DatabaseManager(this);
+	private DatabaseManager dbMgr = new DatabaseManager(this);
+	private ClassesManager clsMgr;
 
 	private JMenuBar menuBar;
 	private JMenu mnuFile;
@@ -79,7 +79,6 @@ public class MainWindow extends JFrame implements Executor {
 
 	private JSplitPane classesSplitPane;
 	private JList classesList;
-	private ListModel classesListModel;
 	private JScrollPane classesScrollPane;
 	private JPanel classPilots;
 
@@ -115,6 +114,7 @@ public class MainWindow extends JFrame implements Executor {
 
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		initGUI();
+		bindGUI();
 
 		databaseClosed();
 		enableStartupGUI(false);
@@ -177,8 +177,7 @@ public class MainWindow extends JFrame implements Executor {
 
 		classesList = new JList();
 		classesList.setMinimumSize(new Dimension(150, 0));
-		classesListModel = new DefaultComboBoxModel(new String[] { "Class 2", "Class 5" }); //$NON-NLS-1$ //$NON-NLS-2$
-		classesList.setModel(classesListModel);
+		classesList.setModel(new DefaultListModel());
 		classesSplitPane.setLeftComponent(classesList);
 
 		classesScrollPane = new JScrollPane();
@@ -303,6 +302,10 @@ public class MainWindow extends JFrame implements Executor {
 		mnuHelpAbout.setMnemonic(Messages.getKeyEvent("menu.help.about")); //$NON-NLS-1$
 	}
 
+	private void bindGUI() {
+		clsMgr = new ClassesManager(this, mainTabs, classesTab, classesList);
+	}
+
 	public void databaseOpened() {
 		setTitle(Constants.APP_NAME + Constants.EN_DASH + main.getDatabase().getName());
 		syncGUI(true);
@@ -324,6 +327,9 @@ public class MainWindow extends JFrame implements Executor {
 		mnuFileSave.setEnabled(open);
 		mnuFileSaveAs.setEnabled(open);
 		mnuFileClose.setEnabled(open);
+
+		clsMgr.syncGUI(open);
+
 		getRootPane().validate();
 	}
 }

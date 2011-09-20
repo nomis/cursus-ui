@@ -61,6 +61,11 @@ public class SeriesClass extends AbstractEntity implements Comparable<SeriesClas
 	}
 
 	@Override
+	public String toString() {
+		return getName();
+	}
+
+	@Override
 	public int compareTo(SeriesClass o) {
 		return getName().compareTo(o.getName());
 	}

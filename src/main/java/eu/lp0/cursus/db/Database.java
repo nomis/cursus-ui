@@ -73,7 +73,7 @@ public abstract class Database {
 	private void initDatabase() throws DatabaseVersionException {
 		startSession();
 		try {
-			DatabaseSession.getTransaction().begin();
+			DatabaseSession.begin();
 
 			Cursus cursus = cursusDAO.findSingleton();
 
@@ -94,7 +94,7 @@ public abstract class Database {
 				log.info("Database \"" + name + "\" has version " + DatabaseVersion.getLatest()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			DatabaseSession.getTransaction().commit();
+			DatabaseSession.commit();
 		} finally {
 			endSession();
 		}
