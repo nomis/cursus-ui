@@ -42,9 +42,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.ListModel;
 import javax.swing.WindowConstants;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 import eu.lp0.cursus.app.Main;
 import eu.lp0.cursus.db.DatabaseVersionException;
@@ -73,14 +76,15 @@ public class MainWindow extends JFrame {
 	private JPanel lapsTab;
 	private JPanel resultsTab;
 
-	private JSplitPane lapsSplitPane;
-	private JList raceList;
-	private ListModel raceListModel;
-	private JPanel raceLaps;
 	private JSplitPane classesSplitPane;
 	private JList classesList;
+	private ListModel classesListModel;
 	private JScrollPane classesScrollPane;
 	private JPanel classPilots;
+
+	private JSplitPane lapsSplitPane;
+	private JTree raceList;
+	private JPanel raceLaps;
 
 	public MainWindow(Main main, final String[] args) {
 		super();
@@ -155,6 +159,8 @@ public class MainWindow extends JFrame {
 
 		classesList = new JList();
 		classesList.setMinimumSize(new Dimension(150, 0));
+		classesListModel = new DefaultComboBoxModel(new String[] { "Class 2", "Class 5" }); //$NON-NLS-1$ //$NON-NLS-2$
+		classesList.setModel(classesListModel);
 		classesSplitPane.setLeftComponent(classesList);
 
 		classesScrollPane = new JScrollPane();
@@ -162,7 +168,6 @@ public class MainWindow extends JFrame {
 
 		classPilots = new JPanel();
 		classesScrollPane.setViewportView(classPilots);
-		raceListModel = new DefaultComboBoxModel(new String[] { "Item One", "Item Two" }); //$NON-NLS-1$ //$NON-NLS-2$
 
 		lapsTab = new JPanel();
 		mainTabs.addTab(Messages.getString("tab.laps"), null, lapsTab, null); //$NON-NLS-1$
@@ -171,10 +176,31 @@ public class MainWindow extends JFrame {
 
 		lapsSplitPane = new JSplitPane();
 		lapsTab.add(lapsSplitPane);
-		raceList = new JList();
-		lapsSplitPane.setLeftComponent(raceList);
+
+		raceList = new JTree();
+		raceList.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Series") { //$NON-NLS-1$
+					{
+						DefaultMutableTreeNode node_1;
+						node_1 = new DefaultMutableTreeNode("Event 1"); //$NON-NLS-1$
+						node_1.add(new DefaultMutableTreeNode("Race 1")); //$NON-NLS-1$
+						node_1.add(new DefaultMutableTreeNode("Race 2")); //$NON-NLS-1$
+						node_1.add(new DefaultMutableTreeNode("Race 3")); //$NON-NLS-1$
+						add(node_1);
+						node_1 = new DefaultMutableTreeNode("Event 2"); //$NON-NLS-1$
+						node_1.add(new DefaultMutableTreeNode("Race 4")); //$NON-NLS-1$
+						add(node_1);
+						node_1 = new DefaultMutableTreeNode("Event 3"); //$NON-NLS-1$
+						node_1.add(new DefaultMutableTreeNode("Race 5")); //$NON-NLS-1$
+						add(node_1);
+						node_1 = new DefaultMutableTreeNode("Event 4"); //$NON-NLS-1$
+						node_1.add(new DefaultMutableTreeNode("Race 6")); //$NON-NLS-1$
+						node_1.add(new DefaultMutableTreeNode("Race 7")); //$NON-NLS-1$
+						node_1.add(new DefaultMutableTreeNode("Race 8")); //$NON-NLS-1$
+						add(node_1);
+					}
+				}));
 		raceList.setMinimumSize(new Dimension(150, 0));
-		raceList.setModel(raceListModel);
+		lapsSplitPane.setLeftComponent(raceList);
 
 		raceLaps = new JPanel();
 		lapsSplitPane.setRightComponent(raceLaps);
