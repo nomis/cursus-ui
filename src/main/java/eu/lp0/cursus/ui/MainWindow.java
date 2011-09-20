@@ -26,7 +26,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.SQLException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -36,7 +35,6 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -50,13 +48,14 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import eu.lp0.cursus.app.Main;
-import eu.lp0.cursus.db.DatabaseVersionException;
+import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
 public class MainWindow extends JFrame {
 	private final Executor background = Executors.newSingleThreadExecutor();
 	private final Main main;
+	private final DatabaseManager dbMgr = new DatabaseManager(this);
 
 	private JMenuBar menuBar;
 	private JMenu mnuFile;
@@ -119,10 +118,18 @@ public class MainWindow extends JFrame {
 		enableStartupGUI(false);
 	}
 
+	Main getMain() {
+		return main;
+	}
+
+	Database getDatabase() {
+		return main.getDatabase();
+	}
+
 	private void startup(String[] args) {
 		try {
 			if (args.length == 0) {
-				newDatabase();
+				dbMgr.newDatabase();
 			} else if (args.length == 1) {
 				// TODO open file
 			} else {
@@ -134,7 +141,7 @@ public class MainWindow extends JFrame {
 	}
 
 	private void shutdown() {
-		if (trySaveDatabase(Messages.getString("menu.file.exit"))) { //$NON-NLS-1$
+		if (dbMgr.trySaveDatabase(Messages.getString("menu.file.exit"))) { //$NON-NLS-1$
 			dispose();
 		}
 	}
@@ -226,7 +233,7 @@ public class MainWindow extends JFrame {
 				background.execute(new Runnable() {
 					@Override
 					public void run() {
-						newDatabase();
+						dbMgr.newDatabase();
 					}
 				});
 			}
@@ -241,7 +248,7 @@ public class MainWindow extends JFrame {
 				background.execute(new Runnable() {
 					@Override
 					public void run() {
-						openDatabase();
+						dbMgr.openDatabase();
 					}
 				});
 			}
@@ -257,7 +264,7 @@ public class MainWindow extends JFrame {
 				background.execute(new Runnable() {
 					@Override
 					public void run() {
-						saveDatabase();
+						dbMgr.saveDatabase();
 					}
 				});
 			}
@@ -273,7 +280,7 @@ public class MainWindow extends JFrame {
 				background.execute(new Runnable() {
 					@Override
 					public void run() {
-						saveAsDatabase();
+						dbMgr.saveAsDatabase();
 					}
 				});
 			}
@@ -290,7 +297,7 @@ public class MainWindow extends JFrame {
 				background.execute(new Runnable() {
 					@Override
 					public void run() {
-						closeDatabase();
+						dbMgr.closeDatabase();
 					}
 				});
 			}
@@ -323,76 +330,6 @@ public class MainWindow extends JFrame {
 		mnuHelp.add(mnuHelpAbout);
 		mnuHelpAbout.setText(Messages.getString("menu.help.about")); //$NON-NLS-1$
 		mnuHelpAbout.setMnemonic(Messages.getKeyEvent("menu.help.about")); //$NON-NLS-1$
-	}
-
-	/**
-	 * Try and save the database if one is open
-	 * 
-	 * @param action
-	 *            text name of the action being performed
-	 * @return true if the database was saved or discarded
-	 */
-	private boolean trySaveDatabase(String action) {
-		if (main.isOpen() && !main.getDatabase().isSaved()) {
-			switch (JOptionPane.showConfirmDialog(this, String.format(Messages.getString("warn.current-db-not-saved"), main.getDatabase().getName()), //$NON-NLS-1$
-					Constants.APP_NAME + Constants.EN_DASH + action, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE)) {
-			case JOptionPane.YES_OPTION:
-				if (saveDatabase()) {
-					return main.close();
-				}
-			case JOptionPane.NO_OPTION:
-				main.close(true);
-				break;
-			case JOptionPane.CANCEL_OPTION:
-				return false;
-			}
-		}
-		return true;
-	}
-
-	private void newDatabase() {
-		if (trySaveDatabase(Messages.getString("menu.file.new"))) { //$NON-NLS-1$
-			boolean ok = true;
-			try {
-				ok = main.open();
-			} catch (SQLException e) {
-				// TODO log
-				ok = false;
-			} catch (DatabaseVersionException e) {
-				// TODO log
-				ok = false;
-			}
-			if (!ok) {
-				JOptionPane.showMessageDialog(this, Messages.getString("err.unable-to-create-new-db"), Constants.APP_NAME, JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
-			}
-		}
-	}
-
-	private boolean openDatabase() {
-		// TODO open database
-		JOptionPane.showMessageDialog(this, Messages.getString("err.feat-not-impl"), //$NON-NLS-1$
-				Constants.APP_NAME + Constants.EN_DASH + Messages.getString("menu.file.open"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
-		return false;
-	}
-
-	private boolean saveDatabase() {
-		// TODO save database to current or new file
-		JOptionPane.showMessageDialog(this, Messages.getString("err.feat-not-impl"), //$NON-NLS-1$
-				Constants.APP_NAME + Constants.EN_DASH + Messages.getString("menu.file.save"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
-		return false;
-	}
-
-	private boolean saveAsDatabase() {
-		// TODO save database to new file
-		JOptionPane.showMessageDialog(this, Messages.getString("err.feat-not-impl"), //$NON-NLS-1$
-				Constants.APP_NAME + Constants.EN_DASH + Messages.getString("menu.file.save-as"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
-		return false;
-	}
-
-	private void closeDatabase() {
-		if (trySaveDatabase(Messages.getString("menu.file.close"))) { //$NON-NLS-1$
-			main.close();
-		}
 	}
 
 	public void databaseOpened() {
