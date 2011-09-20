@@ -26,7 +26,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity(name = "race_no")
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "organisation", "number" }) })
-public class RaceNumber extends AbstractEntity {
+public class RaceNumber extends AbstractEntity implements Comparable<RaceNumber> {
 	private String organisation;
 	private Integer number;
 
@@ -66,6 +66,16 @@ public class RaceNumber extends AbstractEntity {
 
 	public void setPilot(Pilot pilot) {
 		this.pilot = pilot;
+	}
+
+	@Override
+	public int compareTo(RaceNumber o) {
+		int ret = getOrganisation().compareTo(o.getOrganisation());
+		if (ret != 0) {
+			return ret;
+		}
+
+		return ((Integer) getNumber()).compareTo(o.getNumber());
 	}
 
 	@Override

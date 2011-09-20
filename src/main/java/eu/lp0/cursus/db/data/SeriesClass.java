@@ -29,7 +29,7 @@ import javax.persistence.ManyToMany;
  * Pilot class groupings within series (to segregate race scores)
  */
 @Entity(name = "class")
-public class SeriesClass extends AbstractEntity {
+public class SeriesClass extends AbstractEntity implements Comparable<SeriesClass> {
 	private String name;
 
 	SeriesClass() {
@@ -39,7 +39,7 @@ public class SeriesClass extends AbstractEntity {
 		setName(name);
 	}
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	public String getName() {
 		return name;
 	}
@@ -58,5 +58,10 @@ public class SeriesClass extends AbstractEntity {
 
 	public void setPilots(Set<Pilot> pilots) {
 		this.pilots = pilots;
+	}
+
+	@Override
+	public int compareTo(SeriesClass o) {
+		return getName().compareTo(o.getName());
 	}
 }

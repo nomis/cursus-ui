@@ -35,7 +35,7 @@ public class Cursus extends AbstractEntity {
 		setDescription(description);
 	}
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	public long getVersion() {
 		return version;
 	}
