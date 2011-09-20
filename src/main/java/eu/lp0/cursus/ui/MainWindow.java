@@ -93,7 +93,7 @@ public class MainWindow extends JFrame implements Executor {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent e) {
-				background.execute(new Runnable() {
+				execute(new Runnable() {
 					@Override
 					public void run() {
 						MainWindow.this.startup(args);
@@ -103,7 +103,7 @@ public class MainWindow extends JFrame implements Executor {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				background.execute(new Runnable() {
+				execute(new Runnable() {
 					@Override
 					public void run() {
 						shutdown();
