@@ -27,6 +27,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.DefaultComboBoxModel;
@@ -53,7 +54,7 @@ import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
 public class MainWindow extends JFrame implements Executor {
-	private final Executor background = Executors.newSingleThreadExecutor();
+	private final ExecutorService background = Executors.newSingleThreadExecutor();
 	private final Main main;
 
 	private final DatabaseManager dbMgr = new DatabaseManager(this);
@@ -148,7 +149,11 @@ public class MainWindow extends JFrame implements Executor {
 
 	private void shutdown() {
 		if (dbMgr.trySaveDatabase(Messages.getString("menu.file.exit"))) { //$NON-NLS-1$
-			dispose();
+			try {
+				dispose();
+			} finally {
+				background.shutdownNow();
+			}
 		}
 	}
 
