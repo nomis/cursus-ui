@@ -41,6 +41,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
@@ -79,18 +80,23 @@ public class MainWindow extends JFrame implements Executor {
 	private JPanel resultsTab;
 	private JPanel penaltiesTab;
 
+	private JScrollPane pilotsScrollPane;
+	private JTable pilots;
+
 	private JSplitPane classesSplitPane;
 	private JList classesList;
 	private JScrollPane classesScrollPane;
-	private JPanel classPilots;
+	private JTable classPilots;
 
 	private JSplitPane lapsSplitPane;
 	private JTree lapsRaceList;
-	private JPanel raceLaps;
+	private JScrollPane lapsScrollPane;
+	private JTable raceLaps;
 
 	private JSplitPane penaltiesSplitPane;
 	private JTree penaltiesRaceList;
-	private JPanel racePenalties;
+	private JScrollPane penaltiesScrollPane;
+	private JTable racePenalties;
 
 	public MainWindow(Main main, final String[] args) {
 		super();
@@ -177,6 +183,13 @@ public class MainWindow extends JFrame implements Executor {
 		pilotsTab = new JPanel();
 		mainTabs.addTab(Messages.getString("tab.pilots"), null, pilotsTab, null); //$NON-NLS-1$
 		mainTabs.setMnemonicAt(0, Messages.getKeyEvent("tab.pilots")); //$NON-NLS-1$
+		pilotsTab.setLayout(new BorderLayout(0, 0));
+
+		pilotsScrollPane = new JScrollPane();
+		pilotsTab.add(pilotsScrollPane, BorderLayout.CENTER);
+
+		pilots = new JTable();
+		pilotsScrollPane.setViewportView(pilots);
 
 		classesTab = new JPanel();
 		mainTabs.addTab(Messages.getString("tab.classes"), null, classesTab, null); //$NON-NLS-1$
@@ -194,7 +207,7 @@ public class MainWindow extends JFrame implements Executor {
 		classesScrollPane = new JScrollPane();
 		classesSplitPane.setRightComponent(classesScrollPane);
 
-		classPilots = new JPanel();
+		classPilots = new JTable();
 		classesScrollPane.setViewportView(classPilots);
 
 		lapsTab = new JPanel();
@@ -210,8 +223,11 @@ public class MainWindow extends JFrame implements Executor {
 		lapsRaceList.setMinimumSize(new Dimension(150, 0));
 		lapsSplitPane.setLeftComponent(lapsRaceList);
 
-		raceLaps = new JPanel();
-		lapsSplitPane.setRightComponent(raceLaps);
+		lapsScrollPane = new JScrollPane();
+		lapsSplitPane.setRightComponent(lapsScrollPane);
+
+		raceLaps = new JTable();
+		lapsScrollPane.setViewportView(raceLaps);
 
 		penaltiesTab = new JPanel();
 		mainTabs.addTab(Messages.getString("tab.penalties"), null, penaltiesTab, null); //$NON-NLS-1$
@@ -226,8 +242,11 @@ public class MainWindow extends JFrame implements Executor {
 		penaltiesRaceList.setMinimumSize(new Dimension(150, 0));
 		penaltiesSplitPane.setLeftComponent(penaltiesRaceList);
 
-		racePenalties = new JPanel();
-		penaltiesSplitPane.setRightComponent(racePenalties);
+		penaltiesScrollPane = new JScrollPane();
+		penaltiesSplitPane.setRightComponent(penaltiesScrollPane);
+
+		racePenalties = new JTable();
+		penaltiesScrollPane.setViewportView(racePenalties);
 
 		resultsTab = new JPanel();
 		mainTabs.addTab(Messages.getString("tab.results"), null, resultsTab, null); //$NON-NLS-1$
