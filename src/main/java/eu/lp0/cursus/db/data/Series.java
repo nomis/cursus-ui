@@ -47,6 +47,17 @@ public class Series extends AbstractEntity implements Comparable<Series> {
 		this.name = name;
 	}
 
+	private Set<Event> events;
+
+	@ManyToMany(mappedBy = "series")
+	public Set<Event> getEvents() {
+		return events;
+	}
+
+	public void setEvents(Set<Event> events) {
+		this.events = events;
+	}
+
 	private Set<Pilot> pilots;
 
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "series")
