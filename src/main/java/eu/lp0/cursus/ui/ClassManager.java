@@ -17,11 +17,8 @@
  */
 package eu.lp0.cursus.ui;
 
-import java.util.Collections;
-import java.util.Vector;
+import java.util.List;
 
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -40,8 +37,6 @@ class ClassManager {
 	private final JPanel classesTab;
 	private final JList classesList;
 
-	private boolean loaded;
-
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 	private static final ClassDAO classDAO = new ClassDAO();
 
@@ -58,23 +53,25 @@ class ClassManager {
 				ClassManager.this.win.execute(new Runnable() {
 					@Override
 					public void run() {
-						load();
+						if (ClassManager.this.mainTabs.getSelectedComponent() == ClassManager.this.classesTab) {
+							load();
+						}
 					}
 				});
 			}
 		});
 	}
 
+	@SuppressWarnings("unchecked")
 	private void load() {
-		if (!loaded && win.getMain().isOpen() && mainTabs.getSelectedComponent() == classesTab) {
-			Vector<Class> classes = new Vector<Class>();
+		if (win.getMain().isOpen()) {
+			List<Class> classes;
 
 			win.getDatabase().startSession();
 			try {
 				DatabaseSession.begin();
 
-				classes.addAll(classDAO.findAll(seriesDAO.findSingleton()));
-				Collections.sort(classes);
+				classes = classDAO.findAll(seriesDAO.findSingleton());
 				for (Class cls : classes) {
 					classDAO.detach(cls);
 				}
@@ -84,18 +81,15 @@ class ClassManager {
 				win.getDatabase().endSession();
 			}
 
-			classesList.setModel(new DefaultComboBoxModel(classes));
-
-			loaded = true;
+			((EntityComboBoxModel<Class>)classesList.getModel()).updateModel(classes);
 		}
 	}
 
 	public void syncGUI(boolean open) {
-		loaded = false;
 		if (open) {
 			load();
 		} else {
-			classesList.setModel(new DefaultListModel());
+			classesList.setModel(new EntityComboBoxModel<Class>());
 		}
 	}
 }

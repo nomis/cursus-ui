@@ -30,7 +30,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenu;
@@ -44,6 +43,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -51,6 +51,7 @@ import javax.swing.tree.DefaultTreeModel;
 import eu.lp0.cursus.app.Main;
 import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.InvalidDatabaseException;
+import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
@@ -200,8 +201,9 @@ public class MainWindow extends JFrame implements Executor {
 		classesTab.add(classesSplitPane, BorderLayout.CENTER);
 
 		classesList = new JList();
+		classesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		classesList.setMinimumSize(new Dimension(150, 0));
-		classesList.setModel(new DefaultListModel());
+		classesList.setModel(new EntityComboBoxModel<Class>());
 		classesSplitPane.setLeftComponent(classesList);
 
 		classesScrollPane = new JScrollPane();
@@ -219,8 +221,8 @@ public class MainWindow extends JFrame implements Executor {
 		lapsTab.add(lapsSplitPane);
 
 		lapsRaceList = new JTree();
-		lapsRaceList.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 		lapsRaceList.setMinimumSize(new Dimension(150, 0));
+		lapsRaceList.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 		lapsSplitPane.setLeftComponent(lapsRaceList);
 
 		lapsScrollPane = new JScrollPane();
