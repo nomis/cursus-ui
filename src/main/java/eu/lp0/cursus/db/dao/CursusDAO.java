@@ -36,7 +36,6 @@ public class CursusDAO extends AbstractDAO<Cursus> {
 		CriteriaQuery<Cursus> q = cb.createQuery(Cursus.class);
 		Root<Cursus> c = q.from(Cursus.class);
 		q.select(c);
-		q.orderBy(cb.desc(c.get("version"))); //$NON-NLS-1$
 
 		TypedQuery<Cursus> tq = em.createQuery(q);
 		List<Cursus> rs = tq.getResultList();
