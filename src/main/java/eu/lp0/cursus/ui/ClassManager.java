@@ -56,13 +56,18 @@ class ClassManager {
 		mainTabs.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				load();
+				ClassManager.this.win.execute(new Runnable() {
+					@Override
+					public void run() {
+						load();
+					}
+				});
 			}
 		});
 	}
 
 	private void load() {
-		if (!loaded && mainTabs.getSelectedComponent() == classesTab) {
+		if (!loaded && win.getMain().isOpen() && mainTabs.getSelectedComponent() == classesTab) {
 			Vector<String> classNames = new Vector<String>();
 
 			win.getDatabase().startSession();
