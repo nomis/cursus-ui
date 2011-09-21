@@ -61,6 +61,7 @@ public class MainWindow extends JFrame implements Executor {
 
 	private DatabaseManager dbMgr = new DatabaseManager(this);
 	private ClassManager clsMgr;
+	private LapsManager lapsMgr;
 
 	private JMenuBar menuBar;
 	private JMenu mnuFile;
@@ -221,6 +222,7 @@ public class MainWindow extends JFrame implements Executor {
 		lapsTab.add(lapsSplitPane);
 
 		lapsRaceList = new JTree();
+		lapsRaceList.setRootVisible(false);
 		lapsRaceList.setMinimumSize(new Dimension(150, 0));
 		lapsRaceList.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 		lapsSplitPane.setLeftComponent(lapsRaceList);
@@ -240,6 +242,7 @@ public class MainWindow extends JFrame implements Executor {
 		penaltiesTab.add(penaltiesSplitPane);
 
 		penaltiesRaceList = new JTree();
+		penaltiesRaceList.setRootVisible(false);
 		penaltiesRaceList.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 		penaltiesRaceList.setMinimumSize(new Dimension(150, 0));
 		penaltiesSplitPane.setLeftComponent(penaltiesRaceList);
@@ -332,6 +335,7 @@ public class MainWindow extends JFrame implements Executor {
 
 	private void bindGUI() {
 		clsMgr = new ClassManager(this, mainTabs, classesTab, classesList);
+		lapsMgr = new LapsManager(this, mainTabs, lapsTab, lapsRaceList);
 	}
 
 	public void databaseOpened() {
@@ -357,6 +361,7 @@ public class MainWindow extends JFrame implements Executor {
 		mnuFileClose.setEnabled(open);
 
 		clsMgr.syncGUI(open);
+		lapsMgr.syncGUI(open);
 
 		getRootPane().validate();
 	}

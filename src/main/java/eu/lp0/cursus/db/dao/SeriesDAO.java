@@ -35,8 +35,8 @@ public class SeriesDAO extends AbstractDAO<Series> {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
 		CriteriaQuery<Series> q = cb.createQuery(Series.class);
-		Root<Series> c = q.from(Series.class);
-		q.select(c);
+		Root<Series> s = q.from(Series.class);
+		q.select(s);
 
 		TypedQuery<Series> tq = em.createQuery(q);
 		List<Series> rs = tq.getResultList();

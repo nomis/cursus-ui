@@ -17,44 +17,50 @@
  */
 package eu.lp0.cursus.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.tree.DefaultTreeModel;
 
 import eu.lp0.cursus.db.DatabaseSession;
-import eu.lp0.cursus.db.dao.ClassDAO;
+import eu.lp0.cursus.db.dao.EventDAO;
+import eu.lp0.cursus.db.dao.RaceDAO;
 import eu.lp0.cursus.db.dao.SeriesDAO;
-import eu.lp0.cursus.db.data.Class;
+import eu.lp0.cursus.db.data.Event;
+import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.db.data.Series;
 
-class ClassManager {
+class LapsManager {
 	private final MainWindow win;
 
 	private final JTabbedPane mainTabs;
-	private final JPanel classesTab;
-	private final JList classesList;
+	private final JPanel lapsTab;
+	private final JTree lapsRaceList;
 
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
-	private static final ClassDAO classDAO = new ClassDAO();
+	private static final EventDAO eventDAO = new EventDAO();
+	private static final RaceDAO raceDAO = new RaceDAO();
 
-	ClassManager(MainWindow win, JTabbedPane mainTabs, JPanel classesTab, JList classesList) {
+	LapsManager(MainWindow win, JTabbedPane mainTabs, JPanel lapsTab, JTree lapsRaceList) {
 		this.win = win;
 
 		this.mainTabs = mainTabs;
-		this.classesTab = classesTab;
-		this.classesList = classesList;
+		this.lapsTab = lapsTab;
+		this.lapsRaceList = lapsRaceList;
 
 		mainTabs.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				ClassManager.this.win.execute(new Runnable() {
+				LapsManager.this.win.execute(new Runnable() {
 					@Override
 					public void run() {
-						if (ClassManager.this.mainTabs.getSelectedComponent() == ClassManager.this.classesTab) {
+						if (LapsManager.this.mainTabs.getSelectedComponent() == LapsManager.this.lapsTab) {
 							load();
 						}
 					}
@@ -63,19 +69,23 @@ class ClassManager {
 		});
 	}
 
-	@SuppressWarnings("unchecked")
 	private void load() {
 		if (win.getMain().isOpen()) {
-			final List<Class> classes;
+			final List<Series> seriesList = new ArrayList<Series>();
 
 			win.getDatabase().startSession();
 			try {
 				DatabaseSession.begin();
 
-				classes = classDAO.findAll(seriesDAO.findSingleton());
-				for (Class cls : classes) {
-					classDAO.detach(cls);
+				Series series = seriesDAO.findSingleton();
+				for (Event event : series.getEvents()) {
+					for (Race race : event.getRaces()) {
+						raceDAO.detach(race);
+					}
+					eventDAO.detach(event);
 				}
+				seriesDAO.detach(series);
+				seriesList.add(series);
 
 				DatabaseSession.commit();
 			} finally {
@@ -85,7 +95,7 @@ class ClassManager {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					((EntityComboBoxModel<Class>)classesList.getModel()).updateModel(classes);
+					((DefaultTreeModel)lapsRaceList.getModel()).setRoot(new DatabaseTreeModel(seriesList));
 				}
 			});
 		}
@@ -93,11 +103,11 @@ class ClassManager {
 
 	public void syncGUI(boolean open) {
 		if (open) {
-			if (mainTabs.getSelectedComponent() == classesTab) {
+			if (mainTabs.getSelectedComponent() == lapsTab) {
 				load();
 			}
 		} else {
-			classesList.setModel(new EntityComboBoxModel<Class>());
+			((DefaultTreeModel)lapsRaceList.getModel()).setRoot(null);
 		}
 	}
 }
