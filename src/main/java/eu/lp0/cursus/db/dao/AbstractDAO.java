@@ -34,4 +34,8 @@ public abstract class AbstractDAO<E extends AbstractEntity> {
 	public void remove(E entity) {
 		DatabaseSession.getEntityManager().remove(entity);
 	}
+
+	public void detach(E entity) {
+		DatabaseSession.getEntityManager().detach(entity);
+	}
 }

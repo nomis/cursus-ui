@@ -18,7 +18,6 @@
 package eu.lp0.cursus.ui;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -68,16 +67,16 @@ class ClassManager {
 
 	private void load() {
 		if (!loaded && win.getMain().isOpen() && mainTabs.getSelectedComponent() == classesTab) {
-			Vector<String> classNames = new Vector<String>();
+			Vector<Class> classes = new Vector<Class>();
 
 			win.getDatabase().startSession();
 			try {
 				DatabaseSession.begin();
 
-				List<Class> classes = classDAO.findAll(seriesDAO.findSingleton());
+				classes.addAll(classDAO.findAll(seriesDAO.findSingleton()));
 				Collections.sort(classes);
 				for (Class cls : classes) {
-					classNames.add(cls.getName());
+					classDAO.detach(cls);
 				}
 
 				DatabaseSession.commit();
@@ -85,7 +84,7 @@ class ClassManager {
 				win.getDatabase().endSession();
 			}
 
-			classesList.setModel(new DefaultComboBoxModel(classNames));
+			classesList.setModel(new DefaultComboBoxModel(classes));
 
 			loaded = true;
 		}
