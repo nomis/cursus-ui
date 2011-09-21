@@ -25,7 +25,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity(name = "race_no")
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "organisation", "number" }) })
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "series_id", "organisation", "number" }) })
 public class RaceNumber extends AbstractEntity implements Comparable<RaceNumber> {
 	private String organisation;
 	private Integer number;
@@ -33,9 +33,22 @@ public class RaceNumber extends AbstractEntity implements Comparable<RaceNumber>
 	RaceNumber() {
 	}
 
-	public RaceNumber(String organisation, int number) {
+	public RaceNumber(Series series, String organisation, int number) {
+		setSeries(series);
 		setOrganisation(organisation);
 		setNumber(number);
+	}
+
+	private Series series;
+
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "series_id", nullable = false)
+	public Series getSeries() {
+		return series;
+	}
+
+	public void setSeries(Series series) {
+		this.series = series;
 	}
 
 	@Column(nullable = false)
@@ -75,7 +88,7 @@ public class RaceNumber extends AbstractEntity implements Comparable<RaceNumber>
 			return ret;
 		}
 
-		return ((Integer) getNumber()).compareTo(o.getNumber());
+		return ((Integer)getNumber()).compareTo(o.getNumber());
 	}
 
 	@Override

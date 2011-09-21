@@ -17,32 +17,18 @@
  */
 package eu.lp0.cursus.db.data;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 /**
- * Pilot class groupings within series (to segregate race scores)
+ * Race series
  */
-@Entity(name = "class")
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "series_id", "name" }) })
-public class Class extends AbstractEntity implements Comparable<Class> {
+@Entity(name = "series")
+public class Series extends AbstractEntity {
 	private String name;
-
-	Class() {
-	}
-
-	public Class(String name) {
-		setName(name);
-	}
 
 	@Column(nullable = false)
 	public String getName() {
@@ -53,22 +39,9 @@ public class Class extends AbstractEntity implements Comparable<Class> {
 		this.name = name;
 	}
 
-	private Series series;
+	private Set<Pilot> pilots;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "series_id", nullable = false)
-	public Series getSeries() {
-		return series;
-	}
-
-	public void setSeries(Series series) {
-		this.series = series;
-	}
-
-	private Set<Pilot> pilots = new HashSet<Pilot>();
-
-	@ManyToMany
-	@JoinTable
+	@ManyToMany(mappedBy = "series")
 	public Set<Pilot> getPilots() {
 		return pilots;
 	}
@@ -77,13 +50,14 @@ public class Class extends AbstractEntity implements Comparable<Class> {
 		this.pilots = pilots;
 	}
 
-	@Override
-	public String toString() {
-		return getName();
+	private Set<Class> classes;
+
+	@ManyToMany(mappedBy = "series")
+	public Set<Class> getClasses() {
+		return classes;
 	}
 
-	@Override
-	public int compareTo(Class o) {
-		return getName().compareTo(o.getName());
+	public void setClasses(Set<Class> classes) {
+		this.classes = classes;
 	}
 }

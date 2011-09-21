@@ -26,13 +26,17 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * Pilot (person competing in the race)
  */
 @Entity(name = "pilot")
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "series_id", "race_no_id" }) })
 public class Pilot extends AbstractEntity {
 	private String name;
 
@@ -66,13 +70,25 @@ public class Pilot extends AbstractEntity {
 		this.country = country;
 	}
 
+	private Series series;
+
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "series_id", nullable = false)
+	public Series getSeries() {
+		return series;
+	}
+
+	public void setSeries(Series series) {
+		this.series = series;
+	}
+
 	private RaceNumber number;
 
 	/**
 	 * Primary race number
 	 */
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(unique = true)
+	@OneToOne(cascade = CascadeType.ALL, optional = true)
+	@JoinColumn(name = "race_no_id", nullable = true)
 	public RaceNumber getRaceNumber() {
 		return number;
 	}
