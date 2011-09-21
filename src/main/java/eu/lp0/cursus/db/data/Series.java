@@ -28,7 +28,7 @@ import javax.persistence.ManyToMany;
  * Race series
  */
 @Entity(name = "series")
-public class Series extends AbstractEntity {
+public class Series extends AbstractEntity implements Comparable<Series> {
 	Series() {
 	}
 
@@ -67,5 +67,15 @@ public class Series extends AbstractEntity {
 
 	public void setClasses(Set<Class> classes) {
 		this.classes = classes;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
+
+	@Override
+	public int compareTo(Series o) {
+		return getName().compareTo(o.getName());
 	}
 }

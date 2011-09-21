@@ -40,7 +40,8 @@ public class Class extends AbstractEntity implements Comparable<Class> {
 	Class() {
 	}
 
-	public Class(String name) {
+	public Class(Series series, String name) {
+		setSeries(series);
 		setName(name);
 	}
 
@@ -84,6 +85,10 @@ public class Class extends AbstractEntity implements Comparable<Class> {
 
 	@Override
 	public int compareTo(Class o) {
+		int ret = getSeries().compareTo(o.getSeries());
+		if (ret != 0) {
+			return ret;
+		}
 		return getName().compareTo(o.getName());
 	}
 }
