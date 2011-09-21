@@ -77,6 +77,7 @@ public class MainWindow extends JFrame implements Executor {
 	private JPanel classesTab;
 	private JPanel lapsTab;
 	private JPanel resultsTab;
+	private JPanel penaltiesTab;
 
 	private JSplitPane classesSplitPane;
 	private JList classesList;
@@ -84,8 +85,12 @@ public class MainWindow extends JFrame implements Executor {
 	private JPanel classPilots;
 
 	private JSplitPane lapsSplitPane;
-	private JTree raceList;
+	private JTree lapsRaceList;
 	private JPanel raceLaps;
+
+	private JSplitPane penaltiesSplitPane;
+	private JTree penaltiesRaceList;
+	private JPanel racePenalties;
 
 	public MainWindow(Main main, final String[] args) {
 		super();
@@ -200,37 +205,33 @@ public class MainWindow extends JFrame implements Executor {
 		lapsSplitPane = new JSplitPane();
 		lapsTab.add(lapsSplitPane);
 
-		raceList = new JTree();
-		raceList.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Series") { //$NON-NLS-1$
-					{
-						DefaultMutableTreeNode node_1;
-						node_1 = new DefaultMutableTreeNode("Event 1"); //$NON-NLS-1$
-						node_1.add(new DefaultMutableTreeNode("Race 1")); //$NON-NLS-1$
-						node_1.add(new DefaultMutableTreeNode("Race 2")); //$NON-NLS-1$
-						node_1.add(new DefaultMutableTreeNode("Race 3")); //$NON-NLS-1$
-						add(node_1);
-						node_1 = new DefaultMutableTreeNode("Event 2"); //$NON-NLS-1$
-						node_1.add(new DefaultMutableTreeNode("Race 4")); //$NON-NLS-1$
-						add(node_1);
-						node_1 = new DefaultMutableTreeNode("Event 3"); //$NON-NLS-1$
-						node_1.add(new DefaultMutableTreeNode("Race 5")); //$NON-NLS-1$
-						add(node_1);
-						node_1 = new DefaultMutableTreeNode("Event 4"); //$NON-NLS-1$
-						node_1.add(new DefaultMutableTreeNode("Race 6")); //$NON-NLS-1$
-						node_1.add(new DefaultMutableTreeNode("Race 7")); //$NON-NLS-1$
-						node_1.add(new DefaultMutableTreeNode("Race 8")); //$NON-NLS-1$
-						add(node_1);
-					}
-				}));
-		raceList.setMinimumSize(new Dimension(150, 0));
-		lapsSplitPane.setLeftComponent(raceList);
+		lapsRaceList = new JTree();
+		lapsRaceList.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
+		lapsRaceList.setMinimumSize(new Dimension(150, 0));
+		lapsSplitPane.setLeftComponent(lapsRaceList);
 
 		raceLaps = new JPanel();
 		lapsSplitPane.setRightComponent(raceLaps);
 
+		penaltiesTab = new JPanel();
+		mainTabs.addTab(Messages.getString("tab.penalties"), null, penaltiesTab, null); //$NON-NLS-1$
+		mainTabs.setMnemonicAt(3, Messages.getKeyEvent("tab.results")); //$NON-NLS-1$
+		penaltiesTab.setLayout(new BorderLayout(0, 0));
+
+		penaltiesSplitPane = new JSplitPane();
+		penaltiesTab.add(penaltiesSplitPane);
+
+		penaltiesRaceList = new JTree();
+		penaltiesRaceList.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
+		penaltiesRaceList.setMinimumSize(new Dimension(150, 0));
+		penaltiesSplitPane.setLeftComponent(penaltiesRaceList);
+
+		racePenalties = new JPanel();
+		penaltiesSplitPane.setRightComponent(racePenalties);
+
 		resultsTab = new JPanel();
 		mainTabs.addTab(Messages.getString("tab.results"), null, resultsTab, null); //$NON-NLS-1$
-		mainTabs.setMnemonicAt(3, Messages.getKeyEvent("tab.results")); //$NON-NLS-1$
+		mainTabs.setMnemonicAt(4, Messages.getKeyEvent("tab.results")); //$NON-NLS-1$
 
 		setSize(800, 600);
 
