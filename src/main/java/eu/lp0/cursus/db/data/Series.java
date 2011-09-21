@@ -19,6 +19,7 @@ package eu.lp0.cursus.db.data;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -48,7 +49,7 @@ public class Series extends AbstractEntity {
 
 	private Set<Pilot> pilots;
 
-	@ManyToMany(mappedBy = "series")
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "series")
 	public Set<Pilot> getPilots() {
 		return pilots;
 	}
@@ -59,7 +60,7 @@ public class Series extends AbstractEntity {
 
 	private Set<Class> classes;
 
-	@ManyToMany(mappedBy = "series")
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "series")
 	public Set<Class> getClasses() {
 		return classes;
 	}

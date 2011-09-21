@@ -19,15 +19,13 @@ package eu.lp0.cursus.db.data;
 
 import java.util.Map;
 
-import javax.persistence.CollectionTable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKeyJoinColumn;
+import javax.persistence.MapKey;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -84,18 +82,16 @@ public class Race extends AbstractEntity {
 		this.description = description;
 	}
 
-	private Map<Pilot, Attendee> attendees;
+	private Map<Pilot, RaceAttendee> attendees;
 
-	@CollectionTable(name = "race_attendees", joinColumns = { @JoinColumn(name = "race_id") })
-	@MapKeyJoinColumn(name = "pilot_id", nullable = false)
-	@ElementCollection
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "race", orphanRemoval = true)
+	@MapKey
 	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
-	public Map<Pilot, Attendee> getAttendees() {
+	public Map<Pilot, RaceAttendee> getAttendees() {
 		return attendees;
 	}
 
-	public void setAttendees(Map<Pilot, Attendee> attendees) {
+	public void setAttendees(Map<Pilot, RaceAttendee> attendees) {
 		this.attendees = attendees;
 	}
 }

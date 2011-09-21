@@ -19,6 +19,7 @@ package eu.lp0.cursus.db.data;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -48,7 +49,7 @@ public class Event extends AbstractEntity {
 
 	private Series series;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(cascade = CascadeType.ALL, optional = false)
 	@JoinColumn(name = "series_id", nullable = false)
 	public Series getSeries() {
 		return series;
