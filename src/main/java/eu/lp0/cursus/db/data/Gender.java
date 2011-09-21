@@ -20,7 +20,7 @@ package eu.lp0.cursus.db.data;
 import eu.lp0.cursus.util.Messages;
 
 public enum Gender {
-	M("gender.male"), F("gender.female"); //$NON-NLS-1$ //$NON-NLS-2$ 
+	M ("gender.male"), F ("gender.female"); //$NON-NLS-1$ //$NON-NLS-2$ 
 
 	private final String key;
 

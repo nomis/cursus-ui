@@ -38,6 +38,36 @@ import javax.persistence.UniqueConstraint;
 @Entity(name = "pilot")
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "series_id", "race_no_id" }) })
 public class Pilot extends AbstractEntity {
+	Pilot() {
+	}
+
+	public Pilot(Series series, String name) {
+		this(series, name, null, null);
+	}
+
+	public Pilot(Series series, String name, Gender gender) {
+		this(series, name, gender, null);
+	}
+
+	public Pilot(Series series, String name, Gender gender, String country) {
+		setSeries(series);
+		setName(name);
+		setGender(gender);
+		setCountry(country);
+	}
+
+	private Series series;
+
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "series_id", nullable = false)
+	public Series getSeries() {
+		return series;
+	}
+
+	public void setSeries(Series series) {
+		this.series = series;
+	}
+
 	private String name;
 
 	@Column(nullable = false)
@@ -68,18 +98,6 @@ public class Pilot extends AbstractEntity {
 
 	public void setCountry(String country) {
 		this.country = country;
-	}
-
-	private Series series;
-
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "series_id", nullable = false)
-	public Series getSeries() {
-		return series;
-	}
-
-	public void setSeries(Series series) {
-		this.series = series;
 	}
 
 	private RaceNumber number;

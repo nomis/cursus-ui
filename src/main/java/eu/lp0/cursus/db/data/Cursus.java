@@ -25,8 +25,6 @@ import javax.persistence.Entity;
  */
 @Entity(name = "cursus")
 public class Cursus extends AbstractEntity {
-	private Long version;
-
 	public Cursus() {
 	}
 
@@ -34,6 +32,8 @@ public class Cursus extends AbstractEntity {
 		setVersion(version);
 		setDescription(description);
 	}
+
+	private Long version;
 
 	@Column(nullable = false, unique = true)
 	public long getVersion() {

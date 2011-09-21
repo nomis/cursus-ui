@@ -28,6 +28,13 @@ import javax.persistence.ManyToMany;
  */
 @Entity(name = "series")
 public class Series extends AbstractEntity {
+	Series() {
+	}
+
+	public Series(String name) {
+		setName(name);
+	}
+
 	private String name;
 
 	@Column(nullable = false)
