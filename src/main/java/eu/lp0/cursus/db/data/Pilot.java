@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.db.data;
 
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -27,6 +28,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -138,5 +140,32 @@ public class Pilot extends AbstractEntity {
 
 	public void setClasses(Set<Class> classes) {
 		this.classes = classes;
+	}
+
+	private Map<Event, PilotEventPenalties> eventPenalties;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot", orphanRemoval = true)
+	@MapKey
+	@Column(nullable = false)
+	public Map<Event, PilotEventPenalties> getEventPenalties() {
+		return eventPenalties;
+	}
+
+	public void setEventPenalties(Map<Event, PilotEventPenalties> eventPenalties) {
+		this.eventPenalties = eventPenalties;
+	}
+
+	private int fixedPenalties;
+
+	/**
+	 * Total fixed penalty points to be applied to the series score
+	 */
+	@Column(nullable = false)
+	public int getFixedPenalties() {
+		return fixedPenalties;
+	}
+
+	public void setFixedPenalties(int fixedPenalties) {
+		this.fixedPenalties = fixedPenalties;
 	}
 }

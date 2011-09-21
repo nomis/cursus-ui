@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.db.data;
 
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -25,6 +26,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -90,5 +93,18 @@ public class Event extends AbstractEntity {
 
 	public void setRaces(Set<Race> races) {
 		this.races = races;
+	}
+
+	private Map<Pilot, PilotEventPenalties> penalties;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
+	@MapKey
+	@Column(nullable = false)
+	public Map<Pilot, PilotEventPenalties> getPenalties() {
+		return penalties;
+	}
+
+	public void setPenalties(Map<Pilot, PilotEventPenalties> penalties) {
+		this.penalties = penalties;
 	}
 }
