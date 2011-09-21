@@ -25,10 +25,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.data.Cursus;
 
 public class CursusDAO extends AbstractDAO<Cursus> {
-	public Cursus findSingleton() {
+	public Cursus findSingleton() throws InvalidDatabaseException {
 		EntityManager em = getEntityManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
@@ -39,6 +40,10 @@ public class CursusDAO extends AbstractDAO<Cursus> {
 
 		TypedQuery<Cursus> tq = em.createQuery(q);
 		List<Cursus> rs = tq.getResultList();
+
+		if (rs.size() > 1) {
+			throw new InvalidDatabaseException("Too many cursus rows: " + rs.size()); //$NON-NLS-1$
+		}
 
 		return rs.isEmpty() ? null : rs.get(0);
 	}

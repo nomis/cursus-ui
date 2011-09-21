@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import eu.lp0.cursus.db.DatabaseVersionException;
+import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
@@ -43,22 +44,27 @@ class DatabaseManager implements ActionListener {
 		win.execute(new Runnable() {
 			@Override
 			public void run() {
-				switch (Commands.valueOf(ae.getActionCommand())) {
-				case NEW:
-					newDatabase();
-					break;
-				case OPEN:
-					openDatabase();
-					break;
-				case SAVE:
-					saveDatabase();
-					break;
-				case SAVE_AS:
-					saveAsDatabase();
-					break;
-				case CLOSE:
-					closeDatabase();
-					break;
+				try {
+					switch (Commands.valueOf(ae.getActionCommand())) {
+					case NEW:
+						newDatabase();
+						break;
+					case OPEN:
+						openDatabase();
+						break;
+					case SAVE:
+						saveDatabase();
+						break;
+					case SAVE_AS:
+						saveAsDatabase();
+						break;
+					case CLOSE:
+						closeDatabase();
+						break;
+					}
+				} catch (InvalidDatabaseException e) {
+					// TODO handle uncaught exceptions
+					throw new RuntimeException(e);
 				}
 			}
 		});
@@ -90,7 +96,7 @@ class DatabaseManager implements ActionListener {
 		return true;
 	}
 
-	void newDatabase() {
+	void newDatabase() throws InvalidDatabaseException {
 		if (trySaveDatabase(Messages.getString("menu.file.new"))) { //$NON-NLS-1$
 			boolean ok = true;
 			try {

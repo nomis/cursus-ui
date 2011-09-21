@@ -95,14 +95,14 @@ public class Pilot extends AbstractEntity {
 		this.numbers = numbers;
 	}
 
-	private Set<SeriesClass> classes;
+	private Set<Class> classes;
 
 	@ManyToMany(mappedBy = "pilots")
-	public Set<SeriesClass> getClasses() {
+	public Set<Class> getClasses() {
 		return classes;
 	}
 
-	public void setClasses(Set<SeriesClass> classes) {
+	public void setClasses(Set<Class> classes) {
 		this.classes = classes;
 	}
 }

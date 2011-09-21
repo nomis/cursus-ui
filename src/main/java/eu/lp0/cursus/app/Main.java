@@ -25,7 +25,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import eu.lp0.cursus.db.Database;
-import eu.lp0.cursus.db.DatabaseVersionException;
+import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.MemoryDatabase;
 import eu.lp0.cursus.ui.MainWindow;
 
@@ -61,7 +61,7 @@ public class Main implements Runnable {
 		return db;
 	}
 
-	public synchronized boolean open() throws SQLException, DatabaseVersionException {
+	public synchronized boolean open() throws SQLException, InvalidDatabaseException {
 		close();
 		if (!isOpen()) {
 			db = new MemoryDatabase();

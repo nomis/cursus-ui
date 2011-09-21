@@ -39,7 +39,7 @@ public abstract class Database {
 
 	private static final CursusDAO cursusDAO = new CursusDAO();
 
-	protected Database(String name, String url, String user, String password) throws SQLException, DatabaseVersionException {
+	protected Database(String name, String url, String user, String password) throws SQLException, DatabaseVersionException, InvalidDatabaseException {
 		this.name = name;
 		this.session = new DatabaseSession(this);
 
@@ -70,7 +70,7 @@ public abstract class Database {
 		session.endSession();
 	}
 
-	private void initDatabase() throws DatabaseVersionException {
+	private void initDatabase() throws InvalidDatabaseException {
 		startSession();
 		try {
 			DatabaseSession.begin();

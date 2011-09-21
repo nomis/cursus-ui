@@ -17,25 +17,8 @@
  */
 package eu.lp0.cursus.db;
 
-import java.sql.SQLException;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
-
-import eu.lp0.cursus.util.Messages;
-
-public class MemoryDatabase extends Database {
-	private static final AtomicLong untitled = new AtomicLong();
-
-	public MemoryDatabase() throws SQLException, InvalidDatabaseException {
-		super(String.format(Messages.getString("db.untitled"), untitled.incrementAndGet()), "jdbc:hsqldb:mem:" + UUID.randomUUID(), "SA", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-	}
-
-	@Override
-	public boolean isSaved() {
-		return false;
-	}
-
-	public synchronized void save() {
-
+public class InvalidDatabaseException extends Exception {
+	public InvalidDatabaseException(String message) {
+		super(message);
 	}
 }

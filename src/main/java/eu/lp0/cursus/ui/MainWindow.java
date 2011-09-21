@@ -49,6 +49,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 import eu.lp0.cursus.app.Main;
 import eu.lp0.cursus.db.Database;
+import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
@@ -57,7 +58,7 @@ public class MainWindow extends JFrame implements Executor {
 	private final Main main;
 
 	private DatabaseManager dbMgr = new DatabaseManager(this);
-	private ClassesManager clsMgr;
+	private ClassManager clsMgr;
 
 	private JMenuBar menuBar;
 	private JMenu mnuFile;
@@ -92,17 +93,22 @@ public class MainWindow extends JFrame implements Executor {
 
 		addWindowListener(new WindowAdapter() {
 			@Override
-			public void windowOpened(WindowEvent e) {
+			public void windowOpened(WindowEvent we) {
 				execute(new Runnable() {
 					@Override
 					public void run() {
-						MainWindow.this.startup(args);
+						try {
+							MainWindow.this.startup(args);
+						} catch (InvalidDatabaseException e) {
+							// TODO handle uncaught exceptions
+							throw new RuntimeException(e);
+						}
 					}
 				});
 			}
 
 			@Override
-			public void windowClosing(WindowEvent e) {
+			public void windowClosing(WindowEvent we) {
 				execute(new Runnable() {
 					@Override
 					public void run() {
@@ -133,7 +139,7 @@ public class MainWindow extends JFrame implements Executor {
 		background.execute(command);
 	}
 
-	private void startup(String[] args) {
+	private void startup(String[] args) throws InvalidDatabaseException {
 		try {
 			if (args.length == 0) {
 				dbMgr.newDatabase();
@@ -282,7 +288,7 @@ public class MainWindow extends JFrame implements Executor {
 		mnuFileExit = new JMenuItem();
 		mnuFileExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
 		mnuFileExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent ae) {
 				WindowEvent wev = new WindowEvent(MainWindow.this, WindowEvent.WINDOW_CLOSING);
 				Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
 			}
@@ -303,7 +309,7 @@ public class MainWindow extends JFrame implements Executor {
 	}
 
 	private void bindGUI() {
-		clsMgr = new ClassesManager(this, mainTabs, classesTab, classesList);
+		clsMgr = new ClassManager(this, mainTabs, classesTab, classesList);
 	}
 
 	public void databaseOpened() {
