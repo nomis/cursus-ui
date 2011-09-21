@@ -17,7 +17,7 @@
  */
 package eu.lp0.cursus.db;
 
-public class InvalidDatabaseException extends Exception {
+public class InvalidDatabaseException extends RuntimeException {
 	public InvalidDatabaseException(String message) {
 		super(message);
 	}

@@ -28,8 +28,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.lp0.cursus.db.dao.CursusDAO;
+import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Cursus;
+import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.util.Constants;
+import eu.lp0.cursus.util.Messages;
 
 public abstract class Database {
 	private final Logger log = LoggerFactory.getLogger(getClass());
@@ -38,6 +41,7 @@ public abstract class Database {
 	private final DatabaseSession session;
 
 	private static final CursusDAO cursusDAO = new CursusDAO();
+	private static final SeriesDAO seriesDAO = new SeriesDAO();
 
 	protected Database(String name, String url, String user, String password) throws SQLException, DatabaseVersionException, InvalidDatabaseException {
 		this.name = name;
@@ -76,14 +80,10 @@ public abstract class Database {
 			DatabaseSession.begin();
 
 			Cursus cursus = cursusDAO.findSingleton();
-
 			if (cursus == null) {
 				log.info("Database \"" + name + "\" has no version record, setting to " + DatabaseVersion.getLatest()); //$NON-NLS-1$ //$NON-NLS-2$
 
-				cursus = new Cursus();
-				cursus.setVersion(DatabaseVersion.getLatest().asLong());
-				cursus.setDescription(Constants.APP_DESC);
-
+				cursus = new Cursus(DatabaseVersion.getLatest().asLong(), Constants.APP_DESC);
 				cursusDAO.persist(cursus);
 			} else if (cursus.getVersion() != DatabaseVersion.getLatest().asLong()) {
 				// TODO support upgrading
@@ -92,6 +92,14 @@ public abstract class Database {
 			} else {
 				// TODO need to parse the actual version
 				log.info("Database \"" + name + "\" has version " + DatabaseVersion.getLatest()); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+
+			Series series = seriesDAO.findSingleton();
+			if (series == null) {
+				log.info("Database \"" + name + "\" has no series, creating untitled series"); //$NON-NLS-1$ //$NON-NLS-2$
+
+				series = new Series(Messages.getString("series.untitled")); //$NON-NLS-1$
+				seriesDAO.persist(series);
 			}
 
 			DatabaseSession.commit();

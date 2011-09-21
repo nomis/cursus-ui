@@ -31,6 +31,7 @@ import javax.swing.event.ChangeListener;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.ClassDAO;
+import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Class;
 
 class ClassManager {
@@ -41,6 +42,9 @@ class ClassManager {
 	private final JList classesList;
 
 	private boolean loaded;
+
+	private static final SeriesDAO seriesDAO = new SeriesDAO();
+	private static final ClassDAO classDAO = new ClassDAO();
 
 	ClassManager(MainWindow win, JTabbedPane mainTabs, JPanel classesTab, JList classesList) {
 		this.win = win;
@@ -65,8 +69,7 @@ class ClassManager {
 			try {
 				DatabaseSession.begin();
 
-				ClassDAO classDAO = new ClassDAO();
-				List<Class> classes = classDAO.getAll();
+				List<Class> classes = classDAO.findAll(seriesDAO.findSingleton());
 				Collections.sort(classes);
 				for (Class cls : classes) {
 					classNames.add(cls.getName());

@@ -26,23 +26,23 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import eu.lp0.cursus.db.InvalidDatabaseException;
-import eu.lp0.cursus.db.data.Cursus;
+import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.util.Messages;
 
-public class CursusDAO extends AbstractDAO<Cursus> {
-	public Cursus findSingleton() throws InvalidDatabaseException {
+public class SeriesDAO extends AbstractDAO<Series> {
+	public Series findSingleton() throws InvalidDatabaseException {
 		EntityManager em = getEntityManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
-		CriteriaQuery<Cursus> q = cb.createQuery(Cursus.class);
-		Root<Cursus> c = q.from(Cursus.class);
+		CriteriaQuery<Series> q = cb.createQuery(Series.class);
+		Root<Series> c = q.from(Series.class);
 		q.select(c);
 
-		TypedQuery<Cursus> tq = em.createQuery(q);
-		List<Cursus> rs = tq.getResultList();
+		TypedQuery<Series> tq = em.createQuery(q);
+		List<Series> rs = tq.getResultList();
 
 		if (rs.size() > 1) {
-			throw new InvalidDatabaseException(String.format(Messages.getString("db.too-many-database-identifier-rows"), rs.size())); //$NON-NLS-1$
+			throw new InvalidDatabaseException(String.format(Messages.getString("db.invalid-num-race-series"), rs.size())); //$NON-NLS-1$
 		}
 
 		return rs.isEmpty() ? null : rs.get(0);
