@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.ui;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JList;
@@ -81,6 +82,8 @@ class ClassManager {
 			} finally {
 				win.getDatabase().endSession();
 			}
+
+			Collections.sort(classes);
 
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
