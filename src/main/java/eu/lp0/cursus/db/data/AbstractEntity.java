@@ -40,4 +40,17 @@ public abstract class AbstractEntity {
 	private void setId(long id) {
 		this.id = id;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) {
+			return false;
+		}
+
+		if (!getClass().equals(o.getClass())) {
+			return false;
+		}
+
+		return getId().equals(((AbstractEntity)o).getId());
+	}
 }
