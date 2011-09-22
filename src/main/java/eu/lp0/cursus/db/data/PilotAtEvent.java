@@ -17,23 +17,28 @@
  */
 package eu.lp0.cursus.db.data;
 
-import javax.persistence.Column;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 /**
- * Pilot event penalties
+ * Pilot at event
  */
-@Entity(name = "pilot_event_penalties")
+@Entity(name = "pilot_at_event")
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "event_id", "pilot_id" }) })
-public class PilotEventPenalties extends AbstractEntity {
-	PilotEventPenalties() {
+public class PilotAtEvent extends AbstractEntity {
+	PilotAtEvent() {
 	}
 
-	public PilotEventPenalties(Event event, Pilot pilot) {
+	public PilotAtEvent(Event event, Pilot pilot) {
 		setEvent(event);
 		setPilot(pilot);
 	}
@@ -62,17 +67,16 @@ public class PilotEventPenalties extends AbstractEntity {
 		this.pilot = pilot;
 	}
 
-	private int fixedPenalties;
+	private List<Penalty> penalties = new ArrayList<Penalty>();
 
-	/**
-	 * Total fixed penalty points to be applied to the event score
-	 */
-	@Column(nullable = false)
-	public int getFixedPenalties() {
-		return fixedPenalties;
+	@ElementCollection
+	@CollectionTable(name = "pilot_at_event_penalties", joinColumns = @JoinColumn(name = "pilot_at_event_id"))
+	@OrderColumn(name = "penalties_order")
+	public List<Penalty> getPenalties() {
+		return penalties;
 	}
 
-	public void setFixedPenalties(int fixedPenalties) {
-		this.fixedPenalties = fixedPenalties;
+	public void setPenalties(List<Penalty> penalties) {
+		this.penalties = penalties;
 	}
 }

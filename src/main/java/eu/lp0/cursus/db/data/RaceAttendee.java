@@ -17,10 +17,16 @@
  */
 package eu.lp0.cursus.db.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -118,31 +124,16 @@ public class RaceAttendee extends AbstractEntity {
 		this.type = type;
 	}
 
-	private int automaticPenalties;
+	private List<Penalty> penalties = new ArrayList<Penalty>();
 
-	/**
-	 * Penalties where the points given for them are calculated automatically
-	 */
-	@Column(nullable = false)
-	public int getAutomaticPenalties() {
-		return automaticPenalties;
+	@ElementCollection
+	@CollectionTable(name = "race_attendee_penalties", joinColumns = @JoinColumn(name = "race_attendee_id"))
+	@OrderColumn(name = "penalties_order")
+	public List<Penalty> getPenalties() {
+		return penalties;
 	}
 
-	public void setAutomaticPenalties(int automaticPenalties) {
-		this.automaticPenalties = automaticPenalties;
-	}
-
-	private int fixedPenalties;
-
-	/**
-	 * Total fixed penalty points to be applied
-	 */
-	@Column(nullable = false)
-	public int getFixedPenalties() {
-		return fixedPenalties;
-	}
-
-	public void setFixedPenalties(int fixedPenalties) {
-		this.fixedPenalties = fixedPenalties;
+	public void setPenalties(List<Penalty> penalties) {
+		this.penalties = penalties;
 	}
 }

@@ -17,12 +17,17 @@
  */
 package eu.lp0.cursus.db.data;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -32,6 +37,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -143,30 +149,32 @@ public class Pilot extends AbstractEntity {
 		this.classes = classes;
 	}
 
-	private Map<Event, PilotEventPenalties> eventPenalties;
+	private Map<Event, PilotAtEvent> events = new HashMap<Event, PilotAtEvent>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot", orphanRemoval = true)
 	@MapKey
 	@Column(nullable = false)
-	public Map<Event, PilotEventPenalties> getEventPenalties() {
-		return eventPenalties;
+	public Map<Event, PilotAtEvent> getEvents() {
+		return events;
 	}
 
-	public void setEventPenalties(Map<Event, PilotEventPenalties> eventPenalties) {
-		this.eventPenalties = eventPenalties;
+	public void setEvents(Map<Event, PilotAtEvent> events) {
+		this.events = events;
 	}
 
-	private int fixedPenalties;
+	private List<Penalty> seriesPenalties = new ArrayList<Penalty>();
 
 	/**
-	 * Total fixed penalty points to be applied to the series score
+	 * Pilot series penalties
 	 */
-	@Column(nullable = false)
-	public int getFixedPenalties() {
-		return fixedPenalties;
+	@ElementCollection
+	@CollectionTable(name = "pilot_series_penalties", joinColumns = @JoinColumn(name = "pilot_id"))
+	@OrderColumn(name = "penalties_order")
+	public List<Penalty> getSeriesPenalties() {
+		return seriesPenalties;
 	}
 
-	public void setFixedPenalties(int fixedPenalties) {
-		this.fixedPenalties = fixedPenalties;
+	public void setSeriesPenalties(List<Penalty> seriesPenalties) {
+		this.seriesPenalties = seriesPenalties;
 	}
 }

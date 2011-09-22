@@ -112,16 +112,16 @@ public class Event extends AbstractEntity implements Comparable<Event> {
 		this.races = races;
 	}
 
-	private Map<Pilot, PilotEventPenalties> penalties = new HashMap<Pilot, PilotEventPenalties>();
+	private Map<Pilot, PilotAtEvent> penalties = new HashMap<Pilot, PilotAtEvent>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
 	@MapKey
 	@Column(nullable = false)
-	public Map<Pilot, PilotEventPenalties> getPenalties() {
+	public Map<Pilot, PilotAtEvent> getPenalties() {
 		return penalties;
 	}
 
-	public void setPenalties(Map<Pilot, PilotEventPenalties> penalties) {
+	public void setPenalties(Map<Pilot, PilotAtEvent> penalties) {
 		this.penalties = penalties;
 	}
 
