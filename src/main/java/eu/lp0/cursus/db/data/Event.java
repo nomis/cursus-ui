@@ -44,7 +44,7 @@ public class Event extends AbstractEntity implements Comparable<Event> {
 	}
 
 	public Event(Series series, String name) {
-		this(series, name, ""); //$NON-NLS-1$
+		this(series, name, null);
 	}
 
 	public Event(Series series, String name, String description) {
@@ -91,7 +91,7 @@ public class Event extends AbstractEntity implements Comparable<Event> {
 
 	private String description;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	public String getDescription() {
 		return description;
 	}

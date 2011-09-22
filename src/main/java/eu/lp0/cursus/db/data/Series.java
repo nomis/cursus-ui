@@ -51,6 +51,17 @@ public class Series extends AbstractEntity implements Comparable<Series> {
 		this.name = name;
 	}
 
+	private String description;
+
+	@Column(nullable = true)
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	private List<Event> events = new ArrayList<Event>();
 
 	@OneToMany(mappedBy = "series")
