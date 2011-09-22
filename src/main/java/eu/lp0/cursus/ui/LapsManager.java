@@ -95,7 +95,7 @@ class LapsManager {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					((DefaultTreeModel)lapsRaceList.getModel()).setRoot(new DatabaseTreeModel(seriesList));
+					updateModel(lapsRaceList, seriesList);
 				}
 			});
 		}
@@ -107,7 +107,13 @@ class LapsManager {
 				load();
 			}
 		} else {
-			((DefaultTreeModel)lapsRaceList.getModel()).setRoot(null);
+			updateModel(lapsRaceList, null);
 		}
+	}
+
+	private static void updateModel(JTree tree, List<Series> seriesList) {
+		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+		DatabaseTreeNode root = (DatabaseTreeNode)tree.getModel().getRoot();
+		root.updateTree(model, seriesList);
 	}
 }

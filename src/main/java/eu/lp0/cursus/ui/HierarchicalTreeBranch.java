@@ -17,12 +17,12 @@
  */
 package eu.lp0.cursus.ui;
 
-import javax.swing.tree.DefaultMutableTreeNode;
+import java.util.List;
 
-import eu.lp0.cursus.db.data.Race;
+import javax.swing.tree.DefaultTreeModel;
 
-public class RaceTreeModel extends DefaultMutableTreeNode {
-	public RaceTreeModel(Race race) {
-		super(race);
-	}
+public interface HierarchicalTreeBranch<P extends Comparable<P>, T extends Comparable<T>> {
+	public void updateTree(DefaultTreeModel model, List<T> items);
+
+	public abstract List<T> getChildItems(P item);
 }

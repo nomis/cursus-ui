@@ -19,14 +19,10 @@ package eu.lp0.cursus.ui;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import eu.lp0.cursus.db.data.Event;
-import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.db.data.Race;
 
-public class SeriesTreeModel extends DefaultMutableTreeNode {
-	public SeriesTreeModel(Series series) {
-		super(series);
-		for (Event event : series.getEvents()) {
-			add(new EventTreeModel(event));
-		}
+public class RaceTreeNode extends DefaultMutableTreeNode {
+	public RaceTreeNode(Race race) {
+		super(race);
 	}
 }

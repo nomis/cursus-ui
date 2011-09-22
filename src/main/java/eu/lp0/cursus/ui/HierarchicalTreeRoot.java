@@ -18,15 +18,25 @@
 package eu.lp0.cursus.ui;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
-import eu.lp0.cursus.db.data.Event;
-import eu.lp0.cursus.db.data.Race;
+public abstract class HierarchicalTreeRoot<P extends Comparable<P>, C extends Comparable<C>, N extends DefaultMutableTreeNode> extends
+		HierarchicalTreeNode<P, N> {
+	public HierarchicalTreeRoot() {
+	}
 
-public class EventTreeModel extends DefaultMutableTreeNode {
-	public EventTreeModel(Event event) {
-		super(event);
-		for (Race race : event.getRaces()) {
-			add(new RaceTreeModel(race));
+	public HierarchicalTreeRoot(Object userObject) {
+		super(userObject);
+	}
+
+	@Override
+	protected void updateNode(DefaultTreeModel model, N node, P item) {
+		super.updateNode(model, node, item);
+
+		if (node instanceof HierarchicalTreeBranch) {
+			@SuppressWarnings("unchecked")
+			HierarchicalTreeBranch<P, C> branch = ((HierarchicalTreeBranch<P, C>)node);
+			branch.updateTree(model, branch.getChildItems(item));
 		}
 	}
 }

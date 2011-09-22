@@ -45,7 +45,6 @@ import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import eu.lp0.cursus.app.Main;
@@ -224,7 +223,7 @@ public class MainWindow extends JFrame implements Executor {
 		lapsRaceList = new JTree();
 		lapsRaceList.setRootVisible(false);
 		lapsRaceList.setMinimumSize(new Dimension(150, 0));
-		lapsRaceList.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
+		lapsRaceList.setModel(new DefaultTreeModel(new DatabaseTreeNode()));
 		lapsSplitPane.setLeftComponent(lapsRaceList);
 
 		lapsScrollPane = new JScrollPane();
@@ -243,7 +242,7 @@ public class MainWindow extends JFrame implements Executor {
 
 		penaltiesRaceList = new JTree();
 		penaltiesRaceList.setRootVisible(false);
-		penaltiesRaceList.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
+		penaltiesRaceList.setModel(new DefaultTreeModel(new DatabaseTreeNode()));
 		penaltiesRaceList.setMinimumSize(new Dimension(150, 0));
 		penaltiesSplitPane.setLeftComponent(penaltiesRaceList);
 
