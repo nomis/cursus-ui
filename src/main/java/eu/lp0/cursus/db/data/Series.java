@@ -37,7 +37,12 @@ public class Series extends AbstractEntity implements Comparable<Series> {
 	}
 
 	public Series(String name) {
+		this(name, ""); //$NON-NLS-1$
+	}
+
+	public Series(String name, String description) {
 		setName(name);
+		setDescription(description);
 	}
 
 	private String name;
@@ -53,7 +58,7 @@ public class Series extends AbstractEntity implements Comparable<Series> {
 
 	private String description;
 
-	@Column(nullable = true)
+	@Column(nullable = false)
 	public String getDescription() {
 		return description;
 	}
