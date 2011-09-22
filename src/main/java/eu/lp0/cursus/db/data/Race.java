@@ -48,8 +48,6 @@ public class Race extends AbstractEntity implements Comparable<Race> {
 		setEvent(event);
 		setName(name);
 		setDescription(description);
-
-		event.getRaces().add(this);
 	}
 
 	private Event event;
