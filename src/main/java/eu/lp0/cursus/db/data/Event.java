@@ -17,17 +17,20 @@
  */
 package eu.lp0.cursus.db.data;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -36,7 +39,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity(name = "event")
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "series_id", "name" }) })
-public class Event extends AbstractEntity {
+public class Event extends AbstractEntity implements Comparable<Event> {
 	Event() {
 	}
 
@@ -62,6 +65,19 @@ public class Event extends AbstractEntity {
 		this.series = series;
 	}
 
+	private int seriesOrder;
+
+	@GeneratedValue
+	@Column(name = "series_order")
+	public int getSeriesOrder() {
+		return seriesOrder;
+	}
+
+	@SuppressWarnings("unused")
+	private void setSeriesOrder(int seriesOrder) {
+		this.seriesOrder = seriesOrder;
+	}
+
 	private String name;
 
 	@Column(nullable = false)
@@ -84,18 +100,19 @@ public class Event extends AbstractEntity {
 		this.description = description;
 	}
 
-	private Set<Race> races;
+	private List<Race> races = new ArrayList<Race>();
 
-	@ManyToMany(mappedBy = "event")
-	public Set<Race> getRaces() {
+	@OneToMany(mappedBy = "event")
+	@OrderColumn(name = "event_order", nullable = false)
+	public List<Race> getRaces() {
 		return races;
 	}
 
-	public void setRaces(Set<Race> races) {
+	public void setRaces(List<Race> races) {
 		this.races = races;
 	}
 
-	private Map<Pilot, PilotEventPenalties> penalties;
+	private Map<Pilot, PilotEventPenalties> penalties = new HashMap<Pilot, PilotEventPenalties>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
 	@MapKey
@@ -106,5 +123,24 @@ public class Event extends AbstractEntity {
 
 	public void setPenalties(Map<Pilot, PilotEventPenalties> penalties) {
 		this.penalties = penalties;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
+
+	@Override
+	public int compareTo(Event o) {
+		if (this == o) {
+			return 0;
+		}
+
+		int ret = getSeries().compareTo(o.getSeries());
+		if (ret != 0) {
+			return ret;
+		}
+
+		return Integer.valueOf(getSeriesOrder()).compareTo(o.getSeriesOrder());
 	}
 }

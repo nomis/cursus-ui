@@ -17,12 +17,16 @@
  */
 package eu.lp0.cursus.db.data;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 
 /**
  * Race series
@@ -47,20 +51,21 @@ public class Series extends AbstractEntity implements Comparable<Series> {
 		this.name = name;
 	}
 
-	private Set<Event> events;
+	private List<Event> events = new ArrayList<Event>();
 
-	@ManyToMany(mappedBy = "series")
-	public Set<Event> getEvents() {
+	@OneToMany(mappedBy = "series")
+	@OrderColumn(name = "series_order", nullable = false)
+	public List<Event> getEvents() {
 		return events;
 	}
 
-	public void setEvents(Set<Event> events) {
+	public void setEvents(List<Event> events) {
 		this.events = events;
 	}
 
-	private Set<Pilot> pilots;
+	private Set<Pilot> pilots = new HashSet<Pilot>();
 
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "series")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "series")
 	public Set<Pilot> getPilots() {
 		return pilots;
 	}
@@ -69,9 +74,9 @@ public class Series extends AbstractEntity implements Comparable<Series> {
 		this.pilots = pilots;
 	}
 
-	private Set<Class> classes;
+	private Set<Class> classes = new HashSet<Class>();
 
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "series")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "series")
 	public Set<Class> getClasses() {
 		return classes;
 	}
@@ -87,6 +92,10 @@ public class Series extends AbstractEntity implements Comparable<Series> {
 
 	@Override
 	public int compareTo(Series o) {
+		if (this == o) {
+			return 0;
+		}
+
 		return getName().compareTo(o.getName());
 	}
 }

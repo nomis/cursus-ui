@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.db.data;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -120,7 +121,7 @@ public class Pilot extends AbstractEntity {
 	/**
 	 * Pilot's race numbers
 	 */
-	private Set<RaceNumber> numbers;
+	private Set<RaceNumber> numbers = new HashSet<RaceNumber>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot", orphanRemoval = true)
 	public Set<RaceNumber> getRaceNumbers() {
@@ -131,7 +132,7 @@ public class Pilot extends AbstractEntity {
 		this.numbers = numbers;
 	}
 
-	private Set<Class> classes;
+	private Set<Class> classes = new HashSet<Class>();
 
 	@ManyToMany(mappedBy = "pilots")
 	public Set<Class> getClasses() {

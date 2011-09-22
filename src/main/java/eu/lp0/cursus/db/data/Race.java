@@ -17,11 +17,13 @@
  */
 package eu.lp0.cursus.db.data;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKey;
@@ -34,7 +36,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity(name = "race")
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "event_id", "name" }) })
-public class Race extends AbstractEntity {
+public class Race extends AbstractEntity implements Comparable<Race> {
 	Race() {
 	}
 
@@ -46,6 +48,8 @@ public class Race extends AbstractEntity {
 		setEvent(event);
 		setName(name);
 		setDescription(description);
+
+		event.getRaces().add(this);
 	}
 
 	private Event event;
@@ -58,6 +62,19 @@ public class Race extends AbstractEntity {
 
 	public void setEvent(Event event) {
 		this.event = event;
+	}
+
+	private int eventOrder;
+
+	@GeneratedValue
+	@Column(name = "event_order")
+	public int getEventOrder() {
+		return eventOrder;
+	}
+
+	@SuppressWarnings("unused")
+	private void setEventOrder(int eventOrder) {
+		this.eventOrder = eventOrder;
 	}
 
 	private String name;
@@ -82,7 +99,7 @@ public class Race extends AbstractEntity {
 		this.description = description;
 	}
 
-	private Map<Pilot, RaceAttendee> attendees;
+	private Map<Pilot, RaceAttendee> attendees = new HashMap<Pilot, RaceAttendee>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "race", orphanRemoval = true)
 	@MapKey
@@ -93,5 +110,24 @@ public class Race extends AbstractEntity {
 
 	public void setAttendees(Map<Pilot, RaceAttendee> attendees) {
 		this.attendees = attendees;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
+
+	@Override
+	public int compareTo(Race o) {
+		if (this == o) {
+			return 0;
+		}
+
+		int ret = getEvent().compareTo(o.getEvent());
+		if (ret != 0) {
+			return ret;
+		}
+
+		return Integer.valueOf(getEventOrder()).compareTo(o.getEventOrder());
 	}
 }

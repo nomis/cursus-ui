@@ -33,8 +33,8 @@ public class RaceNumber extends AbstractEntity implements Comparable<RaceNumber>
 	RaceNumber() {
 	}
 
-	public RaceNumber(Series series, String organisation, int number) {
-		setSeries(series);
+	public RaceNumber(Pilot pilot, String organisation, int number) {
+		setSeries(pilot.getSeries());
 		setOrganisation(organisation);
 		setNumber(number);
 	}
