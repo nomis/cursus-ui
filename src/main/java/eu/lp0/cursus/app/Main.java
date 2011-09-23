@@ -23,19 +23,27 @@ import java.sql.SQLException;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.MemoryDatabase;
 import eu.lp0.cursus.ui.MainWindow;
+import eu.lp0.cursus.util.Constants;
 
 public class Main implements Runnable {
+	private static final Logger log = LoggerFactory.getLogger(Main.class);
 	private final MainWindow win;
 	private Database db = null;
 
 	public static void main(String[] args) throws InterruptedException, InvocationTargetException {
+		log.info(Constants.APP_DESC);
+
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
+			log.debug("Unable to select system look and feel", e); //$NON-NLS-1$
 		}
 
 		SwingUtilities.invokeAndWait(new Main(args));
