@@ -31,6 +31,7 @@ import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.ClassDAO;
 import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Class;
+import eu.lp0.cursus.ui.component.EntityComboBoxModel;
 
 class ClassManager {
 	private final MainWindow win;

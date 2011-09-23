@@ -15,14 +15,14 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui;
+package eu.lp0.cursus.ui.tree;
 
-import java.util.List;
+import javax.swing.tree.DefaultMutableTreeNode;
 
-import javax.swing.tree.DefaultTreeModel;
+import eu.lp0.cursus.db.data.Race;
 
-public interface HierarchicalTreeBranch<P extends Comparable<P>, T extends Comparable<T>> {
-	public void updateTree(DefaultTreeModel model, List<T> items);
-
-	public abstract List<T> getChildItems(P item);
+public class RaceTreeNode extends DefaultMutableTreeNode {
+	public RaceTreeNode(Race race) {
+		super(race);
+	}
 }

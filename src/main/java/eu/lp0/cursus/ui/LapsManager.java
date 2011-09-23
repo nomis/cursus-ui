@@ -35,6 +35,7 @@ import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.ui.tree.DatabaseTreeNode;
 
 class LapsManager {
 	private final MainWindow win;

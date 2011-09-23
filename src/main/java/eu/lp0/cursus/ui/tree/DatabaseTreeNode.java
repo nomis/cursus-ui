@@ -15,10 +15,11 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui;
+package eu.lp0.cursus.ui.tree;
 
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.ui.component.HierarchicalTreeRoot;
 
 public class DatabaseTreeNode extends HierarchicalTreeRoot<Series, Event, SeriesTreeNode> {
 	@Override

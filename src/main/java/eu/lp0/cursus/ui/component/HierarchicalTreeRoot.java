@@ -15,14 +15,28 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui;
+package eu.lp0.cursus.ui.component;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
-import eu.lp0.cursus.db.data.Race;
+public abstract class HierarchicalTreeRoot<P extends Comparable<P>, C extends Comparable<C>, N extends DefaultMutableTreeNode> extends
+		HierarchicalTreeNode<P, N> {
+	public HierarchicalTreeRoot() {
+	}
 
-public class RaceTreeNode extends DefaultMutableTreeNode {
-	public RaceTreeNode(Race race) {
-		super(race);
+	public HierarchicalTreeRoot(Object userObject) {
+		super(userObject);
+	}
+
+	@Override
+	protected void updateNode(DefaultTreeModel model, N node, P item) {
+		super.updateNode(model, node, item);
+
+		if (node instanceof HierarchicalTreeBranch) {
+			@SuppressWarnings("unchecked")
+			HierarchicalTreeBranch<P, C> branch = ((HierarchicalTreeBranch<P, C>)node);
+			branch.updateTree(model, branch.getChildItems(item));
+		}
 	}
 }

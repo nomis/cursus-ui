@@ -15,12 +15,14 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui;
+package eu.lp0.cursus.ui.tree;
 
 import java.util.List;
 
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.ui.component.HierarchicalTreeBranch;
+import eu.lp0.cursus.ui.component.HierarchicalTreeNode;
 
 public class EventTreeNode extends HierarchicalTreeNode<Race, RaceTreeNode> implements HierarchicalTreeBranch<Event, Race> {
 	public EventTreeNode(Event event) {
