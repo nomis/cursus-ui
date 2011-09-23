@@ -43,6 +43,7 @@ import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -344,13 +345,11 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 	}
 
 	public void databaseOpened() {
-		setTitle(Constants.APP_NAME + Constants.EN_DASH + main.getDatabase().getName());
-		syncGUI(true);
+		syncGUI(true, Constants.APP_NAME + Constants.EN_DASH + main.getDatabase().getName());
 	}
 
 	public void databaseClosed() {
-		syncGUI(false);
-		setTitle(Constants.APP_DESC);
+		syncGUI(false, Constants.APP_DESC);
 	}
 
 	private void enableStartupGUI(boolean enabled) {
@@ -358,17 +357,23 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 		mnuFileOpen.setEnabled(enabled);
 	}
 
-	private void syncGUI(boolean open) {
-		mainTabs.setVisible(open);
-		enableStartupGUI(true);
-		mnuFileSave.setEnabled(open);
-		mnuFileSaveAs.setEnabled(open);
-		mnuFileClose.setEnabled(open);
+	private void syncGUI(final boolean open, final String title) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				mainTabs.setVisible(open);
+				enableStartupGUI(true);
+				mnuFileSave.setEnabled(open);
+				mnuFileSaveAs.setEnabled(open);
+				mnuFileClose.setEnabled(open);
+				getRootPane().validate();
+
+				setTitle(title);
+			}
+		});
 
 		clsMgr.syncGUI(open);
 		lapsMgr.syncGUI(open);
 		penMgr.syncGUI(open);
-
-		getRootPane().validate();
 	}
 }
