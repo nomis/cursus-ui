@@ -15,19 +15,21 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui;
+package eu.lp0.cursus.ui.component;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-abstract class AbstractTabManager {
+import eu.lp0.cursus.ui.MainWindow;
+
+public abstract class AbstractTabManager {
 	protected final MainWindow win;
 	protected final JTabbedPane tabs;
 	protected final JPanel tab;
 
-	AbstractTabManager(MainWindow win, JTabbedPane tabs, JPanel tab) {
+	protected AbstractTabManager(MainWindow win, JTabbedPane tabs, JPanel tab) {
 		this.win = win;
 		this.tabs = tabs;
 		this.tab = tab;
@@ -53,7 +55,7 @@ abstract class AbstractTabManager {
 
 	protected abstract void databaseClosed();
 
-	void syncGUI(boolean open) {
+	public void syncGUI(boolean open) {
 		if (open) {
 			if (tabs.getSelectedComponent() == tab) {
 				tabSelected();

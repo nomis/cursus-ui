@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui;
+package eu.lp0.cursus.ui.tab;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +33,11 @@ import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.ui.MainWindow;
+import eu.lp0.cursus.ui.component.AbstractTabManager;
 import eu.lp0.cursus.ui.tree.DatabaseTreeNode;
 
-abstract class RaceTreeManager extends AbstractTabManager {
+public abstract class RaceTreeManager extends AbstractTabManager {
 	private final JTree raceList;
 	protected final DatabaseTreeNode tree;
 
@@ -43,7 +45,7 @@ abstract class RaceTreeManager extends AbstractTabManager {
 	private static final EventDAO eventDAO = new EventDAO();
 	private static final RaceDAO raceDAO = new RaceDAO();
 
-	RaceTreeManager(MainWindow win, JTabbedPane tabs, JPanel tab, JTree raceList) {
+	public RaceTreeManager(MainWindow win, JTabbedPane tabs, JPanel tab, JTree raceList) {
 		super(win, tabs, tab);
 		this.raceList = raceList;
 

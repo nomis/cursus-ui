@@ -15,14 +15,16 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui;
+package eu.lp0.cursus.ui.tab;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 
-class PenaltiesManager extends RaceTreeManager {
-	PenaltiesManager(MainWindow win, JTabbedPane mainTabs, JPanel penaltiesTab, JTree penaltiesRaceList) {
+import eu.lp0.cursus.ui.MainWindow;
+
+public class PenaltiesManager extends RaceTreeManager {
+	public PenaltiesManager(MainWindow win, JTabbedPane mainTabs, JPanel penaltiesTab, JTree penaltiesRaceList) {
 		super(win, mainTabs, penaltiesTab, penaltiesRaceList);
 	}
 

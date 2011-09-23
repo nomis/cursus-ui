@@ -15,14 +15,16 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui;
+package eu.lp0.cursus.ui.tab;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 
-class LapsManager extends RaceTreeManager {
-	LapsManager(MainWindow win, JTabbedPane mainTabs, JPanel lapsTab, JTree lapsRaceList) {
+import eu.lp0.cursus.ui.MainWindow;
+
+public class LapsManager extends RaceTreeManager {
+	public LapsManager(MainWindow win, JTabbedPane mainTabs, JPanel lapsTab, JTree lapsRaceList) {
 		super(win, mainTabs, lapsTab, lapsRaceList);
 	}
 

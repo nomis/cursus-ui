@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui;
+package eu.lp0.cursus.ui.tab;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,15 +29,17 @@ import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.ClassDAO;
 import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Class;
+import eu.lp0.cursus.ui.MainWindow;
+import eu.lp0.cursus.ui.component.AbstractTabManager;
 import eu.lp0.cursus.ui.component.EntityComboBoxModel;
 
-class ClassManager extends AbstractTabManager {
+public class ClassManager extends AbstractTabManager {
 	private final JList classesList;
 
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 	private static final ClassDAO classDAO = new ClassDAO();
 
-	ClassManager(MainWindow win, JTabbedPane mainTabs, JPanel classesTab, JList classesList) {
+	public ClassManager(MainWindow win, JTabbedPane mainTabs, JPanel classesTab, JList classesList) {
 		super(win, mainTabs, classesTab);
 		this.classesList = classesList;
 	}

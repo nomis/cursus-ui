@@ -51,6 +51,9 @@ import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.ui.component.EntityComboBoxModel;
+import eu.lp0.cursus.ui.tab.ClassManager;
+import eu.lp0.cursus.ui.tab.LapsManager;
+import eu.lp0.cursus.ui.tab.PenaltiesManager;
 import eu.lp0.cursus.ui.tree.DatabaseTreeNode;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
@@ -140,11 +143,11 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 		enableStartupGUI(false);
 	}
 
-	Main getMain() {
+	public Main getMain() {
 		return main;
 	}
 
-	Database getDatabase() {
+	public Database getDatabase() {
 		return main.getDatabase();
 	}
 
