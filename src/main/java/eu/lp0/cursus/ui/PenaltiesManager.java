@@ -21,9 +21,9 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 
-class LapsManager extends RaceTreeManager {
-	LapsManager(MainWindow win, JTabbedPane mainTabs, JPanel lapsTab, JTree lapsRaceList) {
-		super(win, mainTabs, lapsTab, lapsRaceList);
+class PenaltiesManager extends RaceTreeManager {
+	PenaltiesManager(MainWindow win, JTabbedPane mainTabs, JPanel penaltiesTab, JTree penaltiesRaceList) {
+		super(win, mainTabs, penaltiesTab, penaltiesRaceList);
 	}
 
 	@Override

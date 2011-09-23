@@ -24,8 +24,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.ClassDAO;
@@ -33,75 +31,48 @@ import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.ui.component.EntityComboBoxModel;
 
-class ClassManager {
-	private final MainWindow win;
-
-	private final JTabbedPane mainTabs;
-	private final JPanel classesTab;
+class ClassManager extends AbstractTabManager {
 	private final JList classesList;
 
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 	private static final ClassDAO classDAO = new ClassDAO();
 
 	ClassManager(MainWindow win, JTabbedPane mainTabs, JPanel classesTab, JList classesList) {
-		this.win = win;
-
-		this.mainTabs = mainTabs;
-		this.classesTab = classesTab;
+		super(win, mainTabs, classesTab);
 		this.classesList = classesList;
+	}
 
-		mainTabs.addChangeListener(new ChangeListener() {
+	@Override
+	@SuppressWarnings("unchecked")
+	protected void tabSelected() {
+		final List<Class> classes;
+
+		win.getDatabase().startSession();
+		try {
+			DatabaseSession.begin();
+
+			classes = classDAO.findAll(seriesDAO.findSingleton());
+			for (Class cls : classes) {
+				classDAO.detach(cls);
+			}
+
+			DatabaseSession.commit();
+		} finally {
+			win.getDatabase().endSession();
+		}
+
+		Collections.sort(classes);
+
+		SwingUtilities.invokeLater(new Runnable() {
 			@Override
-			public void stateChanged(ChangeEvent e) {
-				ClassManager.this.win.execute(new Runnable() {
-					@Override
-					public void run() {
-						if (ClassManager.this.mainTabs.getSelectedComponent() == ClassManager.this.classesTab) {
-							load();
-						}
-					}
-				});
+			public void run() {
+				((EntityComboBoxModel<Class>)classesList.getModel()).updateModel(classes);
 			}
 		});
 	}
 
-	@SuppressWarnings("unchecked")
-	private void load() {
-		if (win.getMain().isOpen()) {
-			final List<Class> classes;
-
-			win.getDatabase().startSession();
-			try {
-				DatabaseSession.begin();
-
-				classes = classDAO.findAll(seriesDAO.findSingleton());
-				for (Class cls : classes) {
-					classDAO.detach(cls);
-				}
-
-				DatabaseSession.commit();
-			} finally {
-				win.getDatabase().endSession();
-			}
-
-			Collections.sort(classes);
-
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					((EntityComboBoxModel<Class>)classesList.getModel()).updateModel(classes);
-				}
-			});
-		}
-	}
-
-	public void syncGUI(boolean open) {
-		if (open) {
-			if (mainTabs.getSelectedComponent() == classesTab) {
-				load();
-			}
-		} else {
-			classesList.setModel(new EntityComboBoxModel<Class>());
-		}
+	@Override
+	protected void databaseClosed() {
+		classesList.setModel(new EntityComboBoxModel<Class>());
 	}
 }

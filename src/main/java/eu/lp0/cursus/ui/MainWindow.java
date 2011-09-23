@@ -63,6 +63,7 @@ public class MainWindow extends JFrame implements Executor {
 	private DatabaseManager dbMgr = new DatabaseManager(this);
 	private ClassManager clsMgr;
 	private LapsManager lapsMgr;
+	private PenaltiesManager penMgr;
 
 	private JMenuBar menuBar;
 	private JMenu mnuFile;
@@ -337,6 +338,7 @@ public class MainWindow extends JFrame implements Executor {
 	private void bindGUI() {
 		clsMgr = new ClassManager(this, mainTabs, classesTab, classesList);
 		lapsMgr = new LapsManager(this, mainTabs, lapsTab, lapsRaceList);
+		penMgr = new PenaltiesManager(this, mainTabs, penaltiesTab, penaltiesRaceList);
 	}
 
 	public void databaseOpened() {
@@ -363,6 +365,7 @@ public class MainWindow extends JFrame implements Executor {
 
 		clsMgr.syncGUI(open);
 		lapsMgr.syncGUI(open);
+		penMgr.syncGUI(open);
 
 		getRootPane().validate();
 	}
