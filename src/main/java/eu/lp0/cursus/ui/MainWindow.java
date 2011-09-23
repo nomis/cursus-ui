@@ -30,7 +30,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -56,7 +55,7 @@ import eu.lp0.cursus.ui.tree.DatabaseTreeNode;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-public class MainWindow extends JFrame implements Executor {
+public class MainWindow extends AutoPrefsWindow implements Executor {
 	private final ExecutorService background = Executors.newSingleThreadExecutor();
 	private final Main main;
 
