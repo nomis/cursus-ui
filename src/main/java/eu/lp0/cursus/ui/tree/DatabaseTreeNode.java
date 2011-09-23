@@ -26,42 +26,4 @@ public class DatabaseTreeNode extends HierarchicalTreeRoot<Series, Event, Series
 	protected SeriesTreeNode constructChildNode(Series series) {
 		return new SeriesTreeNode(series);
 	}
-
-	// public void updateTree(DefaultTreeModel model, List<Series> seriesList) {
-	// if (seriesList == null || seriesList.isEmpty()) {
-	// removeAllChildren();
-	// return;
-	// }
-	//
-	// Iterator<Series> seriesIter = seriesList.iterator();
-	// Series next = seriesIter.hasNext() ? seriesIter.next() : null;
-	// int i = 0;
-	//
-	// while (next != null || i < getChildCount()) {
-	// if (i < getChildCount()) {
-	// SeriesTreeNode series = (SeriesTreeNode)getChildAt(i);
-	//
-	// if (next == null || series.getUserObject().compareTo(next) < 0) {
-	// remove(i);
-	// model.nodesWereRemoved(this, new int[] { i }, new Object[] { series });
-	// continue;
-	// } else if (series.getUserObject().equals(next)) {
-	// series.updateTree(next);
-	// model.nodesChanged(this, new int[] { i });
-	// } else {
-	// insert(new SeriesTreeNode(next), i);
-	// model.nodesWereInserted(this, new int[] { i });
-	// }
-	//
-	// i++;
-	// } else {
-	// insert(new SeriesTreeNode(next), i);
-	// model.nodesWereInserted(this, new int[] { i });
-	//
-	// i++;
-	// }
-	//
-	// next = seriesIter.hasNext() ? seriesIter.next() : null;
-	// }
-	// }
 }

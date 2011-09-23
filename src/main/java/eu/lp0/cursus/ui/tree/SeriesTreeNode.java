@@ -42,48 +42,4 @@ public class SeriesTreeNode extends HierarchicalTreeRoot<Event, Race, EventTreeN
 	public List<Event> getChildItems(Series series) {
 		return series.getEvents();
 	}
-
-	// @Override
-	// public Series getUserObject() {
-	// return (Series)super.getUserObject();
-	// }
-	//
-	// @Override
-	// public void setUserObject(Object userObject) {
-	// assert (userObject instanceof Series);
-	// super.setUserObject(userObject);
-	// }
-	//
-	// public void updateTree(Series series) {
-	// setUserObject(series);
-	// if (series.getEvents().isEmpty()) {
-	// removeAllChildren();
-	// return;
-	// }
-	//
-	// Iterator<Event> eventIter = series.getEvents().iterator();
-	// Event next = eventIter.hasNext() ? eventIter.next() : null;
-	// int i = 0;
-	//
-	// while (next != null || i < getChildCount()) {
-	// if (i < getChildCount()) {
-	// EventTreeNode event = (EventTreeNode)getChildAt(i);
-	//
-	// if (next == null || event.getUserObject().compareTo(next) < 0) {
-	// remove(i);
-	// continue;
-	// } else if (event.getUserObject().equals(next)) {
-	// event.updateTree(next);
-	// } else {
-	// insert(new EventTreeNode(next), i);
-	// }
-	//
-	// i++;
-	// } else {
-	// insert(new EventTreeNode(next), i++);
-	// }
-	//
-	// next = eventIter.hasNext() ? eventIter.next() : null;
-	// }
-	// }
 }

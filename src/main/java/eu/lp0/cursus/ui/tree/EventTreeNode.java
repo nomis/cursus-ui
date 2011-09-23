@@ -41,48 +41,4 @@ public class EventTreeNode extends HierarchicalTreeNode<Race, RaceTreeNode> impl
 	public List<Race> getChildItems(Event event) {
 		return event.getRaces();
 	}
-
-	// @Override
-	// public Event getUserObject() {
-	// return (Event)super.getUserObject();
-	// }
-	//
-	// @Override
-	// public void setUserObject(Object userObject) {
-	// assert (userObject instanceof Event);
-	// super.setUserObject(userObject);
-	// }
-	//
-	// public void updateTree(Event event) {
-	// setUserObject(event);
-	// if (event.getRaces() == null || event.getRaces().isEmpty()) {
-	// removeAllChildren();
-	// return;
-	// }
-	//
-	// Iterator<Race> raceIter = event.getRaces().iterator();
-	// Race next = raceIter.hasNext() ? raceIter.next() : null;
-	// int i = 0;
-	//
-	// while (next != null || i < getChildCount()) {
-	// if (i < getChildCount()) {
-	// RaceTreeNode race = (RaceTreeNode)getChildAt(i);
-	//
-	// if (next == null || race.getUserObject().compareTo(next) < 0) {
-	// remove(i);
-	// continue;
-	// } else if (race.getUserObject().equals(next)) {
-	// race.updateTree(next);
-	// } else {
-	// insert(new RaceTreeNode(next), i);
-	// }
-	//
-	// i++;
-	// } else {
-	// insert(new RaceTreeNode(next), i++);
-	// }
-	//
-	// next = raceIter.hasNext() ? raceIter.next() : null;
-	// }
-	// }
 }
