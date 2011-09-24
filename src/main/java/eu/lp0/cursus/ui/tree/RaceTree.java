@@ -17,8 +17,9 @@
  */
 package eu.lp0.cursus.ui.tree;
 
-import java.awt.event.MouseAdapter;
+import java.awt.Component;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
@@ -26,60 +27,73 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-public class RaceTree extends JTree {
-	private JPopupMenu series = new SeriesTreePopupMenu();
-	private JPopupMenu event = new EventTreePopupMenu();
-	private JPopupMenu race = new RaceTreePopupMenu();
+public class RaceTree extends JTree implements MouseListener {
+	private final Component main;
 
-	public RaceTree() {
+	public RaceTree(Component main) {
 		super(new DefaultTreeModel(new DatabaseTreeNode()));
+
+		this.main = main;
+
 		setRootVisible(false);
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent me) {
-				if (me.isPopupTrigger()) {
-					showMenu(me);
-				}
-			}
+		addMouseListener(this);
+	}
 
-			@Override
-			public void mouseReleased(MouseEvent me) {
-				if (me.isPopupTrigger()) {
-					showMenu(me);
-				}
-			}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
 
-			private JPopupMenu menuFromSelection(Object component) {
-				if (component instanceof SeriesTreeNode) {
-					return series;
-				} else if (component instanceof EventTreeNode) {
-					return event;
-				} else if (component instanceof RaceTreeNode) {
-					return race;
-				} else {
-					return null;
-				}
-			}
+	@Override
+	public void mousePressed(MouseEvent me) {
+		if (me.isPopupTrigger()) {
+			showMenu(me);
+		}
+	}
 
-			private TreePath ensureSelection(MouseEvent me) {
-				TreePath path = getPathForLocation(me.getX(), me.getY());
+	@Override
+	public void mouseReleased(MouseEvent me) {
+		if (me.isPopupTrigger()) {
+			showMenu(me);
+		}
+	}
 
-				if (getSelectionPath() != path) {
-					setSelectionPath(path);
-				}
+	private JPopupMenu menuFromSelection(Object component) {
+		if (component instanceof SeriesTreeNode) {
+			return new SeriesTreePopupMenu(main, ((SeriesTreeNode)component).getUserObject());
+		} else if (component instanceof EventTreeNode) {
+			return new EventTreePopupMenu(main, ((EventTreeNode)component).getUserObject());
+		} else if (component instanceof RaceTreeNode) {
+			return new RaceTreePopupMenu(main, ((RaceTreeNode)component).getUserObject());
+		} else {
+			return null;
+		}
+	}
 
-				return path;
-			}
+	private TreePath ensureSelection(MouseEvent me) {
+		TreePath path = getPathForLocation(me.getX(), me.getY());
 
-			private void showMenu(MouseEvent me) {
-				TreePath path = ensureSelection(me);
+		if (getSelectionPath() != path) {
+			setSelectionPath(path);
+		}
 
-				if (path != null) {
-					menuFromSelection(path.getLastPathComponent()).show(me.getComponent(), me.getX(), me.getY());
-				}
-			}
-		});
+		return path;
+	}
+
+	private void showMenu(MouseEvent me) {
+		TreePath path = ensureSelection(me);
+
+		if (path != null) {
+			menuFromSelection(path.getLastPathComponent()).show(me.getComponent(), me.getX(), me.getY());
+		}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
 	}
 }

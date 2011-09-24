@@ -20,8 +20,9 @@ package eu.lp0.cursus.ui.component;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
-public abstract class HierarchicalTreeRoot<P extends Comparable<P>, C extends Comparable<C>, N extends ExpandingTreeNode> extends HierarchicalTreeNode<P, N> {
-	public HierarchicalTreeRoot(Object userObject) {
+public abstract class HierarchicalTreeRoot<T, P extends Comparable<P>, C extends Comparable<C>, N extends ExpandingTreeNode<P>> extends
+		HierarchicalTreeNode<T, P, N> {
+	public HierarchicalTreeRoot(T userObject) {
 		super(userObject);
 	}
 

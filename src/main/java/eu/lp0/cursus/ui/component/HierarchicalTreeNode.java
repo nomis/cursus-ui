@@ -24,12 +24,12 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-public abstract class HierarchicalTreeNode<T extends Comparable<T>, N extends ExpandingTreeNode> extends ExpandingTreeNode {
-	public HierarchicalTreeNode(Object userObject) {
+public abstract class HierarchicalTreeNode<P, C extends Comparable<C>, N extends ExpandingTreeNode<C>> extends ExpandingTreeNode<P> {
+	public HierarchicalTreeNode(P userObject) {
 		super(userObject);
 	}
 
-	public void updateTree(JTree tree, TreePath path, List<T> items) {
+	public void updateTree(JTree tree, TreePath path, List<C> items) {
 		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
 
 		if (items == null || items.isEmpty()) {
@@ -38,16 +38,15 @@ public abstract class HierarchicalTreeNode<T extends Comparable<T>, N extends Ex
 			return;
 		}
 
-		Iterator<T> iter = items.iterator();
-		T next = iter.hasNext() ? iter.next() : null;
+		Iterator<C> iter = items.iterator();
+		C next = iter.hasNext() ? iter.next() : null;
 		int i = 0;
 
 		while (next != null || i < getChildCount()) {
 			if (i < getChildCount()) {
 				@SuppressWarnings("unchecked")
 				N node = (N)getChildAt(i);
-				@SuppressWarnings("unchecked")
-				T user = (T)node.getUserObject();
+				C user = node.getUserObject();
 
 				if (next == null || user.compareTo(next) < 0) {
 					model.removeNodeFromParent(node);
@@ -71,9 +70,9 @@ public abstract class HierarchicalTreeNode<T extends Comparable<T>, N extends Ex
 		}
 	}
 
-	protected void updateNode(JTree tree, TreePath path, N node, T item) {
+	protected void updateNode(JTree tree, TreePath path, N node, C item) {
 		node.setUserObject(item);
 	}
 
-	protected abstract N constructChildNode(T item);
+	protected abstract N constructChildNode(C item);
 }

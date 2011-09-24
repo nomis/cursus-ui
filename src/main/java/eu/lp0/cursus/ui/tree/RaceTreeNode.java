@@ -20,7 +20,7 @@ package eu.lp0.cursus.ui.tree;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.ui.component.ExpandingTreeNode;
 
-public class RaceTreeNode extends ExpandingTreeNode {
+public class RaceTreeNode extends ExpandingTreeNode<Race> {
 	public RaceTreeNode(Race race) {
 		super(race);
 	}

@@ -24,7 +24,7 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.ui.component.HierarchicalTreeBranch;
 import eu.lp0.cursus.ui.component.HierarchicalTreeNode;
 
-public class EventTreeNode extends HierarchicalTreeNode<Race, RaceTreeNode> implements HierarchicalTreeBranch<Event, Race> {
+public class EventTreeNode extends HierarchicalTreeNode<Event, Race, RaceTreeNode> implements HierarchicalTreeBranch<Event, Race> {
 	public EventTreeNode(Event event) {
 		super(event);
 		for (Race race : event.getRaces()) {

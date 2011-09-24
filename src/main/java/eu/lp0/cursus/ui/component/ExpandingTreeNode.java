@@ -23,9 +23,15 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-public abstract class ExpandingTreeNode extends DefaultMutableTreeNode {
-	public ExpandingTreeNode(Object userObject) {
+public abstract class ExpandingTreeNode<T> extends DefaultMutableTreeNode {
+	public ExpandingTreeNode(T userObject) {
 		super(userObject);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T getUserObject() {
+		return (T)super.getUserObject();
 	}
 
 	/**
@@ -44,7 +50,7 @@ public abstract class ExpandingTreeNode extends DefaultMutableTreeNode {
 		tree.expandPath(path);
 
 		for (int i = 0; i < getChildCount(); i++) {
-			ExpandingTreeNode child = (ExpandingTreeNode)getChildAt(i);
+			ExpandingTreeNode<?> child = (ExpandingTreeNode<?>)getChildAt(i);
 			child.expandAll(tree, appendedTreePath(path, child));
 		}
 	}

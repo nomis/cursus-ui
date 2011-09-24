@@ -17,18 +17,32 @@
  */
 package eu.lp0.cursus.ui.tree;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.util.Messages;
 
-public class RaceTreePopupMenu extends JPopupMenu {
+public class RaceTreePopupMenu extends JPopupMenu implements ActionListener {
+	private final Component main;
+	private final Race race;
+
 	private JMenuItem mnuEditRace;
 	private JMenuItem mnuDeleteRace;
 
-	public RaceTreePopupMenu() {
+	private enum Commands {
+		EDIT_RACE, DELETE_RACE;
+	}
+
+	public RaceTreePopupMenu(Component main, Race race) {
+		this.main = main;
+		this.race = race;
+
 		mnuEditRace = new JMenuItem(Messages.getString("menu.race.edit")); //$NON-NLS-1$
 		mnuEditRace.setMnemonic(KeyEvent.VK_F2);
 		add(mnuEditRace);
@@ -36,5 +50,15 @@ public class RaceTreePopupMenu extends JPopupMenu {
 		mnuDeleteRace = new JMenuItem(Messages.getString("menu.race.delete")); //$NON-NLS-1$
 		mnuDeleteRace.setMnemonic(KeyEvent.VK_DELETE);
 		add(mnuDeleteRace);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		switch (Commands.valueOf(ae.getActionCommand())) {
+		case EDIT_RACE:
+			break;
+		case DELETE_RACE:
+			break;
+		}
 	}
 }

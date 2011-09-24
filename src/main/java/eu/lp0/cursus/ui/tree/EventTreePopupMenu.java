@@ -17,19 +17,33 @@
  */
 package eu.lp0.cursus.ui.tree;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.util.Messages;
 
-public class EventTreePopupMenu extends JPopupMenu {
+public class EventTreePopupMenu extends JPopupMenu implements ActionListener {
+	private final Component main;
+	private final Event event;
+
 	private JMenuItem mnuNewRace;
 	private JMenuItem mnuEditEvent;
 	private JMenuItem mnuDeleteEvent;
 
-	public EventTreePopupMenu() {
+	private enum Commands {
+		NEW_RACE, EDIT_EVENT, DELETE_EVENT;
+	}
+
+	public EventTreePopupMenu(Component main, Event event) {
+		this.main = main;
+		this.event = event;
+
 		mnuNewRace = new JMenuItem(Messages.getString("menu.race.new")); //$NON-NLS-1$
 		mnuNewRace.setMnemonic(KeyEvent.VK_INSERT);
 		add(mnuNewRace);
@@ -41,5 +55,17 @@ public class EventTreePopupMenu extends JPopupMenu {
 		mnuDeleteEvent = new JMenuItem(Messages.getString("menu.event.delete")); //$NON-NLS-1$
 		mnuDeleteEvent.setMnemonic(KeyEvent.VK_DELETE);
 		add(mnuDeleteEvent);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		switch (Commands.valueOf(ae.getActionCommand())) {
+		case NEW_RACE:
+			break;
+		case EDIT_EVENT:
+			break;
+		case DELETE_EVENT:
+			break;
+		}
 	}
 }

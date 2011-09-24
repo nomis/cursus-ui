@@ -135,7 +135,6 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 			}
 		});
 
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		initialize();
 		bind();
 
@@ -181,7 +180,9 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 	}
 
 	private void initialize() {
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setTitle(Constants.APP_NAME);
+		setSize(800, 600);
 
 		mainTabs = new JTabbedPane();
 		getContentPane().add(mainTabs, BorderLayout.CENTER);
@@ -225,7 +226,7 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 		lapsSplitPane = new JSplitPane();
 		lapsTab.add(lapsSplitPane);
 
-		lapsRaceList = new RaceTree();
+		lapsRaceList = new RaceTree(this);
 		lapsRaceList.setMinimumSize(new Dimension(150, 0));
 		lapsSplitPane.setLeftComponent(lapsRaceList);
 
@@ -243,7 +244,7 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 		penaltiesSplitPane = new JSplitPane();
 		penaltiesTab.add(penaltiesSplitPane);
 
-		penaltiesRaceList = new RaceTree();
+		penaltiesRaceList = new RaceTree(this);
 		penaltiesRaceList.setMinimumSize(new Dimension(150, 0));
 		penaltiesSplitPane.setLeftComponent(penaltiesRaceList);
 
@@ -256,8 +257,6 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 		resultsTab = new JPanel();
 		mainTabs.addTab(Messages.getString("tab.results"), null, resultsTab, null); //$NON-NLS-1$
 		mainTabs.setMnemonicAt(4, Messages.getKeyEvent("tab.results")); //$NON-NLS-1$
-
-		setSize(800, 600);
 
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
