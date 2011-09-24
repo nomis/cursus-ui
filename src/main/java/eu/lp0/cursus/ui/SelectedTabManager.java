@@ -73,18 +73,20 @@ public class SelectedTabManager implements DatabaseSync, ContainerListener, Chan
 	}
 
 	private void tryRefreshTabLater() {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		@SuppressWarnings("unchecked")
 		final DatabaseTabSync<? extends RaceHierarchy> tab = (DatabaseTabSync<? extends RaceHierarchy>)tabs.getSelectedComponent();
 
 		if (tab != null) {
 			log.trace("Selected tab: " + tab.getClass().getSimpleName()); //$NON-NLS-1$
 
-			RaceHierarchy selected = win.getSelected();
+			final RaceHierarchy selected = win.getSelected();
 			if (isValidFor(tab, selected)) {
 				win.execute(new Runnable() {
 					@Override
 					public void run() {
-						databaseRefresh(tab);
+						databaseRefresh(tab, selected);
 					}
 				});
 			}
@@ -92,6 +94,8 @@ public class SelectedTabManager implements DatabaseSync, ContainerListener, Chan
 	}
 
 	private void invokeCloseTabLater(final DatabaseTabSync<? extends RaceHierarchy> tab) {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		win.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -104,8 +108,7 @@ public class SelectedTabManager implements DatabaseSync, ContainerListener, Chan
 		return selected != null && tab.getType().isAssignableFrom(selected.getClass());
 	}
 
-	public <T extends RaceHierarchy> void databaseRefresh(DatabaseTabSync<T> tab) {
-		RaceHierarchy selected = win.getSelected();
+	public <T extends RaceHierarchy> void databaseRefresh(DatabaseTabSync<T> tab, RaceHierarchy selected) {
 		if (isValidFor(tab, selected)) {
 			tab.tabRefresh(tab.getType().cast(selected));
 		}

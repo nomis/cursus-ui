@@ -165,10 +165,17 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 
 	@Override
 	public void databaseClosed() {
-		updateModel(null);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				updateModel(null);
+			}
+		});
 	}
 
 	private void updateModel(List<Series> seriesList) {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		root.updateTree(this, new TreePath(root), seriesList);
 	}
 }

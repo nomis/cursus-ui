@@ -20,6 +20,7 @@ package eu.lp0.cursus.ui.race;
 import java.awt.Frame;
 
 import javax.swing.JDialog;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import eu.lp0.cursus.db.data.Race;
@@ -41,6 +42,8 @@ public class RaceDetailWindow extends JDialog implements Displayable {
 	}
 
 	public void display() {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		prefs.display(getOwner());
 	}
 

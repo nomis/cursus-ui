@@ -62,9 +62,12 @@ public class JFrameAutoPrefs extends WindowAutoPrefs {
 	protected void savePreferences() {
 		Dimension size;
 		int state;
-		synchronized (frame) {
-			size = frame.getSize();
-			state = frame.getExtendedState();
+
+		synchronized (frame.getTreeLock()) {
+			synchronized (frame) {
+				size = frame.getSize();
+				state = frame.getExtendedState();
+			}
 		}
 
 		if (state == Frame.NORMAL || (state & Frame.MAXIMIZED_HORIZ) == 0) {

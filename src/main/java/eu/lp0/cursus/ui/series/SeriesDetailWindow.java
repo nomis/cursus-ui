@@ -20,6 +20,7 @@ package eu.lp0.cursus.ui.series;
 import java.awt.Frame;
 
 import javax.swing.JDialog;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import eu.lp0.cursus.db.data.Series;
@@ -41,6 +42,8 @@ public class SeriesDetailWindow extends JDialog implements Displayable {
 	}
 
 	public void display() {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		prefs.display(getOwner());
 	}
 

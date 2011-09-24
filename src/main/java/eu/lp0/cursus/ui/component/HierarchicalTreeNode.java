@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
@@ -30,6 +31,8 @@ public abstract class HierarchicalTreeNode<P, C extends Comparable<C>, N extends
 	}
 
 	public void updateTree(JTree tree, TreePath path, List<C> items) {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
 
 		if (items == null || items.isEmpty()) {
@@ -71,6 +74,8 @@ public abstract class HierarchicalTreeNode<P, C extends Comparable<C>, N extends
 	}
 
 	protected void updateNode(JTree tree, TreePath path, N node, C item) {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		node.setUserObject(item);
 	}
 

@@ -26,8 +26,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.prefs.Preferences;
+
+import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,8 +42,8 @@ public class WindowAutoPrefs {
 	private final String prefWidth;
 	private final String prefHeight;
 
-	private AtomicBoolean loaded = new AtomicBoolean(false);
-	private AtomicBoolean saved = new AtomicBoolean(true);
+	private boolean loaded = false;
+	private boolean saved = true;
 
 	public WindowAutoPrefs(Window window) {
 		this.window = window;
@@ -61,10 +62,10 @@ public class WindowAutoPrefs {
 		window.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent e) {
-				if (!loaded.get()) {
+				if (!loaded) {
 					postVisible();
 					log.trace("Loaded preferences"); //$NON-NLS-1$
-					loaded.set(true);
+					loaded = true;
 				}
 			}
 
@@ -84,7 +85,9 @@ public class WindowAutoPrefs {
 	}
 
 	public void display(Component reference) {
-		if (!loaded.get()) {
+		assert (SwingUtilities.isEventDispatchThread());
+
+		if (!loaded) {
 			window.setLocationRelativeTo(reference);
 			preVisible();
 			window.setVisible(true);
@@ -111,10 +114,15 @@ public class WindowAutoPrefs {
 	}
 
 	protected void delayedSaveWindowPreference() {
-		if (saved.getAndSet(false)) {
+		assert (SwingUtilities.isEventDispatchThread());
+
+		if (saved) {
+			saved = false;
+
 			if (log.isTraceEnabled()) {
 				log.trace("Scheduling preferences save"); //$NON-NLS-1$
 			}
+
 			delayed.execute(new Runnable() {
 				@Override
 				public void run() {
@@ -126,7 +134,12 @@ public class WindowAutoPrefs {
 						return;
 					}
 
-					saveWindowPreference();
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							saveWindowPreference();
+						}
+					});
 				}
 			});
 		} else {
@@ -147,22 +160,13 @@ public class WindowAutoPrefs {
 	}
 
 	private void saveWindowPreference() {
-		saved.getAndSet(true);
+		saved = true;
 
-		for (int i = 0; i < 4; i++) {
-			if (loaded.get()) {
-				break;
-			}
-
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				return;
-			}
-		}
-		if (!loaded.get()) {
+		if (!loaded) {
 			return;
 		}
+
+		assert (SwingUtilities.isEventDispatchThread());
 
 		savePreferences();
 	}

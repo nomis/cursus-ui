@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
+import javax.swing.SwingUtilities;
 
 import eu.lp0.cursus.db.data.AbstractEntity;
 
@@ -60,6 +61,8 @@ public class EntityComboBoxModel<E extends AbstractEntity> extends AbstractListM
 	}
 
 	public void updateModel(List<E> updatedItems) {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		E updatedSelectedItem = null;
 
 		if (selectedItem != null) {

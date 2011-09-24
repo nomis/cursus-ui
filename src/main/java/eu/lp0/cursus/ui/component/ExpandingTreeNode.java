@@ -20,6 +20,7 @@ package eu.lp0.cursus.ui.component;
 import java.util.Arrays;
 
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
@@ -43,6 +44,8 @@ public abstract class ExpandingTreeNode<T> extends DefaultMutableTreeNode {
 	 *            Path to us (inclusive)
 	 */
 	protected void expandAll(JTree tree, TreePath path) {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		if (getChildCount() == 0) {
 			return;
 		}

@@ -19,6 +19,7 @@ package eu.lp0.cursus.ui.component;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
 import eu.lp0.cursus.db.data.RaceHierarchy;
 import eu.lp0.cursus.util.Messages;
@@ -43,6 +44,8 @@ public abstract class AbstractDatabaseTab<T extends RaceHierarchy> extends JPane
 	}
 
 	public void addToTabbedPane(JTabbedPane tabbedPane, int index) {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		tabbedPane.insertTab(title, null, this, null, index);
 		tabbedPane.setMnemonicAt(index, mnemonic);
 	}

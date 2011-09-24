@@ -74,19 +74,16 @@ public class TabbedPaneManager implements TreeSelectionListener {
 
 	@Override
 	public void valueChanged(final TreeSelectionEvent tse) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				if (tse.isAddedPath()) {
-					showSelected(RaceTree.userObjectFromSelection(tse.getPath().getLastPathComponent()));
-				} else {
-					showSelected(null);
-				}
-			}
-		});
+		if (tse.isAddedPath()) {
+			showSelected(RaceTree.userObjectFromSelection(tse.getPath().getLastPathComponent()));
+		} else {
+			showSelected(null);
+		}
 	}
 
 	public RaceHierarchy getSelected() {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		TreePath path = tree.getSelectionPath();
 		return path != null ? RaceTree.userObjectFromSelection(path.getLastPathComponent()) : null;
 	}
