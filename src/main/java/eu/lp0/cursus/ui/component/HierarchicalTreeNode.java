@@ -54,9 +54,8 @@ public abstract class HierarchicalTreeNode<P, C extends Comparable<C>, N extends
 				if (next == null || user.compareTo(next) < 0) {
 					model.removeNodeFromParent(node);
 					continue;
-				} else if (user.equals(next)) {
+				} else if (user.compareTo(next) == 0) {
 					updateNode(tree, path, node, user);
-					model.nodeChanged(this);
 				} else {
 					N child = constructChildNode(next);
 					model.insertNodeInto(child, this, i);
@@ -76,7 +75,8 @@ public abstract class HierarchicalTreeNode<P, C extends Comparable<C>, N extends
 	protected void updateNode(JTree tree, TreePath path, N node, C item) {
 		assert (SwingUtilities.isEventDispatchThread());
 
-		node.setUserObject(item);
+		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+		model.valueForPathChanged(appendedTreePath(path, node), item);
 	}
 
 	protected abstract N constructChildNode(C item);

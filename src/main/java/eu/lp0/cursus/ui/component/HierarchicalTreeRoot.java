@@ -28,12 +28,12 @@ public abstract class HierarchicalTreeRoot<T, P extends Comparable<P>, C extends
 
 	@Override
 	protected void updateNode(JTree tree, TreePath path, N node, P item) {
-		super.updateNode(tree, path, node, item);
-
 		if (node instanceof HierarchicalTreeBranch) {
 			@SuppressWarnings("unchecked")
 			HierarchicalTreeBranch<P, C> branch = ((HierarchicalTreeBranch<P, C>)node);
 			branch.updateTree(tree, appendedTreePath(path, branch), branch.getChildItems(item));
 		}
+
+		super.updateNode(tree, path, node, item);
 	}
 }
