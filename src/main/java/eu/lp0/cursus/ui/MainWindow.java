@@ -50,6 +50,7 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceHierarchy;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.event.EventPenaltiesTab;
@@ -63,7 +64,6 @@ import eu.lp0.cursus.ui.series.SeriesClassesTab;
 import eu.lp0.cursus.ui.series.SeriesPenaltiesTab;
 import eu.lp0.cursus.ui.series.SeriesPilotsTab;
 import eu.lp0.cursus.ui.series.SeriesResultsTab;
-import eu.lp0.cursus.ui.tab.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.tree.RaceTree;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
@@ -77,7 +77,8 @@ public class MainWindow extends JFrame implements Executor, Displayable, Databas
 
 	private JFrameAutoPrefs prefs = new JFrameAutoPrefs(this);
 	private DatabaseManager dbMgr = new DatabaseManager(this);
-	private SelectionManager selMgr;
+	private TabbedPaneManager tabMgr;
+	private SelectedTabManager selMgr;
 
 	// Main
 	private JSplitPane splitPane;
@@ -165,7 +166,7 @@ public class MainWindow extends JFrame implements Executor, Displayable, Databas
 	}
 
 	public RaceHierarchy getSelected() {
-		return selMgr.getSelected();
+		return isOpen() ? tabMgr.getSelected() : null;
 	}
 
 	@Override
@@ -316,7 +317,8 @@ public class MainWindow extends JFrame implements Executor, Displayable, Databas
 	}
 
 	private void bind() {
-		selMgr = new SelectionManager(raceList, tabbedPane, seriesTabs, eventTabs, raceTabs);
+		tabMgr = new TabbedPaneManager(raceList, tabbedPane, seriesTabs, eventTabs, raceTabs);
+		selMgr = new SelectedTabManager(this, tabbedPane);
 	}
 
 	private void enableStartupGUI(boolean enabled) {
@@ -341,8 +343,10 @@ public class MainWindow extends JFrame implements Executor, Displayable, Databas
 
 		if (open) {
 			raceList.databaseRefresh();
+			selMgr.databaseRefresh();
 		} else {
 			raceList.databaseClosed();
+			selMgr.databaseClosed();
 		}
 	}
 
@@ -351,7 +355,7 @@ public class MainWindow extends JFrame implements Executor, Displayable, Databas
 	}
 
 	public void databaseClosed() {
-		selMgr.showSelected(null);
+		tabMgr.showSelected(null);
 		sync(false, Constants.APP_DESC);
 	}
 }

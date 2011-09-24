@@ -42,10 +42,10 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceHierarchy;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.ui.tab.AbstractDatabaseTab;
+import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.tree.RaceTree;
 
-public class SelectionManager implements TreeSelectionListener {
+public class TabbedPaneManager implements TreeSelectionListener {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final JTree tree;
 	private final JTabbedPane tabbedPane;
@@ -55,7 +55,7 @@ public class SelectionManager implements TreeSelectionListener {
 	private final List<Component> ordering = new ArrayList<Component>();
 	private Map<Class<? extends RaceHierarchy>, AbstractDatabaseTab<? extends RaceHierarchy>> previousTabs = new HashMap<Class<? extends RaceHierarchy>, AbstractDatabaseTab<? extends RaceHierarchy>>();
 
-	public SelectionManager(JTree tree, JTabbedPane tabbedPane, List<AbstractDatabaseTab<Series>> seriesTabs, List<AbstractDatabaseTab<Event>> eventTabs,
+	public TabbedPaneManager(JTree tree, JTabbedPane tabbedPane, List<AbstractDatabaseTab<Series>> seriesTabs, List<AbstractDatabaseTab<Event>> eventTabs,
 			List<AbstractDatabaseTab<Race>> raceTabs) {
 		this.tree = tree;
 		this.tabbedPane = tabbedPane;

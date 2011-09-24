@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.tab;
+package eu.lp0.cursus.ui.component;
 
 import java.awt.Component;
 import java.awt.event.HierarchyListener;
@@ -26,6 +26,8 @@ public interface DatabaseTabSync<T extends RaceHierarchy> {
 	public void addHierarchyListener(HierarchyListener hierarchyListener);
 
 	public Component getParent();
+
+	public Class<T> getType();
 
 	public void tabRefresh(T selected);
 

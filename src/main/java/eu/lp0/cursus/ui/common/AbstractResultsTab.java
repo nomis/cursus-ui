@@ -18,8 +18,8 @@
 package eu.lp0.cursus.ui.common;
 
 import eu.lp0.cursus.db.data.RaceHierarchy;
+import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
-import eu.lp0.cursus.ui.tab.AbstractDatabaseTab;
 
 public abstract class AbstractResultsTab<T extends RaceHierarchy> extends AbstractDatabaseTab<T> {
 	public AbstractResultsTab(Class<T> clazz, DatabaseWindow win) {

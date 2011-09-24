@@ -23,8 +23,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
-import eu.lp0.cursus.ui.tab.AbstractDatabaseTab;
 
 public class RaceAttendeesTab extends AbstractDatabaseTab<Race> {
 	private JScrollPane scrollPane;
