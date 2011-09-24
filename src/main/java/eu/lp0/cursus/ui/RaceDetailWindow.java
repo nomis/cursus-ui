@@ -36,14 +36,14 @@ public class RaceDetailWindow extends JDialog implements Displayable {
 		this.title = title;
 		this.race = race;
 
-		initialize();
+		initialise();
 	}
 
 	public void display() {
 		prefs.display(getOwner());
 	}
 
-	private void initialize() {
+	private void initialise() {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle(title);
 		setSize(400, 300);
