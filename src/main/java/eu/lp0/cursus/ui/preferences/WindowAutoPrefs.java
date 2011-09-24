@@ -126,8 +126,6 @@ public class WindowAutoPrefs {
 			delayed.execute(new Runnable() {
 				@Override
 				public void run() {
-					log.trace("Saving preferences"); //$NON-NLS-1$
-
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
@@ -167,6 +165,8 @@ public class WindowAutoPrefs {
 		}
 
 		assert (SwingUtilities.isEventDispatchThread());
+
+		log.trace("Saving preferences"); //$NON-NLS-1$
 
 		savePreferences();
 	}
