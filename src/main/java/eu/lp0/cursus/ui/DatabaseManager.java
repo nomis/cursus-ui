@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 
 import eu.lp0.cursus.db.DatabaseVersionException;
 import eu.lp0.cursus.db.InvalidDatabaseException;
+import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
@@ -41,7 +42,7 @@ class DatabaseManager implements ActionListener {
 
 	@Override
 	public void actionPerformed(final ActionEvent ae) {
-		win.execute(new Runnable() {
+		Background.execute(new Runnable() {
 			@Override
 			public void run() {
 				try {
@@ -78,6 +79,8 @@ class DatabaseManager implements ActionListener {
 	 * @return true if the database was saved or discarded
 	 */
 	boolean trySaveDatabase(String action) {
+		assert (Background.isExecutorThread());
+
 		if (win.isOpen() && !win.getDatabase().isSaved()) {
 			switch (JOptionPane.showConfirmDialog(win, String.format(Messages.getString("warn.current-db-not-saved"), win.getDatabase().getName()), //$NON-NLS-1$
 					Constants.APP_NAME + Constants.EN_DASH + action, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE)) {
@@ -97,6 +100,8 @@ class DatabaseManager implements ActionListener {
 	}
 
 	void newDatabase() throws InvalidDatabaseException {
+		assert (Background.isExecutorThread());
+
 		if (trySaveDatabase(Messages.getString("menu.file.new"))) { //$NON-NLS-1$
 			boolean ok = true;
 			try {
@@ -115,6 +120,8 @@ class DatabaseManager implements ActionListener {
 	}
 
 	boolean openDatabase() {
+		assert (Background.isExecutorThread());
+
 		// TODO open database
 		JOptionPane.showMessageDialog(win, Messages.getString("err.feat-not-impl"), //$NON-NLS-1$
 				Constants.APP_NAME + Constants.EN_DASH + Messages.getString("menu.file.open"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
@@ -122,6 +129,8 @@ class DatabaseManager implements ActionListener {
 	}
 
 	boolean saveDatabase() {
+		assert (Background.isExecutorThread());
+
 		// TODO save database to current or new file
 		JOptionPane.showMessageDialog(win, Messages.getString("err.feat-not-impl"), //$NON-NLS-1$
 				Constants.APP_NAME + Constants.EN_DASH + Messages.getString("menu.file.save"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
@@ -129,6 +138,8 @@ class DatabaseManager implements ActionListener {
 	}
 
 	boolean saveAsDatabase() {
+		assert (Background.isExecutorThread());
+
 		// TODO save database to new file
 		JOptionPane.showMessageDialog(win, Messages.getString("err.feat-not-impl"), //$NON-NLS-1$
 				Constants.APP_NAME + Constants.EN_DASH + Messages.getString("menu.file.save-as"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
@@ -136,6 +147,8 @@ class DatabaseManager implements ActionListener {
 	}
 
 	void closeDatabase() {
+		assert (Background.isExecutorThread());
+
 		if (trySaveDatabase(Messages.getString("menu.file.close"))) { //$NON-NLS-1$
 			win.getMain().close();
 		}

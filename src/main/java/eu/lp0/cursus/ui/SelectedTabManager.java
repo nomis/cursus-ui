@@ -33,6 +33,7 @@ import eu.lp0.cursus.db.data.RaceHierarchy;
 import eu.lp0.cursus.ui.component.DatabaseSync;
 import eu.lp0.cursus.ui.component.DatabaseTabSync;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
+import eu.lp0.cursus.util.Background;
 
 public class SelectedTabManager implements DatabaseSync, ContainerListener, ChangeListener {
 	private final Logger log = LoggerFactory.getLogger(getClass());
@@ -83,7 +84,7 @@ public class SelectedTabManager implements DatabaseSync, ContainerListener, Chan
 
 			final RaceHierarchy selected = win.getSelected();
 			if (isValidFor(tab, selected)) {
-				win.execute(new Runnable() {
+				Background.execute(new Runnable() {
 					@Override
 					public void run() {
 						databaseRefresh(tab, selected);
@@ -96,7 +97,7 @@ public class SelectedTabManager implements DatabaseSync, ContainerListener, Chan
 	private void invokeCloseTabLater(final DatabaseTabSync<? extends RaceHierarchy> tab) {
 		assert (SwingUtilities.isEventDispatchThread());
 
-		win.execute(new Runnable() {
+		Background.execute(new Runnable() {
 			@Override
 			public void run() {
 				databaseClosed(tab);
@@ -109,17 +110,23 @@ public class SelectedTabManager implements DatabaseSync, ContainerListener, Chan
 	}
 
 	public <T extends RaceHierarchy> void databaseRefresh(DatabaseTabSync<T> tab, RaceHierarchy selected) {
+		assert (Background.isExecutorThread());
+
 		if (isValidFor(tab, selected)) {
 			tab.tabRefresh(tab.getType().cast(selected));
 		}
 	}
 
 	public <T extends RaceHierarchy> void databaseClosed(DatabaseTabSync<T> tab) {
+		assert (Background.isExecutorThread());
+
 		tab.tabClear();
 	}
 
 	@Override
 	public void databaseRefresh() {
+		assert (Background.isExecutorThread());
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -130,6 +137,8 @@ public class SelectedTabManager implements DatabaseSync, ContainerListener, Chan
 
 	@Override
 	public void databaseClosed() {
+		assert (Background.isExecutorThread());
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@SuppressWarnings("unchecked")
 			@Override

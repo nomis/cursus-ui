@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.app;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 
 import javax.swing.SwingUtilities;
@@ -30,14 +29,16 @@ import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.MemoryDatabase;
 import eu.lp0.cursus.ui.MainWindow;
+import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
 
 public class Main implements Runnable {
 	private static final Logger log = LoggerFactory.getLogger(Main.class);
-	private final MainWindow win;
+	private final String[] args;
+	private MainWindow win = null;
 	private Database db = null;
 
-	public static void main(String[] args) throws InterruptedException, InvocationTargetException {
+	public static void main(String[] args) {
 		log.info(Constants.APP_DESC);
 
 		try {
@@ -46,16 +47,23 @@ public class Main implements Runnable {
 			log.debug("Unable to select system look and feel", e); //$NON-NLS-1$
 		}
 
-		SwingUtilities.invokeAndWait(new Main(args));
+		Background.execute(new Main(args));
 	}
 
 	public Main(String[] args) {
-		win = new MainWindow(this, args);
+		this.args = args;
 	}
 
 	@Override
 	public void run() {
-		win.display();
+		win = new MainWindow(Main.this, args);
+
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				win.display();
+			}
+		});
 	}
 
 	public synchronized boolean isOpen() {
@@ -67,6 +75,8 @@ public class Main implements Runnable {
 	}
 
 	public synchronized boolean open() throws SQLException, InvalidDatabaseException {
+		assert (Background.isExecutorThread());
+
 		close();
 		if (!isOpen()) {
 			db = new MemoryDatabase();
@@ -81,6 +91,8 @@ public class Main implements Runnable {
 	}
 
 	public synchronized boolean close(boolean force) {
+		assert (Background.isExecutorThread());
+
 		if (db != null) {
 			if (db.close(force)) {
 				db = null;

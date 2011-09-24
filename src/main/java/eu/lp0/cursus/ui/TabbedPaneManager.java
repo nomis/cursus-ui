@@ -89,20 +89,17 @@ public class TabbedPaneManager implements TreeSelectionListener {
 	}
 
 	public void showSelected(final RaceHierarchy item) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				if (log.isTraceEnabled()) {
-					if (item != null) {
-						log.trace("Selecting " + item.getClass().getSimpleName() + ": " + item.getName()); //$NON-NLS-1$ //$NON-NLS-2$
-					} else {
-						log.trace("Deselected current item"); //$NON-NLS-1$
-					}
-				}
+		assert (SwingUtilities.isEventDispatchThread());
 
-				updateTabs(item);
+		if (log.isTraceEnabled()) {
+			if (item != null) {
+				log.trace("Selecting " + item.getClass().getSimpleName() + ": " + item.getName()); //$NON-NLS-1$ //$NON-NLS-2$
+			} else {
+				log.trace("Deselected current item"); //$NON-NLS-1$
 			}
-		});
+		}
+
+		updateTabs(item);
 	}
 
 	private Collection<?> getVisibleTabsFor(RaceHierarchy item) {
@@ -121,6 +118,8 @@ public class TabbedPaneManager implements TreeSelectionListener {
 	 * Update the visible tabs, taking care not to cause the tabbed pane to select a different tab while removing/adding tabs
 	 */
 	private void updateTabs(RaceHierarchy item) {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		Class<? extends RaceHierarchy> clazz = (item != null ? item.getClass() : null);
 		@SuppressWarnings("unchecked")
 		AbstractDatabaseTab<? extends RaceHierarchy> selectedTab = (AbstractDatabaseTab<? extends RaceHierarchy>)tabbedPane.getSelectedComponent();

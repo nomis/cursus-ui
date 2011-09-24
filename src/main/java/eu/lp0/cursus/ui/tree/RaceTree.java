@@ -40,6 +40,7 @@ import eu.lp0.cursus.db.data.RaceHierarchy;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.DatabaseSync;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
+import eu.lp0.cursus.util.Background;
 
 public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements MouseListener, DatabaseSync {
 	private final O win;
@@ -134,6 +135,8 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 
 	@Override
 	public void databaseRefresh() {
+		assert (Background.isExecutorThread());
+
 		final List<Series> seriesList = new ArrayList<Series>();
 
 		win.getDatabase().startSession();
@@ -165,6 +168,8 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 
 	@Override
 	public void databaseClosed() {
+		assert (Background.isExecutorThread());
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {

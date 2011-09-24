@@ -17,14 +17,10 @@
  */
 package eu.lp0.cursus.ui.component;
 
-import java.util.concurrent.Executor;
-
 import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.data.RaceHierarchy;
 
-public interface DatabaseWindow extends Executor {
-	// public boolean isOpen();
-
+public interface DatabaseWindow {
 	public Database getDatabase();
 
 	public RaceHierarchy getSelected();

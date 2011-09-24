@@ -28,9 +28,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -65,14 +62,11 @@ import eu.lp0.cursus.ui.series.SeriesPenaltiesTab;
 import eu.lp0.cursus.ui.series.SeriesPilotsTab;
 import eu.lp0.cursus.ui.series.SeriesResultsTab;
 import eu.lp0.cursus.ui.tree.RaceTree;
+import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-public class MainWindow extends JFrame implements Executor, Displayable, DatabaseWindow {
-	/**
-	 * Primary background execution thread used to serialises all actions
-	 */
-	private final ExecutorService background = Executors.newSingleThreadExecutor();
+public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 	private final Main main;
 
 	private JFrameAutoPrefs prefs = new JFrameAutoPrefs(this);
@@ -118,7 +112,7 @@ public class MainWindow extends JFrame implements Executor, Displayable, Databas
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent we) {
-				execute(new Runnable() {
+				Background.execute(new Runnable() {
 					@Override
 					public void run() {
 						try {
@@ -133,7 +127,7 @@ public class MainWindow extends JFrame implements Executor, Displayable, Databas
 
 			@Override
 			public void windowClosing(WindowEvent we) {
-				execute(new Runnable() {
+				Background.execute(new Runnable() {
 					@Override
 					public void run() {
 						shutdown();
@@ -150,6 +144,8 @@ public class MainWindow extends JFrame implements Executor, Displayable, Databas
 	}
 
 	public void display() {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		prefs.display();
 	}
 
@@ -167,11 +163,6 @@ public class MainWindow extends JFrame implements Executor, Displayable, Databas
 
 	public RaceHierarchy getSelected() {
 		return isOpen() ? tabMgr.getSelected() : null;
-	}
-
-	@Override
-	public void execute(Runnable command) {
-		background.execute(command);
 	}
 
 	private void startup(String[] args) throws InvalidDatabaseException {
@@ -193,7 +184,7 @@ public class MainWindow extends JFrame implements Executor, Displayable, Databas
 			try {
 				dispose();
 			} finally {
-				background.shutdownNow();
+				Background.shutdownNow();
 			}
 		}
 	}
@@ -327,6 +318,8 @@ public class MainWindow extends JFrame implements Executor, Displayable, Databas
 	}
 
 	private void sync(final boolean open, final String title) {
+		assert (Background.isExecutorThread());
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -336,6 +329,10 @@ public class MainWindow extends JFrame implements Executor, Displayable, Databas
 				mnuFileSaveAs.setEnabled(open);
 				mnuFileClose.setEnabled(open);
 				getRootPane().validate();
+
+				if (!open) {
+					tabMgr.showSelected(null);
+				}
 
 				setTitle(title);
 			}
@@ -355,7 +352,6 @@ public class MainWindow extends JFrame implements Executor, Displayable, Databas
 	}
 
 	public void databaseClosed() {
-		tabMgr.showSelected(null);
 		sync(false, Constants.APP_DESC);
 	}
 }
