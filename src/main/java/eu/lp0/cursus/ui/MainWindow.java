@@ -145,8 +145,8 @@ public class MainWindow extends JFrame implements Executor, Displayable, Databas
 		initialise();
 		bind();
 
-		databaseClosed();
 		enableStartupGUI(false);
+		databaseClosed();
 	}
 
 	public void display() {
@@ -330,7 +330,7 @@ public class MainWindow extends JFrame implements Executor, Displayable, Databas
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				tabbedPane.setVisible(open);
+				splitPane.setVisible(open);
 				enableStartupGUI(true);
 				mnuFileSave.setEnabled(open);
 				mnuFileSaveAs.setEnabled(open);
