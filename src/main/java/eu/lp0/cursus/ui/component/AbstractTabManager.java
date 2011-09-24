@@ -55,7 +55,7 @@ public abstract class AbstractTabManager {
 
 	protected abstract void databaseClosed();
 
-	public void syncGUI(boolean open) {
+	public void sync(boolean open) {
 		if (open) {
 			if (tabs.getSelectedComponent() == tab) {
 				tabSelected();

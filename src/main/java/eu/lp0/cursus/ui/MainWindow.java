@@ -136,8 +136,8 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 		});
 
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		initGUI();
-		bindGUI();
+		initialize();
+		bind();
 
 		databaseClosed();
 		enableStartupGUI(false);
@@ -180,7 +180,7 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 		}
 	}
 
-	private void initGUI() {
+	private void initialize() {
 		setTitle(Constants.APP_NAME);
 
 		mainTabs = new JTabbedPane();
@@ -333,18 +333,18 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 		mnuHelpAbout.setMnemonic(Messages.getKeyEvent("menu.help.about")); //$NON-NLS-1$
 	}
 
-	private void bindGUI() {
+	private void bind() {
 		clsMgr = new ClassManager(this, mainTabs, classesTab, classesList);
 		lapsMgr = new LapsManager(this, mainTabs, lapsTab, lapsRaceList);
 		penMgr = new PenaltiesManager(this, mainTabs, penaltiesTab, penaltiesRaceList);
 	}
 
 	public void databaseOpened() {
-		syncGUI(true, Constants.APP_NAME + Constants.EN_DASH + main.getDatabase().getName());
+		sync(true, Constants.APP_NAME + Constants.EN_DASH + main.getDatabase().getName());
 	}
 
 	public void databaseClosed() {
-		syncGUI(false, Constants.APP_DESC);
+		sync(false, Constants.APP_DESC);
 	}
 
 	private void enableStartupGUI(boolean enabled) {
@@ -352,7 +352,7 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 		mnuFileOpen.setEnabled(enabled);
 	}
 
-	private void syncGUI(final boolean open, final String title) {
+	private void sync(final boolean open, final String title) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -367,8 +367,8 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 			}
 		});
 
-		clsMgr.syncGUI(open);
-		lapsMgr.syncGUI(open);
-		penMgr.syncGUI(open);
+		clsMgr.sync(open);
+		lapsMgr.sync(open);
+		penMgr.sync(open);
 	}
 }
