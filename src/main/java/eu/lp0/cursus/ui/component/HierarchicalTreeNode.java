@@ -45,6 +45,7 @@ public abstract class HierarchicalTreeNode<P, C extends Comparable<C>, N extends
 		C next = iter.hasNext() ? iter.next() : null;
 		int i = 0;
 
+		// TODO avoid disturbing the currently selected path by only modifying the unselected nodes
 		while (next != null || i < getChildCount()) {
 			if (i < getChildCount()) {
 				@SuppressWarnings("unchecked")
