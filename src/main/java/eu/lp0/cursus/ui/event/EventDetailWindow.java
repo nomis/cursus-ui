@@ -19,37 +19,13 @@ package eu.lp0.cursus.ui.event;
 
 import java.awt.Frame;
 
-import javax.swing.JDialog;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
-
+import eu.lp0.cursus.db.dao.EventDAO;
 import eu.lp0.cursus.db.data.Event;
-import eu.lp0.cursus.ui.component.Displayable;
-import eu.lp0.cursus.ui.preferences.WindowAutoPrefs;
+import eu.lp0.cursus.ui.common.CommonDetailWindow;
+import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class EventDetailWindow extends JDialog implements Displayable {
-	private final String title;
-	private final Event event;
-
-	private WindowAutoPrefs prefs = new WindowAutoPrefs(this);
-
-	public EventDetailWindow(Frame owner, String title, Event event) {
-		super(owner, true);
-		this.title = title;
-		this.event = event;
-
-		initialise();
-	}
-
-	public void display() {
-		assert (SwingUtilities.isEventDispatchThread());
-
-		prefs.display(getOwner());
-	}
-
-	private void initialise() {
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle(title);
-		setSize(400, 300);
+public class EventDetailWindow<O extends Frame & DatabaseWindow> extends CommonDetailWindow<O, Event> {
+	public EventDetailWindow(O win, String title, Event event) {
+		super(win, title, new EventDAO(), event);
 	}
 }

@@ -23,6 +23,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Transient;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -39,6 +40,11 @@ public abstract class AbstractEntity {
 	@SuppressWarnings("unused")
 	private void setId(long id) {
 		this.id = id;
+	}
+
+	@Transient
+	public boolean isTransient() {
+		return getId() == 0;
 	}
 
 	@Override

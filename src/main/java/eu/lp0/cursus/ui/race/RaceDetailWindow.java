@@ -19,37 +19,13 @@ package eu.lp0.cursus.ui.race;
 
 import java.awt.Frame;
 
-import javax.swing.JDialog;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
-
+import eu.lp0.cursus.db.dao.RaceDAO;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.ui.component.Displayable;
-import eu.lp0.cursus.ui.preferences.WindowAutoPrefs;
+import eu.lp0.cursus.ui.common.CommonDetailWindow;
+import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class RaceDetailWindow extends JDialog implements Displayable {
-	private final String title;
-	private final Race race;
-
-	private WindowAutoPrefs prefs = new WindowAutoPrefs(this);
-
-	public RaceDetailWindow(Frame owner, String title, Race race) {
-		super(owner, true);
-		this.title = title;
-		this.race = race;
-
-		initialise();
-	}
-
-	public void display() {
-		assert (SwingUtilities.isEventDispatchThread());
-
-		prefs.display(getOwner());
-	}
-
-	private void initialise() {
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle(title);
-		setSize(400, 300);
+public class RaceDetailWindow<O extends Frame & DatabaseWindow> extends CommonDetailWindow<O, Race> {
+	public RaceDetailWindow(O win, String title, Race race) {
+		super(win, title, new RaceDAO(), race);
 	}
 }
