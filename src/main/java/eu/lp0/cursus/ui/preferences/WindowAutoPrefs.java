@@ -15,88 +15,102 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui;
+package eu.lp0.cursus.ui.preferences;
 
+import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowStateListener;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.prefs.Preferences;
 
-import javax.swing.JFrame;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AutoPrefsWindow extends JFrame {
-	private final String PREF_WIDTH = getClass().getSimpleName() + "/width"; //$NON-NLS-1$
-	private final String PREF_HEIGHT = getClass().getSimpleName() + "/height"; //$NON-NLS-1$
-	private final String PREF_STATE = getClass().getSimpleName() + "/state"; //$NON-NLS-1$
-	private final Logger log = LoggerFactory.getLogger(getClass());
-
-	private final Preferences pref = Preferences.userNodeForPackage(getClass());
+public class WindowAutoPrefs {
 	private final ExecutorService delayed = Executors.newSingleThreadExecutor();
+	protected final Logger log;
+
+	private final Window window;
+	protected final Preferences pref;
+	private final String prefWidth;
+	private final String prefHeight;
 
 	private AtomicBoolean loaded = new AtomicBoolean(false);
 	private AtomicBoolean saved = new AtomicBoolean(true);
 
-	public AutoPrefsWindow() {
-		addComponentListener(new ComponentAdapter() {
+	public WindowAutoPrefs(Window window) {
+		this.window = window;
+		this.log = LoggerFactory.getLogger(window.getClass());
+		pref = Preferences.userNodeForPackage(window.getClass());
+		prefWidth = makePrefName("/width"); //$NON-NLS-1$
+		prefHeight = makePrefName("/height"); //$NON-NLS-1$
+
+		window.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				delayedSaveWindowPreference();
 			}
 		});
 
-		addWindowStateListener(new WindowStateListener() {
+		window.addWindowListener(new WindowAdapter() {
 			@Override
-			public void windowStateChanged(WindowEvent we) {
-				delayedSaveWindowPreference();
+			public void windowOpened(WindowEvent e) {
+				if (!loaded.get()) {
+					postVisible();
+					log.trace("Loaded preferences"); //$NON-NLS-1$
+					loaded.set(true);
+				}
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				delayed.shutdownNow();
 			}
 		});
 	}
 
-	@Override
-	public void dispose() {
-		try {
-			super.dispose();
-		} finally {
-			delayed.shutdownNow();
-		}
+	protected String makePrefName(String key) {
+		return window.getClass().getSimpleName() + key;
 	}
 
 	public void display() {
-		setLocationRelativeTo(null);
+		display(null);
+	}
+
+	public void display(Component reference) {
+		if (!loaded.get()) {
+			window.setLocationRelativeTo(reference);
+			preVisible();
+			window.setVisible(true);
+		}
+	}
+
+	protected void preVisible() {
 		loadSizePreference();
-		setVisible(true);
-		loadStatePreference();
-		loaded.set(true);
+	}
+
+	protected void postVisible() {
 	}
 
 	private void loadSizePreference() {
-		int width = pref.getInt(PREF_WIDTH, 0);
-		int height = pref.getInt(PREF_HEIGHT, 0);
+		int width = pref.getInt(prefWidth, 0);
+		int height = pref.getInt(prefHeight, 0);
+
 		if (width > 0 && height > 0) {
-			setSize(width, height);
+			window.setSize(width, height);
 			if (log.isTraceEnabled()) {
 				log.trace("Loaded size preference " + width + "x" + height); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	}
 
-	private void loadStatePreference() {
-		setExtendedState((getExtendedState() & ~Frame.MAXIMIZED_BOTH) | (pref.getInt(PREF_STATE, Frame.NORMAL) & Frame.MAXIMIZED_BOTH));
-		if (log.isTraceEnabled()) {
-			log.trace("Loaded state preference " + getExtendedState()); //$NON-NLS-1$
-		}
-	}
-
-	private void delayedSaveWindowPreference() {
+	protected void delayedSaveWindowPreference() {
 		if (saved.getAndSet(false)) {
 			if (log.isTraceEnabled()) {
 				log.trace("Scheduling preferences save"); //$NON-NLS-1$
@@ -104,6 +118,8 @@ public abstract class AutoPrefsWindow extends JFrame {
 			delayed.execute(new Runnable() {
 				@Override
 				public void run() {
+					log.trace("Saving preferences"); //$NON-NLS-1$
+
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
@@ -120,32 +136,41 @@ public abstract class AutoPrefsWindow extends JFrame {
 		}
 	}
 
+	protected void saveWidth(int width) {
+		pref.putInt(prefWidth, width);
+		log.trace("Saved width preference " + width); //$NON-NLS-1$
+	}
+
+	protected void saveHeight(int height) {
+		pref.putInt(prefHeight, height);
+		log.trace("Saved height preference " + height); //$NON-NLS-1$
+	}
+
 	private void saveWindowPreference() {
 		saved.getAndSet(true);
 
+		for (int i = 0; i < 4; i++) {
+			if (loaded.get()) {
+				break;
+			}
+
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				return;
+			}
+		}
 		if (!loaded.get()) {
 			return;
 		}
 
-		Dimension size;
-		int state;
-		synchronized (getTreeLock()) {
-			synchronized (this) {
-				size = getSize();
-				state = getExtendedState();
-			}
-		}
+		savePreferences();
+	}
 
-		if (state == Frame.NORMAL || (state & Frame.MAXIMIZED_HORIZ) == 0) {
-			pref.putInt(PREF_WIDTH, size.width);
-			log.trace("Saved width preference " + size.width); //$NON-NLS-1$
-		}
-		if (state == Frame.NORMAL || (state & Frame.MAXIMIZED_VERT) == 0) {
-			pref.putInt(PREF_HEIGHT, size.height);
-			log.trace("Saved height preference " + size.height); //$NON-NLS-1$
-		}
+	protected void savePreferences() {
+		Dimension size = window.getSize();
 
-		pref.putInt(PREF_STATE, getExtendedState() & Frame.MAXIMIZED_BOTH);
-		log.trace("Saved state preference " + getExtendedState()); //$NON-NLS-1$
+		saveWidth(size.width);
+		saveHeight(size.height);
 	}
 }

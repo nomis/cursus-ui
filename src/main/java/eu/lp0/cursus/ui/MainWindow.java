@@ -30,6 +30,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -51,6 +52,7 @@ import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.ui.component.EntityComboBoxModel;
+import eu.lp0.cursus.ui.preferences.JFrameAutoPrefs;
 import eu.lp0.cursus.ui.tab.ClassManager;
 import eu.lp0.cursus.ui.tab.LapsManager;
 import eu.lp0.cursus.ui.tab.PenaltiesManager;
@@ -58,10 +60,11 @@ import eu.lp0.cursus.ui.tree.RaceTree;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-public class MainWindow extends AutoPrefsWindow implements Executor {
+public class MainWindow extends JFrame implements Executor, Displayable {
 	private final ExecutorService background = Executors.newSingleThreadExecutor();
 	private final Main main;
 
+	private JFrameAutoPrefs prefs = new JFrameAutoPrefs(this);
 	private DatabaseManager dbMgr = new DatabaseManager(this);
 	private ClassManager clsMgr;
 	private LapsManager lapsMgr;
@@ -140,6 +143,10 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 
 		databaseClosed();
 		enableStartupGUI(false);
+	}
+
+	public void display() {
+		prefs.display();
 	}
 
 	public Main getMain() {
