@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.ui.series;
 
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,6 +34,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.util.DefaultUnitConverter;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.SeriesDAO;
@@ -51,7 +53,6 @@ public class SeriesDetailWindow<O extends Frame & DatabaseWindow> extends JDialo
 	private JTextField txtName;
 	private JTextField txtDesc;
 	private JButton btnCancel;
-	private JButton btnReset;
 	private JButton btnSave;
 
 	private WindowAutoPrefs prefs = new WindowAutoPrefs(this);
@@ -76,36 +77,33 @@ public class SeriesDetailWindow<O extends Frame & DatabaseWindow> extends JDialo
 	private void initialise() {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle(title);
-		setSize(400, 300);
+		DefaultUnitConverter duc = DefaultUnitConverter.getInstance();
+		setSize(new Dimension(duc.dialogUnitXAsPixel(150, this), duc.dialogUnitYAsPixel(70, this)));
+		setMinimumSize(new Dimension(duc.dialogUnitXAsPixel(100, this), duc.dialogUnitYAsPixel(70, this)));
 
-		FormLayout layout = new FormLayout(
-				"2dlu, right:max(30dlu;pref), 2dlu, fill:max(0dlu;pref):grow, max(30dlu;pref), 2dlu, max(30dlu;pref), 2dlu, max(30dlu;pref), 2dlu", //$NON-NLS-1$
-				"2dlu, pref, 2dlu, top:pref:grow, 2dlu, pref, 2dlu"); //$NON-NLS-1$ 
+		FormLayout layout = new FormLayout("2dlu, right:max(30dlu;pref), 2dlu, fill:max(0dlu;pref):grow, max(30dlu;pref), 2dlu, max(30dlu;pref), 2dlu", //$NON-NLS-1$
+				"2dlu, max(15dlu;pref), 2dlu, max(15dlu;pref), 2dlu:grow, max(16dlu;pref), 2dlu"); //$NON-NLS-1$
 		getContentPane().setLayout(layout);
 
 		JLabel lblName = new JLabel("Name:");
 		getContentPane().add(lblName, "2, 2"); //$NON-NLS-1$
 
 		txtName = new DatabaseTextField(origSeries.getName(), Constants.MAX_STRING_LEN);
-		getContentPane().add(txtName, "4, 2, 6, 1"); //$NON-NLS-1$
+		getContentPane().add(txtName, "4, 2, 4, 1"); //$NON-NLS-1$
 
 		JLabel lblDesc = new JLabel("Description:");
 		getContentPane().add(lblDesc, "2, 4"); //$NON-NLS-1$
 
 		txtDesc = new DatabaseTextField(origSeries.getDescription(), Constants.MAX_STRING_LEN);
-		getContentPane().add(txtDesc, "4, 4, 6, 1"); //$NON-NLS-1$
-
-		btnReset = new JButton("Reset");
-		btnReset.addActionListener(this);
-		getContentPane().add(btnReset, "5, 6"); //$NON-NLS-1$
+		getContentPane().add(txtDesc, "4, 4, 4, 1"); //$NON-NLS-1$
 
 		btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(this);
-		getContentPane().add(btnCancel, "7, 6"); //$NON-NLS-1$
+		getContentPane().add(btnCancel, "5, 6"); //$NON-NLS-1$
 
 		btnSave = new JButton("Save");
 		btnSave.addActionListener(this);
-		getContentPane().add(btnSave, "9, 6"); //$NON-NLS-1$
+		getContentPane().add(btnSave, "7, 6"); //$NON-NLS-1$
 
 		getRootPane().setDefaultButton(btnSave);
 		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), btnCancel.getText());
@@ -123,8 +121,6 @@ public class SeriesDetailWindow<O extends Frame & DatabaseWindow> extends JDialo
 			doSave();
 		} else if (ae.getSource() == btnCancel) {
 			doCancel();
-		} else if (ae.getSource() == btnReset) {
-			doReset();
 		}
 	}
 
@@ -149,10 +145,5 @@ public class SeriesDetailWindow<O extends Frame & DatabaseWindow> extends JDialo
 
 	private void doCancel() {
 		dispose();
-	}
-
-	private void doReset() {
-		txtName.setText(origSeries.getName());
-		txtDesc.setText(origSeries.getDescription());
 	}
 }
