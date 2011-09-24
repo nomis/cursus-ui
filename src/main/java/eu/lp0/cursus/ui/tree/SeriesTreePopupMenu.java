@@ -17,7 +17,7 @@
  */
 package eu.lp0.cursus.ui.tree;
 
-import java.awt.Component;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -25,11 +25,16 @@ import java.awt.event.KeyEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.ui.Displayable;
+import eu.lp0.cursus.ui.EventDetailWindow;
+import eu.lp0.cursus.ui.SeriesDetailWindow;
+import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
 public class SeriesTreePopupMenu extends JPopupMenu implements ActionListener {
-	private final Component main;
+	private final Frame owner;
 	private final Series series;
 
 	private JMenuItem mnuNewEvent;
@@ -39,8 +44,8 @@ public class SeriesTreePopupMenu extends JPopupMenu implements ActionListener {
 		NEW_EVENT, EDIT_SERIES;
 	}
 
-	public SeriesTreePopupMenu(Component main, Series series) {
-		this.main = main;
+	public SeriesTreePopupMenu(Frame owner, Series series) {
+		this.owner = owner;
 		this.series = series;
 
 		mnuNewEvent = new JMenuItem(Messages.getString("menu.event.new")); //$NON-NLS-1$
@@ -58,11 +63,19 @@ public class SeriesTreePopupMenu extends JPopupMenu implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		Displayable win = null;
+
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_EVENT:
+			win = new EventDetailWindow(owner, series.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(series)); //$NON-NLS-1$
 			break;
 		case EDIT_SERIES:
+			win = new SeriesDetailWindow(owner, Messages.getString("menu.series.edit") + Constants.EN_DASH + series.getName(), series); //$NON-NLS-1$
 			break;
+		}
+
+		if (win != null) {
+			win.display();
 		}
 	}
 }

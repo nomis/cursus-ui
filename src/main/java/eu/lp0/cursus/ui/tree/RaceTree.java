@@ -17,7 +17,7 @@
  */
 package eu.lp0.cursus.ui.tree;
 
-import java.awt.Component;
+import java.awt.Frame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -28,12 +28,12 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 public class RaceTree extends JTree implements MouseListener {
-	private final Component main;
+	private final Frame owner;
 
-	public RaceTree(Component main) {
+	public RaceTree(Frame owner) {
 		super(new DefaultTreeModel(new DatabaseTreeNode()));
 
-		this.main = main;
+		this.owner = owner;
 
 		setRootVisible(false);
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -47,6 +47,7 @@ public class RaceTree extends JTree implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent me) {
+		ensureSelection(me);
 		if (me.isPopupTrigger()) {
 			showMenu(me);
 		}
@@ -54,6 +55,7 @@ public class RaceTree extends JTree implements MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent me) {
+		ensureSelection(me);
 		if (me.isPopupTrigger()) {
 			showMenu(me);
 		}
@@ -61,28 +63,28 @@ public class RaceTree extends JTree implements MouseListener {
 
 	private JPopupMenu menuFromSelection(Object component) {
 		if (component instanceof SeriesTreeNode) {
-			return new SeriesTreePopupMenu(main, ((SeriesTreeNode)component).getUserObject());
+			return new SeriesTreePopupMenu(owner, ((SeriesTreeNode)component).getUserObject());
 		} else if (component instanceof EventTreeNode) {
-			return new EventTreePopupMenu(main, ((EventTreeNode)component).getUserObject());
+			return new EventTreePopupMenu(owner, ((EventTreeNode)component).getUserObject());
 		} else if (component instanceof RaceTreeNode) {
-			return new RaceTreePopupMenu(main, ((RaceTreeNode)component).getUserObject());
+			return new RaceTreePopupMenu(owner, ((RaceTreeNode)component).getUserObject());
 		} else {
 			return null;
 		}
 	}
 
-	private TreePath ensureSelection(MouseEvent me) {
+	private void ensureSelection(MouseEvent me) {
 		TreePath path = getPathForLocation(me.getX(), me.getY());
 
 		if (getSelectionPath() != path) {
-			setSelectionPath(path);
+			if (path == null || me.isPopupTrigger()) {
+				setSelectionPath(path);
+			}
 		}
-
-		return path;
 	}
 
 	private void showMenu(MouseEvent me) {
-		TreePath path = ensureSelection(me);
+		TreePath path = getSelectionPath();
 
 		if (path != null) {
 			menuFromSelection(path.getLastPathComponent()).show(me.getComponent(), me.getX(), me.getY());
