@@ -19,8 +19,6 @@ package eu.lp0.cursus.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,7 +30,6 @@ import javax.swing.WindowConstants;
 
 import eu.lp0.cursus.app.Main;
 import eu.lp0.cursus.db.Database;
-import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceHierarchy;
@@ -55,13 +52,14 @@ import eu.lp0.cursus.ui.series.SeriesResultsTab;
 import eu.lp0.cursus.ui.tree.RaceTree;
 import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
-import eu.lp0.cursus.util.Messages;
 
 public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 	private final Main main;
 
 	private JFrameAutoPrefs prefs = new JFrameAutoPrefs(this);
 	private DatabaseManager dbMgr = new DatabaseManager(this);
+	@SuppressWarnings("unused")
+	private RuntimeManager runMgr;
 	private TabbedPaneManager tabMgr;
 	private SelectedTabManager selMgr;
 
@@ -83,36 +81,9 @@ public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 	private AbstractDatabaseTab<Race> racResultsTab;
 	private List<AbstractDatabaseTab<Race>> raceTabs;
 
-	public MainWindow(Main main, final String[] args) {
+	public MainWindow(Main main) {
 		super();
 		this.main = main;
-
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowOpened(WindowEvent we) {
-				Background.execute(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							startup(args);
-						} catch (InvalidDatabaseException e) {
-							// TODO handle uncaught exceptions
-							throw new RuntimeException(e);
-						}
-					}
-				});
-			}
-
-			@Override
-			public void windowClosing(WindowEvent we) {
-				Background.execute(new Runnable() {
-					@Override
-					public void run() {
-						shutdown();
-					}
-				});
-			}
-		});
 
 		initialise();
 		bind();
@@ -143,37 +114,6 @@ public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 
 	public RaceHierarchy getSelected() {
 		return isOpen() ? tabMgr.getSelected() : null;
-	}
-
-	private void startup(String[] args) throws InvalidDatabaseException {
-		assert (Background.isExecutorThread());
-
-		try {
-			if (args.length == 0) {
-				dbMgr.newDatabase();
-			} else if (args.length == 1) {
-				// TODO open file
-			} else {
-				// TODO error message
-			}
-		} finally {
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					menuBar.enableOpen(true);
-				}
-			});
-		}
-	}
-
-	private void shutdown() {
-		if (dbMgr.trySaveDatabase(Messages.getString("menu.file.exit"))) { //$NON-NLS-1$
-			try {
-				dispose();
-			} finally {
-				Background.shutdownNow();
-			}
-		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -225,6 +165,7 @@ public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 	}
 
 	private void bind() {
+		runMgr = new RuntimeManager(this, dbMgr, main.getArgs());
 		tabMgr = new TabbedPaneManager(raceList, tabbedPane, seriesTabs, eventTabs, raceTabs);
 		selMgr = new SelectedTabManager(this, tabbedPane);
 	}

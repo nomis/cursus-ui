@@ -54,9 +54,13 @@ public class Main implements Runnable {
 		this.args = args;
 	}
 
+	public String[] getArgs() {
+		return args;
+	}
+
 	@Override
 	public void run() {
-		win = new MainWindow(Main.this, args);
+		win = new MainWindow(this);
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
