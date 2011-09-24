@@ -31,14 +31,14 @@ import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
 public class DatabaseManager implements ActionListener {
-	public enum Commands {
-		NEW, OPEN, SAVE, SAVE_AS, CLOSE;
-	}
-
 	private final MainWindow win;
 
 	DatabaseManager(MainWindow win) {
 		this.win = win;
+	}
+
+	public enum Commands {
+		NEW, OPEN, SAVE, SAVE_AS, CLOSE;
 	}
 
 	@Override
