@@ -47,6 +47,10 @@ public abstract class AbstractEntity {
 			return false;
 		}
 
+		if (o == this) {
+			return true;
+		}
+
 		if (!getClass().equals(o.getClass())) {
 			return false;
 		}
