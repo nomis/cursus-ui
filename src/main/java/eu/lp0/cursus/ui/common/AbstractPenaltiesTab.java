@@ -15,37 +15,19 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui;
+package eu.lp0.cursus.ui.common;
 
-import java.awt.Frame;
+import eu.lp0.cursus.db.data.RaceHierarchy;
+import eu.lp0.cursus.ui.component.DatabaseWindow;
+import eu.lp0.cursus.ui.tab.AbstractDatabaseTab;
 
-import javax.swing.JDialog;
-import javax.swing.WindowConstants;
-
-import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.ui.preferences.WindowAutoPrefs;
-
-public class SeriesDetailWindow extends JDialog implements Displayable {
-	private final String title;
-	private final Series series;
-
-	private WindowAutoPrefs prefs = new WindowAutoPrefs(this);
-
-	public SeriesDetailWindow(Frame owner, String title, Series series) {
-		super(owner, true);
-		this.title = title;
-		this.series = series;
-
+public abstract class AbstractPenaltiesTab<T extends RaceHierarchy> extends AbstractDatabaseTab<T> {
+	public AbstractPenaltiesTab(Class<T> clazz, DatabaseWindow win) {
+		super(clazz, win, "tab.penalties"); //$NON-NLS-1$
 		initialise();
 	}
 
-	public void display() {
-		prefs.display(getOwner());
-	}
-
 	private void initialise() {
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle(title);
-		setSize(400, 300);
+
 	}
 }

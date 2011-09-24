@@ -36,7 +36,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity(name = "race")
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "event_id", "name" }) })
-public class Race extends AbstractEntity implements Comparable<Race> {
+public class Race extends AbstractEntity implements Comparable<Race>, RaceHierarchy {
 	Race() {
 	}
 

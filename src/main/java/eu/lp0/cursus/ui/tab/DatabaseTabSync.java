@@ -17,24 +17,17 @@
  */
 package eu.lp0.cursus.ui.tab;
 
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTree;
+import java.awt.Component;
+import java.awt.event.HierarchyListener;
 
-import eu.lp0.cursus.ui.MainWindow;
+import eu.lp0.cursus.db.data.RaceHierarchy;
 
-public class LapsManager extends RaceTreeManager {
-	public LapsManager(MainWindow win, JTabbedPane mainTabs, JPanel lapsTab, JTree lapsRaceList) {
-		super(win, mainTabs, lapsTab, lapsRaceList);
-	}
+public interface DatabaseTabSync<T extends RaceHierarchy> {
+	public void addHierarchyListener(HierarchyListener hierarchyListener);
 
-	@Override
-	protected void tabSelected() {
-		super.tabSelected();
-	}
+	public Component getParent();
 
-	@Override
-	protected void databaseClosed() {
-		super.databaseClosed();
-	}
+	public void tabRefresh(T selected);
+
+	public void tabClear();
 }

@@ -32,7 +32,7 @@ import javax.persistence.OrderColumn;
  * Race series
  */
 @Entity(name = "series")
-public class Series extends AbstractEntity implements Comparable<Series> {
+public class Series extends AbstractEntity implements Comparable<Series>, RaceHierarchy {
 	Series() {
 	}
 

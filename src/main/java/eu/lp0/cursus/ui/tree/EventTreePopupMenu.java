@@ -27,9 +27,9 @@ import javax.swing.JPopupMenu;
 
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.ui.Displayable;
-import eu.lp0.cursus.ui.EventDetailWindow;
-import eu.lp0.cursus.ui.RaceDetailWindow;
+import eu.lp0.cursus.ui.component.Displayable;
+import eu.lp0.cursus.ui.event.EventDetailWindow;
+import eu.lp0.cursus.ui.race.RaceDetailWindow;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 

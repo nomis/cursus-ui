@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui;
+package eu.lp0.cursus.ui.event;
 
 import java.awt.Frame;
 
@@ -23,6 +23,7 @@ import javax.swing.JDialog;
 import javax.swing.WindowConstants;
 
 import eu.lp0.cursus.db.data.Event;
+import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.preferences.WindowAutoPrefs;
 
 public class EventDetailWindow extends JDialog implements Displayable {

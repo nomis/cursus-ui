@@ -15,8 +15,10 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui;
+package eu.lp0.cursus.db.data;
 
-public interface Displayable {
-	public void display();
+public interface RaceHierarchy {
+	public String getName();
+
+	public String getDescription();
 }

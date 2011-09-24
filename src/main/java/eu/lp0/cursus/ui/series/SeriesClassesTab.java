@@ -15,45 +15,69 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.tab;
+package eu.lp0.cursus.ui.series;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.ClassDAO;
-import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Class;
-import eu.lp0.cursus.ui.MainWindow;
-import eu.lp0.cursus.ui.component.AbstractTabManager;
+import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.EntityComboBoxModel;
+import eu.lp0.cursus.ui.tab.AbstractDatabaseTab;
 
-public class ClassManager extends AbstractTabManager {
-	private final JList classesList;
+public class SeriesClassesTab extends AbstractDatabaseTab<Series> {
+	private JSplitPane splitPane;
+	private JList list;
+	private JScrollPane scrollPane;
+	private JTable table;
 
-	private static final SeriesDAO seriesDAO = new SeriesDAO();
 	private static final ClassDAO classDAO = new ClassDAO();
 
-	public ClassManager(MainWindow win, JTabbedPane mainTabs, JPanel classesTab, JList classesList) {
-		super(win, mainTabs, classesTab);
-		this.classesList = classesList;
+	public SeriesClassesTab(DatabaseWindow win) {
+		super(Series.class, win, "tab.classes"); //$NON-NLS-1$
+		initialise();
+	}
+
+	private void initialise() {
+		setLayout(new BorderLayout(0, 0));
+
+		splitPane = new JSplitPane();
+		add(splitPane, BorderLayout.CENTER);
+
+		list = new JList();
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.setMinimumSize(new Dimension(150, 0));
+		list.setModel(new EntityComboBoxModel<Class>());
+		splitPane.setLeftComponent(list);
+
+		scrollPane = new JScrollPane();
+		splitPane.setRightComponent(scrollPane);
+
+		table = new JTable();
+		scrollPane.setViewportView(table);
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	protected void tabSelected() {
+	public void tabRefresh(Series series) {
 		final List<Class> classes;
 
 		win.getDatabase().startSession();
 		try {
 			DatabaseSession.begin();
 
-			classes = classDAO.findAll(seriesDAO.findSingleton());
+			classes = classDAO.findAll(series);
 			for (Class cls : classes) {
 				classDAO.detach(cls);
 			}
@@ -66,15 +90,16 @@ public class ClassManager extends AbstractTabManager {
 		Collections.sort(classes);
 
 		SwingUtilities.invokeLater(new Runnable() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public void run() {
-				((EntityComboBoxModel<Class>)classesList.getModel()).updateModel(classes);
+				((EntityComboBoxModel<Class>)list.getModel()).updateModel(classes);
 			}
 		});
 	}
 
 	@Override
-	protected void databaseClosed() {
-		classesList.setModel(new EntityComboBoxModel<Class>());
+	public void tabClear() {
+		list.setModel(new EntityComboBoxModel<Class>());
 	}
 }

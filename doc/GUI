@@ -1,0 +1,26 @@
+Left pane
+	Race list
+Right pane
+	Context: none
+		TBD
+	Context: series
+		Tab: classes
+			Left pane
+				Class list
+			Right pane
+				Class management
+		Tab: pilots (registration)
+		Tab: penalties (series)
+		Tab: results (series)
+	Context: event
+		Tab: penalties (event)
+		Tab: results (event)
+	Context: race
+		Tab: pilots (attendees)
+		Tab: laps
+		Tab: penalties (race)
+		Tab: results (race)
+	
+Tabs remember their selection if a different race is selected
+Penalties tab is very similar for each type: a list of penalties with add/remove
+Results tab TBD

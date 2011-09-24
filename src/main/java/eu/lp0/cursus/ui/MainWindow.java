@@ -26,50 +26,78 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTree;
 import javax.swing.KeyStroke;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import eu.lp0.cursus.app.Main;
 import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.InvalidDatabaseException;
-import eu.lp0.cursus.db.data.Class;
-import eu.lp0.cursus.ui.component.EntityComboBoxModel;
+import eu.lp0.cursus.db.data.Event;
+import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.db.data.RaceHierarchy;
+import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.ui.component.DatabaseWindow;
+import eu.lp0.cursus.ui.component.Displayable;
+import eu.lp0.cursus.ui.event.EventPenaltiesTab;
+import eu.lp0.cursus.ui.event.EventResultsTab;
 import eu.lp0.cursus.ui.preferences.JFrameAutoPrefs;
-import eu.lp0.cursus.ui.tab.ClassManager;
-import eu.lp0.cursus.ui.tab.LapsManager;
-import eu.lp0.cursus.ui.tab.PenaltiesManager;
+import eu.lp0.cursus.ui.race.RaceAttendeesTab;
+import eu.lp0.cursus.ui.race.RaceLapsTab;
+import eu.lp0.cursus.ui.race.RacePenaltiesTab;
+import eu.lp0.cursus.ui.race.RaceResultsTab;
+import eu.lp0.cursus.ui.series.SeriesClassesTab;
+import eu.lp0.cursus.ui.series.SeriesPenaltiesTab;
+import eu.lp0.cursus.ui.series.SeriesPilotsTab;
+import eu.lp0.cursus.ui.series.SeriesResultsTab;
+import eu.lp0.cursus.ui.tab.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.tree.RaceTree;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-public class MainWindow extends JFrame implements Executor, Displayable {
+public class MainWindow extends JFrame implements Executor, Displayable, DatabaseWindow {
+	/**
+	 * Primary background execution thread used to serialises all actions
+	 */
 	private final ExecutorService background = Executors.newSingleThreadExecutor();
 	private final Main main;
 
 	private JFrameAutoPrefs prefs = new JFrameAutoPrefs(this);
 	private DatabaseManager dbMgr = new DatabaseManager(this);
-	private ClassManager clsMgr;
-	private LapsManager lapsMgr;
-	private PenaltiesManager penMgr;
+	private SelectionManager selMgr;
 
+	// Main
+	private JSplitPane splitPane;
+	private RaceTree<MainWindow> raceList;
+	private JTabbedPane tabbedPane;
+	private AbstractDatabaseTab<Series> serPilotsTab;
+	private AbstractDatabaseTab<Series> serClassesTab;
+	private AbstractDatabaseTab<Series> serPenaltiesTab;
+	private AbstractDatabaseTab<Series> serResultsTab;
+	private List<AbstractDatabaseTab<Series>> seriesTabs;
+	private AbstractDatabaseTab<Event> evtPenaltiesTab;
+	private AbstractDatabaseTab<Event> evtResultsTab;
+	private List<AbstractDatabaseTab<Event>> eventTabs;
+	private AbstractDatabaseTab<Race> racAttendeesTab;
+	private AbstractDatabaseTab<Race> racLapsTab;
+	private AbstractDatabaseTab<Race> racPenaltiesTab;
+	private AbstractDatabaseTab<Race> racResultsTab;
+	private List<AbstractDatabaseTab<Race>> raceTabs;
+
+	// Menu
 	private JMenuBar menuBar;
 	private JMenu mnuFile;
 	private JMenuItem mnuFileNew;
@@ -81,31 +109,6 @@ public class MainWindow extends JFrame implements Executor, Displayable {
 	private JMenuItem mnuFileExit;
 	private JMenu mnuHelp;
 	private JMenuItem mnuHelpAbout;
-
-	private JTabbedPane mainTabs;
-	private JPanel pilotsTab;
-	private JPanel classesTab;
-	private JPanel lapsTab;
-	private JPanel resultsTab;
-	private JPanel penaltiesTab;
-
-	private JScrollPane pilotsScrollPane;
-	private JTable pilots;
-
-	private JSplitPane classesSplitPane;
-	private JList classesList;
-	private JScrollPane classesScrollPane;
-	private JTable classPilots;
-
-	private JSplitPane lapsSplitPane;
-	private JTree lapsRaceList;
-	private JScrollPane lapsScrollPane;
-	private JTable raceLaps;
-
-	private JSplitPane penaltiesSplitPane;
-	private JTree penaltiesRaceList;
-	private JScrollPane penaltiesScrollPane;
-	private JTable racePenalties;
 
 	public MainWindow(Main main, final String[] args) {
 		super();
@@ -138,7 +141,7 @@ public class MainWindow extends JFrame implements Executor, Displayable {
 			}
 		});
 
-		initialize();
+		initialise();
 		bind();
 
 		databaseClosed();
@@ -153,8 +156,16 @@ public class MainWindow extends JFrame implements Executor, Displayable {
 		return main;
 	}
 
+	public boolean isOpen() {
+		return main.isOpen();
+	}
+
 	public Database getDatabase() {
 		return main.getDatabase();
+	}
+
+	public RaceHierarchy getSelected() {
+		return selMgr.getSelected();
 	}
 
 	@Override
@@ -186,171 +197,126 @@ public class MainWindow extends JFrame implements Executor, Displayable {
 		}
 	}
 
-	private void initialize() {
+	@SuppressWarnings("unchecked")
+	private void initialise() {
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setTitle(Constants.APP_NAME);
 		setSize(800, 600);
 
-		mainTabs = new JTabbedPane();
-		getContentPane().add(mainTabs, BorderLayout.CENTER);
+		{ // Main
+			splitPane = new JSplitPane();
+			getContentPane().add(splitPane, BorderLayout.CENTER);
 
-		pilotsTab = new JPanel();
-		mainTabs.addTab(Messages.getString("tab.pilots"), null, pilotsTab, null); //$NON-NLS-1$
-		mainTabs.setMnemonicAt(0, Messages.getKeyEvent("tab.pilots")); //$NON-NLS-1$
-		pilotsTab.setLayout(new BorderLayout(0, 0));
+			raceList = new RaceTree<MainWindow>(this);
+			splitPane.setLeftComponent(raceList);
+			raceList.setMinimumSize(new Dimension(150, 0));
 
-		pilotsScrollPane = new JScrollPane();
-		pilotsTab.add(pilotsScrollPane, BorderLayout.CENTER);
+			tabbedPane = new JTabbedPane();
+			splitPane.setRightComponent(tabbedPane);
+		}
 
-		pilots = new JTable();
-		pilotsScrollPane.setViewportView(pilots);
+		{ // Series
+			serClassesTab = new SeriesClassesTab(this);
+			serPilotsTab = new SeriesPilotsTab(this);
+			serPenaltiesTab = new SeriesPenaltiesTab(this);
+			serResultsTab = new SeriesResultsTab(this);
+			seriesTabs = Arrays.asList(serPilotsTab, serClassesTab, serPenaltiesTab, serResultsTab);
+		}
 
-		classesTab = new JPanel();
-		mainTabs.addTab(Messages.getString("tab.classes"), null, classesTab, null); //$NON-NLS-1$
-		mainTabs.setMnemonicAt(1, Messages.getKeyEvent("tab.classes")); //$NON-NLS-1$
-		classesTab.setLayout(new BorderLayout(0, 0));
+		{ // Event
+			evtPenaltiesTab = new EventPenaltiesTab(this);
+			evtResultsTab = new EventResultsTab(this);
 
-		classesSplitPane = new JSplitPane();
-		classesTab.add(classesSplitPane, BorderLayout.CENTER);
+			eventTabs = Arrays.asList(evtPenaltiesTab, evtResultsTab);
+		}
 
-		classesList = new JList();
-		classesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		classesList.setMinimumSize(new Dimension(150, 0));
-		classesList.setModel(new EntityComboBoxModel<Class>());
-		classesSplitPane.setLeftComponent(classesList);
+		{ // Race
+			racAttendeesTab = new RaceAttendeesTab(this);
+			racLapsTab = new RaceLapsTab(this);
+			racPenaltiesTab = new RacePenaltiesTab(this);
+			racResultsTab = new RaceResultsTab(this);
 
-		classesScrollPane = new JScrollPane();
-		classesSplitPane.setRightComponent(classesScrollPane);
+			raceTabs = Arrays.asList(racAttendeesTab, racLapsTab, racPenaltiesTab, racResultsTab);
+		}
 
-		classPilots = new JTable();
-		classesScrollPane.setViewportView(classPilots);
+		{ // Menu
+			menuBar = new JMenuBar();
+			setJMenuBar(menuBar);
 
-		lapsTab = new JPanel();
-		mainTabs.addTab(Messages.getString("tab.laps"), null, lapsTab, null); //$NON-NLS-1$
-		mainTabs.setMnemonicAt(2, Messages.getKeyEvent("tab.laps")); //$NON-NLS-1$
-		lapsTab.setLayout(new BorderLayout(0, 0));
+			mnuFile = new JMenu();
+			menuBar.add(mnuFile);
+			mnuFile.setText(Messages.getString("menu.file")); //$NON-NLS-1$
+			mnuFile.setMnemonic(Messages.getKeyEvent("menu.file")); //$NON-NLS-1$
 
-		lapsSplitPane = new JSplitPane();
-		lapsTab.add(lapsSplitPane);
+			mnuFileNew = new JMenuItem();
+			mnuFile.add(mnuFileNew);
+			mnuFileNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
+			mnuFileNew.setText(Messages.getString("menu.file.new")); //$NON-NLS-1$
+			mnuFileNew.setMnemonic(Messages.getKeyEvent("menu.file.new")); //$NON-NLS-1$
+			mnuFileNew.setActionCommand(DatabaseManager.Commands.NEW.toString());
+			mnuFileNew.addActionListener(dbMgr);
 
-		lapsRaceList = new RaceTree(this);
-		lapsRaceList.setMinimumSize(new Dimension(150, 0));
-		lapsSplitPane.setLeftComponent(lapsRaceList);
+			mnuFileOpen = new JMenuItem();
+			mnuFile.add(mnuFileOpen);
+			mnuFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
+			mnuFileOpen.setText(Messages.getString("menu.file.open")); //$NON-NLS-1$
+			mnuFileOpen.setMnemonic(Messages.getKeyEvent("menu.file.open")); //$NON-NLS-1$
+			mnuFileOpen.setActionCommand(DatabaseManager.Commands.OPEN.toString());
+			mnuFileOpen.addActionListener(dbMgr);
 
-		lapsScrollPane = new JScrollPane();
-		lapsSplitPane.setRightComponent(lapsScrollPane);
+			mnuFileSave = new JMenuItem();
+			mnuFile.add(mnuFileSave);
+			mnuFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+			mnuFileSave.setText(Messages.getString("menu.file.save")); //$NON-NLS-1$
+			mnuFileSave.setMnemonic(Messages.getKeyEvent("menu.file.save")); //$NON-NLS-1$
+			mnuFileSave.setActionCommand(DatabaseManager.Commands.SAVE.toString());
+			mnuFileSave.addActionListener(dbMgr);
 
-		raceLaps = new JTable();
-		lapsScrollPane.setViewportView(raceLaps);
+			mnuFileSaveAs = new JMenuItem();
+			mnuFile.add(mnuFileSaveAs);
+			mnuFileSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
+			mnuFileSaveAs.setText(Messages.getString("menu.file.save-as")); //$NON-NLS-1$
+			mnuFileSaveAs.setMnemonic(Messages.getKeyEvent("menu.file.save-as")); //$NON-NLS-1$
+			mnuFileSaveAs.setActionCommand(DatabaseManager.Commands.SAVE_AS.toString());
+			mnuFileSaveAs.addActionListener(dbMgr);
 
-		penaltiesTab = new JPanel();
-		mainTabs.addTab(Messages.getString("tab.penalties"), null, penaltiesTab, null); //$NON-NLS-1$
-		mainTabs.setMnemonicAt(3, Messages.getKeyEvent("tab.results")); //$NON-NLS-1$
-		penaltiesTab.setLayout(new BorderLayout(0, 0));
+			mnuFileClose = new JMenuItem();
+			mnuFile.add(mnuFileClose);
+			mnuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK));
+			mnuFileClose.setText(Messages.getString("menu.file.close")); //$NON-NLS-1$
+			mnuFileClose.setMnemonic(Messages.getKeyEvent("menu.file.close")); //$NON-NLS-1$
+			mnuFileClose.setActionCommand(DatabaseManager.Commands.CLOSE.toString());
+			mnuFileClose.addActionListener(dbMgr);
 
-		penaltiesSplitPane = new JSplitPane();
-		penaltiesTab.add(penaltiesSplitPane);
+			mnuFileSeparator1 = new JSeparator();
+			mnuFile.add(mnuFileSeparator1);
 
-		penaltiesRaceList = new RaceTree(this);
-		penaltiesRaceList.setMinimumSize(new Dimension(150, 0));
-		penaltiesSplitPane.setLeftComponent(penaltiesRaceList);
+			mnuFileExit = new JMenuItem();
+			mnuFileExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
+			mnuFileExit.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent ae) {
+					WindowEvent wev = new WindowEvent(MainWindow.this, WindowEvent.WINDOW_CLOSING);
+					Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
+				}
+			});
+			mnuFile.add(mnuFileExit);
+			mnuFileExit.setText(Messages.getString("menu.file.exit")); //$NON-NLS-1$
+			mnuFileExit.setMnemonic(Messages.getKeyEvent("menu.file.exit")); //$NON-NLS-1$
 
-		penaltiesScrollPane = new JScrollPane();
-		penaltiesSplitPane.setRightComponent(penaltiesScrollPane);
+			mnuHelp = new JMenu();
+			menuBar.add(mnuHelp);
+			mnuHelp.setText(Messages.getString("menu.help")); //$NON-NLS-1$
+			mnuHelp.setMnemonic(Messages.getKeyEvent("menu.help")); //$NON-NLS-1$
 
-		racePenalties = new JTable();
-		penaltiesScrollPane.setViewportView(racePenalties);
-
-		resultsTab = new JPanel();
-		mainTabs.addTab(Messages.getString("tab.results"), null, resultsTab, null); //$NON-NLS-1$
-		mainTabs.setMnemonicAt(4, Messages.getKeyEvent("tab.results")); //$NON-NLS-1$
-
-		menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-
-		mnuFile = new JMenu();
-		menuBar.add(mnuFile);
-		mnuFile.setText(Messages.getString("menu.file")); //$NON-NLS-1$
-		mnuFile.setMnemonic(Messages.getKeyEvent("menu.file")); //$NON-NLS-1$
-
-		mnuFileNew = new JMenuItem();
-		mnuFile.add(mnuFileNew);
-		mnuFileNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
-		mnuFileNew.setText(Messages.getString("menu.file.new")); //$NON-NLS-1$
-		mnuFileNew.setMnemonic(Messages.getKeyEvent("menu.file.new")); //$NON-NLS-1$
-		mnuFileNew.setActionCommand(DatabaseManager.Commands.NEW.toString());
-		mnuFileNew.addActionListener(dbMgr);
-
-		mnuFileOpen = new JMenuItem();
-		mnuFile.add(mnuFileOpen);
-		mnuFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
-		mnuFileOpen.setText(Messages.getString("menu.file.open")); //$NON-NLS-1$
-		mnuFileOpen.setMnemonic(Messages.getKeyEvent("menu.file.open")); //$NON-NLS-1$
-		mnuFileOpen.setActionCommand(DatabaseManager.Commands.OPEN.toString());
-		mnuFileOpen.addActionListener(dbMgr);
-
-		mnuFileSave = new JMenuItem();
-		mnuFile.add(mnuFileSave);
-		mnuFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-		mnuFileSave.setText(Messages.getString("menu.file.save")); //$NON-NLS-1$
-		mnuFileSave.setMnemonic(Messages.getKeyEvent("menu.file.save")); //$NON-NLS-1$
-		mnuFileSave.setActionCommand(DatabaseManager.Commands.SAVE.toString());
-		mnuFileSave.addActionListener(dbMgr);
-
-		mnuFileSaveAs = new JMenuItem();
-		mnuFile.add(mnuFileSaveAs);
-		mnuFileSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
-		mnuFileSaveAs.setText(Messages.getString("menu.file.save-as")); //$NON-NLS-1$
-		mnuFileSaveAs.setMnemonic(Messages.getKeyEvent("menu.file.save-as")); //$NON-NLS-1$
-		mnuFileSaveAs.setActionCommand(DatabaseManager.Commands.SAVE_AS.toString());
-		mnuFileSaveAs.addActionListener(dbMgr);
-
-		mnuFileClose = new JMenuItem();
-		mnuFile.add(mnuFileClose);
-		mnuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK));
-		mnuFileClose.setText(Messages.getString("menu.file.close")); //$NON-NLS-1$
-		mnuFileClose.setMnemonic(Messages.getKeyEvent("menu.file.close")); //$NON-NLS-1$
-		mnuFileClose.setActionCommand(DatabaseManager.Commands.CLOSE.toString());
-		mnuFileClose.addActionListener(dbMgr);
-
-		mnuFileSeparator1 = new JSeparator();
-		mnuFile.add(mnuFileSeparator1);
-
-		mnuFileExit = new JMenuItem();
-		mnuFileExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
-		mnuFileExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				WindowEvent wev = new WindowEvent(MainWindow.this, WindowEvent.WINDOW_CLOSING);
-				Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
-			}
-		});
-		mnuFile.add(mnuFileExit);
-		mnuFileExit.setText(Messages.getString("menu.file.exit")); //$NON-NLS-1$
-		mnuFileExit.setMnemonic(Messages.getKeyEvent("menu.file.exit")); //$NON-NLS-1$
-
-		mnuHelp = new JMenu();
-		menuBar.add(mnuHelp);
-		mnuHelp.setText(Messages.getString("menu.help")); //$NON-NLS-1$
-		mnuHelp.setMnemonic(Messages.getKeyEvent("menu.help")); //$NON-NLS-1$
-
-		mnuHelpAbout = new JMenuItem();
-		mnuHelp.add(mnuHelpAbout);
-		mnuHelpAbout.setText(Messages.getString("menu.help.about")); //$NON-NLS-1$
-		mnuHelpAbout.setMnemonic(Messages.getKeyEvent("menu.help.about")); //$NON-NLS-1$
+			mnuHelpAbout = new JMenuItem();
+			mnuHelp.add(mnuHelpAbout);
+			mnuHelpAbout.setText(Messages.getString("menu.help.about")); //$NON-NLS-1$
+			mnuHelpAbout.setMnemonic(Messages.getKeyEvent("menu.help.about")); //$NON-NLS-1$
+		}
 	}
 
 	private void bind() {
-		clsMgr = new ClassManager(this, mainTabs, classesTab, classesList);
-		lapsMgr = new LapsManager(this, mainTabs, lapsTab, lapsRaceList);
-		penMgr = new PenaltiesManager(this, mainTabs, penaltiesTab, penaltiesRaceList);
-	}
-
-	public void databaseOpened() {
-		sync(true, Constants.APP_NAME + Constants.EN_DASH + main.getDatabase().getName());
-	}
-
-	public void databaseClosed() {
-		sync(false, Constants.APP_DESC);
+		selMgr = new SelectionManager(raceList, tabbedPane, seriesTabs, eventTabs, raceTabs);
 	}
 
 	private void enableStartupGUI(boolean enabled) {
@@ -362,7 +328,7 @@ public class MainWindow extends JFrame implements Executor, Displayable {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				mainTabs.setVisible(open);
+				tabbedPane.setVisible(open);
 				enableStartupGUI(true);
 				mnuFileSave.setEnabled(open);
 				mnuFileSaveAs.setEnabled(open);
@@ -373,8 +339,19 @@ public class MainWindow extends JFrame implements Executor, Displayable {
 			}
 		});
 
-		clsMgr.sync(open);
-		lapsMgr.sync(open);
-		penMgr.sync(open);
+		if (open) {
+			raceList.databaseRefresh();
+		} else {
+			raceList.databaseClosed();
+		}
+	}
+
+	public void databaseOpened() {
+		sync(true, Constants.APP_NAME + Constants.EN_DASH + main.getDatabase().getName());
+	}
+
+	public void databaseClosed() {
+		selMgr.showSelected(null);
+		sync(false, Constants.APP_DESC);
 	}
 }

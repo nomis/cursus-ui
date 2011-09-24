@@ -15,26 +15,17 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.tab;
+package eu.lp0.cursus.ui.component;
 
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTree;
+import java.util.concurrent.Executor;
 
-import eu.lp0.cursus.ui.MainWindow;
+import eu.lp0.cursus.db.Database;
+import eu.lp0.cursus.db.data.RaceHierarchy;
 
-public class PenaltiesManager extends RaceTreeManager {
-	public PenaltiesManager(MainWindow win, JTabbedPane mainTabs, JPanel penaltiesTab, JTree penaltiesRaceList) {
-		super(win, mainTabs, penaltiesTab, penaltiesRaceList);
-	}
+public interface DatabaseWindow extends Executor {
+	// public boolean isOpen();
 
-	@Override
-	protected void tabSelected() {
-		super.tabSelected();
-	}
+	public Database getDatabase();
 
-	@Override
-	protected void databaseClosed() {
-		super.databaseClosed();
-	}
+	public RaceHierarchy getSelected();
 }

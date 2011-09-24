@@ -15,37 +15,32 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui;
+package eu.lp0.cursus.ui.race;
 
-import java.awt.Frame;
-
-import javax.swing.JDialog;
-import javax.swing.WindowConstants;
+import java.awt.BorderLayout;
 
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.ui.preferences.WindowAutoPrefs;
+import eu.lp0.cursus.ui.common.AbstractPenaltiesTab;
+import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class RaceDetailWindow extends JDialog implements Displayable {
-	private final String title;
-	private final Race race;
-
-	private WindowAutoPrefs prefs = new WindowAutoPrefs(this);
-
-	public RaceDetailWindow(Frame owner, String title, Race race) {
-		super(owner, true);
-		this.title = title;
-		this.race = race;
-
+public class RacePenaltiesTab extends AbstractPenaltiesTab<Race> {
+	public RacePenaltiesTab(DatabaseWindow win) {
+		super(Race.class, win);
 		initialise();
 	}
 
-	public void display() {
-		prefs.display(getOwner());
+	private void initialise() {
+		setLayout(new BorderLayout(0, 0));
+
 	}
 
-	private void initialise() {
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle(title);
-		setSize(400, 300);
+	@Override
+	public void tabRefresh(Race race) {
+
+	}
+
+	@Override
+	public void tabClear() {
+
 	}
 }
