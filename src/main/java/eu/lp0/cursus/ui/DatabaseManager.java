@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import eu.lp0.cursus.db.DatabaseVersionException;
 import eu.lp0.cursus.db.InvalidDatabaseException;
@@ -29,7 +30,7 @@ import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-class DatabaseManager implements ActionListener {
+public class DatabaseManager implements ActionListener {
 	public enum Commands {
 		NEW, OPEN, SAVE, SAVE_AS, CLOSE;
 	}
@@ -48,6 +49,7 @@ class DatabaseManager implements ActionListener {
 				try {
 					switch (Commands.valueOf(ae.getActionCommand())) {
 					case NEW:
+
 						newDatabase();
 						break;
 					case OPEN:
@@ -103,6 +105,13 @@ class DatabaseManager implements ActionListener {
 		assert (Background.isExecutorThread());
 
 		if (trySaveDatabase(Messages.getString("menu.file.new"))) { //$NON-NLS-1$
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					win.getMenu().enableOpen(false);
+				}
+			});
+
 			boolean ok = true;
 			try {
 				ok = win.getMain().open();
@@ -115,6 +124,13 @@ class DatabaseManager implements ActionListener {
 			}
 			if (!ok) {
 				JOptionPane.showMessageDialog(win, Messages.getString("err.unable-to-create-new-db"), Constants.APP_NAME, JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						win.getMenu().enableOpen(true);
+					}
+				});
 			}
 		}
 	}
