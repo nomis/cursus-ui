@@ -43,6 +43,10 @@ public class Event extends AbstractEntity implements Comparable<Event> {
 	Event() {
 	}
 
+	public Event(Series series) {
+		this(series, "", ""); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
 	public Event(Series series, String name) {
 		this(series, name, ""); //$NON-NLS-1$
 	}

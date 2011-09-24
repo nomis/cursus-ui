@@ -40,6 +40,10 @@ public class Race extends AbstractEntity implements Comparable<Race> {
 	Race() {
 	}
 
+	public Race(Event event) {
+		this(event, "", ""); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
 	public Race(Event event, String name) {
 		this(event, name, ""); //$NON-NLS-1$
 	}
