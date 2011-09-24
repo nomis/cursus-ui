@@ -17,13 +17,27 @@
  */
 package eu.lp0.cursus.ui.component;
 
-import eu.lp0.cursus.db.Database;
-import eu.lp0.cursus.db.data.RaceHierarchy;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
-public interface DatabaseWindow {
-	public Database getDatabase();
+public class RestrictedLengthPlainDocument extends PlainDocument {
+	private int maxLength;
 
-	public RaceHierarchy getSelected();
+	public RestrictedLengthPlainDocument(int maxLength) {
+		if (maxLength < 0) {
+			throw new IllegalArgumentException();
+		}
 
-	public void refreshRaceList();
+		this.maxLength = maxLength;
+	}
+
+	@Override
+	public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+		super.insertString(offs, str, a);
+
+		if (getLength() > maxLength) {
+			remove(maxLength, getLength() - maxLength);
+		}
+	}
 }

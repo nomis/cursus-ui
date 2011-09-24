@@ -29,6 +29,10 @@ import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Series;
 
 public class ClassDAO extends AbstractDAO<Class> {
+	public ClassDAO() {
+		super(Class.class);
+	}
+
 	public List<Class> findAll(Series series) {
 		EntityManager em = getEntityManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();

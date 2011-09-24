@@ -22,6 +22,8 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import eu.lp0.cursus.util.Constants;
+
 /**
  * Penalty
  */
@@ -81,7 +83,7 @@ public class Penalty extends AbstractEntity {
 
 	private String reason;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getReason() {
 		return reason;
 	}

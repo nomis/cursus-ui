@@ -29,6 +29,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import eu.lp0.cursus.util.Constants;
+
 /**
  * Pilot class groupings within series (to segregate race scores)
  */
@@ -45,7 +47,7 @@ public class Class extends AbstractEntity implements Comparable<Class> {
 		setName(name);
 	}
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getName() {
 		return name;
 	}

@@ -18,11 +18,22 @@
 package eu.lp0.cursus.db.dao;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.data.AbstractEntity;
 
 public abstract class AbstractDAO<E extends AbstractEntity> {
+	protected final Class<E> clazz;
+
+	public AbstractDAO(Class<E> clazz) {
+		this.clazz = clazz;
+	}
+
 	EntityManager getEntityManager() {
 		return DatabaseSession.getEntityManager();
 	}
@@ -37,5 +48,26 @@ public abstract class AbstractDAO<E extends AbstractEntity> {
 
 	public void detach(E entity) {
 		DatabaseSession.getEntityManager().detach(entity);
+	}
+
+	protected E singleResult(TypedQuery<E> typedQuery) {
+		try {
+			return typedQuery.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+
+	public E get(E entity) {
+		EntityManager em = getEntityManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+
+		CriteriaQuery<E> q = cb.createQuery(clazz);
+		Root<E> s = q.from(clazz);
+		q.select(s);
+		q.where(cb.equal(s.get("id"), entity.getId())); //$NON-NLS-1$
+
+		TypedQuery<E> tq = em.createQuery(q);
+		return singleResult(tq);
 	}
 }

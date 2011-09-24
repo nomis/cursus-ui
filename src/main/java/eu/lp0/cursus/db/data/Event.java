@@ -34,6 +34,8 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import eu.lp0.cursus.util.Constants;
+
 /**
  * Race event
  */
@@ -84,7 +86,7 @@ public class Event extends AbstractEntity implements Comparable<Event>, RaceHier
 
 	private String name;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getName() {
 		return name;
 	}
@@ -95,7 +97,7 @@ public class Event extends AbstractEntity implements Comparable<Event>, RaceHier
 
 	private String description;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getDescription() {
 		return description;
 	}

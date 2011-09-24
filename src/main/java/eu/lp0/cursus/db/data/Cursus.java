@@ -20,6 +20,8 @@ package eu.lp0.cursus.db.data;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+import eu.lp0.cursus.util.Constants;
+
 /**
  * Database identifier
  */
@@ -46,7 +48,7 @@ public class Cursus extends AbstractEntity {
 
 	private String description;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getDescription() {
 		return description;
 	}

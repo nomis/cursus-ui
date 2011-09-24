@@ -30,6 +30,10 @@ import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.util.Messages;
 
 public class SeriesDAO extends AbstractDAO<Series> {
+	public SeriesDAO() {
+		super(Series.class);
+	}
+
 	public Series findSingleton() throws InvalidDatabaseException {
 		EntityManager em = getEntityManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();

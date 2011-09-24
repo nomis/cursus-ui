@@ -41,6 +41,8 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import eu.lp0.cursus.util.Constants;
+
 /**
  * Pilot (person competing in the race)
  */
@@ -51,11 +53,11 @@ public class Pilot extends AbstractEntity {
 	}
 
 	public Pilot(Series series, String name) {
-		this(series, name, null, null);
+		this(series, name, null, ""); //$NON-NLS-1$
 	}
 
 	public Pilot(Series series, String name, Gender gender) {
-		this(series, name, gender, null);
+		this(series, name, gender, ""); //$NON-NLS-1$
 	}
 
 	public Pilot(Series series, String name, Gender gender, String country) {
@@ -79,7 +81,7 @@ public class Pilot extends AbstractEntity {
 
 	private String name;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getName() {
 		return name;
 	}
@@ -101,6 +103,7 @@ public class Pilot extends AbstractEntity {
 
 	private String country;
 
+	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getCountry() {
 		return country;
 	}

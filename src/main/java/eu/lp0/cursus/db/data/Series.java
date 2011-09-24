@@ -28,6 +28,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 
+import eu.lp0.cursus.util.Constants;
+
 /**
  * Race series
  */
@@ -47,7 +49,7 @@ public class Series extends AbstractEntity implements Comparable<Series>, RaceHi
 
 	private String name;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getName() {
 		return name;
 	}
@@ -58,7 +60,7 @@ public class Series extends AbstractEntity implements Comparable<Series>, RaceHi
 
 	private String description;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getDescription() {
 		return description;
 	}

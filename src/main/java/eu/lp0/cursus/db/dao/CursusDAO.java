@@ -30,6 +30,10 @@ import eu.lp0.cursus.db.data.Cursus;
 import eu.lp0.cursus.util.Messages;
 
 public class CursusDAO extends AbstractDAO<Cursus> {
+	public CursusDAO() {
+		super(Cursus.class);
+	}
+
 	public Cursus findSingleton() throws InvalidDatabaseException {
 		EntityManager em = getEntityManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();

@@ -31,6 +31,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import eu.lp0.cursus.util.Constants;
+
 /**
  * Race
  */
@@ -81,7 +83,7 @@ public class Race extends AbstractEntity implements Comparable<Race>, RaceHierar
 
 	private String name;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getName() {
 		return name;
 	}
@@ -92,7 +94,7 @@ public class Race extends AbstractEntity implements Comparable<Race>, RaceHierar
 
 	private String description;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getDescription() {
 		return description;
 	}

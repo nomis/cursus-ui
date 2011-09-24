@@ -18,25 +18,51 @@
 package eu.lp0.cursus.ui.series;
 
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
+import com.jgoodies.forms.layout.FormLayout;
+
+import eu.lp0.cursus.db.DatabaseSession;
+import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.ui.component.DatabaseTextField;
+import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.preferences.WindowAutoPrefs;
+import eu.lp0.cursus.util.Constants;
 
-public class SeriesDetailWindow extends JDialog implements Displayable {
+public class SeriesDetailWindow<O extends Frame & DatabaseWindow> extends JDialog implements Displayable, ActionListener {
+	private final O win;
 	private final String title;
-	private final Series series;
+	private final Series origSeries;
+
+	private JTextField txtName;
+	private JTextField txtDesc;
+	private JButton btnCancel;
+	private JButton btnReset;
+	private JButton btnSave;
 
 	private WindowAutoPrefs prefs = new WindowAutoPrefs(this);
 
-	public SeriesDetailWindow(Frame owner, String title, Series series) {
-		super(owner, true);
+	private static final SeriesDAO seriesDAO = new SeriesDAO();
+
+	public SeriesDetailWindow(O win, String title, Series series) {
+		super(win, true);
+		this.win = win;
 		this.title = title;
-		this.series = series;
+		this.origSeries = series;
 
 		initialise();
 	}
@@ -51,5 +77,82 @@ public class SeriesDetailWindow extends JDialog implements Displayable {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle(title);
 		setSize(400, 300);
+
+		FormLayout layout = new FormLayout(
+				"2dlu, right:max(30dlu;pref), 2dlu, fill:max(0dlu;pref):grow, max(30dlu;pref), 2dlu, max(30dlu;pref), 2dlu, max(30dlu;pref), 2dlu", //$NON-NLS-1$
+				"2dlu, pref, 2dlu, top:pref:grow, 2dlu, pref, 2dlu"); //$NON-NLS-1$ 
+		getContentPane().setLayout(layout);
+
+		JLabel lblName = new JLabel("Name:");
+		getContentPane().add(lblName, "2, 2"); //$NON-NLS-1$
+
+		txtName = new DatabaseTextField(origSeries.getName(), Constants.MAX_STRING_LEN);
+		getContentPane().add(txtName, "4, 2, 6, 1"); //$NON-NLS-1$
+
+		JLabel lblDesc = new JLabel("Description:");
+		getContentPane().add(lblDesc, "2, 4"); //$NON-NLS-1$
+
+		txtDesc = new DatabaseTextField(origSeries.getDescription(), Constants.MAX_STRING_LEN);
+		getContentPane().add(txtDesc, "4, 4, 6, 1"); //$NON-NLS-1$
+
+		btnReset = new JButton("Reset");
+		btnReset.addActionListener(this);
+		getContentPane().add(btnReset, "5, 6"); //$NON-NLS-1$
+
+		btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(this);
+		getContentPane().add(btnCancel, "7, 6"); //$NON-NLS-1$
+
+		btnSave = new JButton("Save");
+		btnSave.addActionListener(this);
+		getContentPane().add(btnSave, "9, 6"); //$NON-NLS-1$
+
+		getRootPane().setDefaultButton(btnSave);
+		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), btnCancel.getText());
+		getRootPane().getActionMap().put(btnCancel.getText(), new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				btnCancel.doClick();
+			}
+		});
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		if (ae.getSource() == btnSave) {
+			doSave();
+		} else if (ae.getSource() == btnCancel) {
+			doCancel();
+		} else if (ae.getSource() == btnReset) {
+			doReset();
+		}
+	}
+
+	private void doSave() {
+		win.getDatabase().startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.get(origSeries);
+			series.setName(txtName.getText());
+			series.setDescription(txtDesc.getText());
+			seriesDAO.persist(series);
+
+			DatabaseSession.commit();
+		} finally {
+			win.getDatabase().endSession();
+		}
+
+		win.refreshRaceList();
+		dispose();
+	}
+
+	private void doCancel() {
+		dispose();
+	}
+
+	private void doReset() {
+		txtName.setText(origSeries.getName());
+		txtDesc.setText(origSeries.getDescription());
 	}
 }

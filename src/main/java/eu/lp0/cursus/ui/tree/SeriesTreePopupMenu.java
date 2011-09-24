@@ -27,14 +27,15 @@ import javax.swing.JPopupMenu;
 
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.event.EventDetailWindow;
 import eu.lp0.cursus.ui.series.SeriesDetailWindow;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-public class SeriesTreePopupMenu extends JPopupMenu implements ActionListener {
-	private final Frame owner;
+public class SeriesTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopupMenu implements ActionListener {
+	private final O owner;
 	private final Series series;
 
 	private JMenuItem mnuNewEvent;
@@ -44,7 +45,7 @@ public class SeriesTreePopupMenu extends JPopupMenu implements ActionListener {
 		NEW_EVENT, EDIT_SERIES;
 	}
 
-	public SeriesTreePopupMenu(Frame owner, Series series) {
+	public SeriesTreePopupMenu(O owner, Series series) {
 		this.owner = owner;
 		this.series = series;
 
@@ -70,7 +71,7 @@ public class SeriesTreePopupMenu extends JPopupMenu implements ActionListener {
 			win = new EventDetailWindow(owner, series.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(series)); //$NON-NLS-1$
 			break;
 		case EDIT_SERIES:
-			win = new SeriesDetailWindow(owner, Messages.getString("menu.series.edit") + Constants.EN_DASH + series.getName(), series); //$NON-NLS-1$
+			win = new SeriesDetailWindow<O>(owner, Messages.getString("menu.series.edit") + Constants.EN_DASH + series.getName(), series); //$NON-NLS-1$
 			break;
 		}
 

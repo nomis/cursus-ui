@@ -24,6 +24,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import eu.lp0.cursus.util.Constants;
+
 @Entity(name = "race_no")
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "series_id", "organisation", "number" }) })
 public class RaceNumber extends AbstractEntity implements Comparable<RaceNumber> {
@@ -51,7 +53,7 @@ public class RaceNumber extends AbstractEntity implements Comparable<RaceNumber>
 		this.series = series;
 	}
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getOrganisation() {
 		return organisation;
 	}

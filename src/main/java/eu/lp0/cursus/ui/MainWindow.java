@@ -213,4 +213,13 @@ public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 	public void databaseClosed() {
 		sync(false, Constants.APP_DESC);
 	}
+
+	public void refreshRaceList() {
+		Background.execute(new Runnable() {
+			@Override
+			public void run() {
+				raceList.databaseRefresh();
+			}
+		});
+	}
 }

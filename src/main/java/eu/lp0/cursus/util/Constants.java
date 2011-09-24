@@ -23,4 +23,6 @@ public class Constants {
 	public static final String APP_DESC = APP_NAME + " " + APP_VERSION; //$NON-NLS-1$
 
 	public static final String EN_DASH = " \u2013 "; //$NON-NLS-1$
+
+	public static final int MAX_STRING_LEN = 255;
 }

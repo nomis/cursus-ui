@@ -105,7 +105,7 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 
 	private JPopupMenu menuFromUserObject(RaceHierarchy item) {
 		if (item instanceof Series) {
-			return new SeriesTreePopupMenu(win, (Series)item);
+			return new SeriesTreePopupMenu<O>(win, (Series)item);
 		} else if (item instanceof Event) {
 			return new EventTreePopupMenu(win, (Event)item);
 		} else if (item instanceof Race) {
