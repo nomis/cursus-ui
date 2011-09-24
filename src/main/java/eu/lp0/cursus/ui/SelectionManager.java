@@ -18,9 +18,15 @@
 package eu.lp0.cursus.ui;
 
 import java.awt.Component;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
@@ -46,7 +52,8 @@ public class SelectionManager implements TreeSelectionListener {
 	private final List<AbstractDatabaseTab<Series>> seriesTabs;
 	private final List<AbstractDatabaseTab<Event>> eventTabs;
 	private final List<AbstractDatabaseTab<Race>> raceTabs;
-	private Map<Class<? extends RaceHierarchy>, AbstractDatabaseTab<? extends RaceHierarchy>> currentTabs = new HashMap<Class<? extends RaceHierarchy>, AbstractDatabaseTab<? extends RaceHierarchy>>();
+	private final List<Component> ordering = new ArrayList<Component>();
+	private Map<Class<? extends RaceHierarchy>, AbstractDatabaseTab<? extends RaceHierarchy>> previousTabs = new HashMap<Class<? extends RaceHierarchy>, AbstractDatabaseTab<? extends RaceHierarchy>>();
 
 	public SelectionManager(JTree tree, JTabbedPane tabbedPane, List<AbstractDatabaseTab<Series>> seriesTabs, List<AbstractDatabaseTab<Event>> eventTabs,
 			List<AbstractDatabaseTab<Race>> raceTabs) {
@@ -55,6 +62,12 @@ public class SelectionManager implements TreeSelectionListener {
 		this.seriesTabs = seriesTabs;
 		this.eventTabs = eventTabs;
 		this.raceTabs = raceTabs;
+
+		ordering.addAll(seriesTabs);
+		assert (Collections.disjoint(ordering, eventTabs));
+		ordering.addAll(eventTabs);
+		assert (Collections.disjoint(ordering, raceTabs));
+		ordering.addAll(raceTabs);
 
 		tree.addTreeSelectionListener(this);
 	}
@@ -78,80 +91,100 @@ public class SelectionManager implements TreeSelectionListener {
 		return path != null ? RaceTree.userObjectFromSelection(path.getLastPathComponent()) : null;
 	}
 
-	public void showSelected(RaceHierarchy item) {
-		if (log.isTraceEnabled()) {
-			if (item != null) {
-				log.trace("Selecting " + item.getClass().getSimpleName() + ": " + item.getName()); //$NON-NLS-1$ //$NON-NLS-2$
-			} else {
-				log.trace("Deselected current item"); //$NON-NLS-1$
-			}
-		}
-
-		saveCurrentTab();
-		showTabs(item);
-		restorePreviousTab(item);
-	}
-
-	@SuppressWarnings("unchecked")
-	private void saveCurrentTab() {
-		Component selectedTab = tabbedPane.getSelectedComponent();
-		if (selectedTab == null) {
-			return;
-		}
-
-		if (log.isTraceEnabled()) {
-			log.trace("Saving current tab: " + selectedTab.getClass().getSimpleName()); //$NON-NLS-1$
-		}
-
-		if (seriesTabs.contains(selectedTab)) {
-			currentTabs.put(Series.class, (AbstractDatabaseTab<Series>)selectedTab);
-		} else if (eventTabs.contains(selectedTab)) {
-			currentTabs.put(Event.class, (AbstractDatabaseTab<Event>)selectedTab);
-		} else if (raceTabs.contains(selectedTab)) {
-			currentTabs.put(Race.class, (AbstractDatabaseTab<Race>)selectedTab);
-		}
-	}
-
-	private void showTabs(RaceHierarchy item) {
-		updateVisibility(seriesTabs, item instanceof Series);
-		updateVisibility(eventTabs, item instanceof Event);
-		updateVisibility(raceTabs, item instanceof Race);
-	}
-
-	private <T extends RaceHierarchy> void updateVisibility(final List<AbstractDatabaseTab<T>> tabs, final boolean visibility) {
+	public void showSelected(final RaceHierarchy item) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				for (AbstractDatabaseTab<T> tab : tabs) {
-					if (visibility) {
-						tab.addToTabbedPane(tabbedPane);
+				if (log.isTraceEnabled()) {
+					if (item != null) {
+						log.trace("Selecting " + item.getClass().getSimpleName() + ": " + item.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 					} else {
-						tabbedPane.remove(tab);
+						log.trace("Deselected current item"); //$NON-NLS-1$
 					}
 				}
+
+				updateTabs(item);
 			}
 		});
 	}
 
-	private void restorePreviousTab(RaceHierarchy item) {
-		Class<? extends RaceHierarchy> clazz = item != null ? item.getClass() : null;
-		final AbstractDatabaseTab<? extends RaceHierarchy> previousTab = currentTabs.get(clazz);
-		if (previousTab == null) {
+	private Collection<?> getVisibleTabsFor(RaceHierarchy item) {
+		if (item instanceof Series) {
+			return seriesTabs;
+		} else if (item instanceof Event) {
+			return eventTabs;
+		} else if (item instanceof Race) {
+			return raceTabs;
+		} else {
+			return Collections.emptyList();
+		}
+	}
+
+	/*
+	 * Update the visible tabs, taking care not to cause the tabbed pane to select a different tab while removing/adding tabs
+	 */
+	private void updateTabs(RaceHierarchy item) {
+		Class<? extends RaceHierarchy> clazz = (item != null ? item.getClass() : null);
+		@SuppressWarnings("unchecked")
+		AbstractDatabaseTab<? extends RaceHierarchy> selectedTab = (AbstractDatabaseTab<? extends RaceHierarchy>)tabbedPane.getSelectedComponent();
+		AbstractDatabaseTab<? extends RaceHierarchy> previousTab = previousTabs.get(clazz);
+		@SuppressWarnings("unchecked")
+		Collection<AbstractDatabaseTab<? extends RaceHierarchy>> targetTabs = (Collection<AbstractDatabaseTab<? extends RaceHierarchy>>)getVisibleTabsFor(item);
+		Set<Component> currentTabs = new LinkedHashSet<Component>();
+
+		// Get the current tabs
+		for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+			Component c = tabbedPane.getComponentAt(i);
+			currentTabs.add(c);
+		}
+
+		if (currentTabs.equals(targetTabs)) {
+			// Nothing to do
 			return;
 		}
 
-		if (log.isTraceEnabled()) {
-			log.trace("Restoring previous tab: " + previousTab.getClass().getSimpleName()); //$NON-NLS-1$
+		// Save current tab
+		if (selectedTab != null) {
+			if (log.isTraceEnabled()) {
+				log.trace("Saving current tab: " + selectedTab.getClass().getSimpleName()); //$NON-NLS-1$
+			}
+
+			previousTabs.put(selectedTab.getType(), selectedTab);
 		}
 
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				int index = tabbedPane.indexOfComponent(previousTab);
-				if (index != -1) {
-					tabbedPane.setSelectedIndex(index);
-				}
+		// Remove all the tabs that aren't selected
+		for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+			Component c = tabbedPane.getComponentAt(i);
+			if (selectedTab != c) {
+				tabbedPane.remove(i--);
 			}
-		});
+		}
+
+		// Remove the selected tab
+		if (selectedTab != null) {
+			tabbedPane.remove(selectedTab);
+		}
+
+		// At this point there should be no tabs
+		assert (tabbedPane.getTabCount() == 0);
+
+		// Add the previously selected tab
+		if (previousTab != null && targetTabs.contains(previousTab)) {
+			if (log.isTraceEnabled()) {
+				log.trace("Restoring previous tab: " + previousTab.getClass().getSimpleName()); //$NON-NLS-1$
+			}
+
+			previousTab.addToTabbedPane(tabbedPane, 0);
+			// This tab will now be selected
+		}
+
+		// Add all the tabs that should be there
+		Iterator<AbstractDatabaseTab<? extends RaceHierarchy>> iter = targetTabs.iterator();
+		for (int i = 0; iter.hasNext(); i++) {
+			AbstractDatabaseTab<? extends RaceHierarchy> tab = iter.next();
+			if (tab != previousTab) {
+				tab.addToTabbedPane(tabbedPane, i);
+			}
+		}
 	}
 }

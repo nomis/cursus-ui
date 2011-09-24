@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.ui.tab;
 
+import java.awt.Component;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 
@@ -37,6 +38,7 @@ public class TabManager<T extends RaceHierarchy> implements DatabaseSync, Hierar
 	private final DatabaseWindow win;
 	private final DatabaseTabSync<T> tab;
 	private final Class<T> clazz;
+	private Component previous = null;
 
 	public TabManager(DatabaseWindow win, DatabaseTabSync<T> tab, Class<T> clazz) {
 		this.win = win;
@@ -52,7 +54,6 @@ public class TabManager<T extends RaceHierarchy> implements DatabaseSync, Hierar
 			JTabbedPane tabs = (JTabbedPane)he.getChangedParent();
 			if (tab.getParent() != null) {
 				tabs.addChangeListener(this);
-				tryRefreshTabLater(tabs);
 			} else {
 				tabs.removeChangeListener(this);
 				invokeCloseTabLater();
@@ -62,7 +63,15 @@ public class TabManager<T extends RaceHierarchy> implements DatabaseSync, Hierar
 
 	@Override
 	public void stateChanged(final ChangeEvent ce) {
-		tryRefreshTabLater((JTabbedPane)ce.getSource());
+		JTabbedPane tabs = (JTabbedPane)ce.getSource();
+		try {
+			if (previous == tabs.getSelectedComponent()) {
+				return;
+			}
+			tryRefreshTabLater(tabs);
+		} finally {
+			previous = tabs.getSelectedComponent();
+		}
 	}
 
 	private void tryRefreshTabLater(JTabbedPane tabs) {

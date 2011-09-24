@@ -26,6 +26,7 @@ import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.util.Messages;
 
 public abstract class AbstractDatabaseTab<T extends RaceHierarchy> extends JPanel implements DatabaseSync, DatabaseTabSync<T> {
+	private final Class<T> clazz;
 	protected final DatabaseWindow win;
 	private final TabManager<T> manager;
 
@@ -33,6 +34,7 @@ public abstract class AbstractDatabaseTab<T extends RaceHierarchy> extends JPane
 	private final int mnemonic;
 
 	public AbstractDatabaseTab(Class<T> clazz, DatabaseWindow win, String messagesKey) {
+		this.clazz = clazz;
 		this.win = win;
 		this.manager = new TabManager<T>(win, this, clazz);
 
@@ -40,9 +42,13 @@ public abstract class AbstractDatabaseTab<T extends RaceHierarchy> extends JPane
 		this.mnemonic = Messages.getKeyEvent(messagesKey);
 	}
 
-	public void addToTabbedPane(JTabbedPane tabbedPane) {
-		tabbedPane.addTab(title, null, this, null);
-		tabbedPane.setMnemonicAt(tabbedPane.getTabCount() - 1, mnemonic);
+	public Class<T> getType() {
+		return clazz;
+	}
+
+	public void addToTabbedPane(JTabbedPane tabbedPane, int index) {
+		tabbedPane.insertTab(title, null, this, null, index);
+		tabbedPane.setMnemonicAt(index, mnemonic);
 	}
 
 	@Override
