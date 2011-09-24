@@ -27,12 +27,12 @@ import javax.persistence.InheritanceType;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class AbstractEntity {
-	private Long id;
+	private long id;
 
 	@Id
 	@GeneratedValue
 	@Column(nullable = false)
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
@@ -51,6 +51,11 @@ public abstract class AbstractEntity {
 			return false;
 		}
 
-		return getId().equals(((AbstractEntity)o).getId());
+		return new Long(getId()).equals(((AbstractEntity)o).getId());
+	}
+
+	@Override
+	public int hashCode() {
+		return (int)(id ^ (id >>> 32));
 	}
 }
