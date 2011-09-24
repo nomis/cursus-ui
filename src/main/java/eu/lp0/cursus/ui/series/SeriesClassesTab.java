@@ -28,6 +28,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.ClassDAO;
@@ -39,8 +40,9 @@ import eu.lp0.cursus.ui.component.EntityComboBoxModel;
 
 public class SeriesClassesTab extends AbstractDatabaseTab<Series> {
 	private JSplitPane splitPane;
+	private JScrollPane leftScrollPane;
 	private JList list;
-	private JScrollPane scrollPane;
+	private JScrollPane rightScrollPane;
 	private JTable table;
 
 	private static final ClassDAO classDAO = new ClassDAO();
@@ -56,17 +58,22 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> {
 		splitPane = new JSplitPane();
 		add(splitPane, BorderLayout.CENTER);
 
+		leftScrollPane = new JScrollPane();
+		leftScrollPane.setBorder(new EmptyBorder(0, 0, 0, 2));
+		leftScrollPane.setPreferredSize(new Dimension(150, 0));
+		splitPane.setLeftComponent(leftScrollPane);
+
 		list = new JList();
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setMinimumSize(new Dimension(150, 0));
 		list.setModel(new EntityComboBoxModel<Class>());
-		splitPane.setLeftComponent(list);
+		leftScrollPane.setViewportView(list);
 
-		scrollPane = new JScrollPane();
-		splitPane.setRightComponent(scrollPane);
+		rightScrollPane = new JScrollPane();
+		rightScrollPane.setBorder(new EmptyBorder(0, 2, 0, 0));
+		splitPane.setRightComponent(rightScrollPane);
 
 		table = new JTable();
-		scrollPane.setViewportView(table);
+		rightScrollPane.setViewportView(table);
 	}
 
 	@Override

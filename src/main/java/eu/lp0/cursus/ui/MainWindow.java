@@ -137,11 +137,11 @@ public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 
 			scrollPane = new JScrollPane();
 			scrollPane.setBorder(new EmptyBorder(0, 0, 0, 2));
+			scrollPane.setPreferredSize(new Dimension(150, 0));
 			splitPane.setLeftComponent(scrollPane);
 
 			raceList = new RaceTree<MainWindow>(this);
 			scrollPane.setViewportView(raceList);
-			scrollPane.setPreferredSize(new Dimension(150, 0));
 
 			tabbedPane = new JTabbedPane();
 			tabbedPane.setBorder(new EmptyBorder(0, 2, 0, 0));
