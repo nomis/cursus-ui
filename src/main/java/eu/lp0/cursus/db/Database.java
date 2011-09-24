@@ -27,9 +27,15 @@ import javax.persistence.Persistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.lp0.cursus.db.dao.ClassDAO;
 import eu.lp0.cursus.db.dao.CursusDAO;
+import eu.lp0.cursus.db.dao.EventDAO;
+import eu.lp0.cursus.db.dao.RaceDAO;
 import eu.lp0.cursus.db.dao.SeriesDAO;
+import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Cursus;
+import eu.lp0.cursus.db.data.Event;
+import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
@@ -42,6 +48,8 @@ public abstract class Database {
 
 	private static final CursusDAO cursusDAO = new CursusDAO();
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
+	private static final EventDAO eventDAO = new EventDAO();
+	private static final RaceDAO raceDAO = new RaceDAO();
 
 	protected Database(String name, String url, String user, String password) throws SQLException, DatabaseVersionException, InvalidDatabaseException {
 		this.name = name;
@@ -100,6 +108,12 @@ public abstract class Database {
 
 				series = new Series(Messages.getString("series.untitled")); //$NON-NLS-1$
 				seriesDAO.persist(series);
+
+				Event event = new Event(series, Messages.getString("event.untitled")); //$NON-NLS-1$
+				eventDAO.persist(event);
+
+				Race race = new Race(event, Messages.getString("race.untitled")); //$NON-NLS-1$
+				raceDAO.persist(race);
 			}
 
 			DatabaseSession.commit();
