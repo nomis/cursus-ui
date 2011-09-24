@@ -47,6 +47,8 @@ public class Main implements Runnable {
 			log.debug("Unable to select system look and feel", e); //$NON-NLS-1$
 		}
 
+		UIManager.getDefaults().put("SplitPane.continuousLayout", true); //$NON-NLS-1$
+
 		Background.execute(new Main(args));
 	}
 

@@ -20,6 +20,7 @@ package eu.lp0.cursus.ui.component;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 
 import eu.lp0.cursus.db.data.RaceHierarchy;
 import eu.lp0.cursus.util.Messages;
@@ -37,6 +38,8 @@ public abstract class AbstractDatabaseTab<T extends RaceHierarchy> extends JPane
 
 		this.title = Messages.getString(messagesKey);
 		this.mnemonic = Messages.getKeyEvent(messagesKey);
+
+		setBorder(new EmptyBorder(2, 2, 2, 2));
 	}
 
 	public Class<T> getType() {

@@ -28,6 +28,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
 
 import eu.lp0.cursus.app.Main;
 import eu.lp0.cursus.db.Database;
@@ -131,16 +132,19 @@ public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 
 		{ // Main
 			splitPane = new JSplitPane();
+			splitPane.setBorder(new EmptyBorder(2, 0, 0, 0));
 			getContentPane().add(splitPane, BorderLayout.CENTER);
 
 			scrollPane = new JScrollPane();
+			scrollPane.setBorder(new EmptyBorder(0, 0, 0, 2));
 			splitPane.setLeftComponent(scrollPane);
 
 			raceList = new RaceTree<MainWindow>(this);
 			scrollPane.setViewportView(raceList);
-			scrollPane.setMinimumSize(new Dimension(150, 0));
+			scrollPane.setPreferredSize(new Dimension(150, 0));
 
 			tabbedPane = new JTabbedPane();
+			tabbedPane.setBorder(new EmptyBorder(0, 2, 0, 0));
 			splitPane.setRightComponent(tabbedPane);
 		}
 
