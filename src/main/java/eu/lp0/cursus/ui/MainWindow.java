@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
@@ -65,6 +66,7 @@ public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 
 	private MainMenu menuBar;
 	private JSplitPane splitPane;
+	private JScrollPane scrollPane;
 	private RaceTree<MainWindow> raceList;
 	private JTabbedPane tabbedPane;
 	private AbstractDatabaseTab<Series> serPilotsTab;
@@ -131,9 +133,12 @@ public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 			splitPane = new JSplitPane();
 			getContentPane().add(splitPane, BorderLayout.CENTER);
 
+			scrollPane = new JScrollPane();
+			splitPane.setLeftComponent(scrollPane);
+
 			raceList = new RaceTree<MainWindow>(this);
-			splitPane.setLeftComponent(raceList);
-			raceList.setMinimumSize(new Dimension(150, 0));
+			scrollPane.setViewportView(raceList);
+			scrollPane.setMinimumSize(new Dimension(150, 0));
 
 			tabbedPane = new JTabbedPane();
 			splitPane.setRightComponent(tabbedPane);
