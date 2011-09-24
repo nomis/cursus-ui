@@ -25,6 +25,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.EventDAO;
@@ -38,8 +39,8 @@ import eu.lp0.cursus.ui.component.AbstractTabManager;
 import eu.lp0.cursus.ui.tree.DatabaseTreeNode;
 
 public abstract class RaceTreeManager extends AbstractTabManager {
-	private final JTree raceList;
-	protected final DatabaseTreeNode tree;
+	private final JTree tree;
+	private final DatabaseTreeNode root;
 
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 	private static final EventDAO eventDAO = new EventDAO();
@@ -47,11 +48,10 @@ public abstract class RaceTreeManager extends AbstractTabManager {
 
 	public RaceTreeManager(MainWindow win, JTabbedPane tabs, JPanel tab, JTree raceList) {
 		super(win, tabs, tab);
-		this.raceList = raceList;
+		this.tree = raceList;
 
 		DefaultTreeModel model = (DefaultTreeModel)raceList.getModel();
-		this.tree = (DatabaseTreeNode)model.getRoot();
-		;
+		root = (DatabaseTreeNode)model.getRoot();
 	}
 
 	@Override
@@ -80,19 +80,17 @@ public abstract class RaceTreeManager extends AbstractTabManager {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				updateModel(raceList, seriesList);
+				updateModel(seriesList);
 			}
 		});
 	}
 
 	@Override
 	protected void databaseClosed() {
-		updateModel(raceList, null);
+		updateModel(null);
 	}
 
-	private static void updateModel(JTree tree, List<Series> seriesList) {
-		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
-		DatabaseTreeNode root = (DatabaseTreeNode)model.getRoot();
-		root.updateTree(model, seriesList);
+	private void updateModel(List<Series> seriesList) {
+		root.updateTree(tree, new TreePath(root), seriesList);
 	}
 }

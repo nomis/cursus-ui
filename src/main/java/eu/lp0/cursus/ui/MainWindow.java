@@ -45,7 +45,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-import javax.swing.tree.DefaultTreeModel;
 
 import eu.lp0.cursus.app.Main;
 import eu.lp0.cursus.db.Database;
@@ -55,7 +54,7 @@ import eu.lp0.cursus.ui.component.EntityComboBoxModel;
 import eu.lp0.cursus.ui.tab.ClassManager;
 import eu.lp0.cursus.ui.tab.LapsManager;
 import eu.lp0.cursus.ui.tab.PenaltiesManager;
-import eu.lp0.cursus.ui.tree.DatabaseTreeNode;
+import eu.lp0.cursus.ui.tree.RaceTree;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
@@ -226,10 +225,8 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 		lapsSplitPane = new JSplitPane();
 		lapsTab.add(lapsSplitPane);
 
-		lapsRaceList = new JTree();
-		lapsRaceList.setRootVisible(false);
+		lapsRaceList = new RaceTree();
 		lapsRaceList.setMinimumSize(new Dimension(150, 0));
-		lapsRaceList.setModel(new DefaultTreeModel(new DatabaseTreeNode()));
 		lapsSplitPane.setLeftComponent(lapsRaceList);
 
 		lapsScrollPane = new JScrollPane();
@@ -246,9 +243,7 @@ public class MainWindow extends AutoPrefsWindow implements Executor {
 		penaltiesSplitPane = new JSplitPane();
 		penaltiesTab.add(penaltiesSplitPane);
 
-		penaltiesRaceList = new JTree();
-		penaltiesRaceList.setRootVisible(false);
-		penaltiesRaceList.setModel(new DefaultTreeModel(new DatabaseTreeNode()));
+		penaltiesRaceList = new RaceTree();
 		penaltiesRaceList.setMinimumSize(new Dimension(150, 0));
 		penaltiesSplitPane.setLeftComponent(penaltiesRaceList);
 

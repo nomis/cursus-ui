@@ -19,10 +19,11 @@ package eu.lp0.cursus.ui.component;
 
 import java.util.List;
 
-import javax.swing.tree.DefaultTreeModel;
+import javax.swing.JTree;
+import javax.swing.tree.TreePath;
 
 public interface HierarchicalTreeBranch<P extends Comparable<P>, T extends Comparable<T>> {
-	public void updateTree(DefaultTreeModel model, List<T> items);
+	public void updateTree(JTree tree, TreePath path, List<T> items);
 
 	public abstract List<T> getChildItems(P item);
 }

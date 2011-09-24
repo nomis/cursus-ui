@@ -20,20 +20,21 @@ package eu.lp0.cursus.ui.component;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
-public abstract class HierarchicalTreeNode<T extends Comparable<T>, N extends DefaultMutableTreeNode> extends DefaultMutableTreeNode {
-	public HierarchicalTreeNode() {
-	}
-
+public abstract class HierarchicalTreeNode<T extends Comparable<T>, N extends ExpandingTreeNode> extends ExpandingTreeNode {
 	public HierarchicalTreeNode(Object userObject) {
 		super(userObject);
 	}
 
-	public void updateTree(DefaultTreeModel model, List<T> items) {
+	public void updateTree(JTree tree, TreePath path, List<T> items) {
+		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+
 		if (items == null || items.isEmpty()) {
 			removeAllChildren();
+			model.nodeStructureChanged(this);
 			return;
 		}
 
@@ -49,20 +50,20 @@ public abstract class HierarchicalTreeNode<T extends Comparable<T>, N extends De
 				T user = (T)node.getUserObject();
 
 				if (next == null || user.compareTo(next) < 0) {
-					remove(i);
-					model.nodesWereRemoved(this, new int[] { i }, new Object[] { node });
+					model.removeNodeFromParent(node);
 					continue;
 				} else if (user.equals(next)) {
-					updateNode(model, node, user);
-					model.nodesChanged(this, new int[] { i });
+					updateNode(tree, path, node, user);
+					model.nodeChanged(this);
 				} else {
-					insert(constructChildNode(next), i);
-					model.nodesWereInserted(this, new int[] { i });
+					N child = constructChildNode(next);
+					model.insertNodeInto(child, this, i);
+					child.expandAll(tree, appendedTreePath(path, child));
 				}
 			} else {
-				insert(constructChildNode(next), i);
-				model.nodesWereInserted(this, new int[] { i });
-				model.nodeStructureChanged(this);
+				N child = constructChildNode(next);
+				model.insertNodeInto(child, this, i);
+				child.expandAll(tree, appendedTreePath(path, child));
 			}
 
 			i++;
@@ -70,7 +71,7 @@ public abstract class HierarchicalTreeNode<T extends Comparable<T>, N extends De
 		}
 	}
 
-	protected void updateNode(DefaultTreeModel model, N node, T item) {
+	protected void updateNode(JTree tree, TreePath path, N node, T item) {
 		node.setUserObject(item);
 	}
 

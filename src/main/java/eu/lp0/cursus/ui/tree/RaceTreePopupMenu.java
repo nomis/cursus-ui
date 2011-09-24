@@ -17,18 +17,24 @@
  */
 package eu.lp0.cursus.ui.tree;
 
-import eu.lp0.cursus.db.data.Event;
-import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.ui.component.HierarchicalTreeRoot;
-import eu.lp0.cursus.util.Constants;
+import java.awt.event.KeyEvent;
 
-public class DatabaseTreeNode extends HierarchicalTreeRoot<Series, Event, SeriesTreeNode> {
-	public DatabaseTreeNode() {
-		super(Constants.APP_NAME);
-	}
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
-	@Override
-	protected SeriesTreeNode constructChildNode(Series series) {
-		return new SeriesTreeNode(series);
+import eu.lp0.cursus.util.Messages;
+
+public class RaceTreePopupMenu extends JPopupMenu {
+	private JMenuItem mnuEditRace;
+	private JMenuItem mnuDeleteRace;
+
+	public RaceTreePopupMenu() {
+		mnuEditRace = new JMenuItem(Messages.getString("menu.race.edit")); //$NON-NLS-1$
+		mnuEditRace.setMnemonic(KeyEvent.VK_F2);
+		add(mnuEditRace);
+
+		mnuDeleteRace = new JMenuItem(Messages.getString("menu.race.delete")); //$NON-NLS-1$
+		mnuDeleteRace.setMnemonic(KeyEvent.VK_DELETE);
+		add(mnuDeleteRace);
 	}
 }
