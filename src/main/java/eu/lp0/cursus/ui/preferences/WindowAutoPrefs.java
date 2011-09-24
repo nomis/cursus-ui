@@ -119,10 +119,6 @@ public class WindowAutoPrefs {
 		if (saved) {
 			saved = false;
 
-			if (log.isTraceEnabled()) {
-				log.trace("Scheduling preferences save"); //$NON-NLS-1$
-			}
-
 			delayed.execute(new Runnable() {
 				@Override
 				public void run() {
@@ -140,10 +136,6 @@ public class WindowAutoPrefs {
 					});
 				}
 			});
-		} else {
-			if (log.isTraceEnabled()) {
-				log.trace("Preference save already scheduled"); //$NON-NLS-1$
-			}
 		}
 	}
 
