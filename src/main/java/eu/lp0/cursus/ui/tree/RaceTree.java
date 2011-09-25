@@ -20,6 +20,7 @@ package eu.lp0.cursus.ui.tree;
 import java.awt.Frame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JPopupMenu;
@@ -162,6 +163,8 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 		} finally {
 			win.getDatabase().endSession();
 		}
+
+		Collections.sort(seriesList);
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
