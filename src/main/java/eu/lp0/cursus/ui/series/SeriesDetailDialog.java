@@ -25,7 +25,9 @@ import eu.lp0.cursus.ui.common.CommonDetailDialog;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
 public class SeriesDetailDialog<O extends Frame & DatabaseWindow> extends CommonDetailDialog<O, Series> {
+	private static final SeriesDAO seriesDAO = new SeriesDAO();
+
 	public SeriesDetailDialog(O win, String title, Series series) {
-		super(win, title, new SeriesDAO(), series);
+		super(win, title, seriesDAO, series);
 	}
 }

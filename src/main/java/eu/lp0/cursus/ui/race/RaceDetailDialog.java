@@ -19,13 +19,22 @@ package eu.lp0.cursus.ui.race;
 
 import java.awt.Frame;
 
+import eu.lp0.cursus.db.dao.EventDAO;
 import eu.lp0.cursus.db.dao.RaceDAO;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.ui.common.CommonDetailDialog;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
 public class RaceDetailDialog<O extends Frame & DatabaseWindow> extends CommonDetailDialog<O, Race> {
+	private static final EventDAO eventDAO = new EventDAO();
+	private static final RaceDAO raceDAO = new RaceDAO();
+
 	public RaceDetailDialog(O win, String title, Race race) {
-		super(win, title, new RaceDAO(), race);
+		super(win, title, raceDAO, race);
+	}
+
+	@Override
+	public void prePersist(Race race) {
+		race.setEvent(eventDAO.get(race.getEvent()));
 	}
 }

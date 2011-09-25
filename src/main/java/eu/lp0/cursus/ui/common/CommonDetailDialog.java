@@ -152,6 +152,7 @@ public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T ext
 			T item;
 			if (origItem.isTransient()) {
 				item = (T)origItem.clone();
+				prePersist(item);
 			} else {
 				item = dao.get(origItem);
 			}
@@ -175,5 +176,8 @@ public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T ext
 
 	private void doCancel() {
 		dispose();
+	}
+
+	protected void prePersist(T item) {
 	}
 }
