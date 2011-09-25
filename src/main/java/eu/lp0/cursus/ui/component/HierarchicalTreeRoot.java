@@ -69,6 +69,9 @@ public abstract class HierarchicalTreeRoot<P, C extends Comparable<C>, N extends
 		final boolean trace = log.isTraceEnabled();
 
 		if (items == null || items.isEmpty()) {
+			if (trace) {
+				log.trace("Removing all nodes"); //$NON-NLS-1$
+			}
 			removeAllChildren();
 			model.nodeStructureChanged(this);
 			return;
