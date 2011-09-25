@@ -17,10 +17,23 @@
  */
 package eu.lp0.cursus.db.dao;
 
+import java.util.Arrays;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import eu.lp0.cursus.db.data.Event;
 
 public class EventDAO extends RaceHierarchyDAO<Event> {
 	public EventDAO() {
 		super(Event.class);
+	}
+
+	@Override
+	protected Predicate[] withParentRestriction(CriteriaBuilder cb, Root<Event> e, Event event, Predicate... predicates) {
+		predicates = Arrays.copyOf(predicates, predicates.length + 1);
+		predicates[predicates.length - 1] = cb.equal(e.get("series"), event.getSeries()); //$NON-NLS-1$
+		return predicates;
 	}
 }

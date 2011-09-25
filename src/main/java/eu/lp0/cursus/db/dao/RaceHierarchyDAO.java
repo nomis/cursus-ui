@@ -21,6 +21,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import eu.lp0.cursus.db.data.AbstractEntity;
@@ -36,15 +37,19 @@ public class RaceHierarchyDAO<E extends AbstractEntity & RaceHierarchy> extends 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
 		CriteriaQuery<E> q = cb.createQuery(clazz);
-		Root<E> s = q.from(clazz);
-		q.select(s);
+		Root<E> rh = q.from(clazz);
+		q.select(rh);
 		if (entity.isTransient()) {
-			q.where(cb.equal(s.get("name"), newName)); //$NON-NLS-1$ 
+			q.where(withParentRestriction(cb, rh, entity, cb.equal(rh.get("name"), newName))); //$NON-NLS-1$ 
 		} else {
-			q.where(cb.notEqual(s.get("id"), entity.getId()), cb.equal(s.get("name"), newName)); //$NON-NLS-1$ //$NON-NLS-2$
+			q.where(withParentRestriction(cb, rh, entity, cb.notEqual(rh.get("id"), entity.getId()), cb.equal(rh.get("name"), newName))); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		TypedQuery<E> tq = em.createQuery(q);
 		return tq.getResultList().isEmpty();
+	}
+
+	protected Predicate[] withParentRestriction(CriteriaBuilder cb, Root<E> rh, E entity, Predicate... predicates) {
+		return predicates;
 	}
 }
