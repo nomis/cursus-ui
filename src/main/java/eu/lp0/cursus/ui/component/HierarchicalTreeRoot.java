@@ -69,7 +69,7 @@ public abstract class HierarchicalTreeRoot<P, C extends Comparable<C>, N extends
 		final boolean trace = log.isTraceEnabled();
 
 		if (items == null || items.isEmpty()) {
-			if (trace) {
+			if (trace && getChildCount() > 0) {
 				log.trace("Removing all nodes"); //$NON-NLS-1$
 			}
 			removeAllChildren();
