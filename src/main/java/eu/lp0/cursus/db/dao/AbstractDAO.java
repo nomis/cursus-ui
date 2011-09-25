@@ -66,6 +66,8 @@ public abstract class AbstractDAO<E extends AbstractEntity> {
 	 * Detach persisted entity
 	 */
 	public void detach(E entity) {
+		// Don't detach during a transaction as there may be persisted changes not yet committed
+		assert (!DatabaseSession.isActive());
 		DatabaseSession.getEntityManager().detach(entity);
 	}
 

@@ -51,6 +51,10 @@ public class DatabaseSession {
 		getTransaction().begin();
 	}
 
+	public static boolean isActive() {
+		return getTransaction().isActive();
+	}
+
 	public static void commit() {
 		getTransaction().commit();
 	}

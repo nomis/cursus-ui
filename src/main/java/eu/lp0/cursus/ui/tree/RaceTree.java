@@ -151,6 +151,14 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 			seriesList = seriesDAO.findAll();
 			for (Series series : seriesList) {
 				for (Event event : series.getEvents()) {
+					event.getRaces();
+				}
+			}
+
+			DatabaseSession.commit();
+
+			for (Series series : seriesList) {
+				for (Event event : series.getEvents()) {
 					for (Race race : event.getRaces()) {
 						raceDAO.detach(race);
 					}
@@ -158,8 +166,6 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 				}
 				seriesDAO.detach(series);
 			}
-
-			DatabaseSession.commit();
 		} finally {
 			win.getDatabase().endSession();
 		}

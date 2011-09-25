@@ -89,12 +89,12 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> {
 
 			series = seriesDAO.get(series);
 			classes = new ArrayList<Class>(series.getClasses());
+			DatabaseSession.commit();
+
 			for (Class cls : classes) {
 				classDAO.detach(cls);
 			}
 			seriesDAO.detach(series);
-
-			DatabaseSession.commit();
 		} finally {
 			win.getDatabase().endSession();
 		}
