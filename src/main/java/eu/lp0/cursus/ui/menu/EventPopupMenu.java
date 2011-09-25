@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.tree;
+package eu.lp0.cursus.ui.menu;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -34,7 +34,7 @@ import eu.lp0.cursus.ui.race.RaceDetailDialog;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-public class EventTreePopupMenu<O extends Frame & DatabaseWindow> extends AbstractTreePopupMenu<O, Event> implements ActionListener {
+public class EventPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNamedEntityPopupMenu<O, Event> implements ActionListener {
 	private JMenuItem mnuNewRace;
 	private JMenuItem mnuEditEvent;
 	private JMenuItem mnuDeleteEvent;
@@ -45,7 +45,7 @@ public class EventTreePopupMenu<O extends Frame & DatabaseWindow> extends Abstra
 		NEW_RACE, EDIT_EVENT, DELETE_EVENT;
 	}
 
-	public EventTreePopupMenu(O owner, Event event) {
+	public EventPopupMenu(O owner, Event event) {
 		super(owner, event, eventDAO);
 
 		mnuNewRace = new JMenuItem(Messages.getString("menu.race.new")); //$NON-NLS-1$

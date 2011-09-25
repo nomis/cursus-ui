@@ -40,6 +40,10 @@ import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.DatabaseSync;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
+import eu.lp0.cursus.ui.menu.DatabasePopupMenu;
+import eu.lp0.cursus.ui.menu.EventPopupMenu;
+import eu.lp0.cursus.ui.menu.RacePopupMenu;
+import eu.lp0.cursus.ui.menu.SeriesPopupMenu;
 import eu.lp0.cursus.util.Background;
 
 public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements MouseListener, DatabaseSync {
@@ -105,11 +109,11 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 
 	private JPopupMenu menuFromUserObject(RaceEntity item) {
 		if (item instanceof Series) {
-			return new SeriesTreePopupMenu<O>(win, (Series)item);
+			return new SeriesPopupMenu<O>(win, (Series)item);
 		} else if (item instanceof Event) {
-			return new EventTreePopupMenu<O>(win, (Event)item);
+			return new EventPopupMenu<O>(win, (Event)item);
 		} else if (item instanceof Race) {
-			return new RaceTreePopupMenu<O>(win, (Race)item);
+			return new RacePopupMenu<O>(win, (Race)item);
 		} else {
 			return null;
 		}
@@ -132,7 +136,7 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 		if (path != null) {
 			menu = menuFromUserObject(userObjectFromSelection(path.getLastPathComponent()));
 		} else {
-			menu = new DatabaseTreePopupMenu<O>(win);
+			menu = new DatabasePopupMenu<O>(win);
 		}
 
 		menu.show(me.getComponent(), me.getX(), me.getY());

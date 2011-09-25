@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.tree;
+package eu.lp0.cursus.ui.menu;
 
 import java.awt.Frame;
 
@@ -29,20 +29,20 @@ import org.slf4j.LoggerFactory;
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.NamedEntityDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
-import eu.lp0.cursus.db.data.RaceEntity;
+import eu.lp0.cursus.db.data.NamedEntity;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 import eu.lp0.cursus.util.Messages;
 
-public abstract class AbstractTreePopupMenu<O extends Frame & DatabaseWindow, T extends AbstractEntity & RaceEntity> extends JPopupMenu {
+public abstract class AbstractNamedEntityPopupMenu<O extends Frame & DatabaseWindow, T extends AbstractEntity & NamedEntity> extends JPopupMenu {
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 	protected final O owner;
 	protected final T item;
 	private final NamedEntityDAO<T> dao;
 
-	public AbstractTreePopupMenu(O owner, T item, NamedEntityDAO<T> dao) {
+	public AbstractNamedEntityPopupMenu(O owner, T item, NamedEntityDAO<T> dao) {
 		this.owner = owner;
 		this.item = item;
 		this.dao = dao;

@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.tree;
+package eu.lp0.cursus.ui.menu;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -31,7 +31,7 @@ import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.series.SeriesDetailDialog;
 import eu.lp0.cursus.util.Messages;
 
-public class DatabaseTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopupMenu implements ActionListener {
+public class DatabasePopupMenu<O extends Frame & DatabaseWindow> extends JPopupMenu implements ActionListener {
 	private final O owner;
 
 	private JMenuItem mnuNewSeries;
@@ -40,7 +40,7 @@ public class DatabaseTreePopupMenu<O extends Frame & DatabaseWindow> extends JPo
 		NEW_SERIES;
 	}
 
-	public DatabaseTreePopupMenu(O owner) {
+	public DatabasePopupMenu(O owner) {
 		this.owner = owner;
 
 		mnuNewSeries = new JMenuItem(Messages.getString("menu.series.new")); //$NON-NLS-1$
