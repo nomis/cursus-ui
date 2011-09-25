@@ -19,6 +19,7 @@ package eu.lp0.cursus.ui.series;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import javax.swing.border.EmptyBorder;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.ClassDAO;
+import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
@@ -45,6 +47,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> {
 	private JScrollPane rightScrollPane;
 	private JTable table;
 
+	private static final SeriesDAO seriesDAO = new SeriesDAO();
 	private static final ClassDAO classDAO = new ClassDAO();
 
 	public SeriesClassesTab(DatabaseWindow win) {
@@ -84,10 +87,12 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> {
 		try {
 			DatabaseSession.begin();
 
-			classes = classDAO.findAll(series);
+			series = seriesDAO.get(series);
+			classes = new ArrayList<Class>(series.getClasses());
 			for (Class cls : classes) {
 				classDAO.detach(cls);
 			}
+			seriesDAO.detach(series);
 
 			DatabaseSession.commit();
 		} finally {

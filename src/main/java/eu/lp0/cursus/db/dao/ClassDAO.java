@@ -17,34 +17,10 @@
  */
 package eu.lp0.cursus.db.dao;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
 import eu.lp0.cursus.db.data.Class;
-import eu.lp0.cursus.db.data.Series;
 
 public class ClassDAO extends AbstractDAO<Class> {
 	public ClassDAO() {
 		super(Class.class);
-	}
-
-	public List<Class> findAll(Series series) {
-		EntityManager em = getEntityManager();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-
-		CriteriaQuery<Class> q = cb.createQuery(Class.class);
-		Root<Class> c = q.from(Class.class);
-		q.select(c);
-		q.where(cb.equal(c.get("series"), series)); //$NON-NLS-1$
-
-		TypedQuery<Class> tq = em.createQuery(q);
-		List<Class> rs = tq.getResultList();
-
-		return rs;
 	}
 }
