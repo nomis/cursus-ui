@@ -126,10 +126,15 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 
 	private void showMenu(MouseEvent me) {
 		TreePath path = getSelectionPath();
+		JPopupMenu menu = null;
 
 		if (path != null) {
-			menuFromUserObject(userObjectFromSelection(path.getLastPathComponent())).show(me.getComponent(), me.getX(), me.getY());
+			menu = menuFromUserObject(userObjectFromSelection(path.getLastPathComponent()));
+		} else {
+			menu = new DatabaseTreePopupMenu<O>(win);
 		}
+
+		menu.show(me.getComponent(), me.getX(), me.getY());
 	}
 
 	@Override
