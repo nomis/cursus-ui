@@ -15,17 +15,17 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.race;
+package eu.lp0.cursus.ui.series;
 
 import java.awt.Frame;
 
-import eu.lp0.cursus.db.dao.RaceDAO;
-import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.ui.common.CommonDetailWindow;
+import eu.lp0.cursus.db.dao.SeriesDAO;
+import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.ui.common.CommonDetailDialog;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class RaceDetailWindow<O extends Frame & DatabaseWindow> extends CommonDetailWindow<O, Race> {
-	public RaceDetailWindow(O win, String title, Race race) {
-		super(win, title, new RaceDAO(), race);
+public class SeriesDetailDialog<O extends Frame & DatabaseWindow> extends CommonDetailDialog<O, Series> {
+	public SeriesDetailDialog(O win, String title, Series series) {
+		super(win, title, new SeriesDAO(), series);
 	}
 }

@@ -29,8 +29,8 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
-import eu.lp0.cursus.ui.event.EventDetailWindow;
-import eu.lp0.cursus.ui.series.SeriesDetailWindow;
+import eu.lp0.cursus.ui.event.EventDetailDialog;
+import eu.lp0.cursus.ui.series.SeriesDetailDialog;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
@@ -68,10 +68,10 @@ public class SeriesTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopu
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_EVENT:
-			win = new EventDetailWindow<O>(owner, series.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(series)); //$NON-NLS-1$
+			win = new EventDetailDialog<O>(owner, series.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(series)); //$NON-NLS-1$
 			break;
 		case EDIT_SERIES:
-			win = new SeriesDetailWindow<O>(owner, Messages.getString("menu.series.edit") + Constants.EN_DASH + series.getName(), series); //$NON-NLS-1$
+			win = new SeriesDetailDialog<O>(owner, Messages.getString("menu.series.edit") + Constants.EN_DASH + series.getName(), series); //$NON-NLS-1$
 			break;
 		}
 

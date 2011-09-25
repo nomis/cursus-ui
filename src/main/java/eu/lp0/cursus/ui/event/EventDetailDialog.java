@@ -21,11 +21,11 @@ import java.awt.Frame;
 
 import eu.lp0.cursus.db.dao.EventDAO;
 import eu.lp0.cursus.db.data.Event;
-import eu.lp0.cursus.ui.common.CommonDetailWindow;
+import eu.lp0.cursus.ui.common.CommonDetailDialog;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class EventDetailWindow<O extends Frame & DatabaseWindow> extends CommonDetailWindow<O, Event> {
-	public EventDetailWindow(O win, String title, Event event) {
+public class EventDetailDialog<O extends Frame & DatabaseWindow> extends CommonDetailDialog<O, Event> {
+	public EventDetailDialog(O win, String title, Event event) {
 		super(win, title, new EventDAO(), event);
 	}
 }

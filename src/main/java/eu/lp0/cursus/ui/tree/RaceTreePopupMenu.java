@@ -28,7 +28,7 @@ import javax.swing.JPopupMenu;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
-import eu.lp0.cursus.ui.race.RaceDetailWindow;
+import eu.lp0.cursus.ui.race.RaceDetailDialog;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
@@ -66,7 +66,7 @@ public class RaceTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopupM
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case EDIT_RACE:
-			win = new RaceDetailWindow<O>(owner, Messages.getString("menu.race.edit") + Constants.EN_DASH + race.getName(), race); //$NON-NLS-1$
+			win = new RaceDetailDialog<O>(owner, Messages.getString("menu.race.edit") + Constants.EN_DASH + race.getName(), race); //$NON-NLS-1$
 			break;
 		case DELETE_RACE:
 			break;

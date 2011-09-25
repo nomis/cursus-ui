@@ -28,7 +28,7 @@ import javax.swing.JPopupMenu;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
-import eu.lp0.cursus.ui.series.SeriesDetailWindow;
+import eu.lp0.cursus.ui.series.SeriesDetailDialog;
 import eu.lp0.cursus.util.Messages;
 
 public class DatabaseTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopupMenu implements ActionListener {
@@ -56,7 +56,7 @@ public class DatabaseTreePopupMenu<O extends Frame & DatabaseWindow> extends JPo
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_SERIES:
-			win = new SeriesDetailWindow<O>(owner, Messages.getString("menu.series.new"), new Series()); //$NON-NLS-1$
+			win = new SeriesDetailDialog<O>(owner, Messages.getString("menu.series.new"), new Series()); //$NON-NLS-1$
 			break;
 		}
 

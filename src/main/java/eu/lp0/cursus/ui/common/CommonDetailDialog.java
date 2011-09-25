@@ -52,7 +52,7 @@ import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 import eu.lp0.cursus.util.Messages;
 
-public abstract class CommonDetailWindow<O extends Frame & DatabaseWindow, T extends AbstractEntity & RaceHierarchy> extends JDialog implements Displayable,
+public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T extends AbstractEntity & RaceHierarchy> extends JDialog implements Displayable,
 		ActionListener {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final O win;
@@ -67,7 +67,7 @@ public abstract class CommonDetailWindow<O extends Frame & DatabaseWindow, T ext
 
 	private WindowAutoPrefs prefs = new WindowAutoPrefs(this);
 
-	public CommonDetailWindow(O win, String title, RaceHierarchyDAO<T> dao, T item) {
+	public CommonDetailDialog(O win, String title, RaceHierarchyDAO<T> dao, T item) {
 		super(win, true);
 		this.win = win;
 		this.title = title;

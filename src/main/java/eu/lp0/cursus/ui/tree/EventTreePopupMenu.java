@@ -29,8 +29,8 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
-import eu.lp0.cursus.ui.event.EventDetailWindow;
-import eu.lp0.cursus.ui.race.RaceDetailWindow;
+import eu.lp0.cursus.ui.event.EventDetailDialog;
+import eu.lp0.cursus.ui.race.RaceDetailDialog;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
@@ -75,10 +75,10 @@ public class EventTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopup
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_RACE:
-			win = new RaceDetailWindow<O>(owner, event.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(event)); //$NON-NLS-1$
+			win = new RaceDetailDialog<O>(owner, event.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(event)); //$NON-NLS-1$
 			break;
 		case EDIT_EVENT:
-			win = new EventDetailWindow<O>(owner, Messages.getString("menu.event.edit") + Constants.EN_DASH + event.getName(), event); //$NON-NLS-1$
+			win = new EventDetailDialog<O>(owner, Messages.getString("menu.event.edit") + Constants.EN_DASH + event.getName(), event); //$NON-NLS-1$
 			break;
 		case DELETE_EVENT:
 			break;
