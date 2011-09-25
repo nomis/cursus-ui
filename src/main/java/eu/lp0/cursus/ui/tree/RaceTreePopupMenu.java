@@ -23,8 +23,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 
+import eu.lp0.cursus.db.dao.RaceDAO;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
@@ -32,20 +32,18 @@ import eu.lp0.cursus.ui.race.RaceDetailDialog;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-public class RaceTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopupMenu implements ActionListener {
-	private final O owner;
-	private final Race race;
-
+public class RaceTreePopupMenu<O extends Frame & DatabaseWindow> extends AbstractTreePopupMenu<O, Race> implements ActionListener {
 	private JMenuItem mnuEditRace;
 	private JMenuItem mnuDeleteRace;
+
+	private static final RaceDAO raceDAO = new RaceDAO();
 
 	private enum Commands {
 		EDIT_RACE, DELETE_RACE;
 	}
 
 	public RaceTreePopupMenu(O owner, Race race) {
-		this.owner = owner;
-		this.race = race;
+		super(owner, race, raceDAO);
 
 		mnuEditRace = new JMenuItem(Messages.getString("menu.race.edit")); //$NON-NLS-1$
 		mnuEditRace.setMnemonic(KeyEvent.VK_F2);
@@ -66,9 +64,10 @@ public class RaceTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopupM
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case EDIT_RACE:
-			win = new RaceDetailDialog<O>(owner, Messages.getString("menu.race.edit") + Constants.EN_DASH + race.getName(), race); //$NON-NLS-1$
+			win = new RaceDetailDialog<O>(owner, Messages.getString("menu.race.edit") + Constants.EN_DASH + item.getName(), item); //$NON-NLS-1$
 			break;
 		case DELETE_RACE:
+			confirmDelete("menu.race.delete"); //$NON-NLS-1$
 			break;
 		}
 

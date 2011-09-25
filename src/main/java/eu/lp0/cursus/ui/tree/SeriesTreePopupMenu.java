@@ -23,8 +23,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 
+import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
@@ -34,21 +34,19 @@ import eu.lp0.cursus.ui.series.SeriesDetailDialog;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-public class SeriesTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopupMenu implements ActionListener {
-	private final O owner;
-	private final Series series;
-
+public class SeriesTreePopupMenu<O extends Frame & DatabaseWindow> extends AbstractTreePopupMenu<O, Series> implements ActionListener {
 	private JMenuItem mnuNewEvent;
 	private JMenuItem mnuEditSeries;
 	private JMenuItem mnuDeleteSeries;
+
+	private static final SeriesDAO seriesDAO = new SeriesDAO();
 
 	private enum Commands {
 		NEW_EVENT, EDIT_SERIES, DELETE_SERIES;
 	}
 
 	public SeriesTreePopupMenu(O owner, Series series) {
-		this.owner = owner;
-		this.series = series;
+		super(owner, series, seriesDAO);
 
 		mnuNewEvent = new JMenuItem(Messages.getString("menu.event.new")); //$NON-NLS-1$
 		mnuNewEvent.setMnemonic(KeyEvent.VK_INSERT);
@@ -75,12 +73,13 @@ public class SeriesTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopu
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_EVENT:
-			win = new EventDetailDialog<O>(owner, series.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(series)); //$NON-NLS-1$
+			win = new EventDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(item)); //$NON-NLS-1$
 			break;
 		case EDIT_SERIES:
-			win = new SeriesDetailDialog<O>(owner, Messages.getString("menu.series.edit") + Constants.EN_DASH + series.getName(), series); //$NON-NLS-1$
+			win = new SeriesDetailDialog<O>(owner, Messages.getString("menu.series.edit") + Constants.EN_DASH + item.getName(), item); //$NON-NLS-1$
 			break;
 		case DELETE_SERIES:
+			confirmDelete("menu.series.delete"); //$NON-NLS-1$
 			break;
 		}
 

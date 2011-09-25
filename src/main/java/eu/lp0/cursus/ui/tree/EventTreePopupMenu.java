@@ -23,8 +23,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 
+import eu.lp0.cursus.db.dao.EventDAO;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
@@ -34,21 +34,19 @@ import eu.lp0.cursus.ui.race.RaceDetailDialog;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-public class EventTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopupMenu implements ActionListener {
-	private final O owner;
-	private final Event event;
-
+public class EventTreePopupMenu<O extends Frame & DatabaseWindow> extends AbstractTreePopupMenu<O, Event> implements ActionListener {
 	private JMenuItem mnuNewRace;
 	private JMenuItem mnuEditEvent;
 	private JMenuItem mnuDeleteEvent;
+
+	private static final EventDAO eventDAO = new EventDAO();
 
 	private enum Commands {
 		NEW_RACE, EDIT_EVENT, DELETE_EVENT;
 	}
 
 	public EventTreePopupMenu(O owner, Event event) {
-		this.owner = owner;
-		this.event = event;
+		super(owner, event, eventDAO);
 
 		mnuNewRace = new JMenuItem(Messages.getString("menu.race.new")); //$NON-NLS-1$
 		mnuNewRace.setMnemonic(KeyEvent.VK_INSERT);
@@ -75,12 +73,13 @@ public class EventTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopup
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_RACE:
-			win = new RaceDetailDialog<O>(owner, event.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(event)); //$NON-NLS-1$
+			win = new RaceDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(item)); //$NON-NLS-1$
 			break;
 		case EDIT_EVENT:
-			win = new EventDetailDialog<O>(owner, Messages.getString("menu.event.edit") + Constants.EN_DASH + event.getName(), event); //$NON-NLS-1$
+			win = new EventDetailDialog<O>(owner, Messages.getString("menu.event.edit") + Constants.EN_DASH + item.getName(), item); //$NON-NLS-1$
 			break;
 		case DELETE_EVENT:
+			confirmDelete("menu.event.delete"); //$NON-NLS-1$
 			break;
 		}
 
