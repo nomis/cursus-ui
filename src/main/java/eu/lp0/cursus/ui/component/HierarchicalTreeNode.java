@@ -17,19 +17,48 @@
  */
 package eu.lp0.cursus.ui.component;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Manages the mess that is JTree
+ * 
+ * JTree makes it very difficult to get at all of the expansion state which makes things difficult when we have to reorder nodes without affecting the currently
+ * selected node (which the user has selected... so it shouldn't move around or change state)
+ */
 public abstract class HierarchicalTreeNode<P, C extends Comparable<C>, N extends ExpandingTreeNode<C>> extends ExpandingTreeNode<P> {
+	private final Logger log = LoggerFactory.getLogger(getClass());
+
 	public HierarchicalTreeNode(P userObject) {
 		super(userObject);
 	}
 
+	/**
+	 * Update tree with changes
+	 * 
+	 * @param tree
+	 *            The tree
+	 * @param path
+	 *            Path to this node (inclusive)
+	 * @param items
+	 *            Items for this node
+	 */
 	public void updateTree(JTree tree, TreePath path, List<C> items) {
 		assert (SwingUtilities.isEventDispatchThread());
 
@@ -41,21 +70,31 @@ public abstract class HierarchicalTreeNode<P, C extends Comparable<C>, N extends
 			return;
 		}
 
+		// Store a map of each node so that they can be moved around and re-expanded
+		// Try to update currently selected node first so that it can be left alone
+		Map<C, N> existing = new HashMap<C, N>();
+		Set<C> removed = new HashSet<C>();
+		Map<C, Map<TreePath, Boolean>> expanded = new HashMap<C, Map<TreePath, Boolean>>();
 		C preUpdated = null;
+
 		if (isPathSelected(tree, path) && !path.equals(tree.getSelectionPath())) {
 			for (int i = 0; i < getChildCount(); i++) {
 				@SuppressWarnings("unchecked")
 				N node = (N)getChildAt(i);
+				C user = node.getUserObject();
 
 				if (isPathSelected(tree, appendedTreePath(path, node))) {
-					C user = node.getUserObject();
 					for (C item : items) {
 						if (item.equals(user)) {
+							log.trace("Updating node " + user); //$NON-NLS-1$
 							updateNode(tree, path, node, item);
 							preUpdated = item;
 							break;
 						}
 					}
+				} else {
+					existing.put(user, node);
+					expanded.put(user, getPathStates(tree, appendedTreePath(path, node), node));
 				}
 			}
 		}
@@ -65,40 +104,126 @@ public abstract class HierarchicalTreeNode<P, C extends Comparable<C>, N extends
 		int i = 0;
 
 		while (next != null || i < getChildCount()) {
+			boolean add = false;
+
 			if (i < getChildCount()) {
+				boolean remove = false;
 				@SuppressWarnings("unchecked")
 				N node = (N)getChildAt(i);
 				C user = node.getUserObject();
 
 				if (next == null || user.compareTo(next) < 0) {
-					model.removeNodeFromParent(node);
-					continue;
+					remove = true;
 				} else if (user.compareTo(next) == 0) {
-					updateNode(tree, path, node, next);
+					if (next != preUpdated) {
+						log.trace("Updating node " + user); //$NON-NLS-1$
+						updateNode(tree, path, node, next);
+					}
 				} else if (next == preUpdated) {
+					remove = true;
+				} else {
+					add = true;
+				}
+
+				if (remove) {
+					log.trace("Removing node " + user); //$NON-NLS-1$
+					removed.add(user);
 					model.removeNodeFromParent(node);
 					continue;
-				} else {
-					N child = constructChildNode(next);
-					boolean firstChild = (getChildCount() == 0);
-					model.insertNodeInto(child, this, i);
-					if (firstChild) {
-						tree.expandPath(path);
-					}
-					child.expandAll(tree, appendedTreePath(path, child));
 				}
 			} else {
+				add = true;
+			}
+
+			if (add) {
 				boolean firstChild = (getChildCount() == 0);
-				N child = constructChildNode(next);
-				model.insertNodeInto(child, this, i);
+				N node = existing.get(next);
+				if (node != null) {
+					if (!removed.contains(next)) {
+						log.trace("Removing node " + next); //$NON-NLS-1$
+						removed.add(next);
+						model.removeNodeFromParent(node);
+					}
+
+					log.trace("Restoring node " + next); //$NON-NLS-1$
+					model.insertNodeInto(node, this, i);
+					restorePaths(tree, expanded.get(next));
+
+					log.trace("Updating node " + next); //$NON-NLS-1$
+					updateNode(tree, path, node, next);
+				} else {
+					log.trace("Adding node " + next); //$NON-NLS-1$
+					node = constructChildNode(next);
+					model.insertNodeInto(node, this, i);
+					node.expandAll(tree, appendedTreePath(path, node));
+				}
 				if (firstChild) {
 					tree.expandPath(path);
 				}
-				child.expandAll(tree, appendedTreePath(path, child));
 			}
 
 			i++;
 			next = iter.hasNext() ? iter.next() : null;
+		}
+	}
+
+	/**
+	 * Get a map of expanded paths under a node (including itself)
+	 * 
+	 * Works around the JTree "feature" that a child node is considered collapsed if its parent is currently collapsed
+	 * 
+	 * @param tree
+	 *            Tree
+	 * @param path
+	 *            Path to node (inclusive)
+	 * @param node
+	 *            Node to examine
+	 * @return a map of expanded and collapsed paths
+	 */
+	private static Map<TreePath, Boolean> getPathStates(JTree tree, TreePath path, TreeNode node) {
+		boolean expanded = tree.isExpanded(path);
+		Map<TreePath, Boolean> paths = new LinkedHashMap<TreePath, Boolean>();
+
+		paths.put(path, expanded);
+		if (!expanded) {
+			// Temporarily expand to find the state of child nodes
+			tree.expandPath(path);
+		}
+
+		for (int i = 0; i < node.getChildCount(); i++) {
+			TreeNode child = node.getChildAt(i);
+			paths.putAll(getPathStates(tree, appendedTreePath(path, child), child));
+		}
+
+		if (!expanded) {
+			// Reverse temporary expansion
+			tree.collapsePath(path);
+		}
+
+		return paths;
+	}
+
+	/**
+	 * Restore path states in reverse order
+	 * 
+	 * Works around the JTree "feature" that collapsing a node always expands its parent first
+	 * 
+	 * @param tree
+	 *            Tree
+	 * @param paths
+	 *            Paths to be expanded/collapsed
+	 */
+	private static void restorePaths(JTree tree, Map<TreePath, Boolean> paths) {
+		List<Map.Entry<TreePath, Boolean>> reversed = new ArrayList<Map.Entry<TreePath, Boolean>>(paths.entrySet());
+		ListIterator<Map.Entry<TreePath, Boolean>> iter = reversed.listIterator(reversed.size() - 1);
+
+		while (iter.hasPrevious()) {
+			Map.Entry<TreePath, Boolean> path = iter.previous();
+			if (path.getValue()) {
+				tree.expandPath(path.getKey());
+			} else {
+				tree.collapsePath(path.getKey());
+			}
 		}
 	}
 
