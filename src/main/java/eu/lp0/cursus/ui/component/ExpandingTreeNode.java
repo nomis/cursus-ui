@@ -72,4 +72,41 @@ public abstract class ExpandingTreeNode<T> extends DefaultMutableTreeNode {
 		path[path.length - 1] = child;
 		return new TreePath(path);
 	}
+
+	/**
+	 * Removes nodes from the end of a tree path
+	 * 
+	 * @param path
+	 *            Tree path
+	 * @return Truncated path
+	 */
+	protected static TreePath truncatedTreePath(TreePath path, int count) {
+		assert (count > 0);
+		return new TreePath(Arrays.copyOf(path.getPath(), path.getPathCount() - count));
+	}
+
+	/**
+	 * Check if the specified path is currently selected
+	 * 
+	 * @param tree
+	 * @param path
+	 * @return
+	 */
+	protected static boolean isPathSelected(JTree tree, TreePath path) {
+		TreePath selected = tree.getSelectionPath();
+
+		while (selected != null) {
+			if (selected.equals(path)) {
+				return true;
+			}
+
+			if (selected.getPathCount() > 1) {
+				selected = truncatedTreePath(selected, 1);
+			} else {
+				selected = null;
+			}
+		}
+
+		return false;
+	}
 }

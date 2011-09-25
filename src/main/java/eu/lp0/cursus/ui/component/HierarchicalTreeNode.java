@@ -41,11 +41,29 @@ public abstract class HierarchicalTreeNode<P, C extends Comparable<C>, N extends
 			return;
 		}
 
+		C preUpdated = null;
+		if (isPathSelected(tree, path) && !path.equals(tree.getSelectionPath())) {
+			for (int i = 0; i < getChildCount(); i++) {
+				@SuppressWarnings("unchecked")
+				N node = (N)getChildAt(i);
+
+				if (isPathSelected(tree, appendedTreePath(path, node))) {
+					C user = node.getUserObject();
+					for (C item : items) {
+						if (item.equals(user)) {
+							updateNode(tree, path, node, item);
+							preUpdated = item;
+							break;
+						}
+					}
+				}
+			}
+		}
+
 		Iterator<C> iter = items.iterator();
 		C next = iter.hasNext() ? iter.next() : null;
 		int i = 0;
 
-		// TODO avoid disturbing the currently selected path by only modifying the unselected nodes
 		while (next != null || i < getChildCount()) {
 			if (i < getChildCount()) {
 				@SuppressWarnings("unchecked")
@@ -57,6 +75,9 @@ public abstract class HierarchicalTreeNode<P, C extends Comparable<C>, N extends
 					continue;
 				} else if (user.compareTo(next) == 0) {
 					updateNode(tree, path, node, next);
+				} else if (next == preUpdated) {
+					model.removeNodeFromParent(node);
+					continue;
 				} else {
 					N child = constructChildNode(next);
 					model.insertNodeInto(child, this, i);
