@@ -22,10 +22,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import eu.lp0.cursus.db.data.RaceHierarchy;
+import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.util.Messages;
 
-public abstract class AbstractDatabaseTab<T extends RaceHierarchy> extends JPanel implements DatabaseTabSync<T> {
+public abstract class AbstractDatabaseTab<T extends RaceEntity> extends JPanel implements DatabaseTabSync<T> {
 	private final Class<T> clazz;
 	protected final DatabaseWindow win;
 

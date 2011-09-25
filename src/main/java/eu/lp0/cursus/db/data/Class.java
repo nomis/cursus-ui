@@ -36,15 +36,24 @@ import eu.lp0.cursus.util.Constants;
  */
 @Entity(name = "class")
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "series_id", "name" }) })
-public class Class extends AbstractEntity implements Comparable<Class> {
+public class Class extends AbstractEntity implements Comparable<Class>, NamedEntity {
 	private String name;
 
 	Class() {
 	}
 
+	public Class(Series series) {
+		this(series, "", ""); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
 	public Class(Series series, String name) {
+		this(series, name, ""); //$NON-NLS-1$
+	}
+
+	public Class(Series series, String name, String description) {
 		setSeries(series);
 		setName(name);
+		setDescription(description);
 	}
 
 	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
@@ -54,6 +63,17 @@ public class Class extends AbstractEntity implements Comparable<Class> {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	private String description;
+
+	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	private Series series;

@@ -34,7 +34,7 @@ import eu.lp0.cursus.app.Main;
 import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.db.data.RaceHierarchy;
+import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
@@ -115,7 +115,7 @@ public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 		return main.getDatabase();
 	}
 
-	public RaceHierarchy getSelected() {
+	public RaceEntity getSelected() {
 		return isOpen() ? tabMgr.getSelected() : null;
 	}
 

@@ -19,7 +19,7 @@ package eu.lp0.cursus.db.dao;
 
 import eu.lp0.cursus.db.data.Series;
 
-public class SeriesDAO extends RaceHierarchyDAO<Series> {
+public class SeriesDAO extends NamedEntityDAO<Series> {
 	public SeriesDAO() {
 		super(Series.class);
 	}

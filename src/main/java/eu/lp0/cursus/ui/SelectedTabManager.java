@@ -29,7 +29,7 @@ import javax.swing.event.ChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.lp0.cursus.db.data.RaceHierarchy;
+import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.ui.component.DatabaseSync;
 import eu.lp0.cursus.ui.component.DatabaseTabSync;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
@@ -57,7 +57,7 @@ public class SelectedTabManager implements DatabaseSync, ContainerListener, Chan
 	@Override
 	public void componentRemoved(ContainerEvent ce) {
 		@SuppressWarnings("unchecked")
-		DatabaseTabSync<? extends RaceHierarchy> tab = (DatabaseTabSync<? extends RaceHierarchy>)ce.getChild();
+		DatabaseTabSync<? extends RaceEntity> tab = (DatabaseTabSync<? extends RaceEntity>)ce.getChild();
 		invokeCloseTabLater(tab);
 	}
 
@@ -77,12 +77,12 @@ public class SelectedTabManager implements DatabaseSync, ContainerListener, Chan
 		assert (SwingUtilities.isEventDispatchThread());
 
 		@SuppressWarnings("unchecked")
-		final DatabaseTabSync<? extends RaceHierarchy> tab = (DatabaseTabSync<? extends RaceHierarchy>)tabs.getSelectedComponent();
+		final DatabaseTabSync<? extends RaceEntity> tab = (DatabaseTabSync<? extends RaceEntity>)tabs.getSelectedComponent();
 
 		if (tab != null) {
 			log.trace("Selected tab: " + tab.getClass().getSimpleName()); //$NON-NLS-1$
 
-			final RaceHierarchy selected = win.getSelected();
+			final RaceEntity selected = win.getSelected();
 			if (isValidFor(tab, selected)) {
 				Background.execute(new Runnable() {
 					@Override
@@ -94,7 +94,7 @@ public class SelectedTabManager implements DatabaseSync, ContainerListener, Chan
 		}
 	}
 
-	private void invokeCloseTabLater(final DatabaseTabSync<? extends RaceHierarchy> tab) {
+	private void invokeCloseTabLater(final DatabaseTabSync<? extends RaceEntity> tab) {
 		assert (SwingUtilities.isEventDispatchThread());
 
 		Background.execute(new Runnable() {
@@ -105,11 +105,11 @@ public class SelectedTabManager implements DatabaseSync, ContainerListener, Chan
 		});
 	}
 
-	private boolean isValidFor(DatabaseTabSync<? extends RaceHierarchy> tab, RaceHierarchy selected) {
+	private boolean isValidFor(DatabaseTabSync<? extends RaceEntity> tab, RaceEntity selected) {
 		return selected != null && tab.getType().isAssignableFrom(selected.getClass());
 	}
 
-	public <T extends RaceHierarchy> void databaseRefresh(DatabaseTabSync<T> tab, RaceHierarchy selected) {
+	public <T extends RaceEntity> void databaseRefresh(DatabaseTabSync<T> tab, RaceEntity selected) {
 		assert (Background.isExecutorThread());
 
 		if (isValidFor(tab, selected)) {
@@ -117,7 +117,7 @@ public class SelectedTabManager implements DatabaseSync, ContainerListener, Chan
 		}
 	}
 
-	public <T extends RaceHierarchy> void databaseClosed(DatabaseTabSync<T> tab) {
+	public <T extends RaceEntity> void databaseClosed(DatabaseTabSync<T> tab) {
 		assert (Background.isExecutorThread());
 
 		tab.tabClear();
@@ -144,7 +144,7 @@ public class SelectedTabManager implements DatabaseSync, ContainerListener, Chan
 			@Override
 			public void run() {
 				for (int i = 0; i < tabs.getTabCount(); i++) {
-					invokeCloseTabLater((DatabaseTabSync<? extends RaceHierarchy>)tabs.getComponentAt(i));
+					invokeCloseTabLater((DatabaseTabSync<? extends RaceEntity>)tabs.getComponentAt(i));
 				}
 			}
 		});

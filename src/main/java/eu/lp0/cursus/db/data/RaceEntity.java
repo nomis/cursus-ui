@@ -15,25 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.db.dao;
+package eu.lp0.cursus.db.data;
 
-import java.util.Arrays;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
-import eu.lp0.cursus.db.data.Race;
-
-public class RaceDAO extends NamedEntityDAO<Race> {
-	public RaceDAO() {
-		super(Race.class);
-	}
-
-	@Override
-	protected Predicate[] withParentRestriction(CriteriaBuilder cb, Root<Race> r, Race race, Predicate... predicates) {
-		predicates = Arrays.copyOf(predicates, predicates.length + 1);
-		predicates[predicates.length - 1] = cb.equal(r.get("event"), race.getEvent()); //$NON-NLS-1$
-		return predicates;
-	}
+public interface RaceEntity extends NamedEntity {
 }

@@ -20,9 +20,9 @@ package eu.lp0.cursus.ui.component;
 import java.awt.Component;
 import java.awt.event.HierarchyListener;
 
-import eu.lp0.cursus.db.data.RaceHierarchy;
+import eu.lp0.cursus.db.data.RaceEntity;
 
-public interface DatabaseTabSync<T extends RaceHierarchy> {
+public interface DatabaseTabSync<T extends RaceEntity> {
 	public void addHierarchyListener(HierarchyListener hierarchyListener);
 
 	public Component getParent();

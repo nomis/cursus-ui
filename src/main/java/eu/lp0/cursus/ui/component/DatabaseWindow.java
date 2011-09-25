@@ -18,12 +18,12 @@
 package eu.lp0.cursus.ui.component;
 
 import eu.lp0.cursus.db.Database;
-import eu.lp0.cursus.db.data.RaceHierarchy;
+import eu.lp0.cursus.db.data.RaceEntity;
 
 public interface DatabaseWindow {
 	public Database getDatabase();
 
-	public RaceHierarchy getSelected();
+	public RaceEntity getSelected();
 
 	public void refreshRaceList();
 }

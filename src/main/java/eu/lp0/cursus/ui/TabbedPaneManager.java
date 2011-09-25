@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.db.data.RaceHierarchy;
+import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.tree.RaceTree;
@@ -53,7 +53,7 @@ public class TabbedPaneManager implements TreeSelectionListener {
 	private final List<AbstractDatabaseTab<Event>> eventTabs;
 	private final List<AbstractDatabaseTab<Race>> raceTabs;
 	private final List<Component> ordering = new ArrayList<Component>();
-	private Map<Class<? extends RaceHierarchy>, AbstractDatabaseTab<? extends RaceHierarchy>> previousTabs = new HashMap<Class<? extends RaceHierarchy>, AbstractDatabaseTab<? extends RaceHierarchy>>();
+	private Map<Class<? extends RaceEntity>, AbstractDatabaseTab<? extends RaceEntity>> previousTabs = new HashMap<Class<? extends RaceEntity>, AbstractDatabaseTab<? extends RaceEntity>>();
 
 	public TabbedPaneManager(JTree tree, JTabbedPane tabbedPane, List<AbstractDatabaseTab<Series>> seriesTabs, List<AbstractDatabaseTab<Event>> eventTabs,
 			List<AbstractDatabaseTab<Race>> raceTabs) {
@@ -81,14 +81,14 @@ public class TabbedPaneManager implements TreeSelectionListener {
 		}
 	}
 
-	public RaceHierarchy getSelected() {
+	public RaceEntity getSelected() {
 		assert (SwingUtilities.isEventDispatchThread());
 
 		TreePath path = tree.getSelectionPath();
 		return path != null ? RaceTree.userObjectFromSelection(path.getLastPathComponent()) : null;
 	}
 
-	public void showSelected(final RaceHierarchy item) {
+	public void showSelected(final RaceEntity item) {
 		assert (SwingUtilities.isEventDispatchThread());
 
 		if (log.isTraceEnabled()) {
@@ -102,7 +102,7 @@ public class TabbedPaneManager implements TreeSelectionListener {
 		updateTabs(item);
 	}
 
-	private Collection<?> getVisibleTabsFor(RaceHierarchy item) {
+	private Collection<?> getVisibleTabsFor(RaceEntity item) {
 		if (item instanceof Series) {
 			return seriesTabs;
 		} else if (item instanceof Event) {
@@ -117,15 +117,15 @@ public class TabbedPaneManager implements TreeSelectionListener {
 	/*
 	 * Update the visible tabs, taking care not to cause the tabbed pane to select a different tab while removing/adding tabs
 	 */
-	private void updateTabs(RaceHierarchy item) {
+	private void updateTabs(RaceEntity item) {
 		assert (SwingUtilities.isEventDispatchThread());
 
-		Class<? extends RaceHierarchy> clazz = (item != null ? item.getClass() : null);
+		Class<? extends RaceEntity> clazz = (item != null ? item.getClass() : null);
 		@SuppressWarnings("unchecked")
-		AbstractDatabaseTab<? extends RaceHierarchy> selectedTab = (AbstractDatabaseTab<? extends RaceHierarchy>)tabbedPane.getSelectedComponent();
-		AbstractDatabaseTab<? extends RaceHierarchy> previousTab = previousTabs.get(clazz);
+		AbstractDatabaseTab<? extends RaceEntity> selectedTab = (AbstractDatabaseTab<? extends RaceEntity>)tabbedPane.getSelectedComponent();
+		AbstractDatabaseTab<? extends RaceEntity> previousTab = previousTabs.get(clazz);
 		@SuppressWarnings("unchecked")
-		Collection<AbstractDatabaseTab<? extends RaceHierarchy>> targetTabs = (Collection<AbstractDatabaseTab<? extends RaceHierarchy>>)getVisibleTabsFor(item);
+		Collection<AbstractDatabaseTab<? extends RaceEntity>> targetTabs = (Collection<AbstractDatabaseTab<? extends RaceEntity>>)getVisibleTabsFor(item);
 		Set<Component> currentTabs = new LinkedHashSet<Component>();
 
 		// Get the current tabs
@@ -175,9 +175,9 @@ public class TabbedPaneManager implements TreeSelectionListener {
 		}
 
 		// Add all the tabs that should be there
-		Iterator<AbstractDatabaseTab<? extends RaceHierarchy>> iter = targetTabs.iterator();
+		Iterator<AbstractDatabaseTab<? extends RaceEntity>> iter = targetTabs.iterator();
 		for (int i = 0; iter.hasNext(); i++) {
-			AbstractDatabaseTab<? extends RaceHierarchy> tab = iter.next();
+			AbstractDatabaseTab<? extends RaceEntity> tab = iter.next();
 			if (tab != previousTab) {
 				tab.addToTabbedPane(tabbedPane, i);
 			}

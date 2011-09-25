@@ -25,7 +25,7 @@ import javax.persistence.criteria.Root;
 
 import eu.lp0.cursus.db.data.Event;
 
-public class EventDAO extends RaceHierarchyDAO<Event> {
+public class EventDAO extends NamedEntityDAO<Event> {
 	public EventDAO() {
 		super(Event.class);
 	}

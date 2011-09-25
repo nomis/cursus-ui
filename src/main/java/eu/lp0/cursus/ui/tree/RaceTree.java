@@ -36,7 +36,7 @@ import eu.lp0.cursus.db.dao.RaceDAO;
 import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.db.data.RaceHierarchy;
+import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.DatabaseSync;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
@@ -91,7 +91,7 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 	public void mouseExited(MouseEvent e) {
 	}
 
-	public static RaceHierarchy userObjectFromSelection(Object component) {
+	public static RaceEntity userObjectFromSelection(Object component) {
 		if (component instanceof SeriesTreeNode) {
 			return ((SeriesTreeNode)component).getUserObject();
 		} else if (component instanceof EventTreeNode) {
@@ -103,7 +103,7 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 		}
 	}
 
-	private JPopupMenu menuFromUserObject(RaceHierarchy item) {
+	private JPopupMenu menuFromUserObject(RaceEntity item) {
 		if (item instanceof Series) {
 			return new SeriesTreePopupMenu<O>(win, (Series)item);
 		} else if (item instanceof Event) {

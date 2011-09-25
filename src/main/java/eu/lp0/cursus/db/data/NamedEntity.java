@@ -17,7 +17,7 @@
  */
 package eu.lp0.cursus.db.data;
 
-public interface RaceHierarchy {
+public interface NamedEntity {
 	public String getName();
 
 	public void setName(String name);

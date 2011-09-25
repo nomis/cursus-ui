@@ -17,11 +17,11 @@
  */
 package eu.lp0.cursus.ui.common;
 
-import eu.lp0.cursus.db.data.RaceHierarchy;
+import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public abstract class AbstractPenaltiesTab<T extends RaceHierarchy> extends AbstractDatabaseTab<T> {
+public abstract class AbstractPenaltiesTab<T extends RaceEntity> extends AbstractDatabaseTab<T> {
 	public AbstractPenaltiesTab(Class<T> clazz, DatabaseWindow win) {
 		super(clazz, win, "tab.penalties"); //$NON-NLS-1$
 		initialise();

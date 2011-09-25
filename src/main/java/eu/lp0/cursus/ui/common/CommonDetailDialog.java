@@ -41,9 +41,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.util.DefaultUnitConverter;
 
 import eu.lp0.cursus.db.DatabaseSession;
-import eu.lp0.cursus.db.dao.RaceHierarchyDAO;
+import eu.lp0.cursus.db.dao.NamedEntityDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
-import eu.lp0.cursus.db.data.RaceHierarchy;
+import eu.lp0.cursus.db.data.NamedEntity;
 import eu.lp0.cursus.ui.component.DatabaseTextField;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
@@ -52,12 +52,12 @@ import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 import eu.lp0.cursus.util.Messages;
 
-public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T extends AbstractEntity & RaceHierarchy> extends JDialog implements Displayable,
+public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T extends AbstractEntity & NamedEntity> extends JDialog implements Displayable,
 		ActionListener {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final O win;
 	private final String title;
-	private final RaceHierarchyDAO<T> dao;
+	private final NamedEntityDAO<T> dao;
 	private final T origItem;
 
 	private JTextField txtName;
@@ -67,7 +67,7 @@ public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T ext
 
 	private WindowAutoPrefs prefs = new WindowAutoPrefs(this);
 
-	public CommonDetailDialog(O win, String title, RaceHierarchyDAO<T> dao, T item) {
+	public CommonDetailDialog(O win, String title, NamedEntityDAO<T> dao, T item) {
 		super(win, true);
 		this.win = win;
 		this.title = title;

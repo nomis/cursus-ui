@@ -25,10 +25,10 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import eu.lp0.cursus.db.data.AbstractEntity;
-import eu.lp0.cursus.db.data.RaceHierarchy;
+import eu.lp0.cursus.db.data.NamedEntity;
 
-public class RaceHierarchyDAO<E extends AbstractEntity & RaceHierarchy> extends AbstractDAO<E> {
-	public RaceHierarchyDAO(Class<E> clazz) {
+public class NamedEntityDAO<E extends AbstractEntity & NamedEntity> extends AbstractDAO<E> {
+	public NamedEntityDAO(Class<E> clazz) {
 		super(clazz);
 	}
 
