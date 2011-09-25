@@ -38,7 +38,11 @@ public class RaceHierarchyDAO<E extends AbstractEntity & RaceHierarchy> extends 
 		CriteriaQuery<E> q = cb.createQuery(clazz);
 		Root<E> s = q.from(clazz);
 		q.select(s);
-		q.where(cb.notEqual(s.get("id"), entity.getId()), cb.equal(s.get("name"), newName)); //$NON-NLS-1$ //$NON-NLS-2$
+		if (entity.isTransient()) {
+			q.where(cb.equal(s.get("name"), newName)); //$NON-NLS-1$ 
+		} else {
+			q.where(cb.notEqual(s.get("id"), entity.getId()), cb.equal(s.get("name"), newName)); //$NON-NLS-1$ //$NON-NLS-2$
+		}
 
 		TypedQuery<E> tq = em.createQuery(q);
 		return tq.getResultList().isEmpty();
