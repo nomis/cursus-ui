@@ -27,7 +27,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class AbstractEntity {
+public abstract class AbstractEntity implements Cloneable {
 	private long id;
 
 	@Id
@@ -67,5 +67,14 @@ public abstract class AbstractEntity {
 	@Override
 	public int hashCode() {
 		return (int)(id ^ (id >>> 32));
+	}
+
+	@Override
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

@@ -19,7 +19,7 @@ package eu.lp0.cursus.db.dao;
 
 import eu.lp0.cursus.db.data.Event;
 
-public class EventDAO extends AbstractDAO<Event> {
+public class EventDAO extends RaceHierarchyDAO<Event> {
 	public EventDAO() {
 		super(Event.class);
 	}

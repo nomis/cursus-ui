@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+import javax.persistence.PersistenceException;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -33,11 +34,14 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.util.DefaultUnitConverter;
 
 import eu.lp0.cursus.db.DatabaseSession;
-import eu.lp0.cursus.db.dao.AbstractDAO;
+import eu.lp0.cursus.db.dao.RaceHierarchyDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
 import eu.lp0.cursus.db.data.RaceHierarchy;
 import eu.lp0.cursus.ui.component.DatabaseTextField;
@@ -45,12 +49,15 @@ import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.preferences.WindowAutoPrefs;
 import eu.lp0.cursus.util.Constants;
+import eu.lp0.cursus.util.DatabaseError;
+import eu.lp0.cursus.util.Messages;
 
 public abstract class CommonDetailWindow<O extends Frame & DatabaseWindow, T extends AbstractEntity & RaceHierarchy> extends JDialog implements Displayable,
 		ActionListener {
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final O win;
 	private final String title;
-	private final AbstractDAO<T> dao;
+	private final RaceHierarchyDAO<T> dao;
 	private final T origItem;
 
 	private JTextField txtName;
@@ -60,7 +67,7 @@ public abstract class CommonDetailWindow<O extends Frame & DatabaseWindow, T ext
 
 	private WindowAutoPrefs prefs = new WindowAutoPrefs(this);
 
-	public CommonDetailWindow(O win, String title, AbstractDAO<T> dao, T item) {
+	public CommonDetailWindow(O win, String title, RaceHierarchyDAO<T> dao, T item) {
 		super(win, true);
 		this.win = win;
 		this.title = title;
@@ -126,22 +133,38 @@ public abstract class CommonDetailWindow<O extends Frame & DatabaseWindow, T ext
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void doSave() {
+		final String name = txtName.getText();
+		final String desc = txtDesc.getText();
+
 		win.getDatabase().startSession();
 		try {
 			DatabaseSession.begin();
 
+			if (!dao.isNameOk(origItem, name)) {
+				log.warn("Name already in use: " + name); //$NON-NLS-1$
+				DatabaseError.unableToSave(this, getTitle(), String.format(Messages.getString("db.name-in-use"), name)); //$NON-NLS-1$
+				DatabaseSession.rollback();
+				return;
+			}
+
 			T item;
 			if (origItem.isTransient()) {
-				item = origItem;
+				item = (T)origItem.clone();
 			} else {
 				item = dao.get(origItem);
 			}
-			item.setName(txtName.getText());
-			item.setDescription(txtDesc.getText());
+
+			item.setName(name);
+			item.setDescription(desc);
 			dao.persist(item);
 
 			DatabaseSession.commit();
+		} catch (PersistenceException e) {
+			log.error("Unable to save changes", e); //$NON-NLS-1$
+			DatabaseError.errorSaving(this, getTitle(), e);
+			return;
 		} finally {
 			win.getDatabase().endSession();
 		}
