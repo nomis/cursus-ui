@@ -89,18 +89,15 @@ public abstract class HierarchicalTreeRoot<P, C extends Comparable<C>, N extends
 				@SuppressWarnings("unchecked")
 				N node = (N)getChildAt(i);
 				C user = node.getUserObject();
+				int index = items.indexOf(user);
 
-				if (isPathSelected(tree, appendedTreePath(path, node))) {
-					for (C item : items) {
-						if (item.equals(user)) {
-							if (trace) {
-								log.trace("Updating node " + user); //$NON-NLS-1$
-							}
-							updateNode(tree, path, node, item);
-							preUpdated = item;
-							break;
-						}
+				if (isPathSelected(tree, appendedTreePath(path, node)) && index != -1) {
+					C item = items.get(index);
+					if (trace) {
+						log.trace("Updating node " + user); //$NON-NLS-1$
 					}
+					updateNode(tree, path, node, item);
+					preUpdated = item;
 				} else {
 					existing.put(user, node);
 					expanded.put(user, getPathStates(tree, appendedTreePath(path, node), node));
