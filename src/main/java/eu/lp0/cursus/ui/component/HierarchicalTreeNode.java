@@ -56,7 +56,7 @@ public abstract class HierarchicalTreeNode<P, C extends Comparable<C>, N extends
 					model.removeNodeFromParent(node);
 					continue;
 				} else if (user.compareTo(next) == 0) {
-					updateNode(tree, path, node, user);
+					updateNode(tree, path, node, next);
 				} else {
 					N child = constructChildNode(next);
 					model.insertNodeInto(child, this, i);
