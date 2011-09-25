@@ -40,9 +40,10 @@ public class SeriesTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopu
 
 	private JMenuItem mnuNewEvent;
 	private JMenuItem mnuEditSeries;
+	private JMenuItem mnuDeleteSeries;
 
 	private enum Commands {
-		NEW_EVENT, EDIT_SERIES;
+		NEW_EVENT, EDIT_SERIES, DELETE_SERIES;
 	}
 
 	public SeriesTreePopupMenu(O owner, Series series) {
@@ -60,6 +61,12 @@ public class SeriesTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopu
 		mnuEditSeries.setActionCommand(Commands.EDIT_SERIES.toString());
 		mnuEditSeries.addActionListener(this);
 		add(mnuEditSeries);
+
+		mnuDeleteSeries = new JMenuItem(Messages.getString("menu.series.delete")); //$NON-NLS-1$
+		mnuDeleteSeries.setMnemonic(KeyEvent.VK_DELETE);
+		mnuDeleteSeries.setActionCommand(Commands.DELETE_SERIES.toString());
+		mnuDeleteSeries.addActionListener(this);
+		add(mnuDeleteSeries);
 	}
 
 	@Override
@@ -72,6 +79,8 @@ public class SeriesTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopu
 			break;
 		case EDIT_SERIES:
 			win = new SeriesDetailDialog<O>(owner, Messages.getString("menu.series.edit") + Constants.EN_DASH + series.getName(), series); //$NON-NLS-1$
+			break;
+		case DELETE_SERIES:
 			break;
 		}
 
