@@ -35,7 +35,8 @@ import eu.lp0.cursus.util.Constants;
  */
 @Entity(name = "series")
 public class Series extends AbstractEntity implements Comparable<Series>, RaceHierarchy {
-	Series() {
+	public Series() {
+		this("", ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public Series(String name) {
@@ -49,7 +50,7 @@ public class Series extends AbstractEntity implements Comparable<Series>, RaceHi
 
 	private String name;
 
-	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
+	@Column(nullable = false, unique = true, length = Constants.MAX_STRING_LEN)
 	public String getName() {
 		return name;
 	}

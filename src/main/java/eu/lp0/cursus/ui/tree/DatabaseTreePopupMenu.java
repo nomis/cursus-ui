@@ -25,39 +25,29 @@ import java.awt.event.KeyEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
-import eu.lp0.cursus.ui.race.RaceDetailWindow;
-import eu.lp0.cursus.util.Constants;
+import eu.lp0.cursus.ui.series.SeriesDetailWindow;
 import eu.lp0.cursus.util.Messages;
 
-public class RaceTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopupMenu implements ActionListener {
+public class DatabaseTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopupMenu implements ActionListener {
 	private final O owner;
-	private final Race race;
 
-	private JMenuItem mnuEditRace;
-	private JMenuItem mnuDeleteRace;
+	private JMenuItem mnuNewSeries;
 
 	private enum Commands {
-		EDIT_RACE, DELETE_RACE;
+		NEW_SERIES;
 	}
 
-	public RaceTreePopupMenu(O owner, Race race) {
+	public DatabaseTreePopupMenu(O owner) {
 		this.owner = owner;
-		this.race = race;
 
-		mnuEditRace = new JMenuItem(Messages.getString("menu.race.edit")); //$NON-NLS-1$
-		mnuEditRace.setMnemonic(KeyEvent.VK_F2);
-		mnuEditRace.setActionCommand(Commands.EDIT_RACE.toString());
-		mnuEditRace.addActionListener(this);
-		add(mnuEditRace);
-
-		mnuDeleteRace = new JMenuItem(Messages.getString("menu.race.delete")); //$NON-NLS-1$
-		mnuDeleteRace.setMnemonic(KeyEvent.VK_DELETE);
-		mnuDeleteRace.setActionCommand(Commands.DELETE_RACE.toString());
-		mnuDeleteRace.addActionListener(this);
-		add(mnuDeleteRace);
+		mnuNewSeries = new JMenuItem(Messages.getString("menu.series.new")); //$NON-NLS-1$
+		mnuNewSeries.setMnemonic(KeyEvent.VK_INSERT);
+		mnuNewSeries.setActionCommand(Commands.NEW_SERIES.toString());
+		mnuNewSeries.addActionListener(this);
+		add(mnuNewSeries);
 	}
 
 	@Override
@@ -65,10 +55,8 @@ public class RaceTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopupM
 		Displayable win = null;
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
-		case EDIT_RACE:
-			win = new RaceDetailWindow<O>(owner, Messages.getString("menu.race.edit") + Constants.EN_DASH + race.getName(), race); //$NON-NLS-1$
-			break;
-		case DELETE_RACE:
+		case NEW_SERIES:
+			win = new SeriesDetailWindow<O>(owner, Messages.getString("menu.series.new"), new Series()); //$NON-NLS-1$
 			break;
 		}
 

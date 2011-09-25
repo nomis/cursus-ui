@@ -49,7 +49,6 @@ public class DatabaseManager implements ActionListener {
 				try {
 					switch (Commands.valueOf(ae.getActionCommand())) {
 					case NEW:
-
 						newDatabase();
 						break;
 					case OPEN:

@@ -18,6 +18,7 @@
 package eu.lp0.cursus.db;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 
 import javax.persistence.EntityManager;
@@ -27,12 +28,10 @@ import javax.persistence.Persistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.lp0.cursus.db.dao.ClassDAO;
 import eu.lp0.cursus.db.dao.CursusDAO;
 import eu.lp0.cursus.db.dao.EventDAO;
 import eu.lp0.cursus.db.dao.RaceDAO;
 import eu.lp0.cursus.db.dao.SeriesDAO;
-import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Cursus;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
@@ -102,11 +101,11 @@ public abstract class Database {
 				log.info("Database \"" + name + "\" has version " + DatabaseVersion.getLatest()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			Series series = seriesDAO.findSingleton();
-			if (series == null) {
+			List<Series> seriesList = seriesDAO.findAll();
+			if (seriesList.isEmpty()) {
 				log.info("Database \"" + name + "\" has no series, creating untitled series"); //$NON-NLS-1$ //$NON-NLS-2$
 
-				series = new Series(Messages.getString("series.untitled")); //$NON-NLS-1$
+				Series series = new Series(Messages.getString("series.untitled")); //$NON-NLS-1$
 				seriesDAO.persist(series);
 
 				Event event = new Event(series, Messages.getString("event.untitled")); //$NON-NLS-1$

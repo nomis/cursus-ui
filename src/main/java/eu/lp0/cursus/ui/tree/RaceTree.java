@@ -20,7 +20,6 @@ package eu.lp0.cursus.ui.tree;
 import java.awt.Frame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPopupMenu;
@@ -107,9 +106,9 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 		if (item instanceof Series) {
 			return new SeriesTreePopupMenu<O>(win, (Series)item);
 		} else if (item instanceof Event) {
-			return new EventTreePopupMenu(win, (Event)item);
+			return new EventTreePopupMenu<O>(win, (Event)item);
 		} else if (item instanceof Race) {
-			return new RaceTreePopupMenu(win, (Race)item);
+			return new RaceTreePopupMenu<O>(win, (Race)item);
 		} else {
 			return null;
 		}
@@ -137,21 +136,22 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 	public void databaseRefresh() {
 		assert (Background.isExecutorThread());
 
-		final List<Series> seriesList = new ArrayList<Series>();
+		final List<Series> seriesList;
 
 		win.getDatabase().startSession();
 		try {
 			DatabaseSession.begin();
 
-			Series series = seriesDAO.findSingleton();
-			for (Event event : series.getEvents()) {
-				for (Race race : event.getRaces()) {
-					raceDAO.detach(race);
+			seriesList = seriesDAO.findAll();
+			for (Series series : seriesList) {
+				for (Event event : series.getEvents()) {
+					for (Race race : event.getRaces()) {
+						raceDAO.detach(race);
+					}
+					eventDAO.detach(event);
 				}
-				eventDAO.detach(event);
+				seriesDAO.detach(series);
 			}
-			seriesDAO.detach(series);
-			seriesList.add(series);
 
 			DatabaseSession.commit();
 		} finally {

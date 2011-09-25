@@ -17,38 +17,10 @@
  */
 package eu.lp0.cursus.db.dao;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
-import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.util.Messages;
 
 public class SeriesDAO extends AbstractDAO<Series> {
 	public SeriesDAO() {
 		super(Series.class);
-	}
-
-	public Series findSingleton() throws InvalidDatabaseException {
-		EntityManager em = getEntityManager();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-
-		CriteriaQuery<Series> q = cb.createQuery(Series.class);
-		Root<Series> s = q.from(Series.class);
-		q.select(s);
-
-		TypedQuery<Series> tq = em.createQuery(q);
-		List<Series> rs = tq.getResultList();
-
-		if (rs.size() > 1) {
-			throw new InvalidDatabaseException(String.format(Messages.getString("db.invalid-num-race-series"), rs.size())); //$NON-NLS-1$
-		}
-
-		return rs.isEmpty() ? null : rs.get(0);
 	}
 }

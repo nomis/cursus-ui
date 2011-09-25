@@ -17,6 +17,8 @@
  */
 package eu.lp0.cursus.db.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -69,5 +71,17 @@ public abstract class AbstractDAO<E extends AbstractEntity> {
 
 		TypedQuery<E> tq = em.createQuery(q);
 		return singleResult(tq);
+	}
+
+	public List<E> findAll() {
+		EntityManager em = getEntityManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+
+		CriteriaQuery<E> q = cb.createQuery(clazz);
+		Root<E> s = q.from(clazz);
+		q.select(s);
+
+		TypedQuery<E> tq = em.createQuery(q);
+		return tq.getResultList();
 	}
 }

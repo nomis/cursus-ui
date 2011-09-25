@@ -68,7 +68,7 @@ public class SeriesTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopu
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_EVENT:
-			win = new EventDetailWindow(owner, series.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(series)); //$NON-NLS-1$
+			win = new EventDetailWindow<O>(owner, series.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(series)); //$NON-NLS-1$
 			break;
 		case EDIT_SERIES:
 			win = new SeriesDetailWindow<O>(owner, Messages.getString("menu.series.edit") + Constants.EN_DASH + series.getName(), series); //$NON-NLS-1$

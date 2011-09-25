@@ -27,14 +27,15 @@ import javax.swing.JPopupMenu;
 
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.event.EventDetailWindow;
 import eu.lp0.cursus.ui.race.RaceDetailWindow;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-public class EventTreePopupMenu extends JPopupMenu implements ActionListener {
-	private final Frame owner;
+public class EventTreePopupMenu<O extends Frame & DatabaseWindow> extends JPopupMenu implements ActionListener {
+	private final O owner;
 	private final Event event;
 
 	private JMenuItem mnuNewRace;
@@ -45,7 +46,7 @@ public class EventTreePopupMenu extends JPopupMenu implements ActionListener {
 		NEW_RACE, EDIT_EVENT, DELETE_EVENT;
 	}
 
-	public EventTreePopupMenu(Frame owner, Event event) {
+	public EventTreePopupMenu(O owner, Event event) {
 		this.owner = owner;
 		this.event = event;
 
@@ -74,10 +75,10 @@ public class EventTreePopupMenu extends JPopupMenu implements ActionListener {
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_RACE:
-			win = new RaceDetailWindow(owner, event.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(event)); //$NON-NLS-1$
+			win = new RaceDetailWindow<O>(owner, event.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(event)); //$NON-NLS-1$
 			break;
 		case EDIT_EVENT:
-			win = new EventDetailWindow(owner, Messages.getString("menu.event.edit") + Constants.EN_DASH + event.getName(), event); //$NON-NLS-1$
+			win = new EventDetailWindow<O>(owner, Messages.getString("menu.event.edit") + Constants.EN_DASH + event.getName(), event); //$NON-NLS-1$
 			break;
 		case DELETE_EVENT:
 			break;
