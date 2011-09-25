@@ -17,12 +17,7 @@
  */
 package eu.lp0.cursus.ui.component;
 
-import java.util.Arrays;
-
-import javax.swing.JTree;
-import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 
 public abstract class ExpandingTreeNode<T> extends DefaultMutableTreeNode {
 	public ExpandingTreeNode(T userObject) {
@@ -33,80 +28,5 @@ public abstract class ExpandingTreeNode<T> extends DefaultMutableTreeNode {
 	@Override
 	public T getUserObject() {
 		return (T)super.getUserObject();
-	}
-
-	/**
-	 * Expand everything when new nodes are added
-	 * 
-	 * @param tree
-	 *            The tree
-	 * @param path
-	 *            Path to us (inclusive)
-	 */
-	protected void expandAll(JTree tree, TreePath path) {
-		assert (SwingUtilities.isEventDispatchThread());
-
-		if (getChildCount() == 0) {
-			return;
-		}
-
-		tree.expandPath(path);
-
-		for (int i = 0; i < getChildCount(); i++) {
-			ExpandingTreeNode<?> child = (ExpandingTreeNode<?>)getChildAt(i);
-			child.expandAll(tree, appendedTreePath(path, child));
-		}
-	}
-
-	/**
-	 * Append a child to the TreePath of its parent
-	 * 
-	 * @param parent
-	 *            Parent node path
-	 * @param child
-	 *            Child node
-	 * @return Combined path
-	 */
-	protected static TreePath appendedTreePath(TreePath parent, Object child) {
-		Object[] path = Arrays.copyOf(parent.getPath(), parent.getPathCount() + 1);
-		path[path.length - 1] = child;
-		return new TreePath(path);
-	}
-
-	/**
-	 * Removes nodes from the end of a tree path
-	 * 
-	 * @param path
-	 *            Tree path
-	 * @return Truncated path
-	 */
-	protected static TreePath truncatedTreePath(TreePath path, int count) {
-		assert (count > 0);
-		return new TreePath(Arrays.copyOf(path.getPath(), path.getPathCount() - count));
-	}
-
-	/**
-	 * Check if the specified path is currently selected
-	 * 
-	 * @param tree
-	 * @param path
-	 * @return
-	 */
-	protected static boolean isPathSelected(JTree tree, TreePath path) {
-		TreePath selected = tree.getSelectionPath();
-
-		while (selected != null) {
-			if (selected.equals(path)) {
-				return true;
-			}
-
-			if (selected.getPathCount() > 1) {
-				selected = truncatedTreePath(selected, 1);
-			} else {
-				selected = null;
-			}
-		}
-
-		return false;
 	}
 }

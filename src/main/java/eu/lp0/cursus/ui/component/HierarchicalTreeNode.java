@@ -18,6 +18,7 @@
 package eu.lp0.cursus.ui.component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -155,7 +156,7 @@ public abstract class HierarchicalTreeNode<P, C extends Comparable<C>, N extends
 					log.trace("Adding node " + next); //$NON-NLS-1$
 					node = constructChildNode(next);
 					model.insertNodeInto(node, this, i);
-					node.expandAll(tree, appendedTreePath(path, node));
+					expandAll(tree, appendedTreePath(path, node), node);
 				}
 				if (firstChild) {
 					tree.expandPath(path);
@@ -225,6 +226,82 @@ public abstract class HierarchicalTreeNode<P, C extends Comparable<C>, N extends
 				tree.collapsePath(path.getKey());
 			}
 		}
+	}
+
+	/**
+	 * Expand everything when new nodes are added
+	 * 
+	 * @param tree
+	 *            The tree
+	 * @param path
+	 *            Path to node (inclusive)
+	 * @param node
+	 *            Node to expand
+	 */
+	private static void expandAll(JTree tree, TreePath path, TreeNode node) {
+		if (node.getChildCount() == 0) {
+			return;
+		}
+
+		// We could optimise by not expanding this node if it has grandchildren, but that would take longer than just expanding anyway
+		tree.expandPath(path);
+
+		for (int i = 0; i < node.getChildCount(); i++) {
+			ExpandingTreeNode<?> child = (ExpandingTreeNode<?>)node.getChildAt(i);
+			expandAll(tree, appendedTreePath(path, child), child);
+		}
+	}
+
+	/**
+	 * Append a child to the TreePath of its parent
+	 * 
+	 * @param parent
+	 *            Parent node path
+	 * @param child
+	 *            Child node
+	 * @return Combined path
+	 */
+	protected static TreePath appendedTreePath(TreePath parent, Object child) {
+		Object[] path = Arrays.copyOf(parent.getPath(), parent.getPathCount() + 1);
+		path[path.length - 1] = child;
+		return new TreePath(path);
+	}
+
+	/**
+	 * Removes nodes from the end of a tree path
+	 * 
+	 * @param path
+	 *            Tree path
+	 * @return Truncated path
+	 */
+	protected static TreePath truncatedTreePath(TreePath path, int count) {
+		assert (count > 0);
+		return new TreePath(Arrays.copyOf(path.getPath(), path.getPathCount() - count));
+	}
+
+	/**
+	 * Check if the specified path is currently selected
+	 * 
+	 * @param tree
+	 * @param path
+	 * @return
+	 */
+	private static boolean isPathSelected(JTree tree, TreePath path) {
+		TreePath selected = tree.getSelectionPath();
+
+		while (selected != null) {
+			if (selected.equals(path)) {
+				return true;
+			}
+
+			if (selected.getPathCount() > 1) {
+				selected = truncatedTreePath(selected, 1);
+			} else {
+				selected = null;
+			}
+		}
+
+		return false;
 	}
 
 	protected void updateNode(JTree tree, TreePath path, N node, C item) {
