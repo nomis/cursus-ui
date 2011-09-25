@@ -18,9 +18,9 @@
 package eu.lp0.cursus.ui.tree;
 
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.ui.component.ExpandingTreeNode;
+import eu.lp0.cursus.ui.component.HierarchicalTreeNode;
 
-public class RaceTreeNode extends ExpandingTreeNode<Race> {
+public class RaceTreeNode extends HierarchicalTreeNode<Race> {
 	public RaceTreeNode(Race race) {
 		super(race);
 	}

@@ -22,6 +22,9 @@ import java.util.List;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
+/**
+ * HierarchicalTreeRoots that aren't at the top level
+ */
 public interface HierarchicalTreeBranch<P extends Comparable<P>, T extends Comparable<T>> {
 	public void updateTree(JTree tree, TreePath path, List<T> items);
 

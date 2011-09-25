@@ -17,16 +17,26 @@
  */
 package eu.lp0.cursus.ui.component;
 
-import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.JTree;
+import javax.swing.tree.TreePath;
 
-public abstract class ExpandingTreeNode<T> extends DefaultMutableTreeNode {
-	public ExpandingTreeNode(T userObject) {
+/**
+ * Node that has HierarchicalTreeRoots as its children
+ */
+public abstract class HierarchicalTreeParent<T, P extends Comparable<P>, C extends Comparable<C>, N extends HierarchicalTreeNode<P>> extends
+		HierarchicalTreeRoot<T, P, N> {
+	public HierarchicalTreeParent(T userObject) {
 		super(userObject);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public T getUserObject() {
-		return (T)super.getUserObject();
+	protected void updateNode(JTree tree, TreePath path, N node, P item) {
+		if (node instanceof HierarchicalTreeBranch) {
+			@SuppressWarnings("unchecked")
+			HierarchicalTreeBranch<P, C> branch = ((HierarchicalTreeBranch<P, C>)node);
+			branch.updateTree(tree, appendedTreePath(path, branch), branch.getChildItems(item));
+		}
+
+		super.updateNode(tree, path, node, item);
 	}
 }

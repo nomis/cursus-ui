@@ -19,10 +19,10 @@ package eu.lp0.cursus.ui.tree;
 
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.ui.component.HierarchicalTreeRoot;
+import eu.lp0.cursus.ui.component.HierarchicalTreeParent;
 import eu.lp0.cursus.util.Constants;
 
-public class DatabaseTreeNode extends HierarchicalTreeRoot<String, Series, Event, SeriesTreeNode> {
+public class DatabaseTreeNode extends HierarchicalTreeParent<String, Series, Event, SeriesTreeNode> {
 	public DatabaseTreeNode() {
 		super(Constants.APP_NAME);
 	}
