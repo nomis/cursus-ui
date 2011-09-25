@@ -39,14 +39,32 @@ public abstract class AbstractDAO<E extends AbstractEntity> {
 		return DatabaseSession.getEntityManager();
 	}
 
+	/**
+	 * Save/update transient/persisted (but not detached) entity
+	 */
 	public void persist(E entity) {
 		DatabaseSession.getEntityManager().persist(entity);
 	}
 
+	/**
+	 * Copy detached entity to an updated persisted entity, merging all changes
+	 * 
+	 * Merge behaviour may cause unexpected changes (override with DIY merge)
+	 */
+	protected E merge(E entity) {
+		return DatabaseSession.getEntityManager().merge(entity);
+	}
+
+	/**
+	 * Remove persisted entity
+	 */
 	public void remove(E entity) {
 		DatabaseSession.getEntityManager().remove(entity);
 	}
 
+	/**
+	 * Detach persisted entity
+	 */
 	public void detach(E entity) {
 		DatabaseSession.getEntityManager().detach(entity);
 	}
