@@ -18,8 +18,8 @@
 package eu.lp0.cursus.ui.tree;
 
 import java.awt.Frame;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,7 +46,7 @@ import eu.lp0.cursus.ui.menu.RacePopupMenu;
 import eu.lp0.cursus.ui.menu.SeriesPopupMenu;
 import eu.lp0.cursus.util.Background;
 
-public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements MouseListener, DatabaseSync {
+public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements DatabaseSync {
 	private final O win;
 	private final DatabaseTreeNode root;
 
@@ -64,35 +64,23 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 		setRootVisible(false);
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-		addMouseListener(this);
-	}
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent me) {
+				ensureSelection(me);
+				if (me.isPopupTrigger()) {
+					showMenu(me);
+				}
+			}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-	}
-
-	@Override
-	public void mousePressed(MouseEvent me) {
-		ensureSelection(me);
-		if (me.isPopupTrigger()) {
-			showMenu(me);
-		}
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent me) {
-		ensureSelection(me);
-		if (me.isPopupTrigger()) {
-			showMenu(me);
-		}
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
+			@Override
+			public void mouseReleased(MouseEvent me) {
+				ensureSelection(me);
+				if (me.isPopupTrigger()) {
+					showMenu(me);
+				}
+			}
+		});
 	}
 
 	public static RaceEntity userObjectFromSelection(Object component) {
