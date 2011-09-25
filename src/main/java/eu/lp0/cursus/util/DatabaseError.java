@@ -29,7 +29,7 @@ public class DatabaseError {
 	}
 
 	public static void errorSaving(Component c, String context, PersistenceException e) {
-		JOptionPane.showMessageDialog(c, Messages.getString("db.error-saving") + "\n\n" + createMessage(e), Constants.APP_NAME + Constants.EN_DASH + context, //$NON-NLS-1$ //$NON-NLS-2$
+		JOptionPane.showMessageDialog(c, Messages.getString("db.error-saving") + ":\n\n" + createMessage(e), Constants.APP_NAME + Constants.EN_DASH + context, //$NON-NLS-1$ //$NON-NLS-2$
 				JOptionPane.ERROR_MESSAGE);
 	}
 

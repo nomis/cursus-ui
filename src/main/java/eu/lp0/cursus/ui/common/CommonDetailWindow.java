@@ -94,23 +94,23 @@ public abstract class CommonDetailWindow<O extends Frame & DatabaseWindow, T ext
 				"2dlu, max(15dlu;pref), 2dlu, max(15dlu;pref), 2dlu:grow, max(16dlu;pref), 2dlu"); //$NON-NLS-1$
 		getContentPane().setLayout(layout);
 
-		JLabel lblName = new JLabel("Name:");
+		JLabel lblName = new JLabel(Messages.getString("entity.name") + ":"); //$NON-NLS-1$ //$NON-NLS-2$
 		getContentPane().add(lblName, "2, 2"); //$NON-NLS-1$
 
 		txtName = new DatabaseTextField(origItem.getName(), Constants.MAX_STRING_LEN);
 		getContentPane().add(txtName, "4, 2, 4, 1"); //$NON-NLS-1$
 
-		JLabel lblDesc = new JLabel("Description:");
+		JLabel lblDesc = new JLabel(Messages.getString("entity.description") + ":"); //$NON-NLS-1$ //$NON-NLS-2$
 		getContentPane().add(lblDesc, "2, 4"); //$NON-NLS-1$
 
 		txtDesc = new DatabaseTextField(origItem.getDescription(), Constants.MAX_STRING_LEN);
 		getContentPane().add(txtDesc, "4, 4, 4, 1"); //$NON-NLS-1$
 
-		btnCancel = new JButton("Cancel");
+		btnCancel = new JButton(Messages.getString("dialog.cancel")); //$NON-NLS-1$
 		btnCancel.addActionListener(this);
 		getContentPane().add(btnCancel, "5, 6"); //$NON-NLS-1$
 
-		btnSave = new JButton("Save");
+		btnSave = new JButton(Messages.getString("dialog.save")); //$NON-NLS-1$
 		btnSave.addActionListener(this);
 		getContentPane().add(btnSave, "7, 6"); //$NON-NLS-1$
 
