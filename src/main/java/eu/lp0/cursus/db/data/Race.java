@@ -103,7 +103,7 @@ public class Race extends AbstractEntity implements Comparable<Race>, RaceHierar
 
 	private Map<Pilot, RaceAttendee> attendees = new HashMap<Pilot, RaceAttendee>();
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "race", orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "race", orphanRemoval = true)
 	@MapKey
 	@Column(nullable = false)
 	public Map<Pilot, RaceAttendee> getAttendees() {

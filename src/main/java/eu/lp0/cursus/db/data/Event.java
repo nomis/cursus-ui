@@ -60,7 +60,7 @@ public class Event extends AbstractEntity implements Comparable<Event>, RaceHier
 
 	private Series series;
 
-	@ManyToOne(cascade = CascadeType.ALL, optional = false)
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "series_id", nullable = false)
 	public Series getSeries() {
 		return series;
@@ -106,7 +106,7 @@ public class Event extends AbstractEntity implements Comparable<Event>, RaceHier
 
 	private List<Race> races = new ArrayList<Race>();
 
-	@OneToMany(mappedBy = "event")
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "event")
 	@OrderColumn(name = "event_order", nullable = false)
 	public List<Race> getRaces() {
 		while (races.remove(null)) {
@@ -122,7 +122,7 @@ public class Event extends AbstractEntity implements Comparable<Event>, RaceHier
 
 	private Map<Pilot, PilotAtEvent> penalties = new HashMap<Pilot, PilotAtEvent>();
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "event", orphanRemoval = true)
 	@MapKey
 	@Column(nullable = false)
 	public Map<Pilot, PilotAtEvent> getPenalties() {
