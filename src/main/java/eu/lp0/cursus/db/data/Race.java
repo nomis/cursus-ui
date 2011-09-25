@@ -23,7 +23,6 @@ import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKey;
@@ -68,12 +67,11 @@ public class Race extends AbstractEntity implements Comparable<Race>, RaceHierar
 		this.event = event;
 	}
 
-	private int eventOrder;
+	private Integer eventOrder;
 
-	@GeneratedValue
-	@Column(name = "event_order")
-	public int getEventOrder() {
-		return eventOrder;
+	@Column(name = "event_order", nullable = false)
+	public Integer getEventOrder() {
+		return eventOrder != null ? eventOrder : getEvent().getRaces().size();
 	}
 
 	@SuppressWarnings("unused")
@@ -118,7 +116,7 @@ public class Race extends AbstractEntity implements Comparable<Race>, RaceHierar
 
 	@Override
 	public String toString() {
-		return getName();
+		return getName().length() > 0 ? getName() : "[#" + getId() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ 
 	}
 
 	@Override

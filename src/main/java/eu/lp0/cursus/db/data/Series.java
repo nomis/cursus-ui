@@ -75,10 +75,14 @@ public class Series extends AbstractEntity implements Comparable<Series>, RaceHi
 	@OneToMany(mappedBy = "series")
 	@OrderColumn(name = "series_order", nullable = false)
 	public List<Event> getEvents() {
+		while (events.remove(null)) {
+		}
 		return events;
 	}
 
 	public void setEvents(List<Event> events) {
+		while (events.remove(null)) {
+		}
 		this.events = events;
 	}
 
@@ -106,7 +110,7 @@ public class Series extends AbstractEntity implements Comparable<Series>, RaceHi
 
 	@Override
 	public String toString() {
-		return getName();
+		return getName().length() > 0 ? getName() : "[#" + getId() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ 
 	}
 
 	@Override
