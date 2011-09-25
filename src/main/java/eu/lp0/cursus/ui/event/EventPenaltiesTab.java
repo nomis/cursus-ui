@@ -18,13 +18,14 @@
 package eu.lp0.cursus.ui.event;
 
 import java.awt.BorderLayout;
+import java.awt.Frame;
 
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.ui.common.AbstractPenaltiesTab;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class EventPenaltiesTab extends AbstractPenaltiesTab<Event> {
-	public EventPenaltiesTab(DatabaseWindow win) {
+public class EventPenaltiesTab<O extends Frame & DatabaseWindow> extends AbstractPenaltiesTab<O, Event> {
+	public EventPenaltiesTab(O win) {
 		super(Event.class, win);
 		initialise();
 	}

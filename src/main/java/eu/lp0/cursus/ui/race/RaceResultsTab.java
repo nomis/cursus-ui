@@ -18,13 +18,14 @@
 package eu.lp0.cursus.ui.race;
 
 import java.awt.BorderLayout;
+import java.awt.Frame;
 
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.ui.common.AbstractResultsTab;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class RaceResultsTab extends AbstractResultsTab<Race> {
-	public RaceResultsTab(DatabaseWindow win) {
+public class RaceResultsTab<O extends Frame & DatabaseWindow> extends AbstractResultsTab<O, Race> {
+	public RaceResultsTab(O win) {
 		super(Race.class, win);
 		initialise();
 	}

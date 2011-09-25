@@ -17,12 +17,14 @@
  */
 package eu.lp0.cursus.ui.common;
 
+import java.awt.Frame;
+
 import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public abstract class AbstractResultsTab<T extends RaceEntity> extends AbstractDatabaseTab<T> {
-	public AbstractResultsTab(Class<T> clazz, DatabaseWindow win) {
+public abstract class AbstractResultsTab<O extends Frame & DatabaseWindow, T extends RaceEntity> extends AbstractDatabaseTab<O, T> {
+	public AbstractResultsTab(Class<T> clazz, O win) {
 		super(clazz, win, "tab.results"); //$NON-NLS-1$
 		initialise();
 	}

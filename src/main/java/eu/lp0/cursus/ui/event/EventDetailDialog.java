@@ -34,7 +34,12 @@ public class EventDetailDialog<O extends Frame & DatabaseWindow> extends CommonD
 	}
 
 	@Override
-	public void prePersist(Event event) {
+	protected void prePersist(Event event) {
 		event.setSeries(seriesDAO.get(event.getSeries()));
+	}
+
+	@Override
+	protected void postSave() {
+		win.refreshRaceList();
 	}
 }

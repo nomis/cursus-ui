@@ -49,14 +49,14 @@ public class TabbedPaneManager implements TreeSelectionListener {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final JTree tree;
 	private final JTabbedPane tabbedPane;
-	private final List<AbstractDatabaseTab<Series>> seriesTabs;
-	private final List<AbstractDatabaseTab<Event>> eventTabs;
-	private final List<AbstractDatabaseTab<Race>> raceTabs;
+	private final List<AbstractDatabaseTab<MainWindow, Series>> seriesTabs;
+	private final List<AbstractDatabaseTab<MainWindow, Event>> eventTabs;
+	private final List<AbstractDatabaseTab<MainWindow, Race>> raceTabs;
 	private final List<Component> ordering = new ArrayList<Component>();
-	private Map<Class<? extends RaceEntity>, AbstractDatabaseTab<? extends RaceEntity>> previousTabs = new HashMap<Class<? extends RaceEntity>, AbstractDatabaseTab<? extends RaceEntity>>();
+	private Map<Class<? extends RaceEntity>, AbstractDatabaseTab<MainWindow, ? extends RaceEntity>> previousTabs = new HashMap<Class<? extends RaceEntity>, AbstractDatabaseTab<MainWindow, ? extends RaceEntity>>();
 
-	public TabbedPaneManager(JTree tree, JTabbedPane tabbedPane, List<AbstractDatabaseTab<Series>> seriesTabs, List<AbstractDatabaseTab<Event>> eventTabs,
-			List<AbstractDatabaseTab<Race>> raceTabs) {
+	public TabbedPaneManager(JTree tree, JTabbedPane tabbedPane, List<AbstractDatabaseTab<MainWindow, Series>> seriesTabs,
+			List<AbstractDatabaseTab<MainWindow, Event>> eventTabs, List<AbstractDatabaseTab<MainWindow, Race>> raceTabs) {
 		this.tree = tree;
 		this.tabbedPane = tabbedPane;
 		this.seriesTabs = seriesTabs;
@@ -122,10 +122,11 @@ public class TabbedPaneManager implements TreeSelectionListener {
 
 		Class<? extends RaceEntity> clazz = (item != null ? item.getClass() : null);
 		@SuppressWarnings("unchecked")
-		AbstractDatabaseTab<? extends RaceEntity> selectedTab = (AbstractDatabaseTab<? extends RaceEntity>)tabbedPane.getSelectedComponent();
-		AbstractDatabaseTab<? extends RaceEntity> previousTab = previousTabs.get(clazz);
+		AbstractDatabaseTab<MainWindow, ? extends RaceEntity> selectedTab = (AbstractDatabaseTab<MainWindow, ? extends RaceEntity>)tabbedPane
+				.getSelectedComponent();
+		AbstractDatabaseTab<MainWindow, ? extends RaceEntity> previousTab = previousTabs.get(clazz);
 		@SuppressWarnings("unchecked")
-		Collection<AbstractDatabaseTab<? extends RaceEntity>> targetTabs = (Collection<AbstractDatabaseTab<? extends RaceEntity>>)getVisibleTabsFor(item);
+		Collection<AbstractDatabaseTab<MainWindow, ? extends RaceEntity>> targetTabs = (Collection<AbstractDatabaseTab<MainWindow, ? extends RaceEntity>>)getVisibleTabsFor(item);
 		Set<Component> currentTabs = new LinkedHashSet<Component>();
 
 		// Get the current tabs
@@ -175,9 +176,9 @@ public class TabbedPaneManager implements TreeSelectionListener {
 		}
 
 		// Add all the tabs that should be there
-		Iterator<AbstractDatabaseTab<? extends RaceEntity>> iter = targetTabs.iterator();
+		Iterator<AbstractDatabaseTab<MainWindow, ? extends RaceEntity>> iter = targetTabs.iterator();
 		for (int i = 0; iter.hasNext(); i++) {
-			AbstractDatabaseTab<? extends RaceEntity> tab = iter.next();
+			AbstractDatabaseTab<MainWindow, ? extends RaceEntity> tab = iter.next();
 			if (tab != previousTab) {
 				tab.addToTabbedPane(tabbedPane, i);
 			}

@@ -37,6 +37,7 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
+import eu.lp0.cursus.ui.component.DatabaseTabSync;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.event.EventPenaltiesTab;
@@ -70,19 +71,19 @@ public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 	private JScrollPane scrollPane;
 	private RaceTree<MainWindow> raceList;
 	private JTabbedPane tabbedPane;
-	private AbstractDatabaseTab<Series> serPilotsTab;
-	private AbstractDatabaseTab<Series> serClassesTab;
-	private AbstractDatabaseTab<Series> serPenaltiesTab;
-	private AbstractDatabaseTab<Series> serResultsTab;
-	private List<AbstractDatabaseTab<Series>> seriesTabs;
-	private AbstractDatabaseTab<Event> evtPenaltiesTab;
-	private AbstractDatabaseTab<Event> evtResultsTab;
-	private List<AbstractDatabaseTab<Event>> eventTabs;
-	private AbstractDatabaseTab<Race> racAttendeesTab;
-	private AbstractDatabaseTab<Race> racLapsTab;
-	private AbstractDatabaseTab<Race> racPenaltiesTab;
-	private AbstractDatabaseTab<Race> racResultsTab;
-	private List<AbstractDatabaseTab<Race>> raceTabs;
+	private AbstractDatabaseTab<MainWindow, Series> serPilotsTab;
+	private AbstractDatabaseTab<MainWindow, Series> serClassesTab;
+	private AbstractDatabaseTab<MainWindow, Series> serPenaltiesTab;
+	private AbstractDatabaseTab<MainWindow, Series> serResultsTab;
+	private List<AbstractDatabaseTab<MainWindow, Series>> seriesTabs;
+	private AbstractDatabaseTab<MainWindow, Event> evtPenaltiesTab;
+	private AbstractDatabaseTab<MainWindow, Event> evtResultsTab;
+	private List<AbstractDatabaseTab<MainWindow, Event>> eventTabs;
+	private AbstractDatabaseTab<MainWindow, Race> racAttendeesTab;
+	private AbstractDatabaseTab<MainWindow, Race> racLapsTab;
+	private AbstractDatabaseTab<MainWindow, Race> racPenaltiesTab;
+	private AbstractDatabaseTab<MainWindow, Race> racResultsTab;
+	private List<AbstractDatabaseTab<MainWindow, Race>> raceTabs;
 
 	public MainWindow(Main main) {
 		super();
@@ -149,25 +150,25 @@ public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 		}
 
 		{ // Series
-			serClassesTab = new SeriesClassesTab(this);
-			serPilotsTab = new SeriesPilotsTab(this);
-			serPenaltiesTab = new SeriesPenaltiesTab(this);
-			serResultsTab = new SeriesResultsTab(this);
+			serClassesTab = new SeriesClassesTab<MainWindow>(this);
+			serPilotsTab = new SeriesPilotsTab<MainWindow>(this);
+			serPenaltiesTab = new SeriesPenaltiesTab<MainWindow>(this);
+			serResultsTab = new SeriesResultsTab<MainWindow>(this);
 			seriesTabs = Arrays.asList(serPilotsTab, serClassesTab, serPenaltiesTab, serResultsTab);
 		}
 
 		{ // Event
-			evtPenaltiesTab = new EventPenaltiesTab(this);
-			evtResultsTab = new EventResultsTab(this);
+			evtPenaltiesTab = new EventPenaltiesTab<MainWindow>(this);
+			evtResultsTab = new EventResultsTab<MainWindow>(this);
 
 			eventTabs = Arrays.asList(evtPenaltiesTab, evtResultsTab);
 		}
 
 		{ // Race
-			racAttendeesTab = new RaceAttendeesTab(this);
-			racLapsTab = new RaceLapsTab(this);
-			racPenaltiesTab = new RacePenaltiesTab(this);
-			racResultsTab = new RaceResultsTab(this);
+			racAttendeesTab = new RaceAttendeesTab<MainWindow>(this);
+			racLapsTab = new RaceLapsTab<MainWindow>(this);
+			racPenaltiesTab = new RacePenaltiesTab<MainWindow>(this);
+			racResultsTab = new RaceResultsTab<MainWindow>(this);
 
 			raceTabs = Arrays.asList(racAttendeesTab, racLapsTab, racPenaltiesTab, racResultsTab);
 		}
@@ -219,6 +220,15 @@ public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 			@Override
 			public void run() {
 				raceList.databaseRefresh();
+			}
+		});
+	}
+
+	public void refreshTab(final DatabaseTabSync<?> tab) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				selMgr.tryRefreshTabLater(tab);
 			}
 		});
 	}

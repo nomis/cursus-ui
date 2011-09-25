@@ -26,4 +26,6 @@ public interface DatabaseWindow {
 	public RaceEntity getSelected();
 
 	public void refreshRaceList();
+
+	public void refreshTab(final DatabaseTabSync<?> tab);
 }

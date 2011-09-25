@@ -19,7 +19,7 @@ package eu.lp0.cursus.db.dao;
 
 import eu.lp0.cursus.db.data.Class;
 
-public class ClassDAO extends AbstractDAO<Class> {
+public class ClassDAO extends NamedEntityDAO<Class> {
 	public ClassDAO() {
 		super(Class.class);
 	}

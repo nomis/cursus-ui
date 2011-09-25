@@ -54,8 +54,8 @@ import eu.lp0.cursus.util.Messages;
 
 public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T extends AbstractEntity & NamedEntity> extends JDialog implements Displayable,
 		ActionListener {
-	private final Logger log = LoggerFactory.getLogger(getClass());
-	private final O win;
+	protected final Logger log = LoggerFactory.getLogger(getClass());
+	protected final O win;
 	private final String title;
 	private final NamedEntityDAO<T> dao;
 	private final T origItem;
@@ -170,7 +170,7 @@ public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T ext
 			win.getDatabase().endSession();
 		}
 
-		win.refreshRaceList();
+		postSave();
 		dispose();
 	}
 
@@ -179,5 +179,8 @@ public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T ext
 	}
 
 	protected void prePersist(T item) {
+	}
+
+	protected void postSave() {
 	}
 }

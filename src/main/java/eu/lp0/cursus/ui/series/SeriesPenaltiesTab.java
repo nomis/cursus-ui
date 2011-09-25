@@ -18,13 +18,14 @@
 package eu.lp0.cursus.ui.series;
 
 import java.awt.BorderLayout;
+import java.awt.Frame;
 
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.common.AbstractPenaltiesTab;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class SeriesPenaltiesTab extends AbstractPenaltiesTab<Series> {
-	public SeriesPenaltiesTab(DatabaseWindow win) {
+public class SeriesPenaltiesTab<O extends Frame & DatabaseWindow> extends AbstractPenaltiesTab<O, Series> {
+	public SeriesPenaltiesTab(O win) {
 		super(Series.class, win);
 		initialise();
 	}

@@ -102,7 +102,7 @@ public class Class extends AbstractEntity implements Comparable<Class>, NamedEnt
 
 	@Override
 	public String toString() {
-		return getName();
+		return getName().length() > 0 ? getName() : "[#" + getId() + "]"; //$NON-NLS-1$ //$NON-NLS-2$;
 	}
 
 	@Override

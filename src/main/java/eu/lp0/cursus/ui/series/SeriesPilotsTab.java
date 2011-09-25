@@ -18,6 +18,7 @@
 package eu.lp0.cursus.ui.series;
 
 import java.awt.BorderLayout;
+import java.awt.Frame;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,11 +27,11 @@ import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
+public class SeriesPilotsTab<O extends Frame & DatabaseWindow> extends AbstractDatabaseTab<O, Series> {
 	private JScrollPane scrollPane;
 	private JTable table;
 
-	public SeriesPilotsTab(DatabaseWindow win) {
+	public SeriesPilotsTab(O win) {
 		super(Series.class, win, "tab.pilots"); //$NON-NLS-1$
 		initialise();
 	}

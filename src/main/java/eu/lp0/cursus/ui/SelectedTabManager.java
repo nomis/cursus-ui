@@ -109,7 +109,7 @@ public class SelectedTabManager implements DatabaseSync, ContainerListener, Chan
 		return selected != null && tab.getType().isAssignableFrom(selected.getClass());
 	}
 
-	public <T extends RaceEntity> void databaseRefresh(DatabaseTabSync<T> tab, RaceEntity selected) {
+	private <T extends RaceEntity> void databaseRefresh(DatabaseTabSync<T> tab, RaceEntity selected) {
 		assert (Background.isExecutorThread());
 
 		if (isValidFor(tab, selected)) {
@@ -117,10 +117,29 @@ public class SelectedTabManager implements DatabaseSync, ContainerListener, Chan
 		}
 	}
 
-	public <T extends RaceEntity> void databaseClosed(DatabaseTabSync<T> tab) {
+	private <T extends RaceEntity> void databaseClosed(DatabaseTabSync<T> tab) {
 		assert (Background.isExecutorThread());
 
 		tab.tabClear();
+	}
+
+	public void tryRefreshTabLater(DatabaseTabSync<? extends RaceEntity> expectedTab) {
+		assert (SwingUtilities.isEventDispatchThread());
+
+		@SuppressWarnings("unchecked")
+		final DatabaseTabSync<? extends RaceEntity> tab = (DatabaseTabSync<? extends RaceEntity>)tabs.getSelectedComponent();
+
+		if (tab == expectedTab) {
+			final RaceEntity selected = win.getSelected();
+			if (isValidFor(tab, selected)) {
+				Background.execute(new Runnable() {
+					@Override
+					public void run() {
+						databaseRefresh(tab, selected);
+					}
+				});
+			}
+		}
 	}
 
 	@Override

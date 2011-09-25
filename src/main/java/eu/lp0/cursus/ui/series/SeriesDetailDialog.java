@@ -30,4 +30,9 @@ public class SeriesDetailDialog<O extends Frame & DatabaseWindow> extends Common
 	public SeriesDetailDialog(O win, String title, Series series) {
 		super(win, title, seriesDAO, series);
 	}
+
+	@Override
+	protected void postSave() {
+		win.refreshRaceList();
+	}
 }

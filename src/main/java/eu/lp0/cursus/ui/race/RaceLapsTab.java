@@ -18,6 +18,7 @@
 package eu.lp0.cursus.ui.race;
 
 import java.awt.BorderLayout;
+import java.awt.Frame;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,11 +27,11 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class RaceLapsTab extends AbstractDatabaseTab<Race> {
+public class RaceLapsTab<O extends Frame & DatabaseWindow> extends AbstractDatabaseTab<O, Race> {
 	private JScrollPane scrollPane;
 	private JTable table;
 
-	public RaceLapsTab(DatabaseWindow win) {
+	public RaceLapsTab(O win) {
 		super(Race.class, win, "tab.laps"); //$NON-NLS-1$
 		initialise();
 	}
