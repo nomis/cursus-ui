@@ -80,12 +80,20 @@ public abstract class HierarchicalTreeNode<P, C extends Comparable<C>, N extends
 					continue;
 				} else {
 					N child = constructChildNode(next);
+					boolean firstChild = (getChildCount() == 0);
 					model.insertNodeInto(child, this, i);
+					if (firstChild) {
+						tree.expandPath(path);
+					}
 					child.expandAll(tree, appendedTreePath(path, child));
 				}
 			} else {
+				boolean firstChild = (getChildCount() == 0);
 				N child = constructChildNode(next);
 				model.insertNodeInto(child, this, i);
+				if (firstChild) {
+					tree.expandPath(path);
+				}
 				child.expandAll(tree, appendedTreePath(path, child));
 			}
 
