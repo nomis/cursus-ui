@@ -1,0 +1,89 @@
+/*
+	cursus - Race series management program
+	Copyright 2011  Simon Arlott
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package eu.lp0.cursus.ui.component;
+
+import java.awt.Frame;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JPopupMenu;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+
+public abstract class AbstractTree<O extends Frame & DatabaseWindow, R extends TreeNode, T> extends JTree {
+	protected final O win;
+	protected final R root;
+
+	public AbstractTree(O win, R root) {
+		super();
+		this.win = win;
+		this.root = root;
+
+		setModel(new DefaultTreeModel(root));
+
+		setRootVisible(false);
+		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent me) {
+				ensureSelection(me);
+				if (me.isPopupTrigger()) {
+					showMenu(me);
+				}
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent me) {
+				ensureSelection(me);
+				if (me.isPopupTrigger()) {
+					showMenu(me);
+				}
+			}
+		});
+	}
+
+	protected abstract T userObjectFromPathComponent(Object component);
+
+	protected abstract JPopupMenu menuFromUserObject(T item);
+
+	private void ensureSelection(MouseEvent me) {
+		TreePath path = getPathForLocation(me.getX(), me.getY());
+
+		if (getSelectionPath() != path) {
+			if (path == null || me.isPopupTrigger()) {
+				setSelectionPath(path);
+			}
+		}
+	}
+
+	private void showMenu(MouseEvent me) {
+		TreePath path = getSelectionPath();
+		JPopupMenu menu = null;
+
+		if (path != null) {
+			menu = menuFromUserObject(userObjectFromPathComponent(path.getLastPathComponent()));
+		} else {
+			menu = menuFromUserObject(null);
+		}
+		menu.show(me.getComponent(), me.getX(), me.getY());
+	}
+}

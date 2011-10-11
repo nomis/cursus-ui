@@ -18,17 +18,12 @@
 package eu.lp0.cursus.ui.tree;
 
 import java.awt.Frame;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JPopupMenu;
-import javax.swing.JTree;
 import javax.swing.SwingUtilities;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.EventDAO;
@@ -38,6 +33,7 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.ui.component.AbstractTree;
 import eu.lp0.cursus.ui.component.DatabaseSync;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.menu.DatabasePopupMenu;
@@ -46,44 +42,21 @@ import eu.lp0.cursus.ui.menu.RacePopupMenu;
 import eu.lp0.cursus.ui.menu.SeriesPopupMenu;
 import eu.lp0.cursus.util.Background;
 
-public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements DatabaseSync {
-	private final O win;
-	private final DatabaseTreeNode root;
-
+public class RaceTree<O extends Frame & DatabaseWindow> extends AbstractTree<O, DatabaseTreeNode, RaceEntity> implements DatabaseSync {
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 	private static final EventDAO eventDAO = new EventDAO();
 	private static final RaceDAO raceDAO = new RaceDAO();
 
 	public RaceTree(O win) {
-		super();
-		this.win = win;
-
-		root = new DatabaseTreeNode();
-		setModel(new DefaultTreeModel(root));
-
-		setRootVisible(false);
-		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent me) {
-				ensureSelection(me);
-				if (me.isPopupTrigger()) {
-					showMenu(me);
-				}
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent me) {
-				ensureSelection(me);
-				if (me.isPopupTrigger()) {
-					showMenu(me);
-				}
-			}
-		});
+		super(win, new DatabaseTreeNode());
 	}
 
-	public static RaceEntity userObjectFromSelection(Object component) {
+	@Override
+	protected RaceEntity userObjectFromPathComponent(Object component) {
+		return raceEntityFromPathComponent(component);
+	}
+
+	public static RaceEntity raceEntityFromPathComponent(Object component) {
 		if (component instanceof SeriesTreeNode) {
 			return ((SeriesTreeNode)component).getUserObject();
 		} else if (component instanceof EventTreeNode) {
@@ -95,39 +68,19 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 		}
 	}
 
-	private JPopupMenu menuFromUserObject(RaceEntity item) {
+	@Override
+	protected JPopupMenu menuFromUserObject(RaceEntity item) {
 		if (item instanceof Series) {
 			return new SeriesPopupMenu<O>(win, (Series)item);
 		} else if (item instanceof Event) {
 			return new EventPopupMenu<O>(win, (Event)item);
 		} else if (item instanceof Race) {
 			return new RacePopupMenu<O>(win, (Race)item);
+		} else if (item == null) {
+			return new DatabasePopupMenu<O>(win);
 		} else {
 			return null;
 		}
-	}
-
-	private void ensureSelection(MouseEvent me) {
-		TreePath path = getPathForLocation(me.getX(), me.getY());
-
-		if (getSelectionPath() != path) {
-			if (path == null || me.isPopupTrigger()) {
-				setSelectionPath(path);
-			}
-		}
-	}
-
-	private void showMenu(MouseEvent me) {
-		TreePath path = getSelectionPath();
-		JPopupMenu menu = null;
-
-		if (path != null) {
-			menu = menuFromUserObject(userObjectFromSelection(path.getLastPathComponent()));
-		} else {
-			menu = new DatabasePopupMenu<O>(win);
-		}
-
-		menu.show(me.getComponent(), me.getX(), me.getY());
 	}
 
 	@Override
@@ -184,9 +137,9 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends JTree implements
 		});
 	}
 
-	private void updateModel(List<Series> seriesList) {
+	private void updateModel(List<Series> list) {
 		assert (SwingUtilities.isEventDispatchThread());
 
-		root.updateTree(this, new TreePath(root), seriesList);
+		root.updateTree(this, new TreePath(root), list);
 	}
 }
