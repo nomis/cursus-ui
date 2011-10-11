@@ -18,6 +18,9 @@
 package eu.lp0.cursus.ui.component;
 
 import java.awt.Frame;
+import java.awt.Point;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -41,6 +44,15 @@ public abstract class AbstractTree<O extends Frame & DatabaseWindow, R extends T
 
 		setRootVisible(false);
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+
+		addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent ke) {
+				if (ke.getKeyCode() == KeyEvent.VK_CONTEXT_MENU) {
+					showMenu(ke);
+				}
+			}
+		});
 
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -76,6 +88,19 @@ public abstract class AbstractTree<O extends Frame & DatabaseWindow, R extends T
 	}
 
 	private void showMenu(MouseEvent me) {
+		showMenu(me.getX(), me.getY());
+	}
+
+	private void showMenu(KeyEvent ke) {
+		Point mouse = getMousePosition();
+		if (mouse != null) {
+			showMenu((int)getMousePosition().getX(), (int)getMousePosition().getY());
+		} else {
+			showMenu(0, 0);
+		}
+	}
+
+	private void showMenu(int x, int y) {
 		TreePath path = getSelectionPath();
 		JPopupMenu menu = null;
 
@@ -84,6 +109,6 @@ public abstract class AbstractTree<O extends Frame & DatabaseWindow, R extends T
 		} else {
 			menu = menuFromUserObject(null);
 		}
-		menu.show(me.getComponent(), me.getX(), me.getY());
+		menu.show(this, x, y);
 	}
 }
