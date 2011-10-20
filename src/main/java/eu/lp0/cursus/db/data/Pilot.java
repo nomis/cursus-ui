@@ -41,6 +41,7 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import eu.lp0.cursus.ui.component.TableModelColumn;
 import eu.lp0.cursus.util.Constants;
 
 /**
@@ -82,6 +83,7 @@ public class Pilot extends AbstractEntity {
 	private String name;
 
 	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
+	@TableModelColumn(index = 1, name = "pilot.name")
 	public String getName() {
 		return name;
 	}
@@ -93,6 +95,7 @@ public class Pilot extends AbstractEntity {
 	private Gender gender;
 
 	@Enumerated(EnumType.STRING)
+	@TableModelColumn(index = 2, name = "pilot.gender")
 	public Gender getGender() {
 		return gender;
 	}
@@ -104,6 +107,7 @@ public class Pilot extends AbstractEntity {
 	private String country;
 
 	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
+	@TableModelColumn(index = 3, name = "pilot.country")
 	public String getCountry() {
 		return country;
 	}
@@ -119,6 +123,7 @@ public class Pilot extends AbstractEntity {
 	 */
 	@OneToOne(cascade = CascadeType.ALL, optional = true)
 	@JoinColumn(name = "race_no_id", nullable = true)
+	@TableModelColumn(index = 0, name = "pilot.race-number")
 	public RaceNumber getRaceNumber() {
 		return number;
 	}

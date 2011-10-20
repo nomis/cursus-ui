@@ -15,29 +15,19 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.db.data;
+package eu.lp0.cursus.ui.component;
 
-import eu.lp0.cursus.util.Messages;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public enum Gender {
-	M ("gender.male"), F ("gender.female"); //$NON-NLS-1$ //$NON-NLS-2$ 
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Inherited
+public @interface TableModelColumn {
+	public int index();
 
-	private final String key;
-
-	private Gender(String key) {
-		this.key = key;
-	}
-
-	public String toLongString() {
-		return Messages.getString(key + ".long"); //$NON-NLS-1$
-	}
-
-	public String toShortString() {
-		return Messages.getString(key + ".short"); //$NON-NLS-1$
-	}
-
-	@Override
-	public String toString() {
-		return toLongString();
-	}
+	public String name();
 }

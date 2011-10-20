@@ -15,29 +15,12 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.db.data;
+package eu.lp0.cursus.db.dao;
 
-import eu.lp0.cursus.util.Messages;
+import eu.lp0.cursus.db.data.Pilot;
 
-public enum Gender {
-	M ("gender.male"), F ("gender.female"); //$NON-NLS-1$ //$NON-NLS-2$ 
-
-	private final String key;
-
-	private Gender(String key) {
-		this.key = key;
-	}
-
-	public String toLongString() {
-		return Messages.getString(key + ".long"); //$NON-NLS-1$
-	}
-
-	public String toShortString() {
-		return Messages.getString(key + ".short"); //$NON-NLS-1$
-	}
-
-	@Override
-	public String toString() {
-		return toLongString();
+public class PilotDAO extends AbstractDAO<Pilot> {
+	public PilotDAO() {
+		super(Pilot.class);
 	}
 }
