@@ -72,7 +72,7 @@ public class Series extends AbstractEntity implements Comparable<Series>, RaceEn
 
 	private List<Event> events = new ArrayList<Event>();
 
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "series")
+	@OneToMany(cascade = { CascadeType.REMOVE, CascadeType.DETACH }, mappedBy = "series")
 	@OrderColumn(name = "series_order", nullable = false)
 	public List<Event> getEvents() {
 		while (events.remove(null)) {
@@ -88,7 +88,7 @@ public class Series extends AbstractEntity implements Comparable<Series>, RaceEn
 
 	private Set<Pilot> pilots = new HashSet<Pilot>();
 
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "series")
+	@OneToMany(cascade = { CascadeType.REMOVE, CascadeType.DETACH }, mappedBy = "series")
 	public Set<Pilot> getPilots() {
 		return pilots;
 	}
@@ -99,7 +99,7 @@ public class Series extends AbstractEntity implements Comparable<Series>, RaceEn
 
 	private Set<RaceNumber> raceNumbers = new HashSet<RaceNumber>();
 
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "series")
+	@OneToMany(cascade = { CascadeType.REMOVE, CascadeType.DETACH }, mappedBy = "series")
 	public Set<RaceNumber> getRaceNumbers() {
 		return raceNumbers;
 	}
@@ -110,7 +110,7 @@ public class Series extends AbstractEntity implements Comparable<Series>, RaceEn
 
 	private Set<Class> classes = new HashSet<Class>();
 
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "series")
+	@OneToMany(cascade = { CascadeType.REMOVE, CascadeType.DETACH }, mappedBy = "series")
 	public Set<Class> getClasses() {
 		return classes;
 	}

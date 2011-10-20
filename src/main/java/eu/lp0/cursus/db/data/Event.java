@@ -106,7 +106,7 @@ public class Event extends AbstractEntity implements Comparable<Event>, RaceEnti
 
 	private List<Race> races = new ArrayList<Race>();
 
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "event")
+	@OneToMany(cascade = { CascadeType.REMOVE, CascadeType.DETACH }, mappedBy = "event")
 	@OrderColumn(name = "event_order", nullable = false)
 	public List<Race> getRaces() {
 		while (races.remove(null)) {
@@ -122,7 +122,7 @@ public class Event extends AbstractEntity implements Comparable<Event>, RaceEnti
 
 	private Map<Pilot, PilotAtEvent> penalties = new HashMap<Pilot, PilotAtEvent>();
 
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "event", orphanRemoval = true)
+	@OneToMany(cascade = { CascadeType.REMOVE, CascadeType.DETACH }, mappedBy = "event", orphanRemoval = true)
 	@MapKey
 	@Column(nullable = false)
 	public Map<Pilot, PilotAtEvent> getPenalties() {

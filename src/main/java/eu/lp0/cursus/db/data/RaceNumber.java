@@ -17,6 +17,9 @@
  */
 package eu.lp0.cursus.db.data;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -56,11 +59,11 @@ public class RaceNumber extends AbstractEntity implements Comparable<RaceNumber>
 
 	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getOrganisation() {
-		return organisation;
+		return organisation.replaceAll("[0-9]", ""); //$NON-NLS-1$ //$NON-NLS-2$;
 	}
 
 	public void setOrganisation(String organisation) {
-		this.organisation = organisation;
+		this.organisation = organisation.replaceAll("[0-9]", ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Column(nullable = false)
@@ -97,5 +100,23 @@ public class RaceNumber extends AbstractEntity implements Comparable<RaceNumber>
 	@Override
 	public String toString() {
 		return String.format("%s%02d", getOrganisation(), getNumber()); //$NON-NLS-1$
+	}
+
+	public static RaceNumber valueOfFor(String value, Pilot pilot) {
+		Matcher matcher = Pattern.compile("^([^0-9]+)([0-9]+)$").matcher(value); //$NON-NLS-1$
+		if (matcher.matches()) {
+			String organisation = matcher.group(1);
+			int number = Integer.valueOf(matcher.group(2));
+
+			RaceNumber raceNumber = new RaceNumber(pilot, organisation, number);
+			for (RaceNumber pilotRaceNumber : pilot.getRaceNumbers()) {
+				if (pilotRaceNumber.compareTo(raceNumber) == 0) {
+					raceNumber = pilotRaceNumber;
+				}
+			}
+			return raceNumber;
+		} else {
+			throw new IllegalArgumentException("Unable to parse race number: " + value); //$NON-NLS-1$
+		}
 	}
 }
