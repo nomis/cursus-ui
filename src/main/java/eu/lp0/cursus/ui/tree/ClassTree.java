@@ -117,6 +117,7 @@ public class ClassTree<O extends Frame & DatabaseWindow> extends AbstractTree<O,
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				currentSeries = null;
 				updateModel(null);
 			}
 		});
