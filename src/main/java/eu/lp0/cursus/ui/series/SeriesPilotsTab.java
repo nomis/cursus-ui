@@ -28,7 +28,6 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
 import eu.lp0.cursus.db.DatabaseSession;
-import eu.lp0.cursus.db.dao.PilotDAO;
 import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Series;
@@ -45,7 +44,6 @@ public class SeriesPilotsTab<O extends Frame & DatabaseWindow> extends AbstractD
 	private Series currentSeries = null;
 
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
-	private static final PilotDAO pilotDAO = new PilotDAO();
 
 	public SeriesPilotsTab(O win) {
 		super(Series.class, win, "tab.pilots"); //$NON-NLS-1$
@@ -61,7 +59,7 @@ public class SeriesPilotsTab<O extends Frame & DatabaseWindow> extends AbstractD
 		table = new JTable();
 		scrollPane.setViewportView(table);
 
-		model = new DatabaseTableModel<Pilot, O>(Pilot.class, win, new PilotDAO());
+		model = new PilotTableModel<O>(win);
 		model.setupEditableModel(table);
 	}
 
@@ -80,9 +78,6 @@ public class SeriesPilotsTab<O extends Frame & DatabaseWindow> extends AbstractD
 			newPilots = new ArrayList<Pilot>(newSeries.getPilots());
 			DatabaseSession.commit();
 
-			for (Pilot pilot : newPilots) {
-				pilotDAO.detach(pilot);
-			}
 			seriesDAO.detach(newSeries);
 		} finally {
 			win.getDatabase().endSession();

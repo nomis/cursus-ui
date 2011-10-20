@@ -51,7 +51,7 @@ import eu.lp0.cursus.util.Messages;
 
 public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & DatabaseWindow> extends AbstractTableModel {
 	private final Logger log = LoggerFactory.getLogger(getClass());
-	private O win;
+	protected O win;
 	private AbstractDAO<T> dao;
 	private List<Method> columnGetters = new ArrayList<Method>();
 	private List<Method> columnSetters = new ArrayList<Method>();
@@ -102,6 +102,10 @@ public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & Data
 		return columnGetters.size();
 	}
 
+	public T getValueAt(int rowIndex) {
+		return rows.get(rowIndex);
+	}
+
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		try {
@@ -127,13 +131,6 @@ public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & Data
 		Object oldValue = getValueAt(rowIndex, columnIndex);
 		if (oldValue == newValue || oldValue != null && oldValue.equals(newValue)) {
 			return true;
-		}
-
-		try {
-			columnSetters.get(columnIndex).invoke(rows.get(rowIndex), newValue);
-		} catch (Exception e) {
-			log.error(String.format("Unable to set row=%d, column=%d, oldValue=%s, newValue=%s", rowIndex, columnIndex, oldValue, newValue), e); //$NON-NLS-1$
-			return false;
 		}
 
 		boolean revert = false;
@@ -170,6 +167,12 @@ public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & Data
 			win.getDatabase().endSession();
 		}
 
+		try {
+			columnSetters.get(columnIndex).invoke(rows.get(rowIndex), newValue);
+		} catch (Exception e) {
+			log.error(String.format("Unable to set row=%d, column=%d, oldValue=%s, newValue=%s", rowIndex, columnIndex, oldValue, newValue), e); //$NON-NLS-1$
+			return false;
+		}
 		fireTableCellUpdated(rowIndex, columnIndex);
 		return true;
 	}
@@ -214,31 +217,31 @@ public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & Data
 	public TableCellEditor getCellEditor(int modelIndex) {
 		Class<?> type = getColumnClass(modelIndex);
 		if (type.isEnum()) {
-			return new ModelTableCellEditor(new JComboBox(type.getEnumConstants()));
+			return new DatabaseTableCellEditor(new JComboBox(type.getEnumConstants()));
 		} else if (type == String.class) {
-			return new ModelTableCellEditor(new JTextField());
+			return new DatabaseTableCellEditor(new JTextField());
 		} else if (type == boolean.class) {
-			return new ModelTableCellEditor(new JCheckBox());
+			return new DatabaseTableCellEditor(new JCheckBox());
 		} else {
 			return null;
 		}
 	}
 
-	public class ModelTableCellEditor extends DefaultCellEditor {
-		private int rowIndex = -1;
-		private int columnIndex = -1;
+	public class DatabaseTableCellEditor extends DefaultCellEditor {
+		protected Integer rowIndex = null;
+		protected Integer columnIndex = null;
 
-		public ModelTableCellEditor(JCheckBox checkBox) {
+		public DatabaseTableCellEditor(JCheckBox checkBox) {
 			super(checkBox);
 			checkBox.setBorder(null);
 		}
 
-		public ModelTableCellEditor(JComboBox comboBox) {
+		public DatabaseTableCellEditor(JComboBox comboBox) {
 			super(comboBox);
 			comboBox.setBorder(null);
 		}
 
-		public ModelTableCellEditor(JTextField textField) {
+		public DatabaseTableCellEditor(JTextField textField) {
 			super(textField);
 			textField.setBorder(null);
 		}
