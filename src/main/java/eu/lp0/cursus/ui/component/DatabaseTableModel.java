@@ -21,11 +21,14 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.Vector;
 
+import javax.persistence.Column;
 import javax.persistence.PersistenceException;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
@@ -217,7 +220,13 @@ public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & Data
 	public TableCellEditor getCellEditor(int modelIndex) {
 		Class<?> type = getColumnClass(modelIndex);
 		if (type.isEnum()) {
-			return new DatabaseTableCellEditor(new JComboBox(type.getEnumConstants()));
+			Column col = columnGetters.get(modelIndex).getAnnotation(Column.class);
+			Vector<Object> values = new Vector<Object>();
+			if (col == null || col.nullable() == true) {
+				values.add(""); //$NON-NLS-1$
+			}
+			values.addAll(Arrays.asList((Object[])type.getEnumConstants()));
+			return new DatabaseTableCellEditor(new JComboBox(values));
 		} else if (type == String.class) {
 			return new DatabaseTableCellEditor(new JTextField());
 		} else if (type == boolean.class) {
@@ -255,7 +264,12 @@ public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & Data
 
 		@Override
 		public boolean stopCellEditing() {
-			boolean ok = DatabaseTableModel.this.setEditedValueAt(rowIndex, columnIndex, getCellEditorValue());
+			Object value = getCellEditorValue();
+			if (value != null && value.equals("") && DatabaseTableModel.this.getColumnClass(columnIndex).isEnum()) { //$NON-NLS-1$
+				value = null;
+			}
+
+			boolean ok = DatabaseTableModel.this.setEditedValueAt(rowIndex, columnIndex, value);
 			if (ok) {
 				cancelCellEditing();
 			}
