@@ -21,7 +21,6 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.SortedMap;
@@ -55,16 +54,11 @@ public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & Data
 	private AbstractDAO<T> dao;
 	private List<Method> columnGetters = new ArrayList<Method>();
 	private List<Method> columnSetters = new ArrayList<Method>();
-	private List<T> rows = new ArrayList<T>();
+	private ArrayList<T> rows = new ArrayList<T>();
 
 	public DatabaseTableModel(Class<T> clazz, O win, AbstractDAO<T> dao) {
-		this(clazz, win, dao, Collections.<T> emptyList());
-	}
-
-	public DatabaseTableModel(Class<T> clazz, O win, AbstractDAO<T> dao, List<T> data) {
 		this.win = win;
 		this.dao = dao;
-		this.rows.addAll(data);
 
 		SortedMap<Integer, Method> getters = new TreeMap<Integer, Method>();
 		SortedMap<Integer, Method> setters = new TreeMap<Integer, Method>();
@@ -199,9 +193,7 @@ public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & Data
 			fireTableRowsInserted(idxNew, idxNew);
 		}
 
-		if (rows instanceof ArrayList) {
-			((ArrayList<T>)rows).trimToSize();
-		}
+		rows.trimToSize();
 	}
 
 	public void setupEditableModel(JTable table) {
