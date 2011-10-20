@@ -34,6 +34,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -213,31 +214,31 @@ public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & Data
 	public TableCellEditor getCellEditor(int modelIndex) {
 		Class<?> type = getColumnClass(modelIndex);
 		if (type.isEnum()) {
-			return new TableCellEditor(new JComboBox(type.getEnumConstants()));
+			return new ModelTableCellEditor(new JComboBox(type.getEnumConstants()));
 		} else if (type == String.class) {
-			return new TableCellEditor(new JTextField());
+			return new ModelTableCellEditor(new JTextField());
 		} else if (type == boolean.class) {
-			return new TableCellEditor(new JCheckBox());
+			return new ModelTableCellEditor(new JCheckBox());
 		} else {
 			return null;
 		}
 	}
 
-	public class TableCellEditor extends DefaultCellEditor {
+	public class ModelTableCellEditor extends DefaultCellEditor {
 		private int rowIndex = -1;
 		private int columnIndex = -1;
 
-		public TableCellEditor(JCheckBox checkBox) {
+		public ModelTableCellEditor(JCheckBox checkBox) {
 			super(checkBox);
 			checkBox.setBorder(null);
 		}
 
-		public TableCellEditor(JComboBox comboBox) {
+		public ModelTableCellEditor(JComboBox comboBox) {
 			super(comboBox);
 			comboBox.setBorder(null);
 		}
 
-		public TableCellEditor(JTextField textField) {
+		public ModelTableCellEditor(JTextField textField) {
 			super(textField);
 			textField.setBorder(null);
 		}
