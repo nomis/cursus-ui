@@ -106,6 +106,14 @@ public class WindowAutoPrefs {
 		int height = pref.getInt(prefHeight, 0);
 
 		if (width > 0 && height > 0) {
+			Dimension min = window.getMinimumSize();
+			if (width < min.width) {
+				width = min.width;
+			}
+			if (height < min.height) {
+				height = min.height;
+			}
+
 			window.setSize(width, height);
 			if (log.isTraceEnabled()) {
 				log.trace("Loaded size preference " + width + "x" + height); //$NON-NLS-1$ //$NON-NLS-2$
