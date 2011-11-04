@@ -19,15 +19,33 @@ package eu.lp0.cursus.db.dao;
 
 import java.util.Arrays;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import eu.lp0.cursus.db.data.Event;
+import eu.lp0.cursus.db.data.Series;
 
 public class EventDAO extends NamedEntityDAO<Event> {
 	public EventDAO() {
 		super(Event.class);
+	}
+
+	public Event find(Series series, String name) {
+		EntityManager em = getEntityManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+
+		CriteriaQuery<Event> q = cb.createQuery(Event.class);
+		Root<Event> s = q.from(Event.class);
+		q.select(s);
+		q.where(cb.equal(s.get("series"), series)); //$NON-NLS-1$
+		q.where(cb.equal(s.get("name"), name)); //$NON-NLS-1$
+
+		TypedQuery<Event> tq = em.createQuery(q);
+		return tq.getSingleResult();
 	}
 
 	@Override

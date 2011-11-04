@@ -137,7 +137,7 @@ public class Pilot extends AbstractEntity {
 	 */
 	private Set<RaceNumber> numbers = new HashSet<RaceNumber>();
 
-	@OneToMany(cascade = { CascadeType.REMOVE, CascadeType.DETACH }, mappedBy = "pilot", orphanRemoval = true)
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "pilot", orphanRemoval = true)
 	public Set<RaceNumber> getRaceNumbers() {
 		return numbers;
 	}
@@ -159,7 +159,7 @@ public class Pilot extends AbstractEntity {
 
 	private Map<Event, PilotAtEvent> events = new HashMap<Event, PilotAtEvent>();
 
-	@OneToMany(cascade = { CascadeType.REMOVE, CascadeType.DETACH }, mappedBy = "pilot", orphanRemoval = true)
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "event", orphanRemoval = true)
 	@MapKey
 	@Column(nullable = false)
 	public Map<Event, PilotAtEvent> getEvents() {
@@ -168,6 +168,19 @@ public class Pilot extends AbstractEntity {
 
 	public void setEvents(Map<Event, PilotAtEvent> events) {
 		this.events = events;
+	}
+
+	private Map<Race, RaceAttendee> races = new HashMap<Race, RaceAttendee>();
+
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "pilot", orphanRemoval = true)
+	@MapKey
+	@Column(nullable = false)
+	public Map<Race, RaceAttendee> getRaces() {
+		return races;
+	}
+
+	public void setRaces(Map<Race, RaceAttendee> races) {
+		this.races = races;
 	}
 
 	private List<Penalty> seriesPenalties = new ArrayList<Penalty>();
