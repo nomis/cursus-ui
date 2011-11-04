@@ -20,9 +20,9 @@ package eu.lp0.cursus.ui.menu;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 
 import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Event;
@@ -38,33 +38,40 @@ public class SeriesPopupMenu<O extends Frame & DatabaseWindow> extends AbstractN
 	private JMenuItem mnuNewEvent;
 	private JMenuItem mnuEditSeries;
 	private JMenuItem mnuDeleteSeries;
+	private JSeparator mnuSeparator1;
+	private JMenuItem mnuNewSeries;
 
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 
 	private enum Commands {
-		NEW_EVENT, EDIT_SERIES, DELETE_SERIES;
+		NEW_SERIES, NEW_EVENT, EDIT_SERIES, DELETE_SERIES;
 	}
 
 	public SeriesPopupMenu(O owner, Series series) {
 		super(owner, series, seriesDAO);
 
 		mnuNewEvent = new JMenuItem(Messages.getString("menu.event.new")); //$NON-NLS-1$
-		mnuNewEvent.setMnemonic(KeyEvent.VK_INSERT);
 		mnuNewEvent.setActionCommand(Commands.NEW_EVENT.toString());
 		mnuNewEvent.addActionListener(this);
 		add(mnuNewEvent);
 
 		mnuEditSeries = new JMenuItem(Messages.getString("menu.series.edit")); //$NON-NLS-1$
-		mnuEditSeries.setMnemonic(KeyEvent.VK_F2);
 		mnuEditSeries.setActionCommand(Commands.EDIT_SERIES.toString());
 		mnuEditSeries.addActionListener(this);
 		add(mnuEditSeries);
 
 		mnuDeleteSeries = new JMenuItem(Messages.getString("menu.series.delete")); //$NON-NLS-1$
-		mnuDeleteSeries.setMnemonic(KeyEvent.VK_DELETE);
 		mnuDeleteSeries.setActionCommand(Commands.DELETE_SERIES.toString());
 		mnuDeleteSeries.addActionListener(this);
 		add(mnuDeleteSeries);
+
+		mnuSeparator1 = new JSeparator();
+		add(mnuSeparator1);
+
+		mnuNewSeries = new JMenuItem(Messages.getString("menu.series.new")); //$NON-NLS-1$
+		mnuNewSeries.setActionCommand(Commands.NEW_SERIES.toString());
+		mnuNewSeries.addActionListener(this);
+		add(mnuNewSeries);
 	}
 
 	@Override
@@ -80,6 +87,9 @@ public class SeriesPopupMenu<O extends Frame & DatabaseWindow> extends AbstractN
 			break;
 		case DELETE_SERIES:
 			confirmDelete("menu.series.delete"); //$NON-NLS-1$
+			break;
+		case NEW_SERIES:
+			win = new SeriesDetailDialog<O>(owner, Messages.getString("menu.series.new"), new Series()); //$NON-NLS-1$
 			break;
 		}
 

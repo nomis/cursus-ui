@@ -20,9 +20,9 @@ package eu.lp0.cursus.ui.menu;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 
 import eu.lp0.cursus.db.dao.ClassDAO;
 import eu.lp0.cursus.db.data.Class;
@@ -36,9 +36,10 @@ import eu.lp0.cursus.util.Messages;
 public class ClassPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNamedEntityPopupMenu<O, Class> implements ActionListener {
 	private final SeriesClassesTab<O> tab;
 
-	private JMenuItem mnuNewClass;
 	private JMenuItem mnuEditClass;
 	private JMenuItem mnuDeleteClass;
+	private JSeparator mnuSeparator1;
+	private JMenuItem mnuNewClass;
 
 	private static final ClassDAO classDAO = new ClassDAO();
 
@@ -50,23 +51,23 @@ public class ClassPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 		super(owner, clazz, classDAO);
 		this.tab = tab;
 
-		mnuNewClass = new JMenuItem(Messages.getString("menu.class.new")); //$NON-NLS-1$
-		mnuNewClass.setMnemonic(KeyEvent.VK_INSERT);
-		mnuNewClass.setActionCommand(Commands.NEW_CLASS.toString());
-		mnuNewClass.addActionListener(this);
-		add(mnuNewClass);
-
 		mnuEditClass = new JMenuItem(Messages.getString("menu.class.edit")); //$NON-NLS-1$
-		mnuEditClass.setMnemonic(KeyEvent.VK_F2);
 		mnuEditClass.setActionCommand(Commands.EDIT_CLASS.toString());
 		mnuEditClass.addActionListener(this);
 		add(mnuEditClass);
 
 		mnuDeleteClass = new JMenuItem(Messages.getString("menu.class.delete")); //$NON-NLS-1$
-		mnuDeleteClass.setMnemonic(KeyEvent.VK_DELETE);
 		mnuDeleteClass.setActionCommand(Commands.DELETE_CLASS.toString());
 		mnuDeleteClass.addActionListener(this);
 		add(mnuDeleteClass);
+
+		mnuSeparator1 = new JSeparator();
+		add(mnuSeparator1);
+
+		mnuNewClass = new JMenuItem(Messages.getString("menu.class.new")); //$NON-NLS-1$
+		mnuNewClass.setActionCommand(Commands.NEW_CLASS.toString());
+		mnuNewClass.addActionListener(this);
+		add(mnuNewClass);
 	}
 
 	@Override
@@ -74,14 +75,14 @@ public class ClassPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 		Displayable win = null;
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
-		case NEW_CLASS:
-			win = new ClassDetailDialog<O>(owner, tab, Messages.getString("menu.class.new"), new Class(item.getSeries())); //$NON-NLS-1$
-			break;
 		case EDIT_CLASS:
 			win = new ClassDetailDialog<O>(owner, tab, Messages.getString("menu.class.edit") + Constants.EN_DASH + item.getName(), item); //$NON-NLS-1$
 			break;
 		case DELETE_CLASS:
 			confirmDelete("menu.class.delete"); //$NON-NLS-1$
+			break;
+		case NEW_CLASS:
+			win = new ClassDetailDialog<O>(owner, tab, Messages.getString("menu.class.new"), new Class(item.getSeries())); //$NON-NLS-1$
 			break;
 		}
 

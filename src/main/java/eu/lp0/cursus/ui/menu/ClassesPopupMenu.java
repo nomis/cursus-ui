@@ -20,7 +20,6 @@ package eu.lp0.cursus.ui.menu;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -50,7 +49,6 @@ public class ClassesPopupMenu<O extends Frame & DatabaseWindow> extends JPopupMe
 		this.series = series;
 
 		mnuNewClass = new JMenuItem(Messages.getString("menu.class.new")); //$NON-NLS-1$
-		mnuNewClass.setMnemonic(KeyEvent.VK_INSERT);
 		mnuNewClass.setActionCommand(Commands.NEW_CLASS.toString());
 		mnuNewClass.addActionListener(this);
 		add(mnuNewClass);

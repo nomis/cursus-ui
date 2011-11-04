@@ -20,9 +20,9 @@ package eu.lp0.cursus.ui.menu;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 
 import eu.lp0.cursus.db.dao.RaceDAO;
 import eu.lp0.cursus.db.data.Race;
@@ -35,27 +35,35 @@ import eu.lp0.cursus.util.Messages;
 public class RacePopupMenu<O extends Frame & DatabaseWindow> extends AbstractNamedEntityPopupMenu<O, Race> implements ActionListener {
 	private JMenuItem mnuEditRace;
 	private JMenuItem mnuDeleteRace;
+	private JSeparator mnuSeparator1;
+	private JMenuItem mnuNewRace;
 
 	private static final RaceDAO raceDAO = new RaceDAO();
 
 	private enum Commands {
-		EDIT_RACE, DELETE_RACE;
+		EDIT_RACE, DELETE_RACE, NEW_RACE;
 	}
 
 	public RacePopupMenu(O owner, Race race) {
 		super(owner, race, raceDAO);
 
 		mnuEditRace = new JMenuItem(Messages.getString("menu.race.edit")); //$NON-NLS-1$
-		mnuEditRace.setMnemonic(KeyEvent.VK_F2);
 		mnuEditRace.setActionCommand(Commands.EDIT_RACE.toString());
 		mnuEditRace.addActionListener(this);
 		add(mnuEditRace);
 
 		mnuDeleteRace = new JMenuItem(Messages.getString("menu.race.delete")); //$NON-NLS-1$
-		mnuDeleteRace.setMnemonic(KeyEvent.VK_DELETE);
 		mnuDeleteRace.setActionCommand(Commands.DELETE_RACE.toString());
 		mnuDeleteRace.addActionListener(this);
 		add(mnuDeleteRace);
+
+		mnuSeparator1 = new JSeparator();
+		add(mnuSeparator1);
+
+		mnuNewRace = new JMenuItem(Messages.getString("menu.race.new")); //$NON-NLS-1$
+		mnuNewRace.setActionCommand(Commands.NEW_RACE.toString());
+		mnuNewRace.addActionListener(this);
+		add(mnuNewRace);
 	}
 
 	@Override
@@ -68,6 +76,9 @@ public class RacePopupMenu<O extends Frame & DatabaseWindow> extends AbstractNam
 			break;
 		case DELETE_RACE:
 			confirmDelete("menu.race.delete"); //$NON-NLS-1$
+			break;
+		case NEW_RACE:
+			win = new RaceDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(item.getEvent())); //$NON-NLS-1$
 			break;
 		}
 

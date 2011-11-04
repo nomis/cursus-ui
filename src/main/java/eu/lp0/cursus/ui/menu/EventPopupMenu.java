@@ -20,9 +20,9 @@ package eu.lp0.cursus.ui.menu;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 
 import eu.lp0.cursus.db.dao.EventDAO;
 import eu.lp0.cursus.db.data.Event;
@@ -38,33 +38,40 @@ public class EventPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 	private JMenuItem mnuNewRace;
 	private JMenuItem mnuEditEvent;
 	private JMenuItem mnuDeleteEvent;
+	private JSeparator mnuSeparator1;
+	private JMenuItem mnuNewEvent;
 
 	private static final EventDAO eventDAO = new EventDAO();
 
 	private enum Commands {
-		NEW_RACE, EDIT_EVENT, DELETE_EVENT;
+		NEW_RACE, EDIT_EVENT, DELETE_EVENT, NEW_EVENT;
 	}
 
 	public EventPopupMenu(O owner, Event event) {
 		super(owner, event, eventDAO);
 
 		mnuNewRace = new JMenuItem(Messages.getString("menu.race.new")); //$NON-NLS-1$
-		mnuNewRace.setMnemonic(KeyEvent.VK_INSERT);
 		mnuNewRace.setActionCommand(Commands.NEW_RACE.toString());
 		mnuNewRace.addActionListener(this);
 		add(mnuNewRace);
 
 		mnuEditEvent = new JMenuItem(Messages.getString("menu.event.edit")); //$NON-NLS-1$
-		mnuEditEvent.setMnemonic(KeyEvent.VK_F2);
 		mnuEditEvent.setActionCommand(Commands.EDIT_EVENT.toString());
 		mnuEditEvent.addActionListener(this);
 		add(mnuEditEvent);
 
 		mnuDeleteEvent = new JMenuItem(Messages.getString("menu.event.delete")); //$NON-NLS-1$
-		mnuDeleteEvent.setMnemonic(KeyEvent.VK_DELETE);
 		mnuDeleteEvent.setActionCommand(Commands.DELETE_EVENT.toString());
 		mnuDeleteEvent.addActionListener(this);
 		add(mnuDeleteEvent);
+
+		mnuSeparator1 = new JSeparator();
+		add(mnuSeparator1);
+
+		mnuNewEvent = new JMenuItem(Messages.getString("menu.event.new")); //$NON-NLS-1$
+		mnuNewEvent.setActionCommand(Commands.NEW_EVENT.toString());
+		mnuNewEvent.addActionListener(this);
+		add(mnuNewEvent);
 	}
 
 	@Override
@@ -80,6 +87,9 @@ public class EventPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 			break;
 		case DELETE_EVENT:
 			confirmDelete("menu.event.delete"); //$NON-NLS-1$
+			break;
+		case NEW_EVENT:
+			win = new EventDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(item.getSeries())); //$NON-NLS-1$
 			break;
 		}
 
