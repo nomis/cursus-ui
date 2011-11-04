@@ -24,6 +24,8 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OrderColumn;
@@ -116,6 +118,7 @@ public class RaceAttendee extends AbstractEntity {
 	private Type type;
 
 	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
 	public Type getType() {
 		return type;
 	}
