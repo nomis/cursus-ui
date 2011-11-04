@@ -21,6 +21,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spka.cursus.scoring.Scoring2011;
 
 import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.DatabaseSession;
@@ -33,6 +34,7 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.scoring.ScorerFactory;
 
 public abstract class AbstractSeries2011 {
 	protected final Logger log = LoggerFactory.getLogger(getClass());
@@ -43,6 +45,8 @@ public abstract class AbstractSeries2011 {
 	protected SeriesDAO seriesDAO = new SeriesDAO();
 	protected EventDAO eventDAO = new EventDAO();
 	protected RaceDAO raceDAO = new RaceDAO();
+
+	protected Scoring2011 scorer = (Scoring2011)ScorerFactory.getScorer(Scoring2011.UUID);
 
 	protected Database db;
 	protected Pilot sco018;
