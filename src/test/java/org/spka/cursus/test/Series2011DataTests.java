@@ -81,7 +81,7 @@ public class Series2011DataTests extends AbstractSeries2011 {
 			Race race1 = raceDAO.find(event1, RACE1_NAME);
 
 			Assert.assertEquals(22, race1.getAttendees().size());
-			for (Map.Entry<Pilot, RaceAttendee> entry : race1.getAttendees().entrySet()) {
+			for (Map.Entry<?, ?> entry : race1.getAttendees().entrySet()) {
 				Assert.assertEquals(Pilot.class, entry.getKey().getClass());
 				Assert.assertEquals(RaceAttendee.class, entry.getValue().getClass());
 			}
