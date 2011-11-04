@@ -69,6 +69,9 @@ public abstract class AbstractEntity implements Cloneable {
 
 	@Override
 	public int hashCode() {
+		if (isTransient()) {
+			return super.hashCode();
+		}
 		return (int)(id ^ (id >>> 32));
 	}
 
