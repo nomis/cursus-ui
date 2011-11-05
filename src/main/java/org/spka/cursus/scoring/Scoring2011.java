@@ -17,13 +17,17 @@
  */
 package org.spka.cursus.scoring;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.scoring.EventScore;
+import eu.lp0.cursus.scoring.RaceScore;
 import eu.lp0.cursus.scoring.Scorer;
 import eu.lp0.cursus.scoring.ScoringSystem;
 
@@ -51,5 +55,17 @@ public class Scoring2011 implements Scorer {
 			}
 		}
 		return pilots.size();
+	}
+
+	public List<RaceScore> calculateRaceScores(Race race) {
+		List<RaceScore> pilotScores = new ArrayList<RaceScore>();
+
+		return pilotScores;
+	}
+
+	public List<EventScore> calculateEventScores(Event event) {
+		List<EventScore> pilotScores = new ArrayList<EventScore>();
+
+		return pilotScores;
 	}
 }

@@ -155,8 +155,6 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 		} finally {
 			db.endSession();
 		}
-
-		createEvent1Data();
 	}
 
 	protected void createEvent1Data() throws Exception {
@@ -181,7 +179,9 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 		} finally {
 			db.endSession();
 		}
+	}
 
+	protected void createEvent1Races() throws Exception {
 		createRace1Data();
 	}
 

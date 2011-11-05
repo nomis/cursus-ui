@@ -47,7 +47,7 @@ public class Series2011DataTests extends AbstractSeries2011 {
 
 	@Test
 	public void checkEvent1() throws Exception {
-		createEvent1Data();
+		createEvent1Races();
 
 		db.startSession();
 		try {
@@ -77,9 +77,8 @@ public class Series2011DataTests extends AbstractSeries2011 {
 			Race race1 = raceDAO.find(event1, RACE1_NAME);
 
 			Assert.assertEquals(22, race1.getAttendees().size());
-			Assert.assertEquals(22, scorer.calculateFleetSize(race1));
 			Assert.assertEquals(RaceAttendee.Type.V_SCORER, race1.getAttendees().get(sco060).getType());
-			Assert.assertEquals(RaceAttendee.Type.PILOT, race1.getAttendees().get(sco197).getType());
+			Assert.assertEquals(RaceAttendee.Type.PILOT, race1.getAttendees().get(sco179).getType());
 
 			DatabaseSession.commit();
 		} finally {
