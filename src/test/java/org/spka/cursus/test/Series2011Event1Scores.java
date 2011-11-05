@@ -20,6 +20,7 @@ package org.spka.cursus.test;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import eu.lp0.cursus.db.DatabaseSession;
@@ -28,15 +29,61 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.EventScore;
 import eu.lp0.cursus.scoring.RaceScore;
+import eu.lp0.cursus.scoring.SeriesScore;
 
 /**
  * Scores at the end of event 1 (29/10/2011 to 30/10/2011)
  */
 public class Series2011Event1Scores extends AbstractSeries2011 {
+	@Before
+	public void createData() throws Exception {
+		createEvent1Races();
+	}
+
+	@Test
+	public void checkSeries() throws Exception {
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+
+			Assert.assertEquals(SERIES_FLEET, scorer.calculateFleetSize(series));
+
+			List<SeriesScore> pilotScores = scorer.calculateSeriesScores(series);
+
+			Assert.assertEquals(SERIES_FLEET, pilotScores.size());
+			Assert.assertEquals(new SeriesScore(sco068, 0, 1), pilotScores.get(0));
+			Assert.assertEquals(new SeriesScore(sco200, 2, 2), pilotScores.get(1));
+			Assert.assertEquals(new SeriesScore(sco179, 3, 3), pilotScores.get(2));
+			Assert.assertEquals(new SeriesScore(sco808, 4, 4), pilotScores.get(3));
+			Assert.assertEquals(new SeriesScore(sco116, 5, 5), pilotScores.get(4));
+			Assert.assertEquals(new SeriesScore(sco081, 6, 6), pilotScores.get(5));
+			Assert.assertEquals(new SeriesScore(sco136, 7, 7), pilotScores.get(6));
+			Assert.assertEquals(new SeriesScore(sco248, 8, 8), pilotScores.get(7));
+			Assert.assertEquals(new SeriesScore(sco528, 9, 9), pilotScores.get(8));
+			Assert.assertEquals(new SeriesScore(sco467, 10, 10), pilotScores.get(9));
+			Assert.assertEquals(new SeriesScore(sco159, 11, 11), pilotScores.get(10));
+			Assert.assertEquals(new SeriesScore(sco019, 12, 12), pilotScores.get(11));
+			Assert.assertEquals(new SeriesScore(sco018, 13, 13), pilotScores.get(12));
+			Assert.assertEquals(new SeriesScore(sco198, 14, 14), pilotScores.get(13));
+			Assert.assertEquals(new SeriesScore(sco087, 15, 15), pilotScores.get(14));
+			Assert.assertEquals(new SeriesScore(sco197, 16, 16), pilotScores.get(15));
+			Assert.assertEquals(new SeriesScore(sco158, 17, 17), pilotScores.get(16));
+			Assert.assertEquals(new SeriesScore(sco320, 18, 18), pilotScores.get(17));
+			Assert.assertEquals(new SeriesScore(sco249, 19, 19), pilotScores.get(18));
+			Assert.assertEquals(new SeriesScore(sco060, 23, 20), pilotScores.get(19));
+			Assert.assertEquals(new SeriesScore(sco153, 23, 20), pilotScores.get(20));
+			Assert.assertEquals(new SeriesScore(sco156, 23, 20), pilotScores.get(21));
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+	}
+
 	@Test
 	public void checkEvent1() throws Exception {
-		createEvent1Races();
-
 		db.startSession();
 		try {
 			DatabaseSession.begin();
@@ -44,11 +91,11 @@ public class Series2011Event1Scores extends AbstractSeries2011 {
 			Series series = seriesDAO.find(SERIES_NAME);
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 
-			Assert.assertEquals(22, scorer.calculateFleetSize(event1));
+			Assert.assertEquals(EVENT1_FLEET, scorer.calculateFleetSize(event1));
 
 			List<EventScore> pilotScores = scorer.calculateEventScores(event1);
 
-			Assert.assertEquals(22, pilotScores.size());
+			Assert.assertEquals(EVENT1_FLEET, pilotScores.size());
 			Assert.assertEquals(new EventScore(sco068, 0, 1), pilotScores.get(0));
 			Assert.assertEquals(new EventScore(sco200, 2, 2), pilotScores.get(1));
 			Assert.assertEquals(new EventScore(sco179, 3, 3), pilotScores.get(2));
@@ -80,8 +127,6 @@ public class Series2011Event1Scores extends AbstractSeries2011 {
 
 	@Test
 	public void checkRace1() throws Exception {
-		createEvent1Races();
-
 		db.startSession();
 		try {
 			DatabaseSession.begin();
@@ -90,11 +135,11 @@ public class Series2011Event1Scores extends AbstractSeries2011 {
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 			Race race1 = raceDAO.find(event1, RACE1_NAME);
 
-			Assert.assertEquals(22, scorer.calculateFleetSize(race1));
+			Assert.assertEquals(EVENT1_FLEET, scorer.calculateFleetSize(race1));
 
 			List<RaceScore> pilotScores = scorer.calculateRaceScores(race1);
 
-			Assert.assertEquals(22, pilotScores.size());
+			Assert.assertEquals(EVENT1_FLEET, pilotScores.size());
 			Assert.assertEquals(new RaceScore(sco068, 0, 5, 1), pilotScores.get(0));
 			Assert.assertEquals(new RaceScore(sco200, 2, 5, 2), pilotScores.get(1));
 			Assert.assertEquals(new RaceScore(sco179, 3, 5, 3), pilotScores.get(2));

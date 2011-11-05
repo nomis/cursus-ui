@@ -30,7 +30,9 @@ import eu.lp0.cursus.test.AbstractDatabaseTest;
 
 public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 	protected final String SERIES_NAME = "SPKA Race Series 2011/12"; //$NON-NLS-1$
+	protected final int SERIES_FLEET = 22;
 	protected final String EVENT1_NAME = "Race Event 1"; //$NON-NLS-1$
+	protected final int EVENT1_FLEET = 22;
 	protected final String RACE1_NAME = "Race 1"; //$NON-NLS-1$
 
 	protected Scoring2011 scorer = (Scoring2011)ScorerFactory.getScorer(Scoring2011.UUID);

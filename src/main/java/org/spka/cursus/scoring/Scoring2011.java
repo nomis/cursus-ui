@@ -30,6 +30,7 @@ import eu.lp0.cursus.scoring.EventScore;
 import eu.lp0.cursus.scoring.RaceScore;
 import eu.lp0.cursus.scoring.Scorer;
 import eu.lp0.cursus.scoring.ScoringSystem;
+import eu.lp0.cursus.scoring.SeriesScore;
 
 @ScoringSystem(uuid = Scoring2011.UUID, name = "SPKA 2011/12")
 public class Scoring2011 implements Scorer {
@@ -65,6 +66,12 @@ public class Scoring2011 implements Scorer {
 
 	public List<EventScore> calculateEventScores(Event event) {
 		List<EventScore> pilotScores = new ArrayList<EventScore>();
+
+		return pilotScores;
+	}
+
+	public List<SeriesScore> calculateSeriesScores(Series series) {
+		List<SeriesScore> pilotScores = new ArrayList<SeriesScore>();
 
 		return pilotScores;
 	}

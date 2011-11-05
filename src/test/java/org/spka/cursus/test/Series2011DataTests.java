@@ -37,7 +37,7 @@ public class Series2011DataTests extends AbstractSeries2011 {
 
 			Series series = seriesDAO.find(SERIES_NAME);
 
-			Assert.assertEquals(22, series.getPilots().size());
+			Assert.assertEquals(SERIES_FLEET, series.getPilots().size());
 
 			DatabaseSession.commit();
 		} finally {
@@ -76,7 +76,7 @@ public class Series2011DataTests extends AbstractSeries2011 {
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 			Race race1 = raceDAO.find(event1, RACE1_NAME);
 
-			Assert.assertEquals(22, race1.getAttendees().size());
+			Assert.assertEquals(EVENT1_FLEET, race1.getAttendees().size());
 			Assert.assertEquals(RaceAttendee.Type.V_SCORER, race1.getAttendees().get(sco060).getType());
 			Assert.assertEquals(RaceAttendee.Type.PILOT, race1.getAttendees().get(sco179).getType());
 
