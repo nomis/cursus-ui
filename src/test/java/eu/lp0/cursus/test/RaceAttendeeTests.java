@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.test;
 
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -29,7 +30,7 @@ import eu.lp0.cursus.db.data.RaceAttendee;
 
 public class RaceAttendeeTests extends AbstractDatabaseTest {
 	@Test
-	public void raceAttendeesMapTypes() {
+	public void raceToPilotMapTypes() {
 		// Save data
 		db.startSession();
 		try {
@@ -67,6 +68,56 @@ public class RaceAttendeeTests extends AbstractDatabaseTest {
 			for (Map.Entry<?, ?> entry : race.getAttendees().entrySet()) {
 				Assert.assertEquals(Pilot.class, entry.getKey().getClass());
 				Assert.assertEquals(RaceAttendee.class, entry.getValue().getClass());
+			}
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+	}
+
+	@Test
+	public void pilotToRaceMapTypes() {
+		// Save data
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Race race = raceDAO.findAll().get(0);
+
+			Pilot pilot1 = new Pilot(race.getEvent().getSeries(), "Test 1"); //$NON-NLS-1$
+			pilotDAO.persist(pilot1);
+			race.getAttendees().put(pilot1, new RaceAttendee(race, pilot1, RaceAttendee.Type.PILOT));
+
+			Pilot pilot2 = new Pilot(race.getEvent().getSeries(), "Test 2"); //$NON-NLS-1$
+			pilotDAO.persist(pilot2);
+			race.getAttendees().put(pilot2, new RaceAttendee(race, pilot2, RaceAttendee.Type.PILOT));
+
+			Pilot pilot3 = new Pilot(race.getEvent().getSeries(), "Test 3"); //$NON-NLS-1$
+			pilotDAO.persist(pilot3);
+			race.getAttendees().put(pilot3, new RaceAttendee(race, pilot3, RaceAttendee.Type.PILOT));
+
+			raceDAO.persist(race);
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+
+		// Check data
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			List<Pilot> pilots = pilotDAO.findAll();
+
+			Assert.assertEquals(3, pilots.size());
+			for (Pilot pilot : pilots) {
+				Assert.assertEquals(1, pilot.getRaces().size());
+				for (Map.Entry<?, ?> entry : pilot.getRaces().entrySet()) {
+					Assert.assertEquals(Race.class, entry.getKey().getClass());
+					Assert.assertEquals(RaceAttendee.class, entry.getValue().getClass());
+				}
 			}
 
 			DatabaseSession.commit();
