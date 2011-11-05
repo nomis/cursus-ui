@@ -27,7 +27,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKey;
+import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
@@ -123,8 +123,7 @@ public class Event extends AbstractEntity implements Comparable<Event>, RaceEnti
 	private Map<Pilot, PilotAtEvent> pilots = new HashMap<Pilot, PilotAtEvent>();
 
 	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "event", orphanRemoval = true)
-	@MapKey
-	@Column(nullable = false)
+	@MapKeyJoinColumn(name = "pilot_id", nullable = false)
 	public Map<Pilot, PilotAtEvent> getPilots() {
 		return pilots;
 	}

@@ -34,7 +34,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKey;
+import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
@@ -160,8 +160,7 @@ public class Pilot extends AbstractEntity {
 	private Map<Event, PilotAtEvent> events = new HashMap<Event, PilotAtEvent>();
 
 	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "pilot", orphanRemoval = true)
-	@MapKey
-	@Column(nullable = false)
+	@MapKeyJoinColumn(name = "event_id", nullable = false)
 	public Map<Event, PilotAtEvent> getEvents() {
 		return events;
 	}
@@ -173,8 +172,7 @@ public class Pilot extends AbstractEntity {
 	private Map<Race, RaceAttendee> races = new HashMap<Race, RaceAttendee>();
 
 	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "pilot", orphanRemoval = true)
-	@MapKey
-	@Column(nullable = false)
+	@MapKeyJoinColumn(name = "race_id", nullable = false)
 	public Map<Race, RaceAttendee> getRaces() {
 		return races;
 	}
