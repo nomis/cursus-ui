@@ -159,7 +159,7 @@ public class Pilot extends AbstractEntity {
 
 	private Map<Event, PilotAtEvent> events = new HashMap<Event, PilotAtEvent>();
 
-	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "event", orphanRemoval = true)
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "pilot", orphanRemoval = true)
 	@MapKey
 	@Column(nullable = false)
 	public Map<Event, PilotAtEvent> getEvents() {
