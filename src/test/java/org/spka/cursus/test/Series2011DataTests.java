@@ -17,14 +17,11 @@
  */
 package org.spka.cursus.test;
 
-import java.util.Map;
-
 import org.junit.Assert;
 import org.junit.Test;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.data.Event;
-import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.db.data.Series;
@@ -81,10 +78,6 @@ public class Series2011DataTests extends AbstractSeries2011 {
 
 			Assert.assertEquals(22, race1.getAttendees().size());
 			Assert.assertEquals(22, scorer.calculateFleetSize(race1));
-			for (Map.Entry<?, ?> entry : race1.getAttendees().entrySet()) {
-				Assert.assertEquals(Pilot.class, entry.getKey().getClass());
-				Assert.assertEquals(RaceAttendee.class, entry.getValue().getClass());
-			}
 			Assert.assertEquals(RaceAttendee.Type.V_SCORER, race1.getAttendees().get(sco060).getType());
 			Assert.assertEquals(RaceAttendee.Type.PILOT, race1.getAttendees().get(sco197).getType());
 
