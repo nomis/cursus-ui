@@ -17,16 +17,21 @@
  */
 package eu.lp0.cursus.db.data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -111,6 +116,23 @@ public class Race extends AbstractEntity implements Comparable<Race>, RaceEntity
 
 	public void setAttendees(Map<Pilot, RaceAttendee> attendees) {
 		this.attendees = attendees;
+	}
+
+	private List<RaceEvent> raceEvents = new ArrayList<RaceEvent>();
+
+	@ElementCollection
+	@CollectionTable(name = "race_events", joinColumns = @JoinColumn(name = "race_id"))
+	@OrderColumn(name = "race_event_order")
+	public List<RaceEvent> getEvents() {
+		while (raceEvents.remove(null)) {
+		}
+		return raceEvents;
+	}
+
+	public void setEvents(List<RaceEvent> raceEvents) {
+		while (raceEvents.remove(null)) {
+		}
+		this.raceEvents = raceEvents;
 	}
 
 	@Override
