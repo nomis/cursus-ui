@@ -21,12 +21,22 @@ import eu.lp0.cursus.db.data.Pilot;
 
 public class RaceScore {
 	private final Pilot pilot;
+	private final int penalties;
 	private final int points;
 	private final int laps;
 	private final int position;
 
 	public RaceScore(Pilot pilot, int points, int laps, int position) {
 		this.pilot = pilot;
+		this.penalties = 0;
+		this.points = points;
+		this.laps = laps;
+		this.position = position;
+	}
+
+	public RaceScore(Pilot pilot, int penalties, int points, int laps, int position) {
+		this.pilot = pilot;
+		this.penalties = penalties;
 		this.points = points;
 		this.laps = laps;
 		this.position = position;
@@ -34,6 +44,10 @@ public class RaceScore {
 
 	public Pilot getPilot() {
 		return pilot;
+	}
+
+	public int getPenalties() {
+		return penalties;
 	}
 
 	public int getPoints() {
@@ -54,6 +68,7 @@ public class RaceScore {
 		int result = 1;
 		result = prime * result + laps;
 		result = prime * result + ((pilot == null) ? 0 : pilot.hashCode());
+		result = prime * result + penalties;
 		result = prime * result + points;
 		result = prime * result + position;
 		return result;
@@ -81,6 +96,9 @@ public class RaceScore {
 		} else if (!pilot.equals(other.pilot)) {
 			return false;
 		}
+		if (penalties != other.penalties) {
+			return false;
+		}
 		if (points != other.points) {
 			return false;
 		}
@@ -92,6 +110,6 @@ public class RaceScore {
 
 	@Override
 	public String toString() {
-		return "RaceScore [pilot=" + pilot + ", points=" + points + ", laps=" + laps + ", position=" + position + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		return "RaceScore [pilot=" + pilot.getName() + ", penalties=" + penalties + ", points=" + points + ", laps=" + laps + ", position=" + position + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 	}
 }

@@ -21,11 +21,20 @@ import eu.lp0.cursus.db.data.Pilot;
 
 public class EventScore {
 	private final Pilot pilot;
+	private final int penalties;
 	private final int points;
 	private final int position;
 
 	public EventScore(Pilot pilot, int points, int position) {
 		this.pilot = pilot;
+		this.penalties = 0;
+		this.points = points;
+		this.position = position;
+	}
+
+	public EventScore(Pilot pilot, int penalties, int points, int position) {
+		this.pilot = pilot;
+		this.penalties = penalties;
 		this.points = points;
 		this.position = position;
 	}
@@ -47,6 +56,7 @@ public class EventScore {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((pilot == null) ? 0 : pilot.hashCode());
+		result = prime * result + penalties;
 		result = prime * result + points;
 		result = prime * result + position;
 		return result;
@@ -71,6 +81,9 @@ public class EventScore {
 		} else if (!pilot.equals(other.pilot)) {
 			return false;
 		}
+		if (penalties != other.penalties) {
+			return false;
+		}
 		if (points != other.points) {
 			return false;
 		}
@@ -82,6 +95,6 @@ public class EventScore {
 
 	@Override
 	public String toString() {
-		return "EventScore [pilot=" + pilot + ", points=" + points + ", position=" + position + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
+		return "EventScore [pilot=" + pilot.getName() + ", penalties=" + penalties + ", points=" + points + ", position=" + position + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ 
 	}
 }

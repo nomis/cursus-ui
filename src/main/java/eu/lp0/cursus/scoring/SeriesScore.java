@@ -21,17 +21,30 @@ import eu.lp0.cursus.db.data.Pilot;
 
 public class SeriesScore {
 	private final Pilot pilot;
+	private final int penalties;
 	private final int points;
 	private final int position;
 
 	public SeriesScore(Pilot pilot, int points, int position) {
 		this.pilot = pilot;
+		this.penalties = 0;
+		this.points = points;
+		this.position = position;
+	}
+
+	public SeriesScore(Pilot pilot, int penalties, int points, int position) {
+		this.pilot = pilot;
+		this.penalties = penalties;
 		this.points = points;
 		this.position = position;
 	}
 
 	public Pilot getPilot() {
 		return pilot;
+	}
+
+	public int getPenalties() {
+		return penalties;
 	}
 
 	public int getPoints() {
@@ -47,6 +60,7 @@ public class SeriesScore {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((pilot == null) ? 0 : pilot.hashCode());
+		result = prime * result + penalties;
 		result = prime * result + points;
 		result = prime * result + position;
 		return result;
@@ -71,6 +85,9 @@ public class SeriesScore {
 		} else if (!pilot.equals(other.pilot)) {
 			return false;
 		}
+		if (penalties != other.penalties) {
+			return false;
+		}
 		if (points != other.points) {
 			return false;
 		}
@@ -82,6 +99,6 @@ public class SeriesScore {
 
 	@Override
 	public String toString() {
-		return "SeriesScore [pilot=" + pilot + ", points=" + points + ", position=" + position + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
+		return "SeriesScore [pilot=" + pilot.getName() + ", penalties=" + penalties + ", points=" + points + ", position=" + position + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ 
 	}
 }

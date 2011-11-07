@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.spka.cursus.test;
+package org.spka.cursus.test.series_2011;
 
 import org.spka.cursus.scoring.Scoring2011;
 
@@ -32,6 +32,7 @@ import eu.lp0.cursus.test.AbstractDatabaseTest;
 public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 	protected final String SERIES_NAME = "SPKA Race Series 2011/12"; //$NON-NLS-1$
 	protected final int SERIES_FLEET = 22;
+	protected final int SERIES_FLEET_AT_EVENT1 = 22;
 	protected final String EVENT1_NAME = "Race Event 1"; //$NON-NLS-1$
 	protected final int EVENT1_FLEET = 22;
 	protected final String RACE1_NAME = "Race 1"; //$NON-NLS-1$
