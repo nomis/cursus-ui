@@ -216,9 +216,15 @@ public class Scoring2010 implements Scorer {
 		List<EventScore> pilotScores = new ArrayList<EventScore>();
 		int position = 1;
 		int lastPoints = -1;
+		int incPos = 1;
 		for (PointsCount count : new TreeSet<PointsCount>(points.values())) {
-			if (lastPoints != -1 && count.getPoints() > lastPoints) {
-				position++;
+			if (lastPoints != -1) {
+				if (count.getPoints() > lastPoints) {
+					position += incPos;
+					incPos = 1;
+				} else {
+					incPos++;
+				}
 			}
 			pilotScores.add(new EventScore(count.getPilot(), count.getPoints(), position));
 			lastPoints = count.getPoints();
@@ -242,9 +248,15 @@ public class Scoring2010 implements Scorer {
 		List<SeriesScore> pilotScores = new ArrayList<SeriesScore>();
 		int position = 1;
 		int lastPoints = -1;
+		int incPos = 1;
 		for (PointsCount count : new TreeSet<PointsCount>(points.values())) {
-			if (lastPoints != -1 && count.getPoints() > lastPoints) {
-				position++;
+			if (lastPoints != -1) {
+				if (count.getPoints() > lastPoints) {
+					position += incPos;
+					incPos = 1;
+				} else {
+					incPos++;
+				}
 			}
 			pilotScores.add(new SeriesScore(count.getPilot(), count.getPoints(), position));
 			lastPoints = count.getPoints();
