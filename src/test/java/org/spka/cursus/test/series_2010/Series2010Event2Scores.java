@@ -32,13 +32,13 @@ import eu.lp0.cursus.scoring.RaceScore;
 import eu.lp0.cursus.scoring.SeriesScore;
 
 /**
- * Scores at the end of event 2 (12/02/2011 to 13/02/2011)
+ * Scores at the end of event 2 (27/11/2010)
  */
 public class Series2010Event2Scores extends Series2010Event1Scores {
 	@Override
 	@Before
 	public void createData() throws Exception {
-		createEvent1Races();
+		super.createData();
 		createEvent2Races();
 	}
 
@@ -78,11 +78,10 @@ public class Series2010Event2Scores extends Series2010Event1Scores {
 			List<EventScore> pilotScores = scorer.calculateEventScores(event2);
 
 			Assert.assertEquals(EVENT2_FLEET, pilotScores.size());
-			Assert.assertArrayEquals(new EventScore[] { new EventScore(sco200, 0, 1), new EventScore(sco159, 2, 2), new EventScore(sco068, 3, 3),
-					new EventScore(sco248, 4, 4), new EventScore(sco019, 5, 5), new EventScore(sco018, 6, 6), new EventScore(sco158, 7, 7),
-					new EventScore(sco060, 8, 8), new EventScore(sco087, 9, 9), new EventScore(sco116, 10, 10), new EventScore(sco249, 11, 11),
-					new EventScore(sco081, 16, 12), new EventScore(sco153, 16, 12), new EventScore(sco179, 16, 12), new EventScore(sco808, 16, 12) },
-					pilotScores.toArray());
+			Assert.assertArrayEquals(new EventScore[] { new EventScore(sco068, 0, 1), new EventScore(sco200, 2, 2), new EventScore(sco179, 3, 3),
+					new EventScore(sco159, 4, 4), new EventScore(sco808, 5, 5), new EventScore(sco116, 6, 6), new EventScore(sco087, 7, 7),
+					new EventScore(sco081, 8, 8), new EventScore(sco019, 14, 9), new EventScore(sco060, 14, 9), new EventScore(sco153, 14, 9),
+					new EventScore(sco156, 14, 9), new EventScore(sco197, 14, 9) }, pilotScores.toArray());
 
 			DatabaseSession.commit();
 		} finally {
@@ -105,11 +104,10 @@ public class Series2010Event2Scores extends Series2010Event1Scores {
 			List<RaceScore> pilotScores = scorer.calculateRaceScores(race4);
 
 			Assert.assertEquals(EVENT2_FLEET, pilotScores.size());
-			Assert.assertArrayEquals(new RaceScore[] { new RaceScore(sco200, 0, 6, 1), new RaceScore(sco159, 2, 6, 2), new RaceScore(sco068, 3, 6, 3),
-					new RaceScore(sco248, 4, 5, 4), new RaceScore(sco019, 5, 4, 5), new RaceScore(sco018, 6, 4, 6), new RaceScore(sco158, 7, 3, 7),
-					new RaceScore(sco060, 8, 3, 8), new RaceScore(sco087, 9, 3, 9), new RaceScore(sco116, 10, 3, 10), new RaceScore(sco249, 11, 3, 11),
-					new RaceScore(sco081, 16, 0, 12), new RaceScore(sco153, 16, 0, 12), new RaceScore(sco179, 16, 0, 12), new RaceScore(sco808, 16, 0, 12) },
-					pilotScores.toArray());
+			Assert.assertArrayEquals(new RaceScore[] { new RaceScore(sco068, 0, 6, 1), new RaceScore(sco200, 2, 6, 2), new RaceScore(sco179, 3, 6, 3),
+					new RaceScore(sco159, 4, 5, 4), new RaceScore(sco808, 5, 5, 5), new RaceScore(sco116, 6, 5, 6), new RaceScore(sco087, 7, 4, 7),
+					new RaceScore(sco081, 8, 1, 8), new RaceScore(sco019, 14, 0, 9), new RaceScore(sco060, 14, 0, 9), new RaceScore(sco153, 14, 0, 9),
+					new RaceScore(sco156, 14, 0, 9), new RaceScore(sco197, 14, 0, 9) }, pilotScores.toArray());
 
 			DatabaseSession.commit();
 		} finally {
