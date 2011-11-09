@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.scoring;
+package eu.lp0.cursus.scoring.old;
 
 import eu.lp0.cursus.db.data.Pilot;
 

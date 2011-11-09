@@ -27,9 +27,9 @@ import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.scoring.EventScore;
-import eu.lp0.cursus.scoring.RaceScore;
-import eu.lp0.cursus.scoring.SeriesScore;
+import eu.lp0.cursus.scoring.old.EventScore;
+import eu.lp0.cursus.scoring.old.RaceScore;
+import eu.lp0.cursus.scoring.old.SeriesScore;
 
 /**
  * Scores at the end of event 1 (16/10/2010 to 17/10/2010)
