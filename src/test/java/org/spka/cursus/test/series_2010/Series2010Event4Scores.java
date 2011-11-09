@@ -56,7 +56,12 @@ public class Series2010Event4Scores extends Series2010Event3Scores {
 			List<SeriesScore> pilotScores = scorer.calculateSeriesScores(series);
 
 			Assert.assertEquals(SERIES_FLEET_AT_EVENT4, pilotScores.size());
-			Assert.fail("TODO"); //$NON-NLS-1$
+			Assert.assertArrayEquals(new SeriesScore[] { new SeriesScore(sco200, 2, 1), new SeriesScore(sco179, 11, 2), new SeriesScore(sco068, 16, 3),
+					new SeriesScore(sco808, 17, 3), new SeriesScore(sco159, 19, 5), new SeriesScore(sco081, 25, 6), new SeriesScore(sco248, 36, 6),
+					new SeriesScore(sco019, 40, 6), new SeriesScore(sco116, 42, 9), new SeriesScore(sco087, 43, 9), new SeriesScore(sco249, 53, 11),
+					new SeriesScore(sco018, 55, 12), new SeriesScore(sco060, 61, 13), new SeriesScore(sco042, 77, 14), new SeriesScore(sco136, 79, 15),
+					new SeriesScore(sco153, 79, 15), new SeriesScore(sco158, 87, 17), new SeriesScore(sco197, 89, 18), new SeriesScore(sco156, 95, 19) },
+					pilotScores.toArray());
 
 			DatabaseSession.commit();
 		} finally {
