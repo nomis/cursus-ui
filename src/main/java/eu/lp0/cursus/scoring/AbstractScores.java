@@ -18,14 +18,26 @@
 package eu.lp0.cursus.scoring;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public interface Scores extends RaceLapsData, RacePenaltiesData, RacePointsData, RaceOrderData, RacePositionData, RaceDiscardsData, OverallPenaltiesData,
-		OverallPointsData, OverallOrderData, OverallPositionData {
-	public Collection<Pilot> getPilots();
+public abstract class AbstractScores implements Scores {
+	protected final Collection<Pilot> pilots;
+	protected final List<Race> races;
 
-	public List<Race> getRaces();
+	public AbstractScores(Collection<Pilot> pilots, List<Race> races) {
+		this.pilots = pilots;
+		this.races = races;
+	}
+
+	public Collection<Pilot> getPilots() {
+		return Collections.unmodifiableCollection(pilots);
+	}
+
+	public List<Race> getRaces() {
+		return Collections.unmodifiableList(races);
+	}
 }

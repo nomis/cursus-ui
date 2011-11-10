@@ -50,7 +50,7 @@ public class ScorerFactory {
 		}
 	}
 
-	public static Scorer getScorer(String uuid) {
+	public static Scorer newScorer(String uuid) {
 		Class<? extends Scorer> scorer = scoringSystems.get(uuid);
 		if (scorer != null) {
 			try {
