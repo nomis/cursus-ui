@@ -37,7 +37,7 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 	protected final int EVENT1_FLEET = 22;
 	protected final String RACE1_NAME = "Race 1"; //$NON-NLS-1$
 
-	protected Scoring2011 scorer = (Scoring2011)ScorerFactory.getScorer(Scoring2011.UUID);
+	protected Scoring2011 scorer = (Scoring2011)ScorerFactory.newScorer(Scoring2011.UUID);
 
 	protected Pilot sco018;
 	protected Pilot sco019;
