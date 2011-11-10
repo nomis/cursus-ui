@@ -28,12 +28,12 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.util.IntegerSequence;
 
-public abstract class AbstractRaceDiscardsData implements RaceDiscardsData {
-	protected final Scores scores;
+public abstract class AbstractRaceDiscardsData<T extends ScoredData & RacePointsData> implements RaceDiscardsData {
+	protected final T scores;
 
 	protected final int discards;
 
-	public AbstractRaceDiscardsData(Scores scores, int discards) {
+	public AbstractRaceDiscardsData(T scores, int discards) {
 		if (discards < 0) {
 			throw new IllegalArgumentException();
 		}

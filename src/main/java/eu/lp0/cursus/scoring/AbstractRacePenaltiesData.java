@@ -27,10 +27,10 @@ import com.google.common.collect.Table;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public abstract class AbstractRacePenaltiesData implements RacePenaltiesData {
-	protected final Scores scores;
+public abstract class AbstractRacePenaltiesData<T extends ScoredData> implements RacePenaltiesData {
+	protected final T scores;
 
-	public AbstractRacePenaltiesData(Scores scores) {
+	public AbstractRacePenaltiesData(T scores) {
 		this.scores = scores;
 	}
 

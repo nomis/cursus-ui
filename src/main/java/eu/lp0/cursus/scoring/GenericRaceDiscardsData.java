@@ -28,8 +28,8 @@ import java.util.TreeSet;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public class GenericRaceDiscardsData extends AbstractRaceDiscardsData {
-	public GenericRaceDiscardsData(Scores scores, int racesPerDiscard) {
+public class GenericRaceDiscardsData<T extends ScoredData & RacePointsData> extends AbstractRaceDiscardsData<T> {
+	public GenericRaceDiscardsData(T scores, int racesPerDiscard) {
 		super(scores, scores.getRaces().size() / racesPerDiscard);
 	}
 

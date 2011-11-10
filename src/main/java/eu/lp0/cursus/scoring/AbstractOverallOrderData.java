@@ -21,10 +21,10 @@ import java.util.List;
 
 import eu.lp0.cursus.db.data.Pilot;
 
-public abstract class AbstractOverallOrderData implements OverallOrderData {
-	protected final Scores scores;
+public abstract class AbstractOverallOrderData<T extends ScoredData> implements OverallOrderData {
+	protected final T scores;
 
-	public AbstractOverallOrderData(Scores scores) {
+	public AbstractOverallOrderData(T scores) {
 		this.scores = scores;
 	}
 

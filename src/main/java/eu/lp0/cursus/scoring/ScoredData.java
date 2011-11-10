@@ -17,6 +17,14 @@
  */
 package eu.lp0.cursus.scoring;
 
-public interface Scores extends ScoredData, RaceLapsData, RacePenaltiesData, RacePointsData, RaceOrderData, RacePositionData, RaceDiscardsData,
-		OverallPenaltiesData, OverallPointsData, OverallOrderData, OverallPositionData {
+import java.util.Collection;
+import java.util.List;
+
+import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.db.data.Race;
+
+public interface ScoredData {
+	public Collection<Pilot> getPilots();
+
+	public List<Race> getRaces();
 }

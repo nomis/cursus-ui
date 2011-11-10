@@ -20,8 +20,8 @@ package eu.lp0.cursus.scoring;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public class GenericRaceLapsData extends AbstractRaceLapsData {
-	public GenericRaceLapsData(Scores scores) {
+public class GenericRaceLapsData<T extends ScoredData> extends AbstractRaceLapsData<T> {
+	public GenericRaceLapsData(T scores) {
 		super(scores);
 	}
 

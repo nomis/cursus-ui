@@ -27,40 +27,40 @@ import com.google.common.collect.Table;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public abstract class AbstractRacePositionData implements RacePointsData {
-	protected final Scores scores;
+public abstract class AbstractRacePositionData<T extends ScoredData> implements RacePositionData {
+	protected final T scores;
 
-	public AbstractRacePositionData(Scores scores) {
+	public AbstractRacePositionData(T scores) {
 		this.scores = scores;
 	}
 
 	@Override
-	public Table<Pilot, Race, Integer> getRacePoints() {
-		Table<Pilot, Race, Integer> racePoints = ArrayTable.create(scores.getPilots(), scores.getRaces());
+	public Table<Pilot, Race, Integer> getRacePosition() {
+		Table<Pilot, Race, Integer> racePosition = ArrayTable.create(scores.getPilots(), scores.getRaces());
 		for (Pilot pilot : scores.getPilots()) {
-			racePoints.row(pilot).putAll(getRacePoints(pilot));
+			racePosition.row(pilot).putAll(getRacePosition(pilot));
 		}
-		return racePoints;
+		return racePosition;
 	}
 
 	@Override
-	public Map<Race, Integer> getRacePoints(Pilot pilot) {
-		Map<Race, Integer> racePoints = new HashMap<Race, Integer>();
+	public Map<Race, Integer> getRacePosition(Pilot pilot) {
+		Map<Race, Integer> racePosition = new HashMap<Race, Integer>();
 		for (Race race : scores.getRaces()) {
-			racePoints.put(race, getRacePoints(pilot, race));
+			racePosition.put(race, getRacePosition(pilot, race));
 		}
-		return Collections.unmodifiableMap(racePoints);
+		return Collections.unmodifiableMap(racePosition);
 	}
 
 	@Override
-	public Map<Pilot, Integer> getRacePoints(Race race) {
-		Map<Pilot, Integer> racePoints = new HashMap<Pilot, Integer>();
+	public Map<Pilot, Integer> getRacePosition(Race race) {
+		Map<Pilot, Integer> racePosition = new HashMap<Pilot, Integer>();
 		for (Pilot pilot : scores.getPilots()) {
-			racePoints.put(pilot, getRacePoints(pilot, race));
+			racePosition.put(pilot, getRacePosition(pilot, race));
 		}
-		return Collections.unmodifiableMap(racePoints);
+		return Collections.unmodifiableMap(racePosition);
 	}
 
 	@Override
-	public abstract Integer getRacePoints(Pilot pilot, Race race);
+	public abstract Integer getRacePosition(Pilot pilot, Race race);
 }

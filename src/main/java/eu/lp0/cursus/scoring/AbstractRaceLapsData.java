@@ -26,12 +26,12 @@ import com.google.common.collect.Table;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public abstract class AbstractRaceLapsData implements RaceLapsData {
-	protected final Scores scores;
+public abstract class AbstractRaceLapsData<T extends ScoredData> implements RaceLapsData {
+	protected final T scores;
 
 	protected final Table<Pilot, Race, Integer> raceLaps;
 
-	public AbstractRaceLapsData(Scores scores) {
+	public AbstractRaceLapsData(T scores) {
 		this.scores = scores;
 
 		raceLaps = ArrayTable.create(scores.getPilots(), scores.getRaces());

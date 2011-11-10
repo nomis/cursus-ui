@@ -23,10 +23,10 @@ import java.util.Map;
 
 import eu.lp0.cursus.db.data.Pilot;
 
-public abstract class AbstractOverallPenaltiesData implements OverallPenaltiesData {
-	protected final Scores scores;
+public abstract class AbstractOverallPenaltiesData<T extends ScoredData> implements OverallPenaltiesData {
+	protected final T scores;
 
-	public AbstractOverallPenaltiesData(Scores scores) {
+	public AbstractOverallPenaltiesData(T scores) {
 		this.scores = scores;
 	}
 

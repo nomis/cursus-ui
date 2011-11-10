@@ -24,10 +24,10 @@ import java.util.Map;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public abstract class AbstractRaceOrderData implements RaceOrderData {
-	protected final Scores scores;
+public abstract class AbstractRaceOrderData<T extends ScoredData> implements RaceOrderData {
+	protected final T scores;
 
-	public AbstractRaceOrderData(Scores scores) {
+	public AbstractRaceOrderData(T scores) {
 		this.scores = scores;
 	}
 
