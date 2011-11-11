@@ -33,6 +33,8 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.google.common.collect.ComparisonChain;
+
 import eu.lp0.cursus.util.Constants;
 
 /**
@@ -139,15 +141,6 @@ public class Event extends AbstractEntity implements Comparable<Event>, RaceEnti
 
 	@Override
 	public int compareTo(Event o) {
-		if (this == o) {
-			return 0;
-		}
-
-		int ret = getSeries().compareTo(o.getSeries());
-		if (ret != 0) {
-			return ret;
-		}
-
-		return Integer.valueOf(getSeriesOrder()).compareTo(o.getSeriesOrder());
+		return ComparisonChain.start().compare(getSeries(), o.getSeries()).compare(getSeriesOrder(), o.getSeriesOrder()).result();
 	}
 }

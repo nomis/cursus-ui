@@ -28,6 +28,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ComparisonChain;
 
 import eu.lp0.cursus.util.Constants;
 
@@ -93,12 +94,7 @@ public class RaceNumber extends AbstractEntity implements Comparable<RaceNumber>
 
 	@Override
 	public int compareTo(RaceNumber o) {
-		int ret = getOrganisation().compareTo(o.getOrganisation());
-		if (ret != 0) {
-			return ret;
-		}
-
-		return ((Integer)getNumber()).compareTo(o.getNumber());
+		return ComparisonChain.start().compare(getOrganisation(), o.getOrganisation()).compare(getNumber(), o.getNumber()).result();
 	}
 
 	@Override

@@ -29,6 +29,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.google.common.collect.ComparisonChain;
+
 import eu.lp0.cursus.util.Constants;
 
 /**
@@ -107,10 +109,6 @@ public class Class extends AbstractEntity implements Comparable<Class>, NamedEnt
 
 	@Override
 	public int compareTo(Class o) {
-		int ret = getSeries().compareTo(o.getSeries());
-		if (ret != 0) {
-			return ret;
-		}
-		return getName().compareTo(o.getName());
+		return ComparisonChain.start().compare(getSeries(), o.getSeries()).compare(getName(), o.getName()).result();
 	}
 }

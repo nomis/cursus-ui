@@ -126,10 +126,6 @@ public class Series extends AbstractEntity implements Comparable<Series>, RaceEn
 
 	@Override
 	public int compareTo(Series o) {
-		if (this == o) {
-			return 0;
-		}
-
 		return getName().compareTo(o.getName());
 	}
 }

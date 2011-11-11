@@ -35,6 +35,8 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.google.common.collect.ComparisonChain;
+
 import eu.lp0.cursus.util.Constants;
 
 /**
@@ -142,15 +144,6 @@ public class Race extends AbstractEntity implements Comparable<Race>, RaceEntity
 
 	@Override
 	public int compareTo(Race o) {
-		if (this == o) {
-			return 0;
-		}
-
-		int ret = getEvent().compareTo(o.getEvent());
-		if (ret != 0) {
-			return ret;
-		}
-
-		return Integer.valueOf(getEventOrder()).compareTo(o.getEventOrder());
+		return ComparisonChain.start().compare(getEvent(), o.getEvent()).compare(getEventOrder(), o.getEventOrder()).result();
 	}
 }
