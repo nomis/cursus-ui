@@ -25,4 +25,6 @@ public interface OverallPointsData {
 	public Map<Pilot, Integer> getOverallPoints();
 
 	public Integer getOverallPoints(Pilot pilot);
+
+	public int getOverallFleetSize();
 }

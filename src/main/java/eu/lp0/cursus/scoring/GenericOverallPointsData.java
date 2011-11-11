@@ -17,7 +17,11 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.db.data.Race;
 
 public class GenericOverallPointsData<T extends ScoredData & RacePointsData & RaceDiscardsData & OverallPenaltiesData> extends AbstractOverallPointsData<T> {
 	public GenericOverallPointsData(T scores) {
@@ -45,5 +49,14 @@ public class GenericOverallPointsData<T extends ScoredData & RacePointsData & Ra
 		}
 
 		return points;
+	}
+
+	@Override
+	public int getOverallFleetSize() {
+		Set<Pilot> pilots = new HashSet<Pilot>();
+		for (Race race : scores.getRaces()) {
+			pilots.addAll(race.getAttendees().keySet());
+		}
+		return pilots.size();
 	}
 }

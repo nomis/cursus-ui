@@ -57,7 +57,7 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData & RacePen
 		return getFleetSize(race) + 1;
 	}
 
-	protected int getFleetSize(Race race) {
+	public int getFleetSize(Race race) {
 		return race.getAttendees().size();
 	}
 }

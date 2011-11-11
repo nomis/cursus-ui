@@ -115,6 +115,11 @@ public class GenericScores extends AbstractScores {
 		return racePointsData.getRacePoints(race);
 	}
 
+	@Override
+	public int getFleetSize(Race race) {
+		return racePointsData.getFleetSize(race);
+	}
+
 	// RacePositionsData
 	@Override
 	public Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositions() {
@@ -187,6 +192,11 @@ public class GenericScores extends AbstractScores {
 	@Override
 	public Integer getOverallPoints(Pilot pilot) {
 		return getOverallPoints(pilot);
+	}
+
+	@Override
+	public int getOverallFleetSize() {
+		return overallPointsData.getOverallFleetSize();
 	}
 
 	// OverallPositionData

@@ -17,6 +17,7 @@
  */
 package org.spka.cursus.scoring;
 
+import eu.lp0.cursus.scoring.OverallPointsData;
 import eu.lp0.cursus.scoring.RacePointsData;
 import eu.lp0.cursus.scoring.Scores;
 
@@ -24,5 +25,10 @@ public class ScoresFactory2011 extends ScoresFactory2006 {
 	@Override
 	public RacePointsData newRacePointsData(Scores scores) {
 		return new RacePointsData2011<Scores>(scores);
+	}
+
+	@Override
+	public OverallPointsData newOverallPointsData(Scores scores) {
+		return new OverallPointsData2011<Scores>(scores);
 	}
 }

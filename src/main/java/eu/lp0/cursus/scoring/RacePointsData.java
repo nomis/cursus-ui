@@ -32,4 +32,6 @@ public interface RacePointsData {
 	public Map<Race, Integer> getRacePoints(Pilot pilot);
 
 	public Map<Pilot, Integer> getRacePoints(Race race);
+
+	public int getFleetSize(Race race);
 }

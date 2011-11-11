@@ -23,31 +23,27 @@ import java.util.Set;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.scoring.GenericRacePointsData;
-import eu.lp0.cursus.scoring.RaceLapsData;
-import eu.lp0.cursus.scoring.RacePenaltiesData;
+import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.scoring.GenericOverallPointsData;
+import eu.lp0.cursus.scoring.OverallPenaltiesData;
+import eu.lp0.cursus.scoring.RaceDiscardsData;
+import eu.lp0.cursus.scoring.RacePointsData;
 import eu.lp0.cursus.scoring.ScoredData;
 
-public class RacePointsData2011<T extends ScoredData & RaceLapsData & RacePenaltiesData> extends GenericRacePointsData<T> {
-	public RacePointsData2011(T scores) {
+public class OverallPointsData2011<T extends ScoredData & RacePointsData & RaceDiscardsData & OverallPenaltiesData> extends GenericOverallPointsData<T> {
+	public OverallPointsData2011(T scores) {
 		super(scores);
 	}
 
 	@Override
-	protected int getPointsForNoLaps(Pilot pilot, Race race) {
-		if (race.getAttendees().containsKey(pilot)) {
-			return getFleetSize(race) + 1;
-		} else {
-			return getFleetSize(race) + 2;
-		}
-	}
-
-	@Override
-	public int getFleetSize(Race race) {
+	public int getOverallFleetSize() {
 		Set<Pilot> pilots = new HashSet<Pilot>();
-		for (Event event : race.getEvent().getSeries().getEvents()) {
-			for (Race race2 : event.getRaces()) {
-				pilots.addAll(race2.getAttendees().keySet());
+		if (!scores.getRaces().isEmpty()) {
+			Series series = scores.getRaces().get(0).getEvent().getSeries();
+			for (Event event : series.getEvents()) {
+				for (Race race : event.getRaces()) {
+					pilots.addAll(race.getAttendees().keySet());
+				}
 			}
 		}
 		return pilots.size();
