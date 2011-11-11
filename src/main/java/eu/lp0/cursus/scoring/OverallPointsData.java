@@ -24,7 +24,7 @@ import eu.lp0.cursus.db.data.Pilot;
 public interface OverallPointsData {
 	public Map<Pilot, Integer> getOverallPoints();
 
-	public Integer getOverallPoints(Pilot pilot);
+	public int getOverallPoints(Pilot pilot);
 
 	public int getOverallFleetSize();
 }

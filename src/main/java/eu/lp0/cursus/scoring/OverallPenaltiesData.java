@@ -24,5 +24,5 @@ import eu.lp0.cursus.db.data.Pilot;
 public interface OverallPenaltiesData {
 	public Map<Pilot, Integer> getOverallPenalties();
 
-	public Integer getOverallPenalties(Pilot pilot);
+	public int getOverallPenalties(Pilot pilot);
 }

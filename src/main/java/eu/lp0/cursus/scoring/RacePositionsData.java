@@ -30,7 +30,7 @@ public interface RacePositionsData {
 
 	public LinkedListMultimap<Integer, Pilot> getRacePositions(Race race);
 
-	public Integer getRacePosition(Pilot pilot, Race race);
+	public int getRacePosition(Pilot pilot, Race race);
 
 	public Map<Race, List<Pilot>> getRaceOrders();
 

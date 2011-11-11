@@ -40,5 +40,5 @@ public abstract class AbstractOverallPenaltiesData<T extends ScoredData> impleme
 	}
 
 	@Override
-	public abstract Integer getOverallPenalties(Pilot pilot);
+	public abstract int getOverallPenalties(Pilot pilot);
 }

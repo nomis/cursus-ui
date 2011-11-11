@@ -54,7 +54,7 @@ public class GenericScores extends AbstractScores {
 
 	// RaceLapsData
 	@Override
-	public Integer getLaps(Pilot pilot, Race race) {
+	public int getLaps(Pilot pilot, Race race) {
 		return raceLapsData.getLaps(pilot, race);
 	}
 
@@ -90,7 +90,7 @@ public class GenericScores extends AbstractScores {
 	}
 
 	@Override
-	public Integer getRacePenalties(Pilot pilot, Race race) {
+	public int getRacePenalties(Pilot pilot, Race race) {
 		return racePenaltiesData.getRacePenalties(pilot, race);
 	}
 
@@ -101,7 +101,7 @@ public class GenericScores extends AbstractScores {
 	}
 
 	@Override
-	public Integer getRacePoints(Pilot pilot, Race race) {
+	public int getRacePoints(Pilot pilot, Race race) {
 		return racePointsData.getRacePoints(pilot, race);
 	}
 
@@ -132,7 +132,7 @@ public class GenericScores extends AbstractScores {
 	}
 
 	@Override
-	public Integer getRacePosition(Pilot pilot, Race race) {
+	public int getRacePosition(Pilot pilot, Race race) {
 		return racePositionsData.getRacePosition(pilot, race);
 	}
 
@@ -163,7 +163,7 @@ public class GenericScores extends AbstractScores {
 	}
 
 	@Override
-	public Integer getRaceDiscard(Pilot pilot, int discard) {
+	public int getRaceDiscard(Pilot pilot, int discard) {
 		return raceDiscardsData.getRaceDiscard(pilot, discard);
 	}
 
@@ -179,7 +179,7 @@ public class GenericScores extends AbstractScores {
 	}
 
 	@Override
-	public Integer getOverallPenalties(Pilot pilot) {
+	public int getOverallPenalties(Pilot pilot) {
 		return overallPenaltiesData.getOverallPenalties(pilot);
 	}
 
@@ -190,7 +190,7 @@ public class GenericScores extends AbstractScores {
 	}
 
 	@Override
-	public Integer getOverallPoints(Pilot pilot) {
+	public int getOverallPoints(Pilot pilot) {
 		return getOverallPoints(pilot);
 	}
 
@@ -206,7 +206,7 @@ public class GenericScores extends AbstractScores {
 	}
 
 	@Override
-	public Integer getOverallPosition(Pilot pilot) {
+	public int getOverallPosition(Pilot pilot) {
 		return overallPositionData.getOverallPosition(pilot);
 	}
 

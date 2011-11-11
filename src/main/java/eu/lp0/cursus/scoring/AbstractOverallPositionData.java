@@ -34,7 +34,7 @@ public abstract class AbstractOverallPositionData<T extends ScoredData> implemen
 	}
 
 	@Override
-	public Integer getOverallPosition(Pilot pilot) {
+	public int getOverallPosition(Pilot pilot) {
 		Multimap<Pilot, Integer> inverted = HashMultimap.create();
 		Multimaps.invertFrom(getOverallPositions(), inverted);
 		return inverted.get(pilot).iterator().next();

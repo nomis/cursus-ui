@@ -26,7 +26,7 @@ import eu.lp0.cursus.db.data.Pilot;
 public interface OverallPositionData {
 	public LinkedListMultimap<Integer, Pilot> getOverallPositions();
 
-	public Integer getOverallPosition(Pilot pilot);
+	public int getOverallPosition(Pilot pilot);
 
 	public List<Pilot> getOverallOrder();
 }

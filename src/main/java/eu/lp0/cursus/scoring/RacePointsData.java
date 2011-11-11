@@ -27,7 +27,7 @@ import eu.lp0.cursus.db.data.Race;
 public interface RacePointsData {
 	public Table<Pilot, Race, Integer> getRacePoints();
 
-	public Integer getRacePoints(Pilot pilot, Race race);
+	public int getRacePoints(Pilot pilot, Race race);
 
 	public Map<Race, Integer> getRacePoints(Pilot pilot);
 

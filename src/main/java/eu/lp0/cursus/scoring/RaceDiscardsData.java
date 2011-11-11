@@ -31,7 +31,7 @@ public interface RaceDiscardsData {
 
 	public Map<Pilot, Integer> getRaceDiscards(int discard);
 
-	public Integer getRaceDiscard(Pilot pilot, int discard);
+	public int getRaceDiscard(Pilot pilot, int discard);
 
 	public Map<Integer, Race> getDiscardedRaces(final Pilot pilot);
 }

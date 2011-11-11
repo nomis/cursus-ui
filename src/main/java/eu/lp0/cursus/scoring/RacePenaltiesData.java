@@ -31,5 +31,5 @@ public interface RacePenaltiesData {
 
 	public Map<Pilot, Integer> getRacePenalties(Race race);
 
-	public Integer getRacePenalties(Pilot pilot, Race race);
+	public int getRacePenalties(Pilot pilot, Race race);
 }

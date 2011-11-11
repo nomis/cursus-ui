@@ -44,7 +44,7 @@ public abstract class AbstractRacePointsData<T extends ScoredData> implements Ra
 	}
 
 	@Override
-	public Integer getRacePoints(Pilot pilot, Race race) {
+	public int getRacePoints(Pilot pilot, Race race) {
 		return getRacePoints(race).get(pilot);
 	}
 

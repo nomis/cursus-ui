@@ -46,7 +46,7 @@ public abstract class AbstractRacePositionsData<T extends ScoredData> implements
 	}
 
 	@Override
-	public Integer getRacePosition(Pilot pilot, Race race) {
+	public int getRacePosition(Pilot pilot, Race race) {
 		Multimap<Pilot, Integer> inverted = HashMultimap.create();
 		Multimaps.invertFrom(getRacePositions(race), inverted);
 		return inverted.get(pilot).iterator().next();

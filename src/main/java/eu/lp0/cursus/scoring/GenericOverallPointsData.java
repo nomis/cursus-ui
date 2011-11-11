@@ -29,7 +29,7 @@ public class GenericOverallPointsData<T extends ScoredData & RacePointsData & Ra
 	}
 
 	@Override
-	public Integer getOverallPoints(Pilot pilot) {
+	public int getOverallPoints(Pilot pilot) {
 		int points = 0;
 
 		// Add race points

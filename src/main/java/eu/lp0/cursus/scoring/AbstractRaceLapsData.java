@@ -55,7 +55,7 @@ public abstract class AbstractRaceLapsData<T extends ScoredData> implements Race
 	}
 
 	@Override
-	public Integer getLaps(Pilot pilot, Race race) {
+	public int getLaps(Pilot pilot, Race race) {
 		return raceLaps.get(pilot, race);
 	}
 

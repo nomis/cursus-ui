@@ -24,7 +24,7 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
 public interface RaceLapsData {
-	public Integer getLaps(Pilot pilot, Race race);
+	public int getLaps(Pilot pilot, Race race);
 
 	public Map<Race, Integer> getLaps(Pilot pilot);
 
