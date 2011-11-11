@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.test;
+package eu.lp0.cursus.test.db.data;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +27,7 @@ import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.PilotAtEvent;
+import eu.lp0.cursus.test.db.AbstractDatabaseTest;
 
 public class PilotAtEventTests extends AbstractDatabaseTest {
 	@Test

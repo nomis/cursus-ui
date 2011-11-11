@@ -28,7 +28,7 @@ import eu.lp0.cursus.db.data.RaceEvent;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.Scorer;
 import eu.lp0.cursus.scoring.ScorerFactory;
-import eu.lp0.cursus.test.AbstractDatabaseTest;
+import eu.lp0.cursus.test.db.AbstractDatabaseTest;
 
 public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 	protected final String SERIES_NAME = "SPKA Race Series 2011/12"; //$NON-NLS-1$
