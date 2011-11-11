@@ -1,5 +1,5 @@
 /*
-	cursus - Event series management program
+	cursus - Race series management program
 	Copyright 2011  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
