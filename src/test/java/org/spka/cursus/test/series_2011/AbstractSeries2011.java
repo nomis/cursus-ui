@@ -17,7 +17,7 @@
  */
 package org.spka.cursus.test.series_2011;
 
-import org.spka.cursus.scoring.Scoring2011;
+import org.spka.cursus.scoring.SPKAConstants;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.data.Event;
@@ -26,6 +26,7 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.db.data.RaceEvent;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.scoring.Scorer;
 import eu.lp0.cursus.scoring.ScorerFactory;
 import eu.lp0.cursus.test.AbstractDatabaseTest;
 
@@ -37,7 +38,7 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 	protected final int EVENT1_FLEET = 22;
 	protected final String RACE1_NAME = "Race 1"; //$NON-NLS-1$
 
-	protected Scoring2011 scorer = (Scoring2011)ScorerFactory.newScorer(Scoring2011.UUID);
+	protected Scorer scorer = ScorerFactory.newScorer(SPKAConstants.UUID_2011);
 
 	protected Pilot sco018;
 	protected Pilot sco019;
