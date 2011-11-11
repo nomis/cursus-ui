@@ -23,8 +23,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ArrayTable;
-import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Ordering;
 import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Pilot;
@@ -34,17 +36,17 @@ public abstract class AbstractRaceLapsData<T extends ScoredData> implements Race
 	protected final T scores;
 
 	private final Table<Pilot, Race, Integer> raceLaps;
-	private final Map<Race, LinkedListMultimap<Integer, Pilot>> lapOrder;
+	private final Map<Race, ListMultimap<Integer, Pilot>> lapOrder;
 
 	public AbstractRaceLapsData(T scores) {
 		this.scores = scores;
 
 		raceLaps = ArrayTable.create(scores.getPilots(), scores.getRaces());
-		lapOrder = new HashMap<Race, LinkedListMultimap<Integer, Pilot>>();
+		lapOrder = new HashMap<Race, ListMultimap<Integer, Pilot>>();
 
 		Map<Race, Integer> zeroLaps = new HashMap<Race, Integer>();
 		for (Race race : scores.getRaces()) {
-			LinkedListMultimap<Integer, Pilot> order = LinkedListMultimap.create();
+			ListMultimap<Integer, Pilot> order = ArrayListMultimap.create();
 			lapOrder.put(race, order);
 			zeroLaps.put(race, 0);
 		}
@@ -71,11 +73,17 @@ public abstract class AbstractRaceLapsData<T extends ScoredData> implements Race
 
 	@Override
 	public List<Pilot> getLapOrder(Race race) {
-		return Collections.unmodifiableList(new ArrayList<Pilot>(lapOrder.get(race).values()));
+		ListMultimap<Integer, Pilot> order = lapOrder.get(race);
+		List<Integer> laps = Ordering.natural().reverse().sortedCopy(order.keySet());
+		List<Pilot> pilotOrder = new ArrayList<Pilot>();
+		for (Integer lap : laps) {
+			pilotOrder.addAll(order.get(lap));
+		}
+		return Collections.unmodifiableList(pilotOrder);
 	}
 
 	protected void completeRaceLap(Race race, Pilot pilot) {
-		LinkedListMultimap<Integer, Pilot> order = lapOrder.get(race);
+		ListMultimap<Integer, Pilot> order = lapOrder.get(race);
 		int laps = raceLaps.get(pilot, race);
 
 		order.remove(laps, pilot);
