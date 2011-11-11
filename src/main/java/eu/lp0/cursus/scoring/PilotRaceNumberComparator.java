@@ -17,14 +17,17 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.List;
-import java.util.Set;
+import java.util.Comparator;
+
+import com.google.common.collect.ComparisonChain;
+import com.google.common.collect.Ordering;
 
 import eu.lp0.cursus.db.data.Pilot;
-import eu.lp0.cursus.db.data.Race;
 
-public interface ScoredData {
-	public Set<Pilot> getPilots();
-
-	public List<Race> getRaces();
+public class PilotRaceNumberComparator implements Comparator<Pilot> {
+	@Override
+	public int compare(Pilot o1, Pilot o2) {
+		return ComparisonChain.start().compare(o1.getRaceNumber(), o2.getRaceNumber(), Ordering.natural().nullsLast()).compare(o1.getName(), o2.getName())
+				.compare(o1.getId(), o2.getId()).result();
+	}
 }

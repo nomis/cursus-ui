@@ -17,10 +17,14 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ArrayTable;
+import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Pilot;
@@ -29,12 +33,25 @@ import eu.lp0.cursus.db.data.Race;
 public abstract class AbstractRaceLapsData<T extends ScoredData> implements RaceLapsData {
 	protected final T scores;
 
-	protected final Table<Pilot, Race, Integer> raceLaps;
+	private final Table<Pilot, Race, Integer> raceLaps;
+	private final Map<Race, LinkedListMultimap<Integer, Pilot>> lapOrder;
 
 	public AbstractRaceLapsData(T scores) {
 		this.scores = scores;
 
 		raceLaps = ArrayTable.create(scores.getPilots(), scores.getRaces());
+		lapOrder = new HashMap<Race, LinkedListMultimap<Integer, Pilot>>();
+
+		Map<Race, Integer> zeroLaps = new HashMap<Race, Integer>();
+		for (Race race : scores.getRaces()) {
+			LinkedListMultimap<Integer, Pilot> order = LinkedListMultimap.create();
+			lapOrder.put(race, order);
+			zeroLaps.put(race, 0);
+		}
+
+		for (Pilot pilot : scores.getPilots()) {
+			raceLaps.row(pilot).putAll(zeroLaps);
+		}
 	}
 
 	@Override
@@ -53,5 +70,16 @@ public abstract class AbstractRaceLapsData<T extends ScoredData> implements Race
 	}
 
 	@Override
-	public abstract void completeRaceLap(Pilot pilot, Race race) throws UnsupportedOperationException;
+	public List<Pilot> getLapOrder(Race race) {
+		return Collections.unmodifiableList(new ArrayList<Pilot>(lapOrder.get(race).values()));
+	}
+
+	protected void completeRaceLap(Race race, Pilot pilot) {
+		LinkedListMultimap<Integer, Pilot> order = lapOrder.get(race);
+		int laps = raceLaps.get(pilot, race);
+
+		order.remove(laps, pilot);
+		raceLaps.put(pilot, race, ++laps);
+		order.put(laps, pilot);
+	}
 }

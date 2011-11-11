@@ -17,29 +17,10 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public abstract class AbstractRaceOrderData<T extends ScoredData> implements RaceOrderData {
-	protected final T scores;
-
-	public AbstractRaceOrderData(T scores) {
-		this.scores = scores;
-	}
-
-	@Override
-	public Map<Race, List<Pilot>> getRaceOrder() {
-		Map<Race, List<Pilot>> raceOrder = new HashMap<Race, List<Pilot>>();
-		for (Race race : scores.getRaces()) {
-			raceOrder.put(race, getRaceOrder(race));
-		}
-		return raceOrder;
-	}
-
-	@Override
-	public abstract List<Pilot> getRaceOrder(Race race);
+public interface DiscardCalculator {
+	public int getDiscardsFor(List<Race> races);
 }

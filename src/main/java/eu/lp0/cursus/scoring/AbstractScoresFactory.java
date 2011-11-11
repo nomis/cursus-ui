@@ -17,15 +17,15 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
 public abstract class AbstractScoresFactory implements ScoresFactory {
 	@Override
-	public Scores newScores(Collection<Pilot> pilots, List<Race> race) {
-		return new GenericScores(pilots, race, this);
+	public Scores newScores(Set<Pilot> pilots, List<Race> races) {
+		return new GenericScores(pilots, races, this);
 	}
 }

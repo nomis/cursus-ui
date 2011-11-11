@@ -29,36 +29,42 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
 public class GenericRaceDiscardsData<T extends ScoredData & RacePointsData> extends AbstractRaceDiscardsData<T> {
-	public GenericRaceDiscardsData(T scores, int racesPerDiscard) {
-		super(scores, scores.getRaces().size() / racesPerDiscard);
+	public GenericRaceDiscardsData(T scores) {
+		super(scores, 0);
+	}
+
+	public GenericRaceDiscardsData(T scores, DiscardCalculator discardCalculator) {
+		super(scores, discardCalculator.getDiscardsFor(scores.getRaces()));
 	}
 
 	@Override
 	public Map<Integer, Race> getDiscardedRaces(final Pilot pilot) {
 		Map<Integer, Race> pilotDiscards = new TreeMap<Integer, Race>();
 
-		final Map<Race, Integer> racePoints = scores.getRacePoints(pilot);
-		SortedSet<Race> pilotRaces = new TreeSet<Race>(new Comparator<Race>() {
-			@Override
-			public int compare(Race o1, Race o2) {
-				return racePoints.get(o2).compareTo(racePoints.get(o1));
-			}
-		});
+		if (discards > 0) {
+			final Map<Race, Integer> racePoints = scores.getRacePoints(pilot);
+			SortedSet<Race> pilotRaces = new TreeSet<Race>(new Comparator<Race>() {
+				@Override
+				public int compare(Race o1, Race o2) {
+					return racePoints.get(o2).compareTo(racePoints.get(o1));
+				}
+			});
 
-		// Use all races where the score is not null
-		for (Map.Entry<Race, Integer> entry : racePoints.entrySet()) {
-			if (entry.getValue() != null) {
-				pilotRaces.add(entry.getKey());
+			// Use all races where the score is not null
+			for (Map.Entry<Race, Integer> entry : racePoints.entrySet()) {
+				if (entry.getValue() != null) {
+					pilotRaces.add(entry.getKey());
+				}
 			}
-		}
 
-		// Discard the highest scoring races
-		Iterator<Race> it = pilotRaces.iterator();
-		for (int discard = 1; discard <= discards; discard++) {
-			if (it.hasNext()) {
-				pilotDiscards.put(discard, null);
-			} else {
-				pilotDiscards.put(discard, it.next());
+			// Discard the highest scoring races
+			Iterator<Race> it = pilotRaces.iterator();
+			for (int discard = 1; discard <= discards; discard++) {
+				if (it.hasNext()) {
+					pilotDiscards.put(discard, null);
+				} else {
+					pilotDiscards.put(discard, it.next());
+				}
 			}
 		}
 

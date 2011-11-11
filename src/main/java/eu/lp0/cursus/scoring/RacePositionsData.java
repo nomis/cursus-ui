@@ -17,19 +17,23 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Table;
+import com.google.common.collect.LinkedListMultimap;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public interface RacePositionData {
-	public Table<Pilot, Race, Integer> getRacePosition();
+public interface RacePositionsData {
+	public Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositions();
 
-	public Map<Race, Integer> getRacePosition(Pilot pilot);
-
-	public Map<Pilot, Integer> getRacePosition(Race race);
+	public LinkedListMultimap<Integer, Pilot> getRacePositions(Race race);
 
 	public Integer getRacePosition(Pilot pilot, Race race);
+
+	public Map<Race, List<Pilot>> getRaceOrders();
+
+	public List<Pilot> getRaceOrder(Race race);
+
 }

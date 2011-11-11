@@ -17,14 +17,28 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
+
+import com.google.common.collect.Ordering;
+import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public interface ScoredData {
-	public Set<Pilot> getPilots();
+public class PilotRacePlacingComparator implements Comparator<Pilot> {
+	private final Table<Pilot, Race, Integer> racePoints;
 
-	public List<Race> getRaces();
+	public PilotRacePlacingComparator(Table<Pilot, Race, Integer> racePoints) {
+		this.racePoints = racePoints;
+	}
+
+	private List<Integer> getRacePlacing(Pilot pilot) {
+		return Ordering.natural().sortedCopy(racePoints.row(pilot).values());
+	}
+
+	@Override
+	public int compare(Pilot o1, Pilot o2) {
+		return Ordering.<Integer> natural().lexicographical().compare(getRacePlacing(o1), getRacePlacing(o2));
+	}
 }

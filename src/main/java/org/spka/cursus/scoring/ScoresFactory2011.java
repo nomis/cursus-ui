@@ -15,19 +15,14 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.scoring;
+package org.spka.cursus.scoring;
 
-import java.util.List;
+import eu.lp0.cursus.scoring.RacePointsData;
+import eu.lp0.cursus.scoring.Scores;
 
-import eu.lp0.cursus.db.data.Pilot;
-
-public abstract class AbstractOverallOrderData<T extends ScoredData> implements OverallOrderData {
-	protected final T scores;
-
-	public AbstractOverallOrderData(T scores) {
-		this.scores = scores;
-	}
-
+public class ScoresFactory2011 extends ScoresFactory2006 {
 	@Override
-	public abstract List<Pilot> getOverallOrder();
+	public RacePointsData newRacePointsData(Scores scores) {
+		return new RacePointsData2011<Scores>(scores);
+	}
 }

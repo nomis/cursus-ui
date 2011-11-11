@@ -17,10 +17,24 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.List;
+public abstract class GenericScoresFactory extends AbstractScoresFactory {
+	@Override
+	public RacePenaltiesData newRacePenaltiesData(Scores scores) {
+		return new GenericRacePenaltiesData<Scores>(scores);
+	}
 
-import eu.lp0.cursus.db.data.Pilot;
+	@Override
+	public RacePointsData newRacePointsData(Scores scores) {
+		return new GenericRacePointsData<Scores>(scores);
+	}
 
-public interface OverallOrderData {
-	public List<Pilot> getOverallOrder();
+	@Override
+	public OverallPenaltiesData newOverallPenaltiesData(Scores scores) {
+		return new GenericOverallPenaltiesData<Scores>(scores);
+	}
+
+	@Override
+	public OverallPointsData newOverallPointsData(Scores scores) {
+		return new GenericOverallPointsData<Scores>(scores);
+	}
 }

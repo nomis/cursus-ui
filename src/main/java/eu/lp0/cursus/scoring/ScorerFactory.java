@@ -54,7 +54,7 @@ public class ScorerFactory {
 		Class<? extends Scorer> scorer = scoringSystems.get(uuid);
 		if (scorer != null) {
 			try {
-				return scorer.newInstance();
+				return (scorer.newInstance());
 			} catch (InstantiationException e) {
 				log.error("Cannot instantiate " + uuid, e); //$NON-NLS-1$
 				return null;

@@ -17,7 +17,9 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.LinkedListMultimap;
@@ -25,26 +27,45 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 
 import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.db.data.Race;
 
-public abstract class AbstractOverallPositionData<T extends ScoredData> implements OverallPositionData {
+public abstract class AbstractRacePositionsData<T extends ScoredData> implements RacePositionsData {
 	protected final T scores;
 
-	public AbstractOverallPositionData(T scores) {
+	public AbstractRacePositionsData(T scores) {
 		this.scores = scores;
 	}
 
 	@Override
-	public Integer getOverallPosition(Pilot pilot) {
+	public Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositions() {
+		Map<Race, LinkedListMultimap<Integer, Pilot>> racePositions = new HashMap<Race, LinkedListMultimap<Integer, Pilot>>();
+		for (Race race : scores.getRaces()) {
+			racePositions.put(race, getRacePositions(race));
+		}
+		return racePositions;
+	}
+
+	@Override
+	public Integer getRacePosition(Pilot pilot, Race race) {
 		Multimap<Pilot, Integer> inverted = HashMultimap.create();
-		Multimaps.invertFrom(getOverallPositions(), inverted);
+		Multimaps.invertFrom(getRacePositions(race), inverted);
 		return inverted.get(pilot).iterator().next();
 	}
 
 	@Override
-	public List<Pilot> getOverallOrder() {
-		return getOverallPositions().values();
+	public Map<Race, List<Pilot>> getRaceOrders() {
+		Map<Race, List<Pilot>> raceOrders = new HashMap<Race, List<Pilot>>();
+		for (Race race : scores.getRaces()) {
+			raceOrders.put(race, getRaceOrder(race));
+		}
+		return raceOrders;
 	}
 
 	@Override
-	public abstract LinkedListMultimap<Integer, Pilot> getOverallPositions();
+	public List<Pilot> getRaceOrder(Race race) {
+		return getRacePositions(race).values();
+	}
+
+	@Override
+	public abstract LinkedListMultimap<Integer, Pilot> getRacePositions(Race race);
 }

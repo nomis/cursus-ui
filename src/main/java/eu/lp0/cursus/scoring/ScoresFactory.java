@@ -17,14 +17,14 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
 public interface ScoresFactory {
-	public Scores newScores(Collection<Pilot> pilots, List<Race> race);
+	public Scores newScores(Set<Pilot> pilots, List<Race> races);
 
 	public RaceLapsData newRaceLapsData(Scores scores);
 
@@ -32,17 +32,13 @@ public interface ScoresFactory {
 
 	public RacePointsData newRacePointsData(Scores scores);
 
-	public RaceOrderData newRaceOrderData(Scores scores);
-
-	public RacePositionData newRacePositionData(Scores scores);
+	public RacePositionsData newRacePositionsData(Scores scores);
 
 	public RaceDiscardsData newRaceDiscardsData(Scores scores);
 
 	public OverallPenaltiesData newOverallPenaltiesData(Scores scores);
 
 	public OverallPointsData newOverallPointsData(Scores scores);
-
-	public OverallOrderData newOverallOrderData(Scores scores);
 
 	public OverallPositionData newOverallPositionData(Scores scores);
 

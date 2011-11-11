@@ -15,16 +15,14 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.scoring;
+package org.spka.cursus.scoring;
 
-import java.util.List;
-import java.util.Map;
+public class SPKAConstants {
+	public static final String NAME_2006 = "SPKA 2006/07"; //$NON-NLS-1$
+	public static final String UUID_2006 = "d3071221-d71d-aa18-6637-d3115eea48e6"; //$NON-NLS-1$
 
-import eu.lp0.cursus.db.data.Pilot;
-import eu.lp0.cursus.db.data.Race;
+	public static final int RACES_PER_DISCARD = 4;
 
-public interface RaceOrderData {
-	public Map<Race, List<Pilot>> getRaceOrder();
-
-	public List<Pilot> getRaceOrder(Race race);
+	public static final String NAME_2011 = "SPKA 2011/12"; //$NON-NLS-1$
+	public static final String UUID_2011 = "9f5cd14f-5eac-b854-03c3-1011a2bed527"; //$NON-NLS-1$
 }

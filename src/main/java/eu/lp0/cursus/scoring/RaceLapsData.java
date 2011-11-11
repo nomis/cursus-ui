@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.List;
 import java.util.Map;
 
 import eu.lp0.cursus.db.data.Pilot;
@@ -29,5 +30,5 @@ public interface RaceLapsData {
 
 	public Map<Pilot, Integer> getLaps(Race race);
 
-	public void completeRaceLap(Pilot pilot, Race race);
+	public List<Pilot> getLapOrder(Race race);
 }

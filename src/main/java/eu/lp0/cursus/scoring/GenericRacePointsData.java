@@ -19,44 +19,41 @@ package eu.lp0.cursus.scoring;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.ArrayTable;
-import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public abstract class AbstractRacePointsData<T extends ScoredData> implements RacePointsData {
-	protected final T scores;
-
-	public AbstractRacePointsData(T scores) {
-		this.scores = scores;
+public class GenericRacePointsData<T extends ScoredData & RaceLapsData & RacePenaltiesData> extends AbstractRacePointsData<T> {
+	public GenericRacePointsData(T scores) {
+		super(scores);
 	}
 
 	@Override
-	public Table<Pilot, Race, Integer> getRacePoints() {
-		Table<Pilot, Race, Integer> racePoints = ArrayTable.create(scores.getPilots(), scores.getRaces());
-		for (Race race : scores.getRaces()) {
-			racePoints.column(race).putAll(getRacePoints(race));
+	public Map<Pilot, Integer> getRacePoints(Race race) {
+		Map<Pilot, Integer> racePoints = new HashMap<Pilot, Integer>();
+		List<Pilot> lapOrder = scores.getLapOrder(race);
+
+		// Score everyone who completed a lap
+		int points = 0;
+		for (Pilot pilot : lapOrder) {
+			racePoints.put(pilot, points + scores.getRacePenalties(pilot, race));
+			points += (points == 0) ? 2 : 1;
 		}
-		return racePoints;
-	}
 
-	@Override
-	public Integer getRacePoints(Pilot pilot, Race race) {
-		return getRacePoints(race).get(pilot);
-	}
-
-	@Override
-	public Map<Race, Integer> getRacePoints(Pilot pilot) {
-		Map<Race, Integer> racePoints = new HashMap<Race, Integer>();
-		for (Race race : scores.getRaces()) {
-			racePoints.put(race, getRacePoints(pilot, race));
+		// Score everyone else
+		for (Pilot pilot : scores.getPilots()) {
+			if (!racePoints.containsKey(pilot)) {
+				// It is possible to have penalties but no laps
+				racePoints.put(pilot, getPointsForNoLaps(pilot, race) + scores.getRacePenalties(pilot, race));
+			}
 		}
+
 		return Collections.unmodifiableMap(racePoints);
 	}
 
-	@Override
-	public abstract Map<Pilot, Integer> getRacePoints(Race race);
+	protected int getPointsForNoLaps(Pilot pilot, Race race) {
+		return race.getAttendees().size() + 1;
+	}
 }

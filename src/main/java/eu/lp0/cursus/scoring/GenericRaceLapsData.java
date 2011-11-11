@@ -17,20 +17,64 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
+
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.db.data.RaceAttendee;
+import eu.lp0.cursus.db.data.RaceEvent;
 
 public class GenericRaceLapsData<T extends ScoredData> extends AbstractRaceLapsData<T> {
-	public GenericRaceLapsData(T scores) {
+	private final boolean scoreBeforeStart;
+	private final boolean scoreAfterFinish;
+
+	public GenericRaceLapsData(T scores, boolean scoreBeforeStart, boolean scoreAfterFinish) {
 		super(scores);
+
+		this.scoreBeforeStart = scoreBeforeStart;
+		this.scoreAfterFinish = scoreAfterFinish;
+
+		for (Race race : scores.getRaces()) {
+			loadLaps(race);
+		}
 	}
 
-	@Override
-	public void completeRaceLap(Pilot pilot, Race race) {
-		Integer laps = raceLaps.get(pilot, race);
-		if (laps == null) {
-			laps = 0;
+	private Set<Pilot> filteredPilots(Race race) {
+		ImmutableSet.Builder<Pilot> pilots = ImmutableSet.builder();
+		for (RaceAttendee attendee : race.getAttendees().values()) {
+			if (attendee.getType() == RaceAttendee.Type.PILOT) {
+				pilots.add(attendee.getPilot());
+			}
 		}
-		raceLaps.put(pilot, race, laps + 1);
+		return pilots.build();
+	}
+
+	private void loadLaps(Race race) {
+		Set<Pilot> pilots = filteredPilots(race);
+		boolean beforeStart = true;
+		boolean afterFinish = false;
+
+		for (RaceEvent event : race.getEvents()) {
+			switch (event.getType()) {
+			case START:
+				beforeStart = false;
+				break;
+
+			case LAP:
+				if ((!beforeStart || scoreBeforeStart) && (!afterFinish || scoreAfterFinish)) {
+					// If they aren't marked as attending the race as a pilot, they don't get scored.
+					if (!pilots.contains(event.getPilot())) {
+						completeRaceLap(race, event.getPilot());
+					}
+				}
+				break;
+
+			case FINISH:
+				afterFinish = true;
+				break;
+			}
+		}
 	}
 }

@@ -17,24 +17,24 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
 public abstract class AbstractScores implements Scores {
-	protected final Collection<Pilot> pilots;
+	protected final Set<Pilot> pilots;
 	protected final List<Race> races;
 
-	public AbstractScores(Collection<Pilot> pilots, List<Race> races) {
+	public AbstractScores(Set<Pilot> pilots, List<Race> races) {
 		this.pilots = pilots;
 		this.races = races;
 	}
 
-	public Collection<Pilot> getPilots() {
-		return Collections.unmodifiableCollection(pilots);
+	public Set<Pilot> getPilots() {
+		return Collections.unmodifiableSet(pilots);
 	}
 
 	public List<Race> getRaces() {

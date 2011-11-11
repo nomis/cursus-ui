@@ -15,16 +15,27 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.scoring;
-
-import java.util.List;
-import java.util.Set;
+package org.spka.cursus.scoring;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.scoring.GenericRacePointsData;
+import eu.lp0.cursus.scoring.RaceLapsData;
+import eu.lp0.cursus.scoring.RacePenaltiesData;
+import eu.lp0.cursus.scoring.ScoredData;
 
-public interface ScoredData {
-	public Set<Pilot> getPilots();
+public class RacePointsData2011<T extends ScoredData & RaceLapsData & RacePenaltiesData> extends GenericRacePointsData<T> {
+	public RacePointsData2011(T scores) {
+		super(scores);
+	}
 
-	public List<Race> getRaces();
+	@Override
+	protected int getPointsForNoLaps(Pilot pilot, Race race) {
+		int fleet = race.getEvent().getSeries().getPilots().size();
+		if (race.getAttendees().containsKey(pilot)) {
+			return fleet + 1;
+		} else {
+			return fleet + 2;
+		}
+	}
 }

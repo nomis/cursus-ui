@@ -17,10 +17,11 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Pilot;
@@ -30,29 +31,25 @@ public class GenericScores extends AbstractScores {
 	protected final RaceLapsData raceLapsData;
 	protected final RacePenaltiesData racePenaltiesData;
 	protected final RacePointsData racePointsData;
-	protected final RaceOrderData raceOrderData;
-	protected final RacePositionData racePositionData;
+	protected final RacePositionsData racePositionsData;
 	protected final RaceDiscardsData raceDiscardsData;
 
 	protected final OverallPenaltiesData overallPenaltiesData;
 	protected final OverallPointsData overallPointsData;
-	protected final OverallOrderData overallOrderData;
 	protected final OverallPositionData overallPositionData;
 
-	public GenericScores(Collection<Pilot> pilots, List<Race> races, ScoresFactory scoresDataFactory) {
+	public GenericScores(Set<Pilot> pilots, List<Race> races, ScoresFactory scoresDataFactory) {
 		super(pilots, races);
 
 		raceLapsData = scoresDataFactory.newRaceLapsData(this);
 		racePenaltiesData = scoresDataFactory.newRacePenaltiesData(this);
 		racePointsData = scoresDataFactory.newRacePointsData(this);
-		raceOrderData = scoresDataFactory.newRaceOrderData(this);
-		racePositionData = scoresDataFactory.newRacePositionData(this);
+		racePositionsData = scoresDataFactory.newRacePositionsData(this);
 		raceDiscardsData = scoresDataFactory.newRaceDiscardsData(this);
 
 		overallPenaltiesData = scoresDataFactory.newOverallPenaltiesData(this);
 		overallPointsData = scoresDataFactory.newOverallPointsData(this);
 		overallPositionData = scoresDataFactory.newOverallPositionData(this);
-		overallOrderData = scoresDataFactory.newOverallOrderData(this);
 	}
 
 	// RaceLapsData
@@ -72,8 +69,8 @@ public class GenericScores extends AbstractScores {
 	}
 
 	@Override
-	public void completeRaceLap(Pilot pilot, Race race) {
-		raceLapsData.completeRaceLap(pilot, race);
+	public List<Pilot> getLapOrder(Race race) {
+		return raceLapsData.getLapOrder(race);
 	}
 
 	// RacePenaltiesData
@@ -118,36 +115,30 @@ public class GenericScores extends AbstractScores {
 		return racePointsData.getRacePoints(race);
 	}
 
-	// RaceOrderData
+	// RacePositionsData
 	@Override
-	public Map<Race, List<Pilot>> getRaceOrder() {
-		return raceOrderData.getRaceOrder();
+	public Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositions() {
+		return racePositionsData.getRacePositions();
 	}
 
 	@Override
-	public List<Pilot> getRaceOrder(Race race) {
-		return raceOrderData.getRaceOrder(race);
-	}
-
-	// RacePositionData
-	@Override
-	public Table<Pilot, Race, Integer> getRacePosition() {
-		return racePositionData.getRacePosition();
-	}
-
-	@Override
-	public Map<Race, Integer> getRacePosition(Pilot pilot) {
-		return racePositionData.getRacePosition(pilot);
-	}
-
-	@Override
-	public Map<Pilot, Integer> getRacePosition(Race race) {
-		return racePositionData.getRacePosition(race);
+	public LinkedListMultimap<Integer, Pilot> getRacePositions(Race race) {
+		return racePositionsData.getRacePositions(race);
 	}
 
 	@Override
 	public Integer getRacePosition(Pilot pilot, Race race) {
-		return racePositionData.getRacePosition(pilot, race);
+		return racePositionsData.getRacePosition(pilot, race);
+	}
+
+	@Override
+	public Map<Race, List<Pilot>> getRaceOrders() {
+		return racePositionsData.getRaceOrders();
+	}
+
+	@Override
+	public List<Pilot> getRaceOrder(Race race) {
+		return racePositionsData.getRaceOrder(race);
 	}
 
 	// RaceDiscardsData
@@ -198,20 +189,19 @@ public class GenericScores extends AbstractScores {
 		return getOverallPoints(pilot);
 	}
 
-	// OverallOrderData
-	@Override
-	public List<Pilot> getOverallOrder() {
-		return overallOrderData.getOverallOrder();
-	}
-
 	// OverallPositionData
 	@Override
-	public Map<Pilot, Integer> getOverallPosition() {
-		return overallPositionData.getOverallPosition();
+	public LinkedListMultimap<Integer, Pilot> getOverallPositions() {
+		return overallPositionData.getOverallPositions();
 	}
 
 	@Override
 	public Integer getOverallPosition(Pilot pilot) {
 		return overallPositionData.getOverallPosition(pilot);
+	}
+
+	@Override
+	public List<Pilot> getOverallOrder() {
+		return overallPositionData.getOverallOrder();
 	}
 }

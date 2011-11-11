@@ -18,13 +18,18 @@
 package eu.lp0.cursus.scoring;
 
 import java.util.List;
-import java.util.Set;
 
-import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public interface ScoredData {
-	public Set<Pilot> getPilots();
+public class GenericDiscardCalculator implements DiscardCalculator {
+	private int racesPerDiscard;
 
-	public List<Race> getRaces();
+	public GenericDiscardCalculator(int racesPerDiscard) {
+		this.racesPerDiscard = racesPerDiscard;
+	}
+
+	@Override
+	public int getDiscardsFor(List<Race> races) {
+		return races.size() / racesPerDiscard;
+	}
 }

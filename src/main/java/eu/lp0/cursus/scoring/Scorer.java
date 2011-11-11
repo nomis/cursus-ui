@@ -17,6 +17,28 @@
  */
 package eu.lp0.cursus.scoring;
 
-public interface Scorer {
+import java.util.List;
+import java.util.Set;
 
+import eu.lp0.cursus.db.data.Event;
+import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.db.data.Series;
+
+public interface Scorer {
+	public Scores scoreSeries(Series series);
+
+	public Scores scoreSeries(Series series, Set<Pilot> pilots);
+
+	public Scores scoreEvent(Event event);
+
+	public Scores scoreEvent(Event event, Set<Pilot> pilots);
+
+	public Scores scoreRace(Race race);
+
+	public Scores scoreRace(Race race, Set<Pilot> pilots);
+
+	public Scores scoreRaces(List<Race> races);
+
+	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots);
 }

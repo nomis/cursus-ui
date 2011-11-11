@@ -15,16 +15,20 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.scoring;
+package org.spka.cursus.scoring;
 
 import java.util.List;
 import java.util.Set;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.scoring.Scores;
+import eu.lp0.cursus.scoring.ScoringSystem;
 
-public interface ScoredData {
-	public Set<Pilot> getPilots();
-
-	public List<Race> getRaces();
+@ScoringSystem(uuid = SPKAConstants.UUID_2006, name = SPKAConstants.NAME_2006)
+public class Scorer2011 extends Scorer2006 {
+	@Override
+	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots) {
+		return new ScoresFactory2011().newScores(pilots, races);
+	}
 }

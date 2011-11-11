@@ -17,14 +17,33 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.List;
-import java.util.Set;
-
 import eu.lp0.cursus.db.data.Pilot;
-import eu.lp0.cursus.db.data.Race;
 
-public interface ScoredData {
-	public Set<Pilot> getPilots();
+public class GenericOverallPointsData<T extends ScoredData & RacePointsData & RaceDiscardsData & OverallPenaltiesData> extends AbstractOverallPointsData<T> {
+	public GenericOverallPointsData(T scores) {
+		super(scores);
+	}
 
-	public List<Race> getRaces();
+	@Override
+	public Integer getOverallPoints(Pilot pilot) {
+		int points = 0;
+
+		// Add race points
+		for (Integer racePoints : scores.getRacePoints(pilot).values()) {
+			points += racePoints;
+		}
+
+		// Remove discarded races
+		for (Integer raceDiscard : scores.getRaceDiscards(pilot).values()) {
+			points -= raceDiscard;
+		}
+
+		// Add penalties
+		points += scores.getOverallPenalties(pilot);
+		if (points < 0) {
+			points = 0;
+		}
+
+		return points;
+	}
 }

@@ -30,14 +30,13 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceEvent;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.scoring.Scorer;
 import eu.lp0.cursus.scoring.ScoringSystem;
 import eu.lp0.cursus.scoring.old.EventScore;
 import eu.lp0.cursus.scoring.old.RaceScore;
 import eu.lp0.cursus.scoring.old.SeriesScore;
 
 @ScoringSystem(uuid = Scoring2010.UUID, name = "SPKA 2010/11")
-public class Scoring2010 implements Scorer {
+public class Scoring2010 {
 	public static final String UUID = "d3071221-d71d-aa18-6637-d3115eea48e6"; //$NON-NLS-1$
 
 	public int calculateFleetSize(Race race) {
