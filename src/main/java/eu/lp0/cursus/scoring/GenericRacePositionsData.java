@@ -63,7 +63,7 @@ public class GenericRacePositionsData<T extends ScoredData & RaceLapsData & Race
 		LinkedListMultimap<Integer, Pilot> racePositions = LinkedListMultimap.create();
 		int position = 1;
 
-		for (Integer points : invRacePoints.keys()) {
+		for (Integer points : invRacePoints.keySet()) {
 			SortedSet<Pilot> pilots = invRacePoints.get(points);
 
 			switch (equalPositioning) {

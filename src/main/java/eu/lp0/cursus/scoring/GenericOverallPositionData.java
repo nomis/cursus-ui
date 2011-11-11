@@ -53,7 +53,7 @@ public class GenericOverallPositionData<T extends ScoredData & RacePointsData & 
 		LinkedListMultimap<Integer, Pilot> overallPositions = LinkedListMultimap.create();
 		int position = 1;
 
-		for (Integer points : invOverallPoints.keys()) {
+		for (Integer points : invOverallPoints.keySet()) {
 			SortedSet<Pilot> pilots = invOverallPoints.get(points);
 
 			switch (equalPositioning) {
