@@ -20,6 +20,8 @@ package eu.lp0.cursus.db;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+import com.google.common.base.Preconditions;
+
 public class DatabaseSession {
 	private static final ThreadLocal<EntityManager> threads = new ThreadLocal<EntityManager>();
 	private final Database database;
@@ -29,17 +31,13 @@ public class DatabaseSession {
 	}
 
 	void startSession() {
-		if (threads.get() != null) {
-			throw new IllegalStateException("Session already open"); //$NON-NLS-1$
-		}
+		Preconditions.checkState(threads.get() == null, "Session already open"); //$NON-NLS-1$
 		threads.set(database.createEntityManager());
 	}
 
 	public static EntityManager getEntityManager() {
 		EntityManager em = threads.get();
-		if (em == null) {
-			throw new IllegalStateException("Session not open"); //$NON-NLS-1$
-		}
+		Preconditions.checkState(em != null, "Session not open"); //$NON-NLS-1$
 		return em;
 	}
 
@@ -64,10 +62,7 @@ public class DatabaseSession {
 	}
 
 	void endSession() {
-		if (threads.get() == null) {
-			throw new IllegalStateException("Session not open"); //$NON-NLS-1$
-		}
-		threads.get().close();
+		getEntityManager().close();
 		threads.set(null);
 	}
 }

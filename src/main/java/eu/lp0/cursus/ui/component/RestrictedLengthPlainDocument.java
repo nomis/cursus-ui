@@ -21,13 +21,13 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
+import com.google.common.base.Preconditions;
+
 public class RestrictedLengthPlainDocument extends PlainDocument {
 	private int maxLength;
 
 	public RestrictedLengthPlainDocument(int maxLength) {
-		if (maxLength < 0) {
-			throw new IllegalArgumentException();
-		}
+		Preconditions.checkArgument(maxLength >= 0);
 
 		this.maxLength = maxLength;
 	}

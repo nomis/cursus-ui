@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayTable;
 import com.google.common.collect.Table;
 
@@ -34,9 +35,7 @@ public abstract class AbstractRaceDiscardsData<T extends ScoredData & RacePoints
 	protected final int discards;
 
 	public AbstractRaceDiscardsData(T scores, int discards) {
-		if (discards < 0) {
-			throw new IllegalArgumentException();
-		}
+		Preconditions.checkArgument(discards >= 0);
 
 		this.scores = scores;
 		this.discards = discards;
