@@ -57,15 +57,20 @@ public class ScorerFactory {
 		Class<? extends Scorer> scorer = scoringSystems.get(uuid);
 		if (scorer != null) {
 			try {
-				return (scorer.newInstance());
+				return Scorer.class.cast(scorer.newInstance());
 			} catch (InstantiationException e) {
 				log.error("Cannot instantiate " + uuid, e); //$NON-NLS-1$
 				return null;
 			} catch (IllegalAccessException e) {
 				log.error("Cannot instantiate " + uuid, e); //$NON-NLS-1$
 				return null;
+			} catch (ClassCastException e) {
+				log.error("Cannot instantiate " + uuid, e); //$NON-NLS-1$
+				return null;
 			}
+		} else {
+			log.error("Cannot find " + uuid); //$NON-NLS-1$
+			return null;
 		}
-		return null;
 	}
 }
