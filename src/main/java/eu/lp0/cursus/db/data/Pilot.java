@@ -196,4 +196,9 @@ public class Pilot extends AbstractEntity {
 	public void setSeriesPenalties(List<Penalty> seriesPenalties) {
 		this.seriesPenalties = seriesPenalties;
 	}
+
+	@Override
+	public String toString() {
+		return "Pilot [name=" + name + ", gender=" + gender + ", country=" + country + ", number=" + number + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$
+	}
 }
