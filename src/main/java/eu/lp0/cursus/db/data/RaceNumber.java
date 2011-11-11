@@ -27,11 +27,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.google.common.base.Preconditions;
+
 import eu.lp0.cursus.util.Constants;
 
 @Entity(name = "race_no")
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "series_id", "organisation", "number" }) })
 public class RaceNumber extends AbstractEntity implements Comparable<RaceNumber> {
+	public static final Pattern RACE_NUMBER_PATTERN = Pattern.compile("^([^0-9]+)([0-9]+)$"); //$NON-NLS-1$
+
 	private String organisation;
 	private Integer number;
 
@@ -103,20 +107,17 @@ public class RaceNumber extends AbstractEntity implements Comparable<RaceNumber>
 	}
 
 	public static RaceNumber valueOfFor(String value, Pilot pilot) {
-		Matcher matcher = Pattern.compile("^([^0-9]+)([0-9]+)$").matcher(value); //$NON-NLS-1$
-		if (matcher.matches()) {
-			String organisation = matcher.group(1);
-			int number = Integer.valueOf(matcher.group(2));
+		Matcher matcher = RACE_NUMBER_PATTERN.matcher(value);
+		Preconditions.checkArgument(matcher.matches(), "Unable to parse race number: %s", value); //$NON-NLS-1$
+		String organisation = matcher.group(1);
+		int number = Integer.valueOf(matcher.group(2));
 
-			RaceNumber raceNumber = new RaceNumber(pilot, organisation, number);
-			for (RaceNumber pilotRaceNumber : pilot.getRaceNumbers()) {
-				if (pilotRaceNumber.compareTo(raceNumber) == 0) {
-					raceNumber = pilotRaceNumber;
-				}
+		RaceNumber raceNumber = new RaceNumber(pilot, organisation, number);
+		for (RaceNumber pilotRaceNumber : pilot.getRaceNumbers()) {
+			if (pilotRaceNumber.compareTo(raceNumber) == 0) {
+				raceNumber = pilotRaceNumber;
 			}
-			return raceNumber;
-		} else {
-			throw new IllegalArgumentException("Unable to parse race number: " + value); //$NON-NLS-1$
 		}
+		return raceNumber;
 	}
 }
