@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,7 @@ public abstract class AbstractOverallPositionData<T extends ScoredData> implemen
 		for (Entry<Integer, Pilot> entry : getOverallPositionsWithOrder().entries()) {
 			racePositions.put(entry.getValue(), entry.getKey());
 		}
-		return racePositions;
+		return Collections.unmodifiableMap(racePositions);
 	}
 
 	@Override
@@ -54,7 +55,7 @@ public abstract class AbstractOverallPositionData<T extends ScoredData> implemen
 
 	@Override
 	public List<Pilot> getOverallOrder() {
-		return getOverallPositionsWithOrder().values();
+		return Collections.unmodifiableList(getOverallPositionsWithOrder().values());
 	}
 
 	@Override
