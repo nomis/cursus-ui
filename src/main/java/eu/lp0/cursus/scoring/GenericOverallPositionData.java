@@ -17,7 +17,10 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.SortedSet;
 
 import com.google.common.collect.Iterators;
@@ -46,11 +49,13 @@ public class GenericOverallPositionData<T extends ScoredData & RacePointsData & 
 	public LinkedListMultimap<Integer, Pilot> getOverallPositionsWithOrder() {
 		// Invert race points with ordered lists of pilots
 		Comparator<Pilot> racePlacings = new PilotRacePlacingComparator(scores.getRacePoints());
-		TreeMultimap<Integer, Pilot> invOverallPoints = TreeMultimap.create(Ordering.natural(), racePlacings);
+		Comparator<Pilot> fallbackOrdering = new PilotRaceNumberComparator();
+		TreeMultimap<Integer, Pilot> invOverallPoints = TreeMultimap.create(Ordering.natural(), Ordering.from(racePlacings).compound(fallbackOrdering));
 		Multimaps.invertFrom(Multimaps.forMap(scores.getOverallPoints()), invOverallPoints);
 
 		// Calculate overall positions
 		LinkedListMultimap<Integer, Pilot> overallPositions = LinkedListMultimap.create();
+		List<Pilot> collectedPilots = new ArrayList<Pilot>();
 		int position = 1;
 
 		for (Integer points : invOverallPoints.keySet()) {
@@ -68,12 +73,21 @@ public class GenericOverallPositionData<T extends ScoredData & RacePointsData & 
 				PeekingIterator<Pilot> it = Iterators.peekingIterator(pilots.iterator());
 				while (it.hasNext()) {
 					Pilot pilot = it.next();
-					overallPositions.put(position, pilot);
+					collectedPilots.add(pilot);
 
-					// If this pilot does not compare equally with the next pilot, use the next position
-					if (!it.hasNext() || racePlacings.compare(it.peek(), pilot) != 0) {
-						position++;
+					// If this pilot compares equally with the next pilot, add them too
+					while (it.hasNext() && racePlacings.compare(it.peek(), pilot) == 0) {
+						collectedPilots.add(it.next());
 					}
+
+					// Sort them by an arbitrary order
+					Collections.sort(collectedPilots, fallbackOrdering);
+
+					// Add them all to this position
+					overallPositions.putAll(position, collectedPilots);
+					position++;
+
+					collectedPilots.clear();
 				}
 				break;
 			}
