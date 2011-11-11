@@ -20,9 +20,11 @@ package eu.lp0.cursus.scoring;
 import java.util.Comparator;
 import java.util.SortedSet;
 
+import com.google.common.collect.Iterators;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Ordering;
+import com.google.common.collect.PeekingIterator;
 import com.google.common.collect.TreeMultimap;
 
 import eu.lp0.cursus.db.data.Pilot;
@@ -63,18 +65,15 @@ public class GenericOverallPositionData<T extends ScoredData & RacePointsData & 
 
 			case IF_REQUIRED:
 				// Try to put pilots with the same points in separate positions
-				Pilot prevPilot = null;
-				for (Pilot pilot : pilots) {
-					// If this pilot does not compare equally with the previous pilot, use the next position
-					if (prevPilot != null && racePlacings.compare(prevPilot, pilot) != 0) {
+				PeekingIterator<Pilot> it = Iterators.peekingIterator(pilots.iterator());
+				while (it.hasNext()) {
+					Pilot pilot = it.next();
+					overallPositions.put(position, pilot);
+
+					// If this pilot does not compare equally with the next pilot, use the next position
+					if (it.peek() == null || racePlacings.compare(it.peek(), pilot) != 0) {
 						position++;
 					}
-					overallPositions.put(position, pilot);
-					prevPilot = pilot;
-				}
-				// Update the position after the last pilot added
-				if (prevPilot != null) {
-					position++;
 				}
 				break;
 			}
