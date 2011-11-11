@@ -71,7 +71,7 @@ public class GenericOverallPositionData<T extends ScoredData & RacePointsData & 
 					overallPositions.put(position, pilot);
 
 					// If this pilot does not compare equally with the next pilot, use the next position
-					if (it.peek() == null || racePlacings.compare(it.peek(), pilot) != 0) {
+					if (!it.hasNext() || racePlacings.compare(it.peek(), pilot) != 0) {
 						position++;
 					}
 				}
