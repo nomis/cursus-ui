@@ -122,13 +122,23 @@ public class GenericScores extends AbstractScores {
 
 	// RacePositionsData
 	@Override
-	public Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositions() {
+	public Map<Race, Map<Pilot, Integer>> getRacePositions() {
 		return racePositionsData.getRacePositions();
 	}
 
 	@Override
-	public LinkedListMultimap<Integer, Pilot> getRacePositions(Race race) {
+	public Map<Pilot, Integer> getRacePositions(Race race) {
 		return racePositionsData.getRacePositions(race);
+	}
+
+	@Override
+	public Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositionsWithOrder() {
+		return racePositionsData.getRacePositionsWithOrder();
+	}
+
+	@Override
+	public LinkedListMultimap<Integer, Pilot> getRacePositionsWithOrder(Race race) {
+		return racePositionsData.getRacePositionsWithOrder(race);
 	}
 
 	@Override
@@ -201,8 +211,13 @@ public class GenericScores extends AbstractScores {
 
 	// OverallPositionData
 	@Override
-	public LinkedListMultimap<Integer, Pilot> getOverallPositions() {
+	public Map<Pilot, Integer> getOverallPositions() {
 		return overallPositionData.getOverallPositions();
+	}
+
+	@Override
+	public LinkedListMultimap<Integer, Pilot> getOverallPositionsWithOrder() {
+		return overallPositionData.getOverallPositionsWithOrder();
 	}
 
 	@Override

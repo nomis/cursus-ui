@@ -18,13 +18,16 @@
 package eu.lp0.cursus.scoring;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.LinkedListMultimap;
 
 import eu.lp0.cursus.db.data.Pilot;
 
 public interface OverallPositionData {
-	public LinkedListMultimap<Integer, Pilot> getOverallPositions();
+	public Map<Pilot, Integer> getOverallPositions();
+
+	public LinkedListMultimap<Integer, Pilot> getOverallPositionsWithOrder();
 
 	public int getOverallPosition(Pilot pilot);
 

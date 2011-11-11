@@ -20,6 +20,7 @@ package eu.lp0.cursus.scoring;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.LinkedListMultimap;
@@ -37,8 +38,8 @@ public abstract class AbstractRacePositionsData<T extends ScoredData> implements
 	}
 
 	@Override
-	public Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositions() {
-		Map<Race, LinkedListMultimap<Integer, Pilot>> racePositions = new HashMap<Race, LinkedListMultimap<Integer, Pilot>>();
+	public Map<Race, Map<Pilot, Integer>> getRacePositions() {
+		Map<Race, Map<Pilot, Integer>> racePositions = new HashMap<Race, Map<Pilot, Integer>>();
 		for (Race race : scores.getRaces()) {
 			racePositions.put(race, getRacePositions(race));
 		}
@@ -46,9 +47,27 @@ public abstract class AbstractRacePositionsData<T extends ScoredData> implements
 	}
 
 	@Override
+	public Map<Pilot, Integer> getRacePositions(Race race) {
+		Map<Pilot, Integer> racePositions = new HashMap<Pilot, Integer>();
+		for (Entry<Integer, Pilot> entry : getRacePositionsWithOrder(race).entries()) {
+			racePositions.put(entry.getValue(), entry.getKey());
+		}
+		return racePositions;
+	}
+
+	@Override
+	public Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositionsWithOrder() {
+		Map<Race, LinkedListMultimap<Integer, Pilot>> racePositions = new HashMap<Race, LinkedListMultimap<Integer, Pilot>>();
+		for (Race race : scores.getRaces()) {
+			racePositions.put(race, getRacePositionsWithOrder(race));
+		}
+		return racePositions;
+	}
+
+	@Override
 	public int getRacePosition(Pilot pilot, Race race) {
 		Multimap<Pilot, Integer> inverted = HashMultimap.create();
-		Multimaps.invertFrom(getRacePositions(race), inverted);
+		Multimaps.invertFrom(getRacePositionsWithOrder(race), inverted);
 		return inverted.get(pilot).iterator().next();
 	}
 
@@ -63,9 +82,9 @@ public abstract class AbstractRacePositionsData<T extends ScoredData> implements
 
 	@Override
 	public List<Pilot> getRaceOrder(Race race) {
-		return getRacePositions(race).values();
+		return getRacePositionsWithOrder(race).values();
 	}
 
 	@Override
-	public abstract LinkedListMultimap<Integer, Pilot> getRacePositions(Race race);
+	public abstract LinkedListMultimap<Integer, Pilot> getRacePositionsWithOrder(Race race);
 }

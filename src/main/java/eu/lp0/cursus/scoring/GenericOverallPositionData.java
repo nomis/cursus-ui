@@ -43,7 +43,7 @@ public class GenericOverallPositionData<T extends ScoredData & RacePointsData & 
 	}
 
 	@Override
-	public LinkedListMultimap<Integer, Pilot> getOverallPositions() {
+	public LinkedListMultimap<Integer, Pilot> getOverallPositionsWithOrder() {
 		// Invert race points with ordered lists of pilots
 		Comparator<Pilot> racePlacings = new PilotRacePlacingComparator(scores.getRacePoints());
 		TreeMultimap<Integer, Pilot> invOverallPoints = TreeMultimap.create(Ordering.natural(), racePlacings);

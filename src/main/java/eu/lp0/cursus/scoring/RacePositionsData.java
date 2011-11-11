@@ -26,9 +26,13 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
 public interface RacePositionsData {
-	public Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositions();
+	public Map<Race, Map<Pilot, Integer>> getRacePositions();
 
-	public LinkedListMultimap<Integer, Pilot> getRacePositions(Race race);
+	public Map<Pilot, Integer> getRacePositions(Race race);
+
+	public Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositionsWithOrder();
+
+	public LinkedListMultimap<Integer, Pilot> getRacePositionsWithOrder(Race race);
 
 	public int getRacePosition(Pilot pilot, Race race);
 

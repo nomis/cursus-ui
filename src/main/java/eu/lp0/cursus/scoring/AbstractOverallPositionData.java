@@ -17,7 +17,10 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.LinkedListMultimap;
@@ -34,17 +37,26 @@ public abstract class AbstractOverallPositionData<T extends ScoredData> implemen
 	}
 
 	@Override
+	public Map<Pilot, Integer> getOverallPositions() {
+		Map<Pilot, Integer> racePositions = new HashMap<Pilot, Integer>();
+		for (Entry<Integer, Pilot> entry : getOverallPositionsWithOrder().entries()) {
+			racePositions.put(entry.getValue(), entry.getKey());
+		}
+		return racePositions;
+	}
+
+	@Override
 	public int getOverallPosition(Pilot pilot) {
 		Multimap<Pilot, Integer> inverted = HashMultimap.create();
-		Multimaps.invertFrom(getOverallPositions(), inverted);
+		Multimaps.invertFrom(getOverallPositionsWithOrder(), inverted);
 		return inverted.get(pilot).iterator().next();
 	}
 
 	@Override
 	public List<Pilot> getOverallOrder() {
-		return getOverallPositions().values();
+		return getOverallPositionsWithOrder().values();
 	}
 
 	@Override
-	public abstract LinkedListMultimap<Integer, Pilot> getOverallPositions();
+	public abstract LinkedListMultimap<Integer, Pilot> getOverallPositionsWithOrder();
 }
