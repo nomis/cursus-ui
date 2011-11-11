@@ -17,22 +17,45 @@
  */
 package org.spka.cursus.scoring;
 
+import eu.lp0.cursus.scoring.AbstractScoresFactory;
 import eu.lp0.cursus.scoring.GenericDiscardCalculator;
+import eu.lp0.cursus.scoring.GenericOverallPenaltiesData;
+import eu.lp0.cursus.scoring.GenericOverallPointsData;
 import eu.lp0.cursus.scoring.GenericOverallPositionData;
 import eu.lp0.cursus.scoring.GenericRaceDiscardsData;
 import eu.lp0.cursus.scoring.GenericRaceLapsData;
+import eu.lp0.cursus.scoring.GenericRacePenaltiesData;
+import eu.lp0.cursus.scoring.GenericRacePointsData;
 import eu.lp0.cursus.scoring.GenericRacePositionsData;
-import eu.lp0.cursus.scoring.GenericScoresFactory;
+import eu.lp0.cursus.scoring.OverallPenaltiesData;
+import eu.lp0.cursus.scoring.OverallPointsData;
 import eu.lp0.cursus.scoring.OverallPositionData;
 import eu.lp0.cursus.scoring.RaceDiscardsData;
 import eu.lp0.cursus.scoring.RaceLapsData;
+import eu.lp0.cursus.scoring.RacePenaltiesData;
+import eu.lp0.cursus.scoring.RacePointsData;
 import eu.lp0.cursus.scoring.RacePositionsData;
 import eu.lp0.cursus.scoring.Scores;
 
-public class ScoresFactory2006 extends GenericScoresFactory {
+public class ScoresFactory2006 extends AbstractScoresFactory {
 	@Override
 	public RaceLapsData newRaceLapsData(Scores scores) {
 		return new GenericRaceLapsData<Scores>(scores, false, true);
+	}
+
+	@Override
+	public RacePenaltiesData newRacePenaltiesData(Scores scores) {
+		return new GenericRacePenaltiesData<Scores>(scores);
+	}
+
+	@Override
+	public RacePointsData newRacePointsData(Scores scores) {
+		return new GenericRacePointsData<Scores>(scores);
+	}
+
+	@Override
+	public RacePositionsData newRacePositionsData(Scores scores) {
+		return new GenericRacePositionsData<Scores>(scores, GenericRacePositionsData.EqualPositioning.ALWAYS);
 	}
 
 	@Override
@@ -41,8 +64,13 @@ public class ScoresFactory2006 extends GenericScoresFactory {
 	}
 
 	@Override
-	public RacePositionsData newRacePositionsData(Scores scores) {
-		return new GenericRacePositionsData<Scores>(scores, GenericRacePositionsData.EqualPositioning.ALWAYS);
+	public OverallPenaltiesData newOverallPenaltiesData(Scores scores) {
+		return new GenericOverallPenaltiesData<Scores>(scores);
+	}
+
+	@Override
+	public OverallPointsData newOverallPointsData(Scores scores) {
+		return new GenericOverallPointsData<Scores>(scores);
 	}
 
 	@Override
