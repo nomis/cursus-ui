@@ -43,9 +43,12 @@ public class ScorerFactory {
 
 			ScoringSystem scoringSystem = clazz.getAnnotation(ScoringSystem.class);
 			if (scoringSystem != null) {
-				assert (!scoringSystems.containsKey(scoringSystem.uuid()));
-				scoringSystems.put(scoringSystem.uuid(), clazz);
-				log.info("Registered scoring system " + clazz + " as " + scoringSystem.uuid()); //$NON-NLS-1$ //$NON-NLS-2$
+				if (scoringSystems.containsKey(scoringSystem.uuid())) {
+					log.warn("Duplicate scoring system " + clazz + " as " + scoringSystem.uuid() + " ignored"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				} else {
+					scoringSystems.put(scoringSystem.uuid(), clazz);
+					log.info("Registered scoring system " + clazz + " as " + scoringSystem.uuid()); //$NON-NLS-1$ //$NON-NLS-2$
+				}
 			}
 		}
 	}
