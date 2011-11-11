@@ -25,6 +25,8 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import com.google.common.collect.ComparisonChain;
+
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
@@ -46,7 +48,7 @@ public class GenericRaceDiscardsData<T extends ScoredData & RacePointsData> exte
 			SortedSet<Race> pilotRaces = new TreeSet<Race>(new Comparator<Race>() {
 				@Override
 				public int compare(Race o1, Race o2) {
-					return racePoints.get(o2).compareTo(racePoints.get(o1));
+					return ComparisonChain.start().compare(racePoints.get(o2), racePoints.get(o1)).compare(o1, o2).result();
 				}
 			});
 
@@ -61,9 +63,9 @@ public class GenericRaceDiscardsData<T extends ScoredData & RacePointsData> exte
 			Iterator<Race> it = pilotRaces.iterator();
 			for (int discard = 1; discard <= discards; discard++) {
 				if (it.hasNext()) {
-					pilotDiscards.put(discard, null);
-				} else {
 					pilotDiscards.put(discard, it.next());
+				} else {
+					pilotDiscards.put(discard, null);
 				}
 			}
 		}
