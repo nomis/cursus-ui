@@ -65,7 +65,7 @@ public class GenericRaceLapsData<T extends ScoredData> extends AbstractRaceLapsD
 			case LAP:
 				if ((!beforeStart || scoreBeforeStart) && (!afterFinish || scoreAfterFinish)) {
 					// If they aren't marked as attending the race as a pilot, they don't get scored.
-					if (!pilots.contains(event.getPilot())) {
+					if (pilots.contains(event.getPilot())) {
 						completeRaceLap(race, event.getPilot());
 					}
 				}
