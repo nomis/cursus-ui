@@ -19,12 +19,15 @@ package eu.lp0.cursus.scoring;
 
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+
 import eu.lp0.cursus.db.data.Race;
 
 public class GenericDiscardCalculator implements DiscardCalculator {
 	private int racesPerDiscard;
 
 	public GenericDiscardCalculator(int racesPerDiscard) {
+		Preconditions.checkArgument(racesPerDiscard > 1);
 		this.racesPerDiscard = racesPerDiscard;
 	}
 
