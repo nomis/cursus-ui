@@ -20,6 +20,7 @@ package eu.lp0.cursus.scoring;
 import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.db.data.RaceAttendee;
 
 public class GenericRacePenaltiesData<T extends ScoredData> extends AbstractRacePenaltiesData<T> {
 	public GenericRacePenaltiesData(T scores) {
@@ -28,18 +29,26 @@ public class GenericRacePenaltiesData<T extends ScoredData> extends AbstractRace
 
 	@Override
 	public int getRacePenalties(Pilot pilot, Race race) {
+		RaceAttendee attendee = race.getAttendees().get(pilot);
+		if (attendee == null) {
+			return 0;
+		}
+
 		// Count previous automatic penalties
 		int autoPenalties = 0;
 		for (Race previousRace : race.getEvent().getRaces()) {
 			if (previousRace == race) {
 				break;
 			} else {
-				for (Penalty penalty : race.getAttendees().get(pilot).getPenalties()) {
-					if (penalty.getType() == Penalty.Type.AUTOMATIC) {
-						autoPenalties += penalty.getValue();
-						// Don't allow negative automatic penalties, that just gets silly
-						if (autoPenalties < 0) {
-							autoPenalties = 0;
+				RaceAttendee previousAttendee = previousRace.getAttendees().get(pilot);
+				if (previousAttendee != null) {
+					for (Penalty penalty : previousAttendee.getPenalties()) {
+						if (penalty.getType() == Penalty.Type.AUTOMATIC) {
+							autoPenalties += penalty.getValue();
+							// Don't allow negative automatic penalties, that just gets silly
+							if (autoPenalties < 0) {
+								autoPenalties = 0;
+							}
 						}
 					}
 				}
@@ -48,7 +57,7 @@ public class GenericRacePenaltiesData<T extends ScoredData> extends AbstractRace
 
 		// Calculate race penalties
 		int penalties = 0;
-		for (Penalty penalty : race.getAttendees().get(pilot).getPenalties()) {
+		for (Penalty penalty : attendee.getPenalties()) {
 			switch (penalty.getType()) {
 			case AUTOMATIC:
 				if (penalty.getValue() >= 0) {
