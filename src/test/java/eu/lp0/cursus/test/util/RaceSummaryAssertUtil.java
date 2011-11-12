@@ -17,7 +17,8 @@
  */
 package eu.lp0.cursus.test.util;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,27 +30,31 @@ import eu.lp0.cursus.scoring.Scores;
 
 public class RaceSummaryAssertUtil {
 	private final Map<Pilot, Integer> actualRacePoints;
+	private final List<Pilot> actualRaceOrder;
 
-	private final Set<Pilot> expectedPilots = new HashSet<Pilot>();
-	private final int expectedPilotCount;
+	private final int expectedPilots;
+	private final Set<Pilot> expectedRaceOrder = new LinkedHashSet<Pilot>();
 	private boolean done = false;
 
 	public RaceSummaryAssertUtil(Scores scores, Race race) {
-		expectedPilotCount = scores.getPilots().size();
+		expectedPilots = scores.getPilots().size();
 		actualRacePoints = scores.getRacePoints(race);
+		actualRaceOrder = scores.getRaceOrder(race);
 	}
 
 	public void assertPilot(Pilot pilot, int expectedPoints) {
 		Assert.assertFalse(done);
 
 		Assert.assertEquals("Race points mismatch for " + pilot.getName(), expectedPoints, (int)actualRacePoints.get(pilot)); //$NON-NLS-1$
-		Assert.assertTrue("Pilot " + pilot.getName() + " already specified", expectedPilots.add(pilot)); //$NON-NLS-1$ //$NON-NLS-2$
+		Assert.assertTrue("Pilot " + pilot.getName() + " already specified", expectedRaceOrder.add(pilot)); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public void assertDone() {
 		Assert.assertFalse(done);
 
-		Assert.assertEquals(expectedPilotCount, expectedPilots.size());
+		Assert.assertEquals(expectedPilots, expectedRaceOrder.size());
+		Assert.assertEquals(expectedPilots, actualRaceOrder.size());
+		Assert.assertArrayEquals(expectedRaceOrder.toArray(), actualRaceOrder.toArray());
 		done = true;
 	}
 }
