@@ -20,6 +20,7 @@ package eu.lp0.cursus.scoring;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
@@ -35,6 +36,9 @@ public abstract class AbstractScores extends AbstractForwardingScores {
 		this.pilots = ImmutableSet.copyOf(pilots);
 		this.races = ImmutableList.copyOf(races);
 		this.scoresFactory = scoresFactory;
+
+		Preconditions.checkArgument(!this.pilots.isEmpty(), "No pilots"); //$NON-NLS-1$
+		Preconditions.checkArgument(!this.races.isEmpty(), "No races"); //$NON-NLS-1$
 	}
 
 	// ForwardingScores

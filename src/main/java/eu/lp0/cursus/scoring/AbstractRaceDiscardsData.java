@@ -42,7 +42,8 @@ public abstract class AbstractRaceDiscardsData<T extends ScoredData & RacePoints
 
 	@Override
 	public Table<Pilot, Integer, Integer> getRaceDiscards() {
-		Table<Pilot, Integer, Integer> pilotDiscards = ArrayTable.create(scores.getPilots(), new IntegerSequence(1, discards));
+		// The first column is just nulls, as Tables must have at least one column
+		Table<Pilot, Integer, Integer> pilotDiscards = ArrayTable.create(scores.getPilots(), new IntegerSequence(0, discards));
 		for (Pilot pilot : scores.getPilots()) {
 			pilotDiscards.row(pilot).putAll(getRaceDiscards(pilot));
 		}

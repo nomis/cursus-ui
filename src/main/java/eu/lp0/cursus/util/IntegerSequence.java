@@ -18,18 +18,21 @@
 package eu.lp0.cursus.util;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.AbstractIterator;
 
 public class IntegerSequence implements Iterable<Integer> {
-	private int from;
-	private int to;
-	private int step;
+	private final int from;
+	private final int to;
+	private final int step;
 
 	public IntegerSequence(int from, int to) {
 		this(from, to, 1);
 	}
 
 	public IntegerSequence(int from, int to, int step) {
+		Preconditions.checkArgument(step != 0);
 		this.from = from;
 		this.to = to;
 		this.step = step;
@@ -37,36 +40,25 @@ public class IntegerSequence implements Iterable<Integer> {
 
 	@Override
 	public Iterator<Integer> iterator() {
-		return new Iterator<Integer>() {
+		return new AbstractIterator<Integer>() {
 			private int cur = from;
 
 			@Override
-			public boolean hasNext() {
+			protected Integer computeNext() {
 				if (step > 0) {
-					return cur < to && cur + step <= to;
-				} else if (step < 0) {
-					return cur > from && cur + step >= to;
+					if (from > to || cur > to) {
+						return endOfData();
+					}
 				} else {
-					return false;
+					if (from < to || cur < to) {
+						return endOfData();
+					}
 				}
-			}
-
-			@Override
-			public Integer next() {
-				if (!hasNext()) {
-					throw new NoSuchElementException();
-				}
-
 				try {
 					return cur;
 				} finally {
 					cur += step;
 				}
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
 			}
 		};
 	}

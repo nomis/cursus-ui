@@ -24,10 +24,14 @@ import java.util.Set;
 
 import org.junit.Assert;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Table;
+
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.scoring.Scores;
 
 public class OverallAssertUtil {
+	private final Table<Pilot, Integer, Integer> actualRaceDiscards;
 	private final Map<Pilot, Integer> actualOverallPenalties;
 	private final Map<Pilot, Integer> actualOverallPoints;
 	private final Map<Pilot, Integer> actualOverallPositions;
@@ -39,15 +43,21 @@ public class OverallAssertUtil {
 
 	public OverallAssertUtil(Scores scores) {
 		expectedPilots = scores.getPilots().size();
+		actualRaceDiscards = scores.getRaceDiscards();
 		actualOverallPenalties = scores.getOverallPenalties();
 		actualOverallPoints = scores.getOverallPoints();
 		actualOverallPositions = scores.getOverallPositions();
 		actualOverallOrder = scores.getOverallOrder();
 	}
 
-	public void assertPilot(Pilot pilot, int expectedPenalties, int expectedPoints, int expectedPosition) {
+	public void assertPilot(Pilot pilot, int expectedPenalties, int expectedPoints, int expectedPosition, Integer... expectedDiscards) {
 		Assert.assertFalse(done);
 
+		if (expectedDiscards == null) {
+			expectedDiscards = new Integer[0];
+		}
+		Assert.assertArrayEquals(
+				"Overall discards mismatch for " + pilot, expectedDiscards, Iterables.toArray(Iterables.skip(actualRaceDiscards.row(pilot).values(), 1), Integer.class)); //$NON-NLS-1$
 		Assert.assertEquals("Overall penalties mismatch for " + pilot, expectedPenalties, (int)actualOverallPenalties.get(pilot)); //$NON-NLS-1$
 		Assert.assertEquals("Overall points mismatch for " + pilot, expectedPoints, (int)actualOverallPoints.get(pilot)); //$NON-NLS-1$
 		Assert.assertEquals("Overall position mismatch for " + pilot, expectedPosition, (int)actualOverallPositions.get(pilot)); //$NON-NLS-1$
