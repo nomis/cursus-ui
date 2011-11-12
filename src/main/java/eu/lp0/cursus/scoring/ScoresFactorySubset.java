@@ -17,13 +17,21 @@
  */
 package eu.lp0.cursus.scoring;
 
-/**
- * Scores needs to extend {@code ScoresFactorySubset} so that we can get a new instance of {@code RaceDiscardsData} from within {@code AveragingRacePointsData}
- * and run the race discards calculation on the pre-averaged data (avoiding infinite recursion)
- * 
- * We don't extend {@code ScoresFactory} because creating a new {@code Scores} that uses a {@code ForwardingScoresFactory} is impossible (the method doesn't
- * supply a factory to be intercepted)
- */
-public interface Scores extends ScoredData, ScoresFactorySubset, RaceLapsData, RacePenaltiesData, RacePointsData, RacePositionsData, RaceDiscardsData,
-		OverallPenaltiesData, OverallPointsData, OverallPositionData {
+
+public interface ScoresFactorySubset {
+	public RaceLapsData newRaceLapsData(Scores scores);
+
+	public RacePenaltiesData newRacePenaltiesData(Scores scores);
+
+	public RacePointsData newRacePointsData(Scores scores);
+
+	public RacePositionsData newRacePositionsData(Scores scores);
+
+	public RaceDiscardsData newRaceDiscardsData(Scores scores);
+
+	public OverallPenaltiesData newOverallPenaltiesData(Scores scores);
+
+	public OverallPointsData newOverallPointsData(Scores scores);
+
+	public OverallPositionData newOverallPositionData(Scores scores);
 }

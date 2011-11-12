@@ -56,13 +56,13 @@ public class Series2010Event4Scores extends Series2010Event3Scores {
 			overallAssertUtil.assertPilot(sco200, 0, 2, 1);
 			overallAssertUtil.assertPilot(sco179, 0, 11, 2);
 			overallAssertUtil.assertPilot(sco068, 0, 16, 3);
-			overallAssertUtil.assertPilot(sco808, 0, 17, 3);
+			overallAssertUtil.assertPilot(sco808, 0, 17, 4);
 			overallAssertUtil.assertPilot(sco159, 0, 19, 5);
 			overallAssertUtil.assertPilot(sco081, 0, 25, 6);
 			overallAssertUtil.assertPilot(sco248, 0, 36, 7);
 			overallAssertUtil.assertPilot(sco019, 0, 40, 8);
 			overallAssertUtil.assertPilot(sco116, 0, 42, 9);
-			overallAssertUtil.assertPilot(sco087, 0, 43, 10);
+			overallAssertUtil.assertPilot(sco087, 1, 43, 10);
 			overallAssertUtil.assertPilot(sco249, 0, 53, 11);
 			overallAssertUtil.assertPilot(sco018, 0, 55, 12);
 			overallAssertUtil.assertPilot(sco060, 0, 61, 13);

@@ -18,21 +18,29 @@
 package eu.lp0.cursus.scoring;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import com.google.common.base.Predicates;
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ArrayTable;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
 
-public class AveragingRacePointsData<T extends ScoredData & RaceLapsData & RacePenaltiesData> extends GenericRacePointsData<T> {
+public class AveragingRacePointsData<T extends Scores> extends GenericRacePointsData<T> {
+	private final ScoresBeforeAveraging scoresBeforeAveraging = new ScoresBeforeAveraging();
 	private final Method method;
 	private final Rounding rounding;
 
 	public enum Method {
-		BEFORE_DISCARDS, AFTER_DISCARDS, DISABLED;
+		BEFORE_DISCARDS, AFTER_DISCARDS, SET_NULL;
 	}
 
 	public enum Rounding {
@@ -73,54 +81,133 @@ public class AveragingRacePointsData<T extends ScoredData & RaceLapsData & RaceP
 		Table<Pilot, Race, Integer> racePoints = ArrayTable.create(scores.getPilots(), scores.getRaces());
 		for (Race race : scores.getRaces()) {
 			racePoints.column(race).putAll(super.getRacePoints(race));
+
+			for (Pilot pilot : scores.getPilots()) {
+				if (isPilotMandatoryAttendee(pilot, race)) {
+					if (!getOtherRacesForPilot(pilot, race, false).isEmpty()) {
+						// Null the score so that it can't be discarded
+						racePoints.column(race).put(pilot, null);
+					}
+				}
+			}
 		}
 		return racePoints;
 	}
 
+	private boolean isPilotMandatoryAttendee(Pilot pilot, Race race) {
+		RaceAttendee attendee = race.getAttendees().get(pilot);
+		return attendee != null && attendee.getType().isMandatory();
+	}
+
+	private Set<Race> getOtherRacesForPilot(Pilot pilot, Race race, boolean checkDiscards) {
+		Set<Race> otherRaces = new HashSet<Race>();
+
+		// Find other races where the pilot is not attending in a mandatory position
+		for (Race otherRace : Iterables.filter(scores.getRaces(), Predicates.not(Predicates.equalTo(race)))) {
+			if (!isPilotMandatoryAttendee(pilot, otherRace)) {
+				otherRaces.add(otherRace);
+			}
+		}
+
+		// If averaging should occur after discards, remove discards... unless that removes all races
+		if (checkDiscards && !otherRaces.isEmpty() && method == Method.AFTER_DISCARDS) {
+			Collection<Race> discardedRaces = scoresBeforeAveraging.getDiscardedRaces(pilot).values();
+			if (!discardedRaces.containsAll(otherRaces)) {
+				otherRaces.removeAll(discardedRaces);
+			}
+		}
+
+		return otherRaces;
+	}
+
 	@Override
 	public Map<Pilot, Integer> getRacePoints(Race race) {
-		// The great thing about this call is that it includes the current race without requesting it explicitly from the superclass
-		Table<Pilot, Race, Integer> racePoints = getRacePointsBeforeAveraging();
+		Table<Pilot, Race, Integer> racePoints = ArrayTable.create(scoresBeforeAveraging.getRacePoints());
 
-		// Average the scores of anyone attending as mandatory race master/scorer/marshal/etc.
-		switch (method) {
-		case BEFORE_DISCARDS:
-			for (Map.Entry<Pilot, RaceAttendee> attendee : race.getAttendees().entrySet()) {
-				if (attendee.getValue().getType().isMandatory() && scores.getPilots().contains(attendee.getKey())) {
-					// This pilot is attending as a mandatory position in this race
-					int totalPoints = 0;
-					int totalRaces = 0;
+		if (method != Method.SET_NULL) {
+			for (Pilot pilot : scores.getPilots()) {
+				// Calculate an average score using the other races
+				if (racePoints.row(pilot).get(race) == null) {
+					Set<Race> otherRaces = getOtherRacesForPilot(pilot, race, true);
 
-					// Add their score from the other races
-					for (Map.Entry<Race, Integer> otherRace : racePoints.row(attendee.getKey()).entrySet()) {
-						if (otherRace.getKey() != race) {
-							RaceAttendee otherAttendee = otherRace.getKey().getAttendees().get(attendee.getKey());
-							if (otherAttendee == null || !otherAttendee.getType().isMandatory()) {
-								// This pilot is not attending as a mandatory position in the other race
-								totalPoints += otherRace.getValue();
-								totalRaces++;
-							}
-						}
+					// Add the scores from the other races
+					int points = 0;
+					for (Race otherRace : otherRaces) {
+						points += racePoints.row(pilot).get(otherRace);
 					}
 
-					// Calculate and apply the average if they have some other races
-					if (totalRaces > 0) {
-						int averagePoints = BigDecimal.valueOf(totalPoints).divide(BigDecimal.valueOf(totalRaces), rounding.getValue()).intValue();
-						racePoints.column(race).put(attendee.getKey(), averagePoints);
-					}
+					// Calculate and apply the average
+					points = BigDecimal.valueOf(points).divide(BigDecimal.valueOf(otherRaces.size()), rounding.getValue()).intValue();
+					racePoints.row(pilot).put(race, points);
 				}
 			}
-			break;
-
-		case AFTER_DISCARDS:
-			// TODO
-			break;
-
-		case DISABLED:
-			// Do nothing
-			break;
+		} else {
+			// Do nothing, the scores for those pilots will be null
 		}
 
 		return racePoints.column(race);
+	}
+
+	public class ScoresBeforeAveraging extends ForwardingScores {
+		private final Supplier<RaceDiscardsData> raceDiscardsData = Suppliers.memoize(new Supplier<RaceDiscardsData>() {
+			@Override
+			public RaceDiscardsData get() {
+				return delegate().newRaceDiscardsData(ScoresBeforeAveraging.this);
+			}
+		});
+
+		private final Supplier<RacePointsData> racePointsData = Suppliers.memoize(new Supplier<RacePointsData>() {
+			@Override
+			public RacePointsData get() {
+				return new RacePointsData() {
+					@Override
+					public Table<Pilot, Race, Integer> getRacePoints() {
+						return AveragingRacePointsData.this.getRacePointsBeforeAveraging();
+					}
+
+					@Override
+					public int getRacePoints(Pilot pilot, Race race) {
+						return AveragingRacePointsData.this.getRacePointsBeforeAveraging().get(pilot, race);
+					}
+
+					@Override
+					public Map<Race, Integer> getRacePoints(Pilot pilot) {
+						return AveragingRacePointsData.this.getRacePointsBeforeAveraging().row(pilot);
+					}
+
+					@Override
+					public Map<Pilot, Integer> getRacePoints(Race race) {
+						return AveragingRacePointsData.this.getRacePointsBeforeAveraging().column(race);
+					}
+
+					@Override
+					public int getFleetSize(Race race) {
+						return AveragingRacePointsData.this.getFleetSize(race);
+					}
+				};
+			}
+		});
+
+		@Override
+		protected Scores delegate() {
+			return scores;
+		}
+
+		/**
+		 * Create a new {@code RaceDiscardsData}, but intercept access to {@code RacePointsData}
+		 */
+		@Override
+		protected RaceDiscardsData delegateRaceDiscardsData() {
+			return raceDiscardsData.get();
+		}
+
+		/**
+		 * Provide an implementation of {@code RacePointsData} that returns the points before averaging but uses {@code this} instance to do so (this is
+		 * important as {@code AveragingRacePointsData} could be sub-classed)
+		 */
+		@Override
+		protected RacePointsData delegateRacePointsData() {
+			return racePointsData.get();
+		}
 	}
 }

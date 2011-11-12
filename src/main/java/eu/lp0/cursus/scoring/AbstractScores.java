@@ -26,19 +26,35 @@ import com.google.common.collect.ImmutableSet;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public abstract class AbstractScores implements Scores {
+public abstract class AbstractScores extends AbstractForwardingScores {
 	protected final Set<Pilot> pilots;
 	protected final List<Race> races;
+	private final ScoresFactory scoresFactory;
 
-	public AbstractScores(Set<Pilot> pilots, List<Race> races) {
+	public AbstractScores(Set<Pilot> pilots, List<Race> races, ScoresFactory scoresFactory) {
 		this.pilots = ImmutableSet.copyOf(pilots);
 		this.races = ImmutableList.copyOf(races);
+		this.scoresFactory = scoresFactory;
 	}
 
+	// ForwardingScores
+	@Override
+	protected ScoredData delegateScoredData() {
+		return this;
+	}
+
+	@Override
+	protected ScoresFactory delegateScoresFactory() {
+		return scoresFactory;
+	}
+
+	// ScoredData
+	@Override
 	public Set<Pilot> getPilots() {
 		return pilots;
 	}
 
+	@Override
 	public List<Race> getRaces() {
 		return races;
 	}

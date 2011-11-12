@@ -24,11 +24,9 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.AveragingRacePointsData;
-import eu.lp0.cursus.scoring.RaceLapsData;
-import eu.lp0.cursus.scoring.RacePenaltiesData;
-import eu.lp0.cursus.scoring.ScoredData;
+import eu.lp0.cursus.scoring.Scores;
 
-public class RacePointsData2011<T extends ScoredData & RaceLapsData & RacePenaltiesData> extends AveragingRacePointsData<T> {
+public class RacePointsData2011<T extends Scores> extends AveragingRacePointsData<T> {
 	public RacePointsData2011(T scores, Method method, Rounding rounding) {
 		super(scores, method, rounding);
 	}

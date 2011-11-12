@@ -23,23 +23,6 @@ import java.util.Set;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public interface ScoresFactory {
+public interface ScoresFactory extends ScoresFactorySubset {
 	public Scores newScores(Set<Pilot> pilots, List<Race> races);
-
-	public RaceLapsData newRaceLapsData(Scores scores);
-
-	public RacePenaltiesData newRacePenaltiesData(Scores scores);
-
-	public RacePointsData newRacePointsData(Scores scores);
-
-	public RacePositionsData newRacePositionsData(Scores scores);
-
-	public RaceDiscardsData newRaceDiscardsData(Scores scores);
-
-	public OverallPenaltiesData newOverallPenaltiesData(Scores scores);
-
-	public OverallPointsData newOverallPointsData(Scores scores);
-
-	public OverallPositionData newOverallPositionData(Scores scores);
-
 }

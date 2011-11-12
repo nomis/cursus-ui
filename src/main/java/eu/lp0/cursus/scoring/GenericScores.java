@@ -17,13 +17,8 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
@@ -39,195 +34,58 @@ public class GenericScores extends AbstractScores {
 	protected final OverallPointsData overallPointsData;
 	protected final OverallPositionData overallPositionData;
 
-	public GenericScores(Set<Pilot> pilots, List<Race> races, ScoresFactory scoresDataFactory) {
-		super(pilots, races);
+	public GenericScores(Set<Pilot> pilots, List<Race> races, ScoresFactory scoresFactory) {
+		super(pilots, races, scoresFactory);
 
-		raceLapsData = scoresDataFactory.newRaceLapsData(this);
-		racePenaltiesData = scoresDataFactory.newRacePenaltiesData(this);
-		racePointsData = scoresDataFactory.newRacePointsData(this);
-		racePositionsData = scoresDataFactory.newRacePositionsData(this);
-		raceDiscardsData = scoresDataFactory.newRaceDiscardsData(this);
+		raceLapsData = scoresFactory.newRaceLapsData(this);
+		racePenaltiesData = scoresFactory.newRacePenaltiesData(this);
+		racePointsData = scoresFactory.newRacePointsData(this);
+		racePositionsData = scoresFactory.newRacePositionsData(this);
+		raceDiscardsData = scoresFactory.newRaceDiscardsData(this);
 
-		overallPenaltiesData = scoresDataFactory.newOverallPenaltiesData(this);
-		overallPointsData = scoresDataFactory.newOverallPointsData(this);
-		overallPositionData = scoresDataFactory.newOverallPositionData(this);
+		overallPenaltiesData = scoresFactory.newOverallPenaltiesData(this);
+		overallPointsData = scoresFactory.newOverallPointsData(this);
+		overallPositionData = scoresFactory.newOverallPositionData(this);
 	}
 
-	// RaceLapsData
+	// ForwardingScores
 	@Override
-	public int getLaps(Pilot pilot, Race race) {
-		return raceLapsData.getLaps(pilot, race);
-	}
-
-	@Override
-	public Map<Race, Integer> getLaps(Pilot pilot) {
-		return Collections.unmodifiableMap(raceLapsData.getLaps(pilot));
+	protected RaceLapsData delegateRaceLapsData() {
+		return raceLapsData;
 	}
 
 	@Override
-	public Map<Pilot, Integer> getLaps(Race race) {
-		return Collections.unmodifiableMap(raceLapsData.getLaps(race));
+	protected RacePenaltiesData delegateRacePenaltiesData() {
+		return racePenaltiesData;
 	}
 
 	@Override
-	public List<Pilot> getLapOrder(Race race) {
-		return Collections.unmodifiableList(raceLapsData.getLapOrder(race));
-	}
-
-	// RacePenaltiesData
-	@Override
-	public Table<Pilot, Race, Integer> getRacePenalties() {
-		return racePenaltiesData.getRacePenalties();
+	protected RacePointsData delegateRacePointsData() {
+		return racePointsData;
 	}
 
 	@Override
-	public Map<Race, Integer> getRacePenalties(Pilot pilot) {
-		return Collections.unmodifiableMap(racePenaltiesData.getRacePenalties(pilot));
+	protected RacePositionsData delegateRacePositionsData() {
+		return racePositionsData;
 	}
 
 	@Override
-	public Map<Pilot, Integer> getRacePenalties(Race race) {
-		return Collections.unmodifiableMap(racePenaltiesData.getRacePenalties(race));
+	protected RaceDiscardsData delegateRaceDiscardsData() {
+		return raceDiscardsData;
 	}
 
 	@Override
-	public int getRacePenalties(Pilot pilot, Race race) {
-		return racePenaltiesData.getRacePenalties(pilot, race);
-	}
-
-	// RacePointsData
-	@Override
-	public Table<Pilot, Race, Integer> getRacePoints() {
-		return racePointsData.getRacePoints();
+	protected OverallPenaltiesData delegateOverallPenaltiesData() {
+		return overallPenaltiesData;
 	}
 
 	@Override
-	public int getRacePoints(Pilot pilot, Race race) {
-		return racePointsData.getRacePoints(pilot, race);
+	protected OverallPointsData delegateOverallPointsData() {
+		return overallPointsData;
 	}
 
 	@Override
-	public Map<Race, Integer> getRacePoints(Pilot pilot) {
-		return Collections.unmodifiableMap(racePointsData.getRacePoints(pilot));
-	}
-
-	@Override
-	public Map<Pilot, Integer> getRacePoints(Race race) {
-		return Collections.unmodifiableMap(racePointsData.getRacePoints(race));
-	}
-
-	@Override
-	public int getFleetSize(Race race) {
-		return racePointsData.getFleetSize(race);
-	}
-
-	// RacePositionsData
-	@Override
-	public Map<Race, Map<Pilot, Integer>> getRacePositions() {
-		return Collections.unmodifiableMap(racePositionsData.getRacePositions());
-	}
-
-	@Override
-	public Map<Pilot, Integer> getRacePositions(Race race) {
-		return Collections.unmodifiableMap(racePositionsData.getRacePositions(race));
-	}
-
-	@Override
-	public Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositionsWithOrder() {
-		return Collections.unmodifiableMap(racePositionsData.getRacePositionsWithOrder());
-	}
-
-	@Override
-	public LinkedListMultimap<Integer, Pilot> getRacePositionsWithOrder(Race race) {
-		return racePositionsData.getRacePositionsWithOrder(race);
-	}
-
-	@Override
-	public int getRacePosition(Pilot pilot, Race race) {
-		return racePositionsData.getRacePosition(pilot, race);
-	}
-
-	@Override
-	public Map<Race, List<Pilot>> getRaceOrders() {
-		return Collections.unmodifiableMap(racePositionsData.getRaceOrders());
-	}
-
-	@Override
-	public List<Pilot> getRaceOrder(Race race) {
-		return Collections.unmodifiableList(racePositionsData.getRaceOrder(race));
-	}
-
-	// RaceDiscardsData
-	@Override
-	public Table<Pilot, Integer, Integer> getRaceDiscards() {
-		return raceDiscardsData.getRaceDiscards();
-	}
-
-	@Override
-	public Map<Integer, Integer> getRaceDiscards(Pilot pilot) {
-		return Collections.unmodifiableMap(raceDiscardsData.getRaceDiscards(pilot));
-	}
-
-	@Override
-	public Map<Pilot, Integer> getRaceDiscards(int discard) {
-		return Collections.unmodifiableMap(raceDiscardsData.getRaceDiscards(discard));
-	}
-
-	@Override
-	public int getRaceDiscard(Pilot pilot, int discard) {
-		return raceDiscardsData.getRaceDiscard(pilot, discard);
-	}
-
-	@Override
-	public Map<Integer, Race> getDiscardedRaces(Pilot pilot) {
-		return Collections.unmodifiableMap(raceDiscardsData.getDiscardedRaces(pilot));
-	}
-
-	// OverallPenaltiesData
-	@Override
-	public Map<Pilot, Integer> getOverallPenalties() {
-		return Collections.unmodifiableMap(overallPenaltiesData.getOverallPenalties());
-	}
-
-	@Override
-	public int getOverallPenalties(Pilot pilot) {
-		return overallPenaltiesData.getOverallPenalties(pilot);
-	}
-
-	// OverallPointsData
-	@Override
-	public Map<Pilot, Integer> getOverallPoints() {
-		return Collections.unmodifiableMap(overallPointsData.getOverallPoints());
-	}
-
-	@Override
-	public int getOverallPoints(Pilot pilot) {
-		return getOverallPoints(pilot);
-	}
-
-	@Override
-	public int getOverallFleetSize() {
-		return overallPointsData.getOverallFleetSize();
-	}
-
-	// OverallPositionData
-	@Override
-	public Map<Pilot, Integer> getOverallPositions() {
-		return Collections.unmodifiableMap(overallPositionData.getOverallPositions());
-	}
-
-	@Override
-	public LinkedListMultimap<Integer, Pilot> getOverallPositionsWithOrder() {
-		return overallPositionData.getOverallPositionsWithOrder();
-	}
-
-	@Override
-	public int getOverallPosition(Pilot pilot) {
-		return overallPositionData.getOverallPosition(pilot);
-	}
-
-	@Override
-	public List<Pilot> getOverallOrder() {
-		return Collections.unmodifiableList(overallPositionData.getOverallOrder());
+	protected OverallPositionData delegateOverallPositionData() {
+		return overallPositionData;
 	}
 }
