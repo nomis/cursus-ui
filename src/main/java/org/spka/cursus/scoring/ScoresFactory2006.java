@@ -18,6 +18,7 @@
 package org.spka.cursus.scoring;
 
 import eu.lp0.cursus.scoring.AbstractScoresFactory;
+import eu.lp0.cursus.scoring.AveragingRacePointsData;
 import eu.lp0.cursus.scoring.GenericDiscardCalculator;
 import eu.lp0.cursus.scoring.GenericOverallPenaltiesData;
 import eu.lp0.cursus.scoring.GenericOverallPointsData;
@@ -25,7 +26,6 @@ import eu.lp0.cursus.scoring.GenericOverallPositionData;
 import eu.lp0.cursus.scoring.GenericRaceDiscardsData;
 import eu.lp0.cursus.scoring.GenericRaceLapsData;
 import eu.lp0.cursus.scoring.GenericRacePenaltiesData;
-import eu.lp0.cursus.scoring.GenericRacePointsData;
 import eu.lp0.cursus.scoring.GenericRacePositionsData;
 import eu.lp0.cursus.scoring.OverallPenaltiesData;
 import eu.lp0.cursus.scoring.OverallPointsData;
@@ -50,7 +50,7 @@ public class ScoresFactory2006 extends AbstractScoresFactory {
 
 	@Override
 	public RacePointsData newRacePointsData(Scores scores) {
-		return new GenericRacePointsData<Scores>(scores);
+		return new AveragingRacePointsData<Scores>(scores, AveragingRacePointsData.Method.AFTER_DISCARDS, AveragingRacePointsData.Rounding.ROUND_HALF_UP);
 	}
 
 	@Override

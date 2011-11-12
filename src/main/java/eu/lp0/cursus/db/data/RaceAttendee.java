@@ -71,9 +71,33 @@ public class RaceAttendee extends AbstractEntity {
 		OTHER ("attendee.other"); //$NON-NLS-1$ 
 
 		private final String key;
+		private final boolean mandatory = name().startsWith("M_"); //$NON-NLS-1$
+		private final boolean voluntary = name().startsWith("V_"); //$NON-NLS-1$
 
 		private Type(String key) {
 			this.key = key;
+		}
+
+		/**
+		 * Determines if this participation is mandatory or not
+		 * 
+		 * <b>Warning: {@code isMandatory} does not imply {@code !isVolutunary}</b>
+		 * 
+		 * @return {@code true} if pilot participation is mandatory
+		 */
+		public boolean isMandatory() {
+			return mandatory;
+		}
+
+		/**
+		 * Determines if this participation is voluntary or not
+		 * 
+		 * <b>Warning: {@code isVolutunary} does not imply {@code !isMandatory}</b>
+		 * 
+		 * @return {@code true} if pilot participation is voluntary
+		 */
+		public boolean isVoluntary() {
+			return voluntary;
 		}
 
 		@Override
