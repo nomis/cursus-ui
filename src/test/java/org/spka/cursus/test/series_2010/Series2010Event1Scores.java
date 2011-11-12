@@ -53,6 +53,9 @@ public class Series2010Event1Scores extends AbstractSeries2010 {
 
 			Scores scores = scorer.scoreSeries(series);
 			Assert.assertEquals(SERIES_FLEET_AT_EVENT1, scores.getOverallFleetSize());
+			Assert.assertEquals(EVENT1_FLEET, scores.getFleetSize(race1));
+			Assert.assertEquals(EVENT1_FLEET, scores.getFleetSize(race2));
+			Assert.assertEquals(EVENT1_FLEET, scores.getFleetSize(race3));
 
 			RaceSummaryAssertUtil race1SummaryAssertUtil = new RaceSummaryAssertUtil(scores, race1);
 			race1SummaryAssertUtil.assertPilot(sco200, 0);
@@ -162,6 +165,7 @@ public class Series2010Event1Scores extends AbstractSeries2010 {
 
 			Scores scores = scorer.scoreEvent(event1);
 			Assert.assertEquals(EVENT1_FLEET, scores.getOverallFleetSize());
+			Assert.assertEquals(EVENT1_FLEET, scores.getFleetSize(race1));
 
 			RaceSummaryAssertUtil race1SummaryAssertUtil = new RaceSummaryAssertUtil(scores, race1);
 			race1SummaryAssertUtil.assertPilot(sco200, 0);
