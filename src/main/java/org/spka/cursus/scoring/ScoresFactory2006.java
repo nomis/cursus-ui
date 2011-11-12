@@ -55,7 +55,7 @@ public class ScoresFactory2006 extends AbstractScoresFactory {
 
 	@Override
 	public RacePositionsData newRacePositionsData(Scores scores) {
-		return new GenericRacePositionsData<Scores>(scores, GenericRacePositionsData.EqualPositioning.ALWAYS);
+		return new GenericRacePositionsData<Scores>(scores, GenericRacePositionsData.EqualPositioning.WITHOUT_LAPS);
 	}
 
 	@Override
