@@ -71,7 +71,7 @@ public abstract class AbstractRaceDiscardsData<T extends ScoredData & RacePoints
 
 	@Override
 	public int getRaceDiscard(Pilot pilot, int discard) {
-		if (discard < 0 || discard > discards) {
+		if (discard < 1 || discard > discards) {
 			throw new IndexOutOfBoundsException();
 		}
 
