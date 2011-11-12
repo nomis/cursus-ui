@@ -51,6 +51,7 @@ public class RaceAssertUtil {
 	public void assertPilot(Pilot pilot, int expectedLaps, int expectedPenalties, int expectedPoints, int expectedPosition) {
 		Assert.assertFalse(done);
 
+		Assert.assertTrue("Pilot " + pilot.getName() + " does not exist in scores", actualRacePoints.containsKey(pilot)); //$NON-NLS-1$//$NON-NLS-2$
 		Assert.assertEquals("Race laps mismatch for " + pilot.getName(), expectedLaps, (int)actualRaceLaps.get(pilot)); //$NON-NLS-1$
 		Assert.assertEquals("Race penalties mismatch for " + pilot.getName(), expectedPenalties, (int)actualRacePenalties.get(pilot)); //$NON-NLS-1$
 		Assert.assertEquals("Race points mismatch for " + pilot.getName(), expectedPoints, (int)actualRacePoints.get(pilot)); //$NON-NLS-1$
