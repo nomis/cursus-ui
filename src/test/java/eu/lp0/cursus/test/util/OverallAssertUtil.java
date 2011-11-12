@@ -33,10 +33,12 @@ public class OverallAssertUtil {
 	private final Map<Pilot, Integer> actualOverallPositions;
 	private final List<Pilot> actualOverallOrder;
 
+	private final int expectedPilots;
 	private final Set<Pilot> expectedOverallOrder = new LinkedHashSet<Pilot>();
 	private boolean done = false;
 
 	public OverallAssertUtil(Scores scores) {
+		expectedPilots = scores.getPilots().size();
 		actualOverallPenalties = scores.getOverallPenalties();
 		actualOverallPoints = scores.getOverallPoints();
 		actualOverallPositions = scores.getOverallPositions();
@@ -55,6 +57,8 @@ public class OverallAssertUtil {
 	public void assertOrder() {
 		Assert.assertFalse(done);
 
+		Assert.assertEquals(expectedPilots, expectedOverallOrder.size());
+		Assert.assertEquals(expectedPilots, actualOverallOrder.size());
 		Assert.assertArrayEquals(expectedOverallOrder.toArray(), actualOverallOrder.toArray());
 		done = true;
 	}

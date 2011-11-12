@@ -35,10 +35,12 @@ public class RaceAssertUtil {
 	private final Map<Pilot, Integer> actualRacePositions;
 	private final List<Pilot> actualRaceOrder;
 
+	private final int expectedPilots;
 	private final Set<Pilot> expectedRaceOrder = new LinkedHashSet<Pilot>();
 	private boolean done = false;
 
 	public RaceAssertUtil(Scores scores, Race race) {
+		expectedPilots = scores.getPilots().size();
 		actualRaceLaps = scores.getLaps(race);
 		actualRacePenalties = scores.getRacePenalties(race);
 		actualRacePoints = scores.getRacePoints(race);
@@ -59,6 +61,8 @@ public class RaceAssertUtil {
 	public void assertOrder() {
 		Assert.assertFalse(done);
 
+		Assert.assertEquals(expectedPilots, expectedRaceOrder.size());
+		Assert.assertEquals(expectedPilots, actualRaceOrder.size());
 		Assert.assertArrayEquals(expectedRaceOrder.toArray(), actualRaceOrder.toArray());
 		done = true;
 	}
