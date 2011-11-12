@@ -37,7 +37,7 @@ import eu.lp0.cursus.scoring.RacePointsData;
 import eu.lp0.cursus.scoring.RacePositionsData;
 import eu.lp0.cursus.scoring.Scores;
 
-public class ScoresFactory2006 extends AbstractScoresFactory {
+public class ScoresFactory2010 extends AbstractScoresFactory {
 	@Override
 	public RaceLapsData newRaceLapsData(Scores scores) {
 		return new GenericRaceLapsData<Scores>(scores, false, true);

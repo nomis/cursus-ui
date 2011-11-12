@@ -59,7 +59,7 @@ public abstract class AbstractSeries2010 extends AbstractDatabaseTest {
 	protected final String RACE7_NAME = "Race 7"; //$NON-NLS-1$
 	protected final String RACE8_NAME = "Race 8"; //$NON-NLS-1$
 
-	protected Scorer scorer = ScorerFactory.newScorer(SPKAConstants.UUID_2006);
+	protected Scorer scorer = ScorerFactory.newScorer(SPKAConstants.UUID_2010);
 
 	protected Pilot sco018;
 	protected Pilot sco019;

@@ -26,7 +26,7 @@ import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.scoring.ScoringSystem;
 
 @ScoringSystem(uuid = SPKAConstants.UUID_2011, name = SPKAConstants.NAME_2011)
-public class Scorer2011 extends Scorer2006 {
+public class Scorer2011 extends Scorer2010 {
 	@Override
 	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots) {
 		return new ScoresFactory2011().newScores(pilots, races);
