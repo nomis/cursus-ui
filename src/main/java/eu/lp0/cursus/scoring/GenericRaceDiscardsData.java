@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
@@ -70,6 +69,6 @@ public class GenericRaceDiscardsData<T extends ScoredData & RacePointsData> exte
 			}
 		}
 
-		return Collections.unmodifiableMap(pilotDiscards);
+		return pilotDiscards;
 	}
 }

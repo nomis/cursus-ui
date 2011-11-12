@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -61,12 +60,12 @@ public abstract class AbstractRaceDiscardsData<T extends ScoredData & RacePoints
 			pilotDiscards.put(discard, racePoints.get(raceDiscards.get(discard)));
 		}
 
-		return Collections.unmodifiableMap(pilotDiscards);
+		return pilotDiscards;
 	}
 
 	@Override
 	public Map<Pilot, Integer> getRaceDiscards(int discard) {
-		return Collections.unmodifiableMap(getRaceDiscards().column(discard));
+		return getRaceDiscards().column(discard);
 	}
 
 	@Override

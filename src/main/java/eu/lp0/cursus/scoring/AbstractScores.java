@@ -17,9 +17,11 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
@@ -29,15 +31,15 @@ public abstract class AbstractScores implements Scores {
 	protected final List<Race> races;
 
 	public AbstractScores(Set<Pilot> pilots, List<Race> races) {
-		this.pilots = pilots;
-		this.races = races;
+		this.pilots = ImmutableSet.copyOf(pilots);
+		this.races = ImmutableList.copyOf(races);
 	}
 
 	public Set<Pilot> getPilots() {
-		return Collections.unmodifiableSet(pilots);
+		return pilots;
 	}
 
 	public List<Race> getRaces() {
-		return Collections.unmodifiableList(races);
+		return races;
 	}
 }

@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +43,7 @@ public abstract class AbstractRacePositionsData<T extends ScoredData> implements
 		for (Race race : scores.getRaces()) {
 			racePositions.put(race, getRacePositions(race));
 		}
-		return Collections.unmodifiableMap(racePositions);
+		return racePositions;
 	}
 
 	@Override
@@ -53,7 +52,7 @@ public abstract class AbstractRacePositionsData<T extends ScoredData> implements
 		for (Entry<Integer, Pilot> entry : getRacePositionsWithOrder(race).entries()) {
 			racePositions.put(entry.getValue(), entry.getKey());
 		}
-		return Collections.unmodifiableMap(racePositions);
+		return racePositions;
 	}
 
 	@Override
@@ -62,7 +61,7 @@ public abstract class AbstractRacePositionsData<T extends ScoredData> implements
 		for (Race race : scores.getRaces()) {
 			racePositions.put(race, getRacePositionsWithOrder(race));
 		}
-		return Collections.unmodifiableMap(racePositions);
+		return racePositions;
 	}
 
 	@Override
@@ -78,12 +77,12 @@ public abstract class AbstractRacePositionsData<T extends ScoredData> implements
 		for (Race race : scores.getRaces()) {
 			raceOrders.put(race, getRaceOrder(race));
 		}
-		return Collections.unmodifiableMap(raceOrders);
+		return raceOrders;
 	}
 
 	@Override
 	public List<Pilot> getRaceOrder(Race race) {
-		return Collections.unmodifiableList(getRacePositionsWithOrder(race).values());
+		return getRacePositionsWithOrder(race).values();
 	}
 
 	@Override

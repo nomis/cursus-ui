@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +49,7 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData & RacePen
 			}
 		}
 
-		return Collections.unmodifiableMap(racePoints);
+		return racePoints;
 	}
 
 	protected int getPointsForNoLaps(Pilot pilot, Race race) {

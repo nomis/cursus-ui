@@ -18,7 +18,6 @@
 package eu.lp0.cursus.scoring;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,12 +62,12 @@ public abstract class AbstractRaceLapsData<T extends ScoredData> implements Race
 
 	@Override
 	public Map<Race, Integer> getLaps(Pilot pilot) {
-		return Collections.unmodifiableMap(raceLaps.row(pilot));
+		return raceLaps.row(pilot);
 	}
 
 	@Override
 	public Map<Pilot, Integer> getLaps(Race race) {
-		return Collections.unmodifiableMap(raceLaps.column(race));
+		return raceLaps.column(race);
 	}
 
 	@Override
@@ -79,7 +78,7 @@ public abstract class AbstractRaceLapsData<T extends ScoredData> implements Race
 		for (Integer lap : laps) {
 			pilotOrder.addAll(order.get(lap));
 		}
-		return Collections.unmodifiableList(pilotOrder);
+		return pilotOrder;
 	}
 
 	protected void completeRaceLap(Race race, Pilot pilot) {

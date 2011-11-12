@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,7 +53,7 @@ public abstract class AbstractRacePointsData<T extends ScoredData> implements Ra
 		for (Race race : scores.getRaces()) {
 			racePoints.put(race, getRacePoints(pilot, race));
 		}
-		return Collections.unmodifiableMap(racePoints);
+		return racePoints;
 	}
 
 	@Override

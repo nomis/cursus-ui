@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +35,7 @@ public abstract class AbstractOverallPenaltiesData<T extends ScoredData> impleme
 		for (Pilot pilot : scores.getPilots()) {
 			overallPenalties.put(pilot, getOverallPenalties(pilot));
 		}
-		return Collections.unmodifiableMap(overallPenalties);
+		return overallPenalties;
 	}
 
 	@Override

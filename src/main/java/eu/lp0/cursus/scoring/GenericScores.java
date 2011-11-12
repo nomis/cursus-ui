@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -60,17 +61,17 @@ public class GenericScores extends AbstractScores {
 
 	@Override
 	public Map<Race, Integer> getLaps(Pilot pilot) {
-		return raceLapsData.getLaps(pilot);
+		return Collections.unmodifiableMap(raceLapsData.getLaps(pilot));
 	}
 
 	@Override
 	public Map<Pilot, Integer> getLaps(Race race) {
-		return raceLapsData.getLaps(race);
+		return Collections.unmodifiableMap(raceLapsData.getLaps(race));
 	}
 
 	@Override
 	public List<Pilot> getLapOrder(Race race) {
-		return raceLapsData.getLapOrder(race);
+		return Collections.unmodifiableList(raceLapsData.getLapOrder(race));
 	}
 
 	// RacePenaltiesData
@@ -81,12 +82,12 @@ public class GenericScores extends AbstractScores {
 
 	@Override
 	public Map<Race, Integer> getRacePenalties(Pilot pilot) {
-		return racePenaltiesData.getRacePenalties(pilot);
+		return Collections.unmodifiableMap(racePenaltiesData.getRacePenalties(pilot));
 	}
 
 	@Override
 	public Map<Pilot, Integer> getRacePenalties(Race race) {
-		return racePenaltiesData.getRacePenalties(race);
+		return Collections.unmodifiableMap(racePenaltiesData.getRacePenalties(race));
 	}
 
 	@Override
@@ -107,12 +108,12 @@ public class GenericScores extends AbstractScores {
 
 	@Override
 	public Map<Race, Integer> getRacePoints(Pilot pilot) {
-		return racePointsData.getRacePoints(pilot);
+		return Collections.unmodifiableMap(racePointsData.getRacePoints(pilot));
 	}
 
 	@Override
 	public Map<Pilot, Integer> getRacePoints(Race race) {
-		return racePointsData.getRacePoints(race);
+		return Collections.unmodifiableMap(racePointsData.getRacePoints(race));
 	}
 
 	@Override
@@ -123,17 +124,17 @@ public class GenericScores extends AbstractScores {
 	// RacePositionsData
 	@Override
 	public Map<Race, Map<Pilot, Integer>> getRacePositions() {
-		return racePositionsData.getRacePositions();
+		return Collections.unmodifiableMap(racePositionsData.getRacePositions());
 	}
 
 	@Override
 	public Map<Pilot, Integer> getRacePositions(Race race) {
-		return racePositionsData.getRacePositions(race);
+		return Collections.unmodifiableMap(racePositionsData.getRacePositions(race));
 	}
 
 	@Override
 	public Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositionsWithOrder() {
-		return racePositionsData.getRacePositionsWithOrder();
+		return Collections.unmodifiableMap(racePositionsData.getRacePositionsWithOrder());
 	}
 
 	@Override
@@ -148,12 +149,12 @@ public class GenericScores extends AbstractScores {
 
 	@Override
 	public Map<Race, List<Pilot>> getRaceOrders() {
-		return racePositionsData.getRaceOrders();
+		return Collections.unmodifiableMap(racePositionsData.getRaceOrders());
 	}
 
 	@Override
 	public List<Pilot> getRaceOrder(Race race) {
-		return racePositionsData.getRaceOrder(race);
+		return Collections.unmodifiableList(racePositionsData.getRaceOrder(race));
 	}
 
 	// RaceDiscardsData
@@ -164,12 +165,12 @@ public class GenericScores extends AbstractScores {
 
 	@Override
 	public Map<Integer, Integer> getRaceDiscards(Pilot pilot) {
-		return raceDiscardsData.getRaceDiscards(pilot);
+		return Collections.unmodifiableMap(raceDiscardsData.getRaceDiscards(pilot));
 	}
 
 	@Override
 	public Map<Pilot, Integer> getRaceDiscards(int discard) {
-		return raceDiscardsData.getRaceDiscards(discard);
+		return Collections.unmodifiableMap(raceDiscardsData.getRaceDiscards(discard));
 	}
 
 	@Override
@@ -179,13 +180,13 @@ public class GenericScores extends AbstractScores {
 
 	@Override
 	public Map<Integer, Race> getDiscardedRaces(Pilot pilot) {
-		return raceDiscardsData.getDiscardedRaces(pilot);
+		return Collections.unmodifiableMap(raceDiscardsData.getDiscardedRaces(pilot));
 	}
 
 	// OverallPenaltiesData
 	@Override
 	public Map<Pilot, Integer> getOverallPenalties() {
-		return overallPenaltiesData.getOverallPenalties();
+		return Collections.unmodifiableMap(overallPenaltiesData.getOverallPenalties());
 	}
 
 	@Override
@@ -196,7 +197,7 @@ public class GenericScores extends AbstractScores {
 	// OverallPointsData
 	@Override
 	public Map<Pilot, Integer> getOverallPoints() {
-		return overallPointsData.getOverallPoints();
+		return Collections.unmodifiableMap(overallPointsData.getOverallPoints());
 	}
 
 	@Override
@@ -212,7 +213,7 @@ public class GenericScores extends AbstractScores {
 	// OverallPositionData
 	@Override
 	public Map<Pilot, Integer> getOverallPositions() {
-		return overallPositionData.getOverallPositions();
+		return Collections.unmodifiableMap(overallPositionData.getOverallPositions());
 	}
 
 	@Override
@@ -227,6 +228,6 @@ public class GenericScores extends AbstractScores {
 
 	@Override
 	public List<Pilot> getOverallOrder() {
-		return overallPositionData.getOverallOrder();
+		return Collections.unmodifiableList(overallPositionData.getOverallOrder());
 	}
 }
