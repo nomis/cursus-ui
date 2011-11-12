@@ -25,7 +25,7 @@ import eu.lp0.cursus.scoring.Scores;
 public class ScoresFactory2011 extends ScoresFactory2010 {
 	@Override
 	public RacePointsData newRacePointsData(Scores scores) {
-		return new RacePointsData2011<Scores>(scores);
+		return new RacePointsData2011<Scores>(scores, AveragingRacePointsData.Method.AFTER_DISCARDS, AveragingRacePointsData.Rounding.ROUND_HALF_UP);
 	}
 
 	@Override

@@ -23,14 +23,14 @@ import java.util.Set;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.scoring.GenericRacePointsData;
+import eu.lp0.cursus.scoring.AveragingRacePointsData;
 import eu.lp0.cursus.scoring.RaceLapsData;
 import eu.lp0.cursus.scoring.RacePenaltiesData;
 import eu.lp0.cursus.scoring.ScoredData;
 
-public class RacePointsData2011<T extends ScoredData & RaceLapsData & RacePenaltiesData> extends GenericRacePointsData<T> {
-	public RacePointsData2011(T scores) {
-		super(scores);
+public class RacePointsData2011<T extends ScoredData & RaceLapsData & RacePenaltiesData> extends AveragingRacePointsData<T> {
+	public RacePointsData2011(T scores, Method method, Rounding rounding) {
+		super(scores, method, rounding);
 	}
 
 	@Override
