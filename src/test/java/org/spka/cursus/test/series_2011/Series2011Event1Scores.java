@@ -28,6 +28,7 @@ import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.test.util.OverallAssertUtil;
 import eu.lp0.cursus.test.util.RaceAssertUtil;
+import eu.lp0.cursus.test.util.RaceSummaryAssertUtil;
 
 /**
  * Scores at the end of event 1 (29/10/2011 to 30/10/2011)
@@ -45,9 +46,36 @@ public class Series2011Event1Scores extends AbstractSeries2011 {
 			DatabaseSession.begin();
 
 			Series series = seriesDAO.find(SERIES_NAME);
+			Event event1 = eventDAO.find(series, EVENT1_NAME);
+			Race race1 = raceDAO.find(event1, RACE1_NAME);
 
 			Scores scores = scorer.scoreSeries(series);
 			Assert.assertEquals(SERIES_FLEET_AT_EVENT1, scores.getOverallFleetSize());
+
+			RaceSummaryAssertUtil race1SummaryAssertUtil = new RaceSummaryAssertUtil(scores, race1);
+			race1SummaryAssertUtil.assertPilot(sco068, 0);
+			race1SummaryAssertUtil.assertPilot(sco200, 2);
+			race1SummaryAssertUtil.assertPilot(sco179, 3);
+			race1SummaryAssertUtil.assertPilot(sco808, 4);
+			race1SummaryAssertUtil.assertPilot(sco116, 5);
+			race1SummaryAssertUtil.assertPilot(sco081, 6);
+			race1SummaryAssertUtil.assertPilot(sco136, 7);
+			race1SummaryAssertUtil.assertPilot(sco248, 8);
+			race1SummaryAssertUtil.assertPilot(sco528, 9);
+			race1SummaryAssertUtil.assertPilot(sco467, 10);
+			race1SummaryAssertUtil.assertPilot(sco159, 11);
+			race1SummaryAssertUtil.assertPilot(sco019, 12);
+			race1SummaryAssertUtil.assertPilot(sco018, 13);
+			race1SummaryAssertUtil.assertPilot(sco198, 14);
+			race1SummaryAssertUtil.assertPilot(sco087, 15);
+			race1SummaryAssertUtil.assertPilot(sco197, 16);
+			race1SummaryAssertUtil.assertPilot(sco158, 17);
+			race1SummaryAssertUtil.assertPilot(sco320, 18);
+			race1SummaryAssertUtil.assertPilot(sco249, 19);
+			race1SummaryAssertUtil.assertPilot(sco060, 23);
+			race1SummaryAssertUtil.assertPilot(sco153, 23);
+			race1SummaryAssertUtil.assertPilot(sco156, 23);
+			race1SummaryAssertUtil.assertDone();
 
 			OverallAssertUtil overallAssertUtil = new OverallAssertUtil(scores);
 			overallAssertUtil.assertPilot(sco068, 0, 0, 1);
@@ -88,9 +116,35 @@ public class Series2011Event1Scores extends AbstractSeries2011 {
 
 			Series series = seriesDAO.find(SERIES_NAME);
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
+			Race race1 = raceDAO.find(event1, RACE1_NAME);
 
 			Scores scores = scorer.scoreEvent(event1);
 			Assert.assertEquals(EVENT1_FLEET, scores.getOverallFleetSize());
+
+			RaceSummaryAssertUtil race1SummaryAssertUtil = new RaceSummaryAssertUtil(scores, race1);
+			race1SummaryAssertUtil.assertPilot(sco068, 0);
+			race1SummaryAssertUtil.assertPilot(sco200, 2);
+			race1SummaryAssertUtil.assertPilot(sco179, 3);
+			race1SummaryAssertUtil.assertPilot(sco808, 4);
+			race1SummaryAssertUtil.assertPilot(sco116, 5);
+			race1SummaryAssertUtil.assertPilot(sco081, 6);
+			race1SummaryAssertUtil.assertPilot(sco136, 7);
+			race1SummaryAssertUtil.assertPilot(sco248, 8);
+			race1SummaryAssertUtil.assertPilot(sco528, 9);
+			race1SummaryAssertUtil.assertPilot(sco467, 10);
+			race1SummaryAssertUtil.assertPilot(sco159, 11);
+			race1SummaryAssertUtil.assertPilot(sco019, 12);
+			race1SummaryAssertUtil.assertPilot(sco018, 13);
+			race1SummaryAssertUtil.assertPilot(sco198, 14);
+			race1SummaryAssertUtil.assertPilot(sco087, 15);
+			race1SummaryAssertUtil.assertPilot(sco197, 16);
+			race1SummaryAssertUtil.assertPilot(sco158, 17);
+			race1SummaryAssertUtil.assertPilot(sco320, 18);
+			race1SummaryAssertUtil.assertPilot(sco249, 19);
+			race1SummaryAssertUtil.assertPilot(sco060, 23);
+			race1SummaryAssertUtil.assertPilot(sco153, 23);
+			race1SummaryAssertUtil.assertPilot(sco156, 23);
+			race1SummaryAssertUtil.assertDone();
 
 			OverallAssertUtil overallAssertUtil = new OverallAssertUtil(scores);
 			overallAssertUtil.assertPilot(sco068, 0, 0, 1);
@@ -161,6 +215,31 @@ public class Series2011Event1Scores extends AbstractSeries2011 {
 			raceAssertUtil.assertPilot(sco153, 0, 0, 23, 20);
 			raceAssertUtil.assertPilot(sco156, 0, 0, 23, 20);
 			raceAssertUtil.assertOrder();
+
+			OverallAssertUtil overallAssertUtil = new OverallAssertUtil(scores);
+			overallAssertUtil.assertPilot(sco068, 0, 0, 1);
+			overallAssertUtil.assertPilot(sco200, 0, 2, 2);
+			overallAssertUtil.assertPilot(sco179, 0, 3, 3);
+			overallAssertUtil.assertPilot(sco808, 0, 4, 4);
+			overallAssertUtil.assertPilot(sco116, 0, 5, 5);
+			overallAssertUtil.assertPilot(sco081, 0, 6, 6);
+			overallAssertUtil.assertPilot(sco136, 0, 7, 7);
+			overallAssertUtil.assertPilot(sco248, 0, 8, 8);
+			overallAssertUtil.assertPilot(sco528, 0, 9, 9);
+			overallAssertUtil.assertPilot(sco467, 0, 10, 10);
+			overallAssertUtil.assertPilot(sco159, 0, 11, 11);
+			overallAssertUtil.assertPilot(sco019, 0, 12, 12);
+			overallAssertUtil.assertPilot(sco018, 0, 13, 13);
+			overallAssertUtil.assertPilot(sco198, 0, 14, 14);
+			overallAssertUtil.assertPilot(sco087, 0, 15, 15);
+			overallAssertUtil.assertPilot(sco197, 0, 16, 16);
+			overallAssertUtil.assertPilot(sco158, 0, 17, 17);
+			overallAssertUtil.assertPilot(sco320, 0, 18, 18);
+			overallAssertUtil.assertPilot(sco249, 0, 19, 19);
+			overallAssertUtil.assertPilot(sco060, 0, 23, 20);
+			overallAssertUtil.assertPilot(sco153, 0, 23, 20);
+			overallAssertUtil.assertPilot(sco156, 0, 23, 20);
+			overallAssertUtil.assertOrder();
 
 			DatabaseSession.commit();
 		} finally {
