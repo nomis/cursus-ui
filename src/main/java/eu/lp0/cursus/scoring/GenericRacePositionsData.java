@@ -81,8 +81,9 @@ public class GenericRacePositionsData<T extends ScoredData & RaceLapsData & Race
 				}
 
 				// Add everyone without laps (by removing pilots with laps from the set) in the same position
-				racePositions.putAll(position, Sets.difference(pilots, pilotsWithLaps));
-				position += pilots.size();
+				Set<Pilot> pilots2 = Sets.difference(pilots, pilotsWithLaps);
+				racePositions.putAll(position, pilots2);
+				position += pilots2.size();
 				break;
 
 			case NEVER:
