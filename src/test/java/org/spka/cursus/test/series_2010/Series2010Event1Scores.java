@@ -66,7 +66,9 @@ public class Series2010Event1Scores extends AbstractSeries2010 {
 			overallAssertUtil.assertPilot(sco087, 1, 39, 14);
 			overallAssertUtil.assertPilot(sco153, 0, 44, 15);
 			overallAssertUtil.assertPilot(sco197, 0, 45, 16);
+			overallAssertUtil.assertPilot(sco136, 0, 54, 17);
 			overallAssertUtil.assertPilot(sco156, 0, 54, 17);
+			overallAssertUtil.assertPilot(sco158, 0, 54, 17);
 			overallAssertUtil.assertOrder();
 
 			DatabaseSession.commit();
