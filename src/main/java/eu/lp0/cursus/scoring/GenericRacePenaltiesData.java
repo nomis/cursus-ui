@@ -82,6 +82,13 @@ public class GenericRacePenaltiesData<T extends ScoredData> extends AbstractRace
 			}
 		}
 
+		// Can't have negative race penalties because we need
+		// to be able to remove them from the race points later
+		// and negative race points doesn't make sense
+		if (penalties < 0) {
+			penalties = 0;
+		}
+
 		return penalties;
 	}
 }
