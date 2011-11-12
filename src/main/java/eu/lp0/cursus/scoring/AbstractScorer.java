@@ -18,10 +18,11 @@
 package eu.lp0.cursus.scoring;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.google.common.collect.ImmutableList;
 
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
@@ -60,7 +61,7 @@ public abstract class AbstractScorer implements Scorer {
 
 	@Override
 	public Scores scoreRace(Race race, Set<Pilot> pilots) {
-		return scoreRaces(Arrays.asList(race), pilots);
+		return scoreRaces(ImmutableList.of(race), pilots);
 	}
 
 	@Override
