@@ -17,13 +17,16 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public class GenericOverallPointsData<T extends ScoredData & RacePointsData & RaceDiscardsData & OverallPenaltiesData> extends AbstractOverallPointsData<T> {
+public class GenericOverallPointsData<T extends ScoredData & RacePenaltiesData & RacePointsData & RaceDiscardsData & OverallPenaltiesData> extends
+		AbstractOverallPointsData<T> {
 	public GenericOverallPointsData(T scores) {
 		super(scores);
 	}
@@ -32,17 +35,21 @@ public class GenericOverallPointsData<T extends ScoredData & RacePointsData & Ra
 	public int getOverallPoints(Pilot pilot) {
 		int points = 0;
 
-		// Add race points
-		for (Integer racePoints : scores.getRacePoints(pilot).values()) {
-			points += racePoints;
+		Collection<Race> discardedRaces = scores.getDiscardedRaces(pilot).values();
+
+		// Add race points (this includes penalties) but not for discards
+		for (Entry<Race, Integer> racePoints : scores.getRacePoints(pilot).entrySet()) {
+			if (!discardedRaces.contains(racePoints.getKey())) {
+				points += racePoints.getValue();
+			}
 		}
 
-		// Remove discarded races
-		for (Integer raceDiscard : scores.getRaceDiscards(pilot).values()) {
-			points -= raceDiscard;
+		// Remove race penalties (including discards because those are included again below)
+		for (Integer racePenalties : scores.getRacePenalties(pilot).values()) {
+			points -= racePenalties;
 		}
 
-		// Add penalties
+		// Add all penalties (this includes race penalties and penalties on discarded races)
 		points += scores.getOverallPenalties(pilot);
 		if (points < 0) {
 			points = 0;

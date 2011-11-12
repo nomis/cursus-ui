@@ -27,10 +27,12 @@ import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.GenericOverallPointsData;
 import eu.lp0.cursus.scoring.OverallPenaltiesData;
 import eu.lp0.cursus.scoring.RaceDiscardsData;
+import eu.lp0.cursus.scoring.RacePenaltiesData;
 import eu.lp0.cursus.scoring.RacePointsData;
 import eu.lp0.cursus.scoring.ScoredData;
 
-public class OverallPointsData2011<T extends ScoredData & RacePointsData & RaceDiscardsData & OverallPenaltiesData> extends GenericOverallPointsData<T> {
+public class OverallPointsData2011<T extends ScoredData & RacePenaltiesData & RacePointsData & RaceDiscardsData & OverallPenaltiesData> extends
+		GenericOverallPointsData<T> {
 	public OverallPointsData2011(T scores) {
 		super(scores);
 	}
