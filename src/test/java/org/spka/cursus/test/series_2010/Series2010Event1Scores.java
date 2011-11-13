@@ -413,7 +413,7 @@ public class Series2010Event1Scores extends AbstractSeries2010 {
 			overallAssertUtil.assertPilot(sco068, 0, 4, 4);
 			overallAssertUtil.assertPilot(sco060, 0, 5, 5);
 			overallAssertUtil.assertPilot(sco248, 0, 6, 6);
-			overallAssertUtil.assertPilot(sco087, 1, 7, 7);
+			overallAssertUtil.assertPilot(sco087, 1, 8, 7);
 			overallAssertUtil.assertPilot(sco116, 0, 8, 8);
 			overallAssertUtil.assertPilot(sco249, 0, 9, 9);
 			overallAssertUtil.assertPilot(sco042, 0, 10, 10);
