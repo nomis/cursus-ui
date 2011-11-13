@@ -21,12 +21,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
 public interface RacePositionsData {
-	public Map<Race, Map<Pilot, Integer>> getRacePositions();
+	public Table<Race, Pilot, Integer> getRacePositions();
 
 	public Map<Pilot, Integer> getRacePositions(Race race);
 

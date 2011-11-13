@@ -49,7 +49,7 @@ public class GenericRacePositionsData<T extends ScoredData & RaceLapsData & Race
 	}
 
 	@Override
-	public LinkedListMultimap<Integer, Pilot> getRacePositionsWithOrder(Race race) {
+	protected LinkedListMultimap<Integer, Pilot> calculateRacePositionsWithOrder(Race race) {
 		// Create a lap order list containing all pilots
 		List<Pilot> lapOrder = new ArrayList<Pilot>(scores.getLapOrder(race));
 		Set<Pilot> pilotsWithLaps = new HashSet<Pilot>(lapOrder);

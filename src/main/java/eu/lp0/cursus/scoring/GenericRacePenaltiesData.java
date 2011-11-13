@@ -28,7 +28,7 @@ public class GenericRacePenaltiesData<T extends ScoredData> extends AbstractRace
 	}
 
 	@Override
-	public int getRacePenalties(Pilot pilot, Race race) {
+	protected int calculateRacePenalties(Pilot pilot, Race race) {
 		RaceAttendee attendee = race.getAttendees().get(pilot);
 		if (attendee == null) {
 			return 0;
@@ -37,7 +37,7 @@ public class GenericRacePenaltiesData<T extends ScoredData> extends AbstractRace
 		// Count previous automatic penalties
 		int autoPenalties = 0;
 		for (Race previousRace : race.getEvent().getRaces()) {
-			if (previousRace == race) {
+			if (previousRace.equals(race)) {
 				break;
 			} else {
 				RaceAttendee previousAttendee = previousRace.getAttendees().get(pilot);

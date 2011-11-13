@@ -17,11 +17,14 @@
  */
 package org.spka.cursus.scoring;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.scoring.ScoringSystem;
 
@@ -30,5 +33,15 @@ public class Scorer2011 extends Scorer2010 {
 	@Override
 	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots) {
 		return new ScoresFactory2011().newScores(pilots, races);
+	}
+
+	public static int calculateFleetSize(Series series) {
+		Set<Pilot> pilots = new HashSet<Pilot>(series.getPilots().size() * 2);
+		for (Event event : series.getEvents()) {
+			for (Race race : event.getRaces()) {
+				pilots.addAll(race.getAttendees().keySet());
+			}
+		}
+		return pilots.size();
 	}
 }

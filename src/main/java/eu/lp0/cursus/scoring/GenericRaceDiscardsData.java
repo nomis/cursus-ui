@@ -24,7 +24,9 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import com.google.common.base.Predicates;
 import com.google.common.collect.ComparisonChain;
+import com.google.common.collect.Maps;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
@@ -39,7 +41,7 @@ public class GenericRaceDiscardsData<T extends ScoredData & RacePointsData> exte
 	}
 
 	@Override
-	public Map<Integer, Race> getDiscardedRaces(final Pilot pilot) {
+	protected Map<Integer, Race> calculateDiscardedRaces(Pilot pilot) {
 		Map<Integer, Race> pilotDiscards = new TreeMap<Integer, Race>();
 
 		if (discards > 0) {
@@ -52,11 +54,7 @@ public class GenericRaceDiscardsData<T extends ScoredData & RacePointsData> exte
 			});
 
 			// Use all races where the score is not null
-			for (Map.Entry<Race, Integer> entry : racePoints.entrySet()) {
-				if (entry.getValue() != null) {
-					pilotRaces.add(entry.getKey());
-				}
-			}
+			pilotRaces.addAll(Maps.filterValues(racePoints, Predicates.notNull()).keySet());
 
 			// Discard the highest scoring races
 			Iterator<Race> it = pilotRaces.iterator();

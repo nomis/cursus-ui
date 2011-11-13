@@ -38,6 +38,23 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 	private final ScoresBeforeAveraging scoresBeforeAveraging = new ScoresBeforeAveraging();
 	private final Method method;
 	private final Rounding rounding;
+	private final Supplier<Table<Pilot, Race, Integer>> lazyRacePointsBeforeAveraging = Suppliers.memoize(new Supplier<Table<Pilot, Race, Integer>>() {
+		@Override
+		public Table<Pilot, Race, Integer> get() {
+			Table<Pilot, Race, Integer> racePoints = ArrayTable.create(scores.getPilots(), scores.getRaces());
+			for (Race race : scores.getRaces()) {
+				racePoints.column(race).putAll(AveragingRacePointsData.super.calculateRacePoints(race));
+
+				for (Pilot pilot : scores.getSimulatedRacePoints(race)) {
+					if (!getOtherRacesForPilot(pilot, race, false).isEmpty()) {
+						// Null the score so that it can't be discarded
+						racePoints.column(race).put(pilot, null);
+					}
+				}
+			}
+			return racePoints;
+		}
+	});
 
 	public enum Method {
 		BEFORE_DISCARDS, AFTER_DISCARDS, SET_NULL;
@@ -77,41 +94,28 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 		this.rounding = rounding;
 	}
 
-	protected Table<Pilot, Race, Integer> getRacePointsBeforeAveraging() {
-		Table<Pilot, Race, Integer> racePoints = ArrayTable.create(scores.getPilots(), scores.getRaces());
-		for (Race race : scores.getRaces()) {
-			racePoints.column(race).putAll(super.getRacePoints(race));
-
-			for (Pilot pilot : scores.getPilots()) {
-				if (isPilotMandatoryAttendee(pilot, race)) {
-					if (!getOtherRacesForPilot(pilot, race, false).isEmpty()) {
-						// Null the score so that it can't be discarded
-						racePoints.column(race).put(pilot, null);
-					}
-				}
-			}
-		}
-		return racePoints;
-	}
-
-	private boolean isPilotMandatoryAttendee(Pilot pilot, Race race) {
-		RaceAttendee attendee = race.getAttendees().get(pilot);
+	@Override
+	protected boolean calculateSimulatedRacePoints(Pilot pilot, Race race) {
+		// Return true even if the points aren't actually simulated but would
+		// be simulated if there were more races to calculate an average from
+		RaceAttendee attendee = pilot.getRaces().get(race);
 		return attendee != null && attendee.getType().isMandatory();
 	}
 
-	@Override
-	public boolean hasSimulatedRacePoints(Pilot pilot, Race race) {
-		// Return true even if the points aren't actually simulated but would
-		// be simulated if there were more races to calculate an average from
-		return isPilotMandatoryAttendee(pilot, race);
-	}
-
+	// For each pilot with simulated races, this is called twice:
+	// 1. When calculating points before averaging (!checkDiscards)
+	// 2. When calculating averaged points (checkDiscards)
+	//
+	// An optimal implementation for pilots with simulated points
+	// in many races would calculate for all of the pilot's races
+	// together - but this is an very unusual scenario and relatively
+	// few simulated points need to be calculated for each race
 	private Set<Race> getOtherRacesForPilot(Pilot pilot, Race race, boolean checkDiscards) {
 		Set<Race> otherRaces = new HashSet<Race>();
 
 		// Find other races where the pilot is not attending in a mandatory position
 		for (Race otherRace : Iterables.filter(scores.getRaces(), Predicates.not(Predicates.equalTo(race)))) {
-			if (!isPilotMandatoryAttendee(pilot, otherRace)) {
+			if (!scores.hasSimulatedRacePoints(pilot, otherRace)) {
 				otherRaces.add(otherRace);
 			}
 		}
@@ -128,7 +132,7 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 	}
 
 	@Override
-	public Map<Pilot, Integer> getRacePoints(Race race) {
+	protected Map<Pilot, Integer> calculateRacePoints(Race race) {
 		Table<Pilot, Race, Integer> racePoints = ArrayTable.create(scoresBeforeAveraging.getRacePoints());
 
 		if (method != Method.SET_NULL) {
@@ -156,55 +160,53 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 	}
 
 	public class ScoresBeforeAveraging extends ForwardingScores {
-		private final Supplier<RaceDiscardsData> raceDiscardsData = Suppliers.memoize(new Supplier<RaceDiscardsData>() {
-			@Override
-			public RaceDiscardsData get() {
-				return delegate().newRaceDiscardsData(ScoresBeforeAveraging.this);
-			}
-		});
-
 		private final Supplier<RacePointsData> racePointsData = Suppliers.memoize(new Supplier<RacePointsData>() {
 			@Override
 			public RacePointsData get() {
 				return new RacePointsData() {
 					@Override
 					public Table<Pilot, Race, Integer> getRacePoints() {
-						return AveragingRacePointsData.this.getRacePointsBeforeAveraging();
+						return lazyRacePointsBeforeAveraging.get();
 					}
 
 					@Override
 					public int getRacePoints(Pilot pilot, Race race) {
-						return AveragingRacePointsData.this.getRacePointsBeforeAveraging().get(pilot, race);
+						return lazyRacePointsBeforeAveraging.get().get(pilot, race);
 					}
 
 					@Override
 					public Map<Race, Integer> getRacePoints(Pilot pilot) {
-						return AveragingRacePointsData.this.getRacePointsBeforeAveraging().row(pilot);
+						return lazyRacePointsBeforeAveraging.get().row(pilot);
 					}
 
 					@Override
 					public Map<Pilot, Integer> getRacePoints(Race race) {
-						return AveragingRacePointsData.this.getRacePointsBeforeAveraging().column(race);
+						return lazyRacePointsBeforeAveraging.get().column(race);
 					}
 
 					@Override
 					public Map<Race, Collection<Pilot>> getSimulatedRacePoints() {
-						return AveragingRacePointsData.super.getSimulatedRacePoints();
+						return AveragingRacePointsData.this.getSimulatedRacePoints();
+					}
+
+					@Override
+					public Map<Pilot, Collection<Race>> getSimulatedPilotPoints() {
+						return AveragingRacePointsData.this.getSimulatedPilotPoints();
 					}
 
 					@Override
 					public boolean hasSimulatedRacePoints(Pilot pilot, Race race) {
-						return AveragingRacePointsData.super.hasSimulatedRacePoints(pilot, race);
+						return AveragingRacePointsData.this.hasSimulatedRacePoints(pilot, race);
 					}
 
 					@Override
 					public Collection<Race> getSimulatedRacePoints(Pilot pilot) {
-						return AveragingRacePointsData.super.getSimulatedRacePoints(pilot);
+						return AveragingRacePointsData.this.getSimulatedRacePoints(pilot);
 					}
 
 					@Override
 					public Collection<Pilot> getSimulatedRacePoints(Race race) {
-						return AveragingRacePointsData.super.getSimulatedRacePoints(race);
+						return AveragingRacePointsData.this.getSimulatedRacePoints(race);
 					}
 
 					@Override
@@ -218,14 +220,6 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 		@Override
 		protected Scores delegate() {
 			return scores;
-		}
-
-		/**
-		 * Create a new {@code RaceDiscardsData}, but intercept access to {@code RacePointsData}
-		 */
-		@Override
-		protected RaceDiscardsData delegateRaceDiscardsData() {
-			return raceDiscardsData.get();
 		}
 
 		/**

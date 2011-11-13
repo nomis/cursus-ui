@@ -32,61 +32,80 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
 public abstract class AbstractRaceLapsData<T extends ScoredData> implements RaceLapsData {
+	private static final int EXPECTED_MAXIMUM_LAPS = 32;
 	protected final T scores;
-
-	private final Table<Pilot, Race, Integer> raceLaps;
-	private final Map<Race, ListMultimap<Integer, Pilot>> lapOrder;
+	private volatile boolean initialised;
+	private Table<Race, Pilot, Integer> raceLaps;
+	private Map<Race, List<Pilot>> raceLapOrder;
 
 	public AbstractRaceLapsData(T scores) {
 		this.scores = scores;
+	}
 
-		raceLaps = ArrayTable.create(scores.getPilots(), scores.getRaces());
-		lapOrder = new HashMap<Race, ListMultimap<Integer, Pilot>>();
-
-		Map<Race, Integer> zeroLaps = new HashMap<Race, Integer>();
-		for (Race race : scores.getRaces()) {
-			ListMultimap<Integer, Pilot> order = ArrayListMultimap.create();
-			lapOrder.put(race, order);
-			zeroLaps.put(race, 0);
-		}
-
-		for (Pilot pilot : scores.getPilots()) {
-			raceLaps.row(pilot).putAll(zeroLaps);
+	private void lazyInitialisation() {
+		if (!initialised) {
+			synchronized (this) {
+				if (!initialised) {
+					calculateRaceLaps();
+					initialised = true;
+				}
+			}
 		}
 	}
 
+	private void calculateRaceLaps() {
+		raceLaps = ArrayTable.create(scores.getRaces(), scores.getPilots());
+		raceLapOrder = new HashMap<Race, List<Pilot>>(scores.getRaces().size() * 2);
+
+		for (Race race : scores.getRaces()) {
+			Map<Pilot, Integer> laps = raceLaps.row(race);
+			ListMultimap<Integer, Pilot> raceOrder = ArrayListMultimap.create(EXPECTED_MAXIMUM_LAPS, scores.getPilots().size());
+
+			for (Pilot pilot : scores.getPilots()) {
+				laps.put(pilot, 0);
+			}
+
+			for (Pilot pilot : calculateRaceLaps(race)) {
+				int lapCount = raceLaps.get(race, pilot);
+
+				raceOrder.remove(lapCount, pilot);
+				raceLaps.put(race, pilot, ++lapCount);
+				raceOrder.put(lapCount, pilot);
+			}
+
+			List<Integer> reverseLaps = Ordering.natural().reverse().sortedCopy(raceOrder.keySet());
+			List<Pilot> pilotOrder = new ArrayList<Pilot>(scores.getPilots().size());
+			for (Integer lap : reverseLaps) {
+				pilotOrder.addAll(raceOrder.get(lap));
+			}
+			raceLapOrder.put(race, pilotOrder);
+		}
+
+	}
+
 	@Override
-	public int getLaps(Pilot pilot, Race race) {
+	public final int getLaps(Pilot pilot, Race race) {
+		lazyInitialisation();
 		return raceLaps.get(pilot, race);
 	}
 
 	@Override
-	public Map<Race, Integer> getLaps(Pilot pilot) {
-		return raceLaps.row(pilot);
+	public final Map<Race, Integer> getLaps(Pilot pilot) {
+		lazyInitialisation();
+		return raceLaps.column(pilot);
 	}
 
 	@Override
-	public Map<Pilot, Integer> getLaps(Race race) {
-		return raceLaps.column(race);
+	public final Map<Pilot, Integer> getLaps(Race race) {
+		lazyInitialisation();
+		return raceLaps.row(race);
 	}
 
 	@Override
-	public List<Pilot> getLapOrder(Race race) {
-		ListMultimap<Integer, Pilot> order = lapOrder.get(race);
-		List<Integer> laps = Ordering.natural().reverse().sortedCopy(order.keySet());
-		List<Pilot> pilotOrder = new ArrayList<Pilot>();
-		for (Integer lap : laps) {
-			pilotOrder.addAll(order.get(lap));
-		}
-		return pilotOrder;
+	public final List<Pilot> getLapOrder(Race race) {
+		lazyInitialisation();
+		return raceLapOrder.get(race);
 	}
 
-	protected void completeRaceLap(Race race, Pilot pilot) {
-		ListMultimap<Integer, Pilot> order = lapOrder.get(race);
-		int laps = raceLaps.get(pilot, race);
-
-		order.remove(laps, pilot);
-		raceLaps.put(pilot, race, ++laps);
-		order.put(laps, pilot);
-	}
+	protected abstract Iterable<Pilot> calculateRaceLaps(Race race);
 }

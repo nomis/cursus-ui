@@ -17,7 +17,66 @@
  */
 package eu.lp0.cursus.scoring;
 
-public abstract class ForwardingScores extends AbstractForwardingScores {
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
+
+public abstract class ForwardingScores extends AbstractForwardingScores implements ScoresFactorySubset {
+	private final Supplier<RaceLapsData> raceLapsData = Suppliers.memoize(new Supplier<RaceLapsData>() {
+		@Override
+		public RaceLapsData get() {
+			return newRaceLapsData(ForwardingScores.this);
+		}
+	});
+
+	private final Supplier<RacePointsData> racePointsData = Suppliers.memoize(new Supplier<RacePointsData>() {
+		@Override
+		public RacePointsData get() {
+			return newRacePointsData(ForwardingScores.this);
+		}
+	});
+
+	private final Supplier<RacePenaltiesData> racePenaltiesData = Suppliers.memoize(new Supplier<RacePenaltiesData>() {
+		@Override
+		public RacePenaltiesData get() {
+			return newRacePenaltiesData(ForwardingScores.this);
+		}
+	});
+
+	private final Supplier<RacePositionsData> racePositionsData = Suppliers.memoize(new Supplier<RacePositionsData>() {
+		@Override
+		public RacePositionsData get() {
+			return newRacePositionsData(ForwardingScores.this);
+		}
+	});
+
+	private final Supplier<RaceDiscardsData> raceDiscardsData = Suppliers.memoize(new Supplier<RaceDiscardsData>() {
+		@Override
+		public RaceDiscardsData get() {
+			return newRaceDiscardsData(ForwardingScores.this);
+		}
+	});
+
+	private final Supplier<OverallPenaltiesData> overallPenaltiesData = Suppliers.memoize(new Supplier<OverallPenaltiesData>() {
+		@Override
+		public OverallPenaltiesData get() {
+			return newOverallPenaltiesData(ForwardingScores.this);
+		}
+	});
+
+	private final Supplier<OverallPointsData> overallPointsData = Suppliers.memoize(new Supplier<OverallPointsData>() {
+		@Override
+		public OverallPointsData get() {
+			return newOverallPointsData(ForwardingScores.this);
+		}
+	});
+
+	private final Supplier<OverallPositionData> overallPositionData = Suppliers.memoize(new Supplier<OverallPositionData>() {
+		@Override
+		public OverallPositionData get() {
+			return newOverallPositionData(ForwardingScores.this);
+		}
+	});
+
 	protected abstract Scores delegate();
 
 	@Override
@@ -27,46 +86,86 @@ public abstract class ForwardingScores extends AbstractForwardingScores {
 
 	@Override
 	protected ScoresFactorySubset delegateScoresFactory() {
-		return delegate();
+		return this;
+	}
+
+	@Override
+	public RaceLapsData newRaceLapsData(Scores scores) {
+		return delegate().newRaceLapsData(scores);
+	}
+
+	@Override
+	public RacePointsData newRacePointsData(Scores scores) {
+		return delegate().newRacePointsData(scores);
+	}
+
+	@Override
+	public RacePenaltiesData newRacePenaltiesData(Scores scores) {
+		return delegate().newRacePenaltiesData(scores);
+	}
+
+	@Override
+	public RacePositionsData newRacePositionsData(Scores scores) {
+		return delegate().newRacePositionsData(scores);
+	}
+
+	@Override
+	public RaceDiscardsData newRaceDiscardsData(Scores scores) {
+		return delegate().newRaceDiscardsData(scores);
+	}
+
+	@Override
+	public OverallPenaltiesData newOverallPenaltiesData(Scores scores) {
+		return delegate().newOverallPenaltiesData(scores);
+	}
+
+	@Override
+	public OverallPointsData newOverallPointsData(Scores scores) {
+		return delegate().newOverallPointsData(scores);
+	}
+
+	@Override
+	public OverallPositionData newOverallPositionData(Scores scores) {
+		return delegate().newOverallPositionData(scores);
 	}
 
 	@Override
 	protected RaceLapsData delegateRaceLapsData() {
-		return delegate();
+		return raceLapsData.get();
 	}
 
 	@Override
 	protected RacePointsData delegateRacePointsData() {
-		return delegate();
+		return racePointsData.get();
 	}
 
 	@Override
 	protected RacePenaltiesData delegateRacePenaltiesData() {
-		return delegate();
+		return racePenaltiesData.get();
 	}
 
 	@Override
 	protected RacePositionsData delegateRacePositionsData() {
-		return delegate();
+		return racePositionsData.get();
 	}
 
 	@Override
 	protected RaceDiscardsData delegateRaceDiscardsData() {
-		return delegate();
+		return raceDiscardsData.get();
 	}
 
 	@Override
 	protected OverallPenaltiesData delegateOverallPenaltiesData() {
-		return delegate();
+		return overallPenaltiesData.get();
 	}
 
 	@Override
 	protected OverallPointsData delegateOverallPointsData() {
-		return delegate();
+		return overallPointsData.get();
 	}
 
 	@Override
 	protected OverallPositionData delegateOverallPositionData() {
-		return delegate();
+		return overallPositionData.get();
 	}
 }

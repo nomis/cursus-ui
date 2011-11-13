@@ -36,6 +36,8 @@ public interface RacePointsData {
 
 	public Map<Race, Collection<Pilot>> getSimulatedRacePoints();
 
+	public Map<Pilot, Collection<Race>> getSimulatedPilotPoints();
+
 	public boolean hasSimulatedRacePoints(Pilot pilot, Race race);
 
 	public Collection<Race> getSimulatedRacePoints(Pilot pilot);

@@ -17,13 +17,6 @@
  */
 package org.spka.cursus.scoring;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import eu.lp0.cursus.db.data.Event;
-import eu.lp0.cursus.db.data.Pilot;
-import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.GenericOverallPointsData;
 import eu.lp0.cursus.scoring.OverallPenaltiesData;
 import eu.lp0.cursus.scoring.RaceDiscardsData;
@@ -36,16 +29,8 @@ public class OverallPointsData2011<T extends ScoredData & RacePointsData & RaceD
 	}
 
 	@Override
-	public int getOverallFleetSize() {
-		Set<Pilot> pilots = new HashSet<Pilot>();
-		if (!scores.getRaces().isEmpty()) {
-			Series series = scores.getRaces().get(0).getEvent().getSeries();
-			for (Event event : series.getEvents()) {
-				for (Race race : event.getRaces()) {
-					pilots.addAll(race.getAttendees().keySet());
-				}
-			}
-		}
-		return pilots.size();
+	protected int calculateOverallFleetSize() {
+		assert (!scores.getRaces().isEmpty());
+		return Scorer2011.calculateFleetSize(scores.getRaces().get(0).getEvent().getSeries());
 	}
 }

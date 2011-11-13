@@ -22,6 +22,9 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.google.common.base.Predicates;
+import com.google.common.collect.Sets;
+
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
@@ -31,7 +34,7 @@ public class GenericOverallPointsData<T extends ScoredData & RacePointsData & Ra
 	}
 
 	@Override
-	public int getOverallPoints(Pilot pilot) {
+	protected int calculateOverallPoints(Pilot pilot) {
 		int points = 0;
 
 		Collection<Race> discardedRaces = scores.getDiscardedRaces(pilot).values();
@@ -53,10 +56,10 @@ public class GenericOverallPointsData<T extends ScoredData & RacePointsData & Ra
 	}
 
 	@Override
-	public int getOverallFleetSize() {
-		Set<Pilot> pilots = new HashSet<Pilot>();
+	protected int calculateOverallFleetSize() {
+		Set<Pilot> pilots = new HashSet<Pilot>(scores.getPilots().size() * 2);
 		for (Race race : scores.getRaces()) {
-			pilots.addAll(race.getAttendees().keySet());
+			pilots.addAll(Sets.filter(race.getAttendees().keySet(), Predicates.in(scores.getPilots())));
 		}
 		return pilots.size();
 	}

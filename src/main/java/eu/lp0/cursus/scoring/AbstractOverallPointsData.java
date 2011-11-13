@@ -20,24 +20,50 @@ package eu.lp0.cursus.scoring;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
+
 import eu.lp0.cursus.db.data.Pilot;
 
 public abstract class AbstractOverallPointsData<T extends ScoredData> implements OverallPointsData {
 	protected final T scores;
+	protected final Supplier<Map<Pilot, Integer>> lazyOverallPoints = Suppliers.memoize(new Supplier<Map<Pilot, Integer>>() {
+		@Override
+		public Map<Pilot, Integer> get() {
+			Map<Pilot, Integer> overallPoints = new HashMap<Pilot, Integer>(scores.getPilots().size() * 2);
+			for (Pilot pilot : scores.getPilots()) {
+				overallPoints.put(pilot, calculateOverallPoints(pilot));
+			}
+			return overallPoints;
+		}
+	});
+	private final Supplier<Integer> lazyOverallFleetSize = Suppliers.memoize(new Supplier<Integer>() {
+		@Override
+		public Integer get() {
+			return calculateOverallFleetSize();
+		}
+	});
 
 	public AbstractOverallPointsData(T scores) {
 		this.scores = scores;
 	}
 
 	@Override
-	public Map<Pilot, Integer> getOverallPoints() {
-		Map<Pilot, Integer> overallPoints = new HashMap<Pilot, Integer>();
-		for (Pilot pilot : scores.getPilots()) {
-			overallPoints.put(pilot, getOverallPoints(pilot));
-		}
-		return overallPoints;
+	public final Map<Pilot, Integer> getOverallPoints() {
+		return lazyOverallPoints.get();
 	}
 
 	@Override
-	public abstract int getOverallPoints(Pilot pilot);
+	public final int getOverallPoints(Pilot pilot) {
+		return lazyOverallPoints.get().get(pilot);
+	}
+
+	@Override
+	public final int getOverallFleetSize() {
+		return lazyOverallFleetSize.get();
+	}
+
+	protected abstract int calculateOverallPoints(Pilot pilot);
+
+	protected abstract int calculateOverallFleetSize();
 }

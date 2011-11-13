@@ -20,71 +20,93 @@ package eu.lp0.cursus.scoring;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import com.google.common.collect.HashMultimap;
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
+import com.google.common.collect.ArrayTable;
 import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
+import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
 public abstract class AbstractRacePositionsData<T extends ScoredData> implements RacePositionsData {
 	protected final T scores;
+	protected final Supplier<Map<Race, LinkedListMultimap<Integer, Pilot>>> lazyRacePositionsWithOrder = Suppliers
+			.memoize(new Supplier<Map<Race, LinkedListMultimap<Integer, Pilot>>>() {
+				@Override
+				public Map<Race, LinkedListMultimap<Integer, Pilot>> get() {
+					Map<Race, LinkedListMultimap<Integer, Pilot>> raceOrders = new HashMap<Race, LinkedListMultimap<Integer, Pilot>>(
+							scores.getRaces().size() * 2);
+					for (Race race : scores.getRaces()) {
+						raceOrders.put(race, calculateRacePositionsWithOrder(race));
+					}
+					return raceOrders;
+				}
+			});
+	protected final Supplier<Table<Race, Pilot, Integer>> lazyRacePositions = Suppliers.memoize(new Supplier<Table<Race, Pilot, Integer>>() {
+		@Override
+		public Table<Race, Pilot, Integer> get() {
+			Table<Race, Pilot, Integer> racePositions = ArrayTable.create(scores.getRaces(), scores.getPilots());
+			Map<Race, LinkedListMultimap<Integer, Pilot>> racePositionsWithOrder = lazyRacePositionsWithOrder.get();
+			for (Map.Entry<Race, LinkedListMultimap<Integer, Pilot>> raceEntry : racePositionsWithOrder.entrySet()) {
+				for (Map.Entry<Integer, Pilot> positionEntry : raceEntry.getValue().entries()) {
+					racePositions.put(raceEntry.getKey(), positionEntry.getValue(), positionEntry.getKey());
+				}
+			}
+			return racePositions;
+		}
+	});
+	protected final Supplier<Map<Race, List<Pilot>>> lazyRaceOrders = Suppliers.memoize(new Supplier<Map<Race, List<Pilot>>>() {
+		@Override
+		public Map<Race, List<Pilot>> get() {
+			Map<Race, List<Pilot>> raceOrders = new HashMap<Race, List<Pilot>>(scores.getRaces().size() * 2);
+			Map<Race, LinkedListMultimap<Integer, Pilot>> racePositionsWithOrder = lazyRacePositionsWithOrder.get();
+			for (Map.Entry<Race, LinkedListMultimap<Integer, Pilot>> raceEntry : racePositionsWithOrder.entrySet()) {
+				raceOrders.put(raceEntry.getKey(), raceEntry.getValue().values());
+			}
+			return raceOrders;
+		}
+	});
 
 	public AbstractRacePositionsData(T scores) {
 		this.scores = scores;
 	}
 
 	@Override
-	public Map<Race, Map<Pilot, Integer>> getRacePositions() {
-		Map<Race, Map<Pilot, Integer>> racePositions = new HashMap<Race, Map<Pilot, Integer>>();
-		for (Race race : scores.getRaces()) {
-			racePositions.put(race, getRacePositions(race));
-		}
-		return racePositions;
+	public final Table<Race, Pilot, Integer> getRacePositions() {
+		return lazyRacePositions.get();
 	}
 
 	@Override
-	public Map<Pilot, Integer> getRacePositions(Race race) {
-		Map<Pilot, Integer> racePositions = new HashMap<Pilot, Integer>();
-		for (Entry<Integer, Pilot> entry : getRacePositionsWithOrder(race).entries()) {
-			racePositions.put(entry.getValue(), entry.getKey());
-		}
-		return racePositions;
+	public final Map<Pilot, Integer> getRacePositions(Race race) {
+		return lazyRacePositions.get().row(race);
 	}
 
 	@Override
-	public Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositionsWithOrder() {
-		Map<Race, LinkedListMultimap<Integer, Pilot>> racePositions = new HashMap<Race, LinkedListMultimap<Integer, Pilot>>();
-		for (Race race : scores.getRaces()) {
-			racePositions.put(race, getRacePositionsWithOrder(race));
-		}
-		return racePositions;
+	public final Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositionsWithOrder() {
+		return lazyRacePositionsWithOrder.get();
 	}
 
 	@Override
-	public int getRacePosition(Pilot pilot, Race race) {
-		Multimap<Pilot, Integer> inverted = HashMultimap.create();
-		Multimaps.invertFrom(getRacePositionsWithOrder(race), inverted);
-		return inverted.get(pilot).iterator().next();
+	public final LinkedListMultimap<Integer, Pilot> getRacePositionsWithOrder(Race race) {
+		return lazyRacePositionsWithOrder.get().get(race);
 	}
 
 	@Override
-	public Map<Race, List<Pilot>> getRaceOrders() {
-		Map<Race, List<Pilot>> raceOrders = new HashMap<Race, List<Pilot>>();
-		for (Race race : scores.getRaces()) {
-			raceOrders.put(race, getRaceOrder(race));
-		}
-		return raceOrders;
+	public final int getRacePosition(Pilot pilot, Race race) {
+		return lazyRacePositions.get().get(race, pilot);
 	}
 
 	@Override
-	public List<Pilot> getRaceOrder(Race race) {
-		return getRacePositionsWithOrder(race).values();
+	public final Map<Race, List<Pilot>> getRaceOrders() {
+		return lazyRaceOrders.get();
 	}
 
 	@Override
-	public abstract LinkedListMultimap<Integer, Pilot> getRacePositionsWithOrder(Race race);
+	public final List<Pilot> getRaceOrder(Race race) {
+		return lazyRaceOrders.get().get(race);
+	}
+
+	protected abstract LinkedListMultimap<Integer, Pilot> calculateRacePositionsWithOrder(Race race);
 }

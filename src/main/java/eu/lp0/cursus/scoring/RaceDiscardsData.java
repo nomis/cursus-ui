@@ -27,11 +27,13 @@ import eu.lp0.cursus.db.data.Race;
 public interface RaceDiscardsData {
 	public Table<Pilot, Integer, Integer> getRaceDiscards();
 
-	public Map<Integer, Integer> getRaceDiscards(final Pilot pilot);
+	public Map<Integer, Integer> getRaceDiscards(Pilot pilot);
 
 	public Map<Pilot, Integer> getRaceDiscards(int discard);
 
 	public int getRaceDiscard(Pilot pilot, int discard);
 
-	public Map<Integer, Race> getDiscardedRaces(final Pilot pilot);
+	public Table<Pilot, Integer, Race> getDiscardedRaces();
+
+	public Map<Integer, Race> getDiscardedRaces(Pilot pilot);
 }

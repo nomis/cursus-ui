@@ -35,7 +35,7 @@ public class GenericOverallPenaltiesData<T extends ScoredData & RacePenaltiesDat
 	}
 
 	@Override
-	public int getOverallPenalties(Pilot pilot) {
+	protected int calculateOverallPenalties(Pilot pilot) {
 		int penalties = 0;
 
 		// Add race penalties

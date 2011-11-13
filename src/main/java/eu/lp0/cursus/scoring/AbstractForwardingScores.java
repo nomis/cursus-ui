@@ -150,6 +150,11 @@ public abstract class AbstractForwardingScores implements Scores {
 	}
 
 	@Override
+	public Map<Pilot, Collection<Race>> getSimulatedPilotPoints() {
+		return Collections.unmodifiableMap(delegateRacePointsData().getSimulatedPilotPoints());
+	}
+
+	@Override
 	public boolean hasSimulatedRacePoints(Pilot pilot, Race race) {
 		return delegateRacePointsData().hasSimulatedRacePoints(pilot, race);
 	}
@@ -192,8 +197,8 @@ public abstract class AbstractForwardingScores implements Scores {
 
 	// RacePositionsData
 	@Override
-	public Map<Race, Map<Pilot, Integer>> getRacePositions() {
-		return Collections.unmodifiableMap(delegateRacePositionsData().getRacePositions());
+	public Table<Race, Pilot, Integer> getRacePositions() {
+		return delegateRacePositionsData().getRacePositions();
 	}
 
 	@Override
@@ -245,6 +250,11 @@ public abstract class AbstractForwardingScores implements Scores {
 	@Override
 	public int getRaceDiscard(Pilot pilot, int discard) {
 		return delegateRaceDiscardsData().getRaceDiscard(pilot, discard);
+	}
+
+	@Override
+	public Table<Pilot, Integer, Race> getDiscardedRaces() {
+		return delegateRaceDiscardsData().getDiscardedRaces();
 	}
 
 	@Override

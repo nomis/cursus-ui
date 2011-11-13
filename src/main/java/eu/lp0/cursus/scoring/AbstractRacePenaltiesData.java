@@ -17,9 +17,10 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ArrayTable;
 import com.google.common.collect.Table;
 
@@ -28,38 +29,42 @@ import eu.lp0.cursus.db.data.Race;
 
 public abstract class AbstractRacePenaltiesData<T extends ScoredData> implements RacePenaltiesData {
 	protected final T scores;
+	protected final Supplier<Table<Pilot, Race, Integer>> lazyRacePenalties = Suppliers.memoize(new Supplier<Table<Pilot, Race, Integer>>() {
+		@Override
+		public Table<Pilot, Race, Integer> get() {
+			Table<Pilot, Race, Integer> racePenalties = ArrayTable.create(scores.getPilots(), scores.getRaces());
+			for (Race race : scores.getRaces()) {
+				for (Pilot pilot : scores.getPilots()) {
+					racePenalties.put(pilot, race, calculateRacePenalties(pilot, race));
+				}
+			}
+			return racePenalties;
+		}
+	});
 
 	public AbstractRacePenaltiesData(T scores) {
 		this.scores = scores;
 	}
 
 	@Override
-	public Table<Pilot, Race, Integer> getRacePenalties() {
-		Table<Pilot, Race, Integer> racePenalties = ArrayTable.create(scores.getPilots(), scores.getRaces());
-		for (Pilot pilot : scores.getPilots()) {
-			racePenalties.row(pilot).putAll(getRacePenalties(pilot));
-		}
-		return racePenalties;
+	public final Table<Pilot, Race, Integer> getRacePenalties() {
+		return lazyRacePenalties.get();
 	}
 
 	@Override
-	public Map<Race, Integer> getRacePenalties(Pilot pilot) {
-		Map<Race, Integer> racePenalties = new HashMap<Race, Integer>();
-		for (Race race : scores.getRaces()) {
-			racePenalties.put(race, getRacePenalties(pilot, race));
-		}
-		return racePenalties;
+	public final Map<Race, Integer> getRacePenalties(Pilot pilot) {
+		return lazyRacePenalties.get().row(pilot);
 	}
 
 	@Override
-	public Map<Pilot, Integer> getRacePenalties(Race race) {
-		Map<Pilot, Integer> racePenalties = new HashMap<Pilot, Integer>();
-		for (Pilot pilot : scores.getPilots()) {
-			racePenalties.put(pilot, getRacePenalties(pilot, race));
-		}
-		return racePenalties;
+	public final Map<Pilot, Integer> getRacePenalties(Race race) {
+		return lazyRacePenalties.get().column(race);
 	}
 
 	@Override
-	public abstract int getRacePenalties(Pilot pilot, Race race);
+	public final int getRacePenalties(Pilot pilot, Race race) {
+		return lazyRacePenalties.get().get(pilot, race);
+	}
+
+	protected abstract int calculateRacePenalties(Pilot pilot, Race race);
 }

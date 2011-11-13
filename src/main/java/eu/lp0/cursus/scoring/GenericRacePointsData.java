@@ -30,7 +30,7 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 	}
 
 	@Override
-	public Map<Pilot, Integer> getRacePoints(Race race) {
+	protected Map<Pilot, Integer> calculateRacePoints(Race race) {
 		Map<Pilot, Integer> racePoints = new HashMap<Pilot, Integer>();
 		List<Pilot> lapOrder = scores.getLapOrder(race);
 
@@ -52,7 +52,7 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 	}
 
 	@Override
-	public boolean hasSimulatedRacePoints(Pilot pilot, Race race) {
+	protected boolean calculateSimulatedRacePoints(Pilot pilot, Race race) {
 		return false;
 	}
 

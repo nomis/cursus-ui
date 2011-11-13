@@ -20,24 +20,37 @@ package eu.lp0.cursus.scoring;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
+
 import eu.lp0.cursus.db.data.Pilot;
 
 public abstract class AbstractOverallPenaltiesData<T extends ScoredData> implements OverallPenaltiesData {
 	protected final T scores;
+	protected final Supplier<Map<Pilot, Integer>> lazyOverallPenalties = Suppliers.memoize(new Supplier<Map<Pilot, Integer>>() {
+		@Override
+		public Map<Pilot, Integer> get() {
+			Map<Pilot, Integer> overallPenalties = new HashMap<Pilot, Integer>(scores.getPilots().size() * 2);
+			for (Pilot pilot : scores.getPilots()) {
+				overallPenalties.put(pilot, calculateOverallPenalties(pilot));
+			}
+			return overallPenalties;
+		}
+	});
 
 	public AbstractOverallPenaltiesData(T scores) {
 		this.scores = scores;
 	}
 
 	@Override
-	public Map<Pilot, Integer> getOverallPenalties() {
-		Map<Pilot, Integer> overallPenalties = new HashMap<Pilot, Integer>();
-		for (Pilot pilot : scores.getPilots()) {
-			overallPenalties.put(pilot, getOverallPenalties(pilot));
-		}
-		return overallPenalties;
+	public final Map<Pilot, Integer> getOverallPenalties() {
+		return lazyOverallPenalties.get();
 	}
 
 	@Override
-	public abstract int getOverallPenalties(Pilot pilot);
+	public final int getOverallPenalties(Pilot pilot) {
+		return lazyOverallPenalties.get().get(pilot);
+	}
+
+	protected abstract int calculateOverallPenalties(Pilot pilot);
 }

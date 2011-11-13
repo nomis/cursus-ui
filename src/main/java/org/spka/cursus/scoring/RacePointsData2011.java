@@ -17,16 +17,22 @@
  */
 package org.spka.cursus.scoring;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 
-import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.AveragingRacePointsData;
 import eu.lp0.cursus.scoring.Scores;
 
 public class RacePointsData2011<T extends Scores> extends AveragingRacePointsData<T> {
+	private final Supplier<Integer> lazyRaceFleetSize = Suppliers.memoize(new Supplier<Integer>() {
+		@Override
+		public Integer get() {
+			return calculateFleetSize();
+		}
+	});
+
 	public RacePointsData2011(T scores, Method method, Rounding rounding) {
 		super(scores, method, rounding);
 	}
@@ -42,12 +48,11 @@ public class RacePointsData2011<T extends Scores> extends AveragingRacePointsDat
 
 	@Override
 	public int getFleetSize(Race race) {
-		Set<Pilot> pilots = new HashSet<Pilot>();
-		for (Event event : race.getEvent().getSeries().getEvents()) {
-			for (Race race2 : event.getRaces()) {
-				pilots.addAll(race2.getAttendees().keySet());
-			}
-		}
-		return pilots.size();
+		return lazyRaceFleetSize.get();
+	}
+
+	protected int calculateFleetSize() {
+		assert (!scores.getRaces().isEmpty());
+		return Scorer2011.calculateFleetSize(scores.getRaces().get(0).getEvent().getSeries());
 	}
 }

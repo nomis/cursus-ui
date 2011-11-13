@@ -22,41 +22,55 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.google.common.collect.HashMultimap;
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 
 import eu.lp0.cursus.db.data.Pilot;
 
 public abstract class AbstractOverallPositionData<T extends ScoredData> implements OverallPositionData {
 	protected final T scores;
+	protected final Supplier<LinkedListMultimap<Integer, Pilot>> lazyOverallPositionsWithOrder = Suppliers
+			.memoize(new Supplier<LinkedListMultimap<Integer, Pilot>>() {
+				@Override
+				public LinkedListMultimap<Integer, Pilot> get() {
+					return calculateOverallPositionsWithOrder();
+				}
+			});
+	protected final Supplier<Map<Pilot, Integer>> lazyOverallPositions = Suppliers.memoize(new Supplier<Map<Pilot, Integer>>() {
+		@Override
+		public Map<Pilot, Integer> get() {
+			Map<Pilot, Integer> racePositions = new HashMap<Pilot, Integer>(scores.getPilots().size() * 2);
+			for (Entry<Integer, Pilot> entry : lazyOverallPositionsWithOrder.get().entries()) {
+				racePositions.put(entry.getValue(), entry.getKey());
+			}
+			return racePositions;
+		}
+	});
 
 	public AbstractOverallPositionData(T scores) {
 		this.scores = scores;
 	}
 
 	@Override
-	public Map<Pilot, Integer> getOverallPositions() {
-		Map<Pilot, Integer> racePositions = new HashMap<Pilot, Integer>();
-		for (Entry<Integer, Pilot> entry : getOverallPositionsWithOrder().entries()) {
-			racePositions.put(entry.getValue(), entry.getKey());
-		}
-		return racePositions;
+	public final Map<Pilot, Integer> getOverallPositions() {
+		return lazyOverallPositions.get();
 	}
 
 	@Override
-	public int getOverallPosition(Pilot pilot) {
-		Multimap<Pilot, Integer> inverted = HashMultimap.create();
-		Multimaps.invertFrom(getOverallPositionsWithOrder(), inverted);
-		return inverted.get(pilot).iterator().next();
+	public final LinkedListMultimap<Integer, Pilot> getOverallPositionsWithOrder() {
+		return lazyOverallPositionsWithOrder.get();
 	}
 
 	@Override
-	public List<Pilot> getOverallOrder() {
-		return getOverallPositionsWithOrder().values();
+	public final int getOverallPosition(Pilot pilot) {
+		return lazyOverallPositions.get().get(pilot);
 	}
 
 	@Override
-	public abstract LinkedListMultimap<Integer, Pilot> getOverallPositionsWithOrder();
+	public final List<Pilot> getOverallOrder() {
+		return lazyOverallPositionsWithOrder.get().values();
+	}
+
+	protected abstract LinkedListMultimap<Integer, Pilot> calculateOverallPositionsWithOrder();
 }
