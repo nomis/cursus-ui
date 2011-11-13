@@ -18,36 +18,23 @@
 package eu.lp0.cursus.test.util;
 
 import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.junit.Assert;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.scoring.Scores;
 
 public class OverallAssertUtil {
-	private final Table<Pilot, Integer, Integer> actualRaceDiscards;
-	private final Map<Pilot, Integer> actualOverallPenalties;
-	private final Map<Pilot, Integer> actualOverallPoints;
-	private final Map<Pilot, Integer> actualOverallPositions;
-	private final List<Pilot> actualOverallOrder;
+	private final Scores scores;
 
-	private final int expectedPilots;
 	private final Set<Pilot> expectedOverallOrder = new LinkedHashSet<Pilot>();
 	private boolean done = false;
 
 	public OverallAssertUtil(Scores scores) {
-		expectedPilots = scores.getPilots().size();
-		actualRaceDiscards = scores.getRaceDiscards();
-		actualOverallPenalties = scores.getOverallPenalties();
-		actualOverallPoints = scores.getOverallPoints();
-		actualOverallPositions = scores.getOverallPositions();
-		actualOverallOrder = scores.getOverallOrder();
+		this.scores = scores;
 	}
 
 	public void assertPilot(Pilot pilot, int expectedPenalties, int expectedPoints, int expectedPosition, Integer... expectedDiscards) {
@@ -57,21 +44,21 @@ public class OverallAssertUtil {
 			expectedDiscards = new Integer[0];
 		}
 
-		Assert.assertTrue("Pilot " + pilot.getName() + " does not exist in scores", actualOverallPoints.containsKey(pilot)); //$NON-NLS-1$//$NON-NLS-2$
+		Assert.assertTrue("Pilot " + pilot.getName() + " does not exist in scores", scores.getPilots().contains(pilot)); //$NON-NLS-1$//$NON-NLS-2$
 		Assert.assertArrayEquals(
-				"Overall discards mismatch for " + pilot, expectedDiscards, Iterables.toArray(Iterables.skip(actualRaceDiscards.row(pilot).values(), 1), Integer.class)); //$NON-NLS-1$
-		Assert.assertEquals("Overall penalties mismatch for " + pilot, expectedPenalties, (int)actualOverallPenalties.get(pilot)); //$NON-NLS-1$
-		Assert.assertEquals("Overall points mismatch for " + pilot, expectedPoints, (int)actualOverallPoints.get(pilot)); //$NON-NLS-1$
-		Assert.assertEquals("Overall position mismatch for " + pilot, expectedPosition, (int)actualOverallPositions.get(pilot)); //$NON-NLS-1$
+				"Overall discards mismatch for " + pilot, expectedDiscards, Iterables.toArray(Iterables.skip(scores.getRaceDiscards(pilot).values(), 1), Integer.class)); //$NON-NLS-1$
+		Assert.assertEquals("Overall penalties mismatch for " + pilot, expectedPenalties, scores.getOverallPenalties(pilot)); //$NON-NLS-1$
+		Assert.assertEquals("Overall points mismatch for " + pilot, expectedPoints, scores.getOverallPoints(pilot)); //$NON-NLS-1$
+		Assert.assertEquals("Overall position mismatch for " + pilot, expectedPosition, scores.getOverallPosition(pilot)); //$NON-NLS-1$
 		Assert.assertTrue("Pilot " + pilot + " already specified", expectedOverallOrder.add(pilot)); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public void assertOrder() {
 		Assert.assertFalse(done);
 
-		Assert.assertEquals(expectedPilots, expectedOverallOrder.size());
-		Assert.assertEquals(expectedPilots, actualOverallOrder.size());
-		Assert.assertArrayEquals(expectedOverallOrder.toArray(), actualOverallOrder.toArray());
+		Assert.assertEquals(scores.getPilots().size(), expectedOverallOrder.size());
+		Assert.assertEquals(scores.getPilots().size(), scores.getOverallOrder().size());
+		Assert.assertArrayEquals(expectedOverallOrder.toArray(), scores.getOverallOrder().toArray());
 		done = true;
 	}
 }
