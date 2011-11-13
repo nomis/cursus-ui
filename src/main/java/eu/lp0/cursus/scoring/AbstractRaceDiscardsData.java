@@ -19,10 +19,12 @@ package eu.lp0.cursus.scoring;
 
 import java.util.Map;
 
+import com.google.common.base.Functions;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ArrayTable;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Pilot;
@@ -47,13 +49,12 @@ public abstract class AbstractRaceDiscardsData<T extends ScoredData & RacePoints
 		@Override
 		public Table<Pilot, Integer, Integer> get() {
 			// The first column is just nulls, as Tables must have at least one column
-			Table<Pilot, Integer, Integer> pilotDiscards = ArrayTable.create(scores.getPilots(), new IntegerSequence(0, discards));
+			Iterable<Integer> discardSeq = new IntegerSequence(0, discards);
+			Table<Pilot, Integer, Integer> pilotDiscards = ArrayTable.create(scores.getPilots(), discardSeq);
 			Table<Pilot, Race, Integer> racePoints = scores.getRacePoints();
 			Table<Pilot, Integer, Race> discardedRaces = lazyDiscardedRaces.get();
 			for (Pilot pilot : scores.getPilots()) {
-				for (int discard = 1; discard <= discards; discard++) {
-					pilotDiscards.put(pilot, discard, racePoints.get(pilot, discardedRaces.get(pilot, discard)));
-				}
+				pilotDiscards.row(pilot).putAll(Maps.transformValues(discardedRaces.row(pilot), Functions.forMap(racePoints.row(pilot), null)));
 			}
 			return pilotDiscards;
 		}
