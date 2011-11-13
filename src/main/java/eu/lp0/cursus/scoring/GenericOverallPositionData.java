@@ -55,7 +55,7 @@ public class GenericOverallPositionData<T extends ScoredData & RacePointsData & 
 
 		// Calculate overall positions
 		LinkedListMultimap<Integer, Pilot> overallPositions = LinkedListMultimap.create();
-		List<Pilot> collectedPilots = new ArrayList<Pilot>();
+		List<Pilot> collectedPilots = new ArrayList<Pilot>(scores.getPilots().size());
 		int position = 1;
 
 		for (Integer points : invOverallPoints.keySet()) {

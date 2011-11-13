@@ -60,7 +60,7 @@ public class GenericRacePositionsData<T extends ScoredData & RaceLapsData & Race
 		// Add penalties to race points
 		Map<Pilot, Integer> racePoints = scores.getRacePoints(race);
 		Map<Pilot, Integer> racePenalties = scores.getRacePenalties(race);
-		Map<Pilot, Integer> racePointsWithPenalties = new HashMap<Pilot, Integer>();
+		Map<Pilot, Integer> racePointsWithPenalties = new HashMap<Pilot, Integer>(scores.getPilots().size() * 2);
 		for (Pilot pilot : scores.getPilots()) {
 			racePointsWithPenalties.put(pilot, racePoints.get(pilot) + racePenalties.get(pilot));
 		}

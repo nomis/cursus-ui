@@ -31,7 +31,7 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 
 	@Override
 	protected Map<Pilot, Integer> calculateRacePoints(Race race) {
-		Map<Pilot, Integer> racePoints = new HashMap<Pilot, Integer>();
+		Map<Pilot, Integer> racePoints = new HashMap<Pilot, Integer>(scores.getPilots().size() * 2);
 		List<Pilot> lapOrder = scores.getLapOrder(race);
 
 		// Score everyone who completed a lap

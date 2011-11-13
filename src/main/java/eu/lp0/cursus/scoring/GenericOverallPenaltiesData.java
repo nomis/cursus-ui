@@ -45,7 +45,7 @@ public class GenericOverallPenaltiesData<T extends ScoredData & RacePenaltiesDat
 
 		// Get event/series penalties
 		List<Penalty> overallPenalties = new ArrayList<Penalty>();
-		Set<Event> events = new HashSet<Event>();
+		Set<Event> events = new HashSet<Event>(scores.getRaces().size());
 		for (Race race : scores.getRaces()) {
 			events.add(race.getEvent());
 		}
