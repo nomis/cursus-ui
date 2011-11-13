@@ -139,11 +139,15 @@ public class Series2010Event2Scores extends Series2010Event1Scores {
 			race4AssertUtil.assertPilot(sco087, 4, 0, 7, 8);
 			race4AssertUtil.assertPilot(sco081, 1, 0, 8, 9);
 			race4AssertUtil.assertPilot(sco060, 0, 0, 8, 10);
+			race4AssertUtil.assertPilot(sco018, 0, 0, 14, 11);
+			race4AssertUtil.assertPilot(sco042, 0, 0, 14, 11);
 			race4AssertUtil.assertPilot(sco136, 0, 0, 14, 11);
 			race4AssertUtil.assertPilot(sco153, 0, 0, 14, 11);
 			race4AssertUtil.assertPilot(sco156, 0, 0, 14, 11);
 			race4AssertUtil.assertPilot(sco158, 0, 0, 14, 11);
 			race4AssertUtil.assertPilot(sco197, 0, 0, 14, 11);
+			race4AssertUtil.assertPilot(sco248, 0, 0, 14, 11);
+			race4AssertUtil.assertPilot(sco249, 0, 0, 14, 11);
 			race4AssertUtil.assertOrder();
 
 			OverallAssertUtil overallAssertUtil = new OverallAssertUtil(scores);
