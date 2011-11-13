@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -141,6 +142,26 @@ public abstract class AbstractForwardingScores implements Scores {
 	@Override
 	public Map<Pilot, Integer> getRacePoints(Race race) {
 		return Collections.unmodifiableMap(delegateRacePointsData().getRacePoints(race));
+	}
+
+	@Override
+	public Map<Race, Collection<Pilot>> getSimulatedRacePoints() {
+		return Collections.unmodifiableMap(delegateRacePointsData().getSimulatedRacePoints());
+	}
+
+	@Override
+	public boolean hasSimulatedRacePoints(Pilot pilot, Race race) {
+		return delegateRacePointsData().hasSimulatedRacePoints(pilot, race);
+	}
+
+	@Override
+	public Collection<Race> getSimulatedRacePoints(Pilot pilot) {
+		return Collections.unmodifiableCollection(delegateRacePointsData().getSimulatedRacePoints(pilot));
+	}
+
+	@Override
+	public Collection<Pilot> getSimulatedRacePoints(Race race) {
+		return Collections.unmodifiableCollection(delegateRacePointsData().getSimulatedRacePoints(race));
 	}
 
 	@Override

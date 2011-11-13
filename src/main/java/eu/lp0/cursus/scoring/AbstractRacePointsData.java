@@ -17,10 +17,16 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import com.google.common.collect.ArrayTable;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
+import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Pilot;
@@ -57,5 +63,42 @@ public abstract class AbstractRacePointsData<T extends ScoredData> implements Ra
 	}
 
 	@Override
+	public Map<Race, Collection<Pilot>> getSimulatedRacePoints() {
+		SetMultimap<Pilot, Race> simulatedRacePoints = HashMultimap.create();
+		for (Pilot pilot : scores.getPilots()) {
+			simulatedRacePoints.putAll(pilot, getSimulatedRacePoints(pilot));
+		}
+
+		Multimap<Race, Pilot> invSimulatedRacePoints = HashMultimap.create();
+		Multimaps.invertFrom(simulatedRacePoints, invSimulatedRacePoints);
+		return invSimulatedRacePoints.asMap();
+	}
+
+	@Override
+	public Collection<Race> getSimulatedRacePoints(Pilot pilot) {
+		Collection<Race> simulatedRacePoints = new HashSet<Race>();
+		for (Race race : scores.getRaces()) {
+			if (hasSimulatedRacePoints(pilot, race)) {
+				simulatedRacePoints.add(race);
+			}
+		}
+		return simulatedRacePoints;
+	}
+
+	@Override
+	public Collection<Pilot> getSimulatedRacePoints(Race race) {
+		Collection<Pilot> simulatedRacePoints = new HashSet<Pilot>();
+		for (Pilot pilot : scores.getPilots()) {
+			if (hasSimulatedRacePoints(pilot, race)) {
+				simulatedRacePoints.add(pilot);
+			}
+		}
+		return simulatedRacePoints;
+	}
+
+	@Override
 	public abstract Map<Pilot, Integer> getRacePoints(Race race);
+
+	@Override
+	public abstract boolean hasSimulatedRacePoints(Pilot pilot, Race race);
 }

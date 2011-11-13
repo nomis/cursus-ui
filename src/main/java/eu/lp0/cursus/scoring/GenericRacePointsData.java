@@ -51,6 +51,11 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 		return racePoints;
 	}
 
+	@Override
+	public boolean hasSimulatedRacePoints(Pilot pilot, Race race) {
+		return false;
+	}
+
 	protected int getPointsForNoLaps(Pilot pilot, Race race) {
 		return getFleetSize(race) + 1;
 	}

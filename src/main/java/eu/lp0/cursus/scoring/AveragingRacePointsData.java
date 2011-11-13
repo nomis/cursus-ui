@@ -99,6 +99,13 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 		return attendee != null && attendee.getType().isMandatory();
 	}
 
+	@Override
+	public boolean hasSimulatedRacePoints(Pilot pilot, Race race) {
+		// Return true even if the points aren't actually simulated but would
+		// be simulated if there were more races to calculate an average from
+		return isPilotMandatoryAttendee(pilot, race);
+	}
+
 	private Set<Race> getOtherRacesForPilot(Pilot pilot, Race race, boolean checkDiscards) {
 		Set<Race> otherRaces = new HashSet<Race>();
 
@@ -178,6 +185,26 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 					@Override
 					public Map<Pilot, Integer> getRacePoints(Race race) {
 						return AveragingRacePointsData.this.getRacePointsBeforeAveraging().column(race);
+					}
+
+					@Override
+					public Map<Race, Collection<Pilot>> getSimulatedRacePoints() {
+						return AveragingRacePointsData.super.getSimulatedRacePoints();
+					}
+
+					@Override
+					public boolean hasSimulatedRacePoints(Pilot pilot, Race race) {
+						return AveragingRacePointsData.super.hasSimulatedRacePoints(pilot, race);
+					}
+
+					@Override
+					public Collection<Race> getSimulatedRacePoints(Pilot pilot) {
+						return AveragingRacePointsData.super.getSimulatedRacePoints(pilot);
+					}
+
+					@Override
+					public Collection<Pilot> getSimulatedRacePoints(Race race) {
+						return AveragingRacePointsData.super.getSimulatedRacePoints(race);
 					}
 
 					@Override
