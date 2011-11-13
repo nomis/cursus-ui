@@ -86,7 +86,7 @@ public abstract class AbstractRaceLapsData<T extends ScoredData> implements Race
 	@Override
 	public final int getLaps(Pilot pilot, Race race) {
 		lazyInitialisation();
-		return raceLaps.get(pilot, race);
+		return raceLaps.get(race, pilot);
 	}
 
 	@Override

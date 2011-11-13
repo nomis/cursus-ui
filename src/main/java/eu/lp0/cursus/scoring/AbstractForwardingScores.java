@@ -281,7 +281,7 @@ public abstract class AbstractForwardingScores implements Scores {
 
 	@Override
 	public int getOverallPoints(Pilot pilot) {
-		return getOverallPoints(pilot);
+		return delegateOverallPointsData().getOverallPoints(pilot);
 	}
 
 	@Override
