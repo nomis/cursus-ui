@@ -35,7 +35,7 @@ import eu.lp0.cursus.util.Constants;
 @Embeddable
 public class RaceEvent {
 	public enum Type {
-		START, LAP, FINISH;
+		START, LAP, INVALID_LAP, FINISH;
 	}
 
 	RaceEvent() {

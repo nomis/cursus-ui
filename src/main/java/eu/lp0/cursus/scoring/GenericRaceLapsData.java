@@ -71,6 +71,10 @@ public class GenericRaceLapsData<T extends ScoredData> extends AbstractRaceLapsD
 				}
 				break;
 
+			case INVALID_LAP:
+				// Do nothing
+				break;
+
 			case FINISH:
 				afterFinish = true;
 				break;
