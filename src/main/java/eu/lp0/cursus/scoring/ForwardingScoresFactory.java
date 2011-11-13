@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.scoring;
 
-
 public abstract class ForwardingScoresFactory implements ScoresFactory {
 	protected abstract ScoresFactory delegate();
 
@@ -27,13 +26,13 @@ public abstract class ForwardingScoresFactory implements ScoresFactory {
 	}
 
 	@Override
-	public RacePenaltiesData newRacePenaltiesData(Scores scores) {
-		return delegate().newRacePenaltiesData(scores);
+	public RacePointsData newRacePointsData(Scores scores) {
+		return delegate().newRacePointsData(scores);
 	}
 
 	@Override
-	public RacePointsData newRacePointsData(Scores scores) {
-		return delegate().newRacePointsData(scores);
+	public RacePenaltiesData newRacePenaltiesData(Scores scores) {
+		return delegate().newRacePenaltiesData(scores);
 	}
 
 	@Override

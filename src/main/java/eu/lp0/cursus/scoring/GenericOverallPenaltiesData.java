@@ -38,7 +38,7 @@ public class GenericOverallPenaltiesData<T extends ScoredData & RacePenaltiesDat
 	public int getOverallPenalties(Pilot pilot) {
 		int penalties = 0;
 
-		// Add race penalties (including discards, these will be cancelled out when the discarding removes the race points)
+		// Add race penalties
 		for (Integer racePenalties : scores.getRacePenalties(pilot).values()) {
 			penalties += racePenalties;
 		}

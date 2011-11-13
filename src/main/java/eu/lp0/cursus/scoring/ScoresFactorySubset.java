@@ -17,13 +17,12 @@
  */
 package eu.lp0.cursus.scoring;
 
-
 public interface ScoresFactorySubset {
 	public RaceLapsData newRaceLapsData(Scores scores);
 
-	public RacePenaltiesData newRacePenaltiesData(Scores scores);
-
 	public RacePointsData newRacePointsData(Scores scores);
+
+	public RacePenaltiesData newRacePenaltiesData(Scores scores);
 
 	public RacePositionsData newRacePositionsData(Scores scores);
 

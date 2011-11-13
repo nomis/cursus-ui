@@ -25,8 +25,7 @@ import java.util.Set;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public class GenericOverallPointsData<T extends ScoredData & RacePenaltiesData & RacePointsData & RaceDiscardsData & OverallPenaltiesData> extends
-		AbstractOverallPointsData<T> {
+public class GenericOverallPointsData<T extends ScoredData & RacePointsData & RaceDiscardsData & OverallPenaltiesData> extends AbstractOverallPointsData<T> {
 	public GenericOverallPointsData(T scores) {
 		super(scores);
 	}
@@ -37,19 +36,14 @@ public class GenericOverallPointsData<T extends ScoredData & RacePenaltiesData &
 
 		Collection<Race> discardedRaces = scores.getDiscardedRaces(pilot).values();
 
-		// Add race points (this includes penalties) but not for discards
+		// Add race points but not discards
 		for (Entry<Race, Integer> racePoints : scores.getRacePoints(pilot).entrySet()) {
 			if (!discardedRaces.contains(racePoints.getKey())) {
 				points += racePoints.getValue();
 			}
 		}
 
-		// Remove race penalties (including discards because those are included again below)
-		for (Integer racePenalties : scores.getRacePenalties(pilot).values()) {
-			points -= racePenalties;
-		}
-
-		// Add all penalties (this includes race penalties and penalties on discarded races)
+		// Add all penalties (this includes race penalties)
 		points += scores.getOverallPenalties(pilot);
 		if (points < 0) {
 			points = 0;

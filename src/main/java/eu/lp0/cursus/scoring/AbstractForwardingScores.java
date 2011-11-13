@@ -35,9 +35,9 @@ public abstract class AbstractForwardingScores implements Scores {
 
 	protected abstract RaceLapsData delegateRaceLapsData();
 
-	protected abstract RacePenaltiesData delegateRacePenaltiesData();
-
 	protected abstract RacePointsData delegateRacePointsData();
+
+	protected abstract RacePenaltiesData delegateRacePenaltiesData();
 
 	protected abstract RacePositionsData delegateRacePositionsData();
 
@@ -122,27 +122,6 @@ public abstract class AbstractForwardingScores implements Scores {
 		return Collections.unmodifiableList(delegateRaceLapsData().getLapOrder(race));
 	}
 
-	// RacePenaltiesData
-	@Override
-	public Table<Pilot, Race, Integer> getRacePenalties() {
-		return delegateRacePenaltiesData().getRacePenalties();
-	}
-
-	@Override
-	public Map<Race, Integer> getRacePenalties(Pilot pilot) {
-		return Collections.unmodifiableMap(delegateRacePenaltiesData().getRacePenalties(pilot));
-	}
-
-	@Override
-	public Map<Pilot, Integer> getRacePenalties(Race race) {
-		return Collections.unmodifiableMap(delegateRacePenaltiesData().getRacePenalties(race));
-	}
-
-	@Override
-	public int getRacePenalties(Pilot pilot, Race race) {
-		return delegateRacePenaltiesData().getRacePenalties(pilot, race);
-	}
-
 	// RacePointsData
 	@Override
 	public Table<Pilot, Race, Integer> getRacePoints() {
@@ -167,6 +146,27 @@ public abstract class AbstractForwardingScores implements Scores {
 	@Override
 	public int getFleetSize(Race race) {
 		return delegateRacePointsData().getFleetSize(race);
+	}
+
+	// RacePenaltiesData
+	@Override
+	public Table<Pilot, Race, Integer> getRacePenalties() {
+		return delegateRacePenaltiesData().getRacePenalties();
+	}
+
+	@Override
+	public Map<Race, Integer> getRacePenalties(Pilot pilot) {
+		return Collections.unmodifiableMap(delegateRacePenaltiesData().getRacePenalties(pilot));
+	}
+
+	@Override
+	public Map<Pilot, Integer> getRacePenalties(Race race) {
+		return Collections.unmodifiableMap(delegateRacePenaltiesData().getRacePenalties(race));
+	}
+
+	@Override
+	public int getRacePenalties(Pilot pilot, Race race) {
+		return delegateRacePenaltiesData().getRacePenalties(pilot, race);
 	}
 
 	// RacePositionsData

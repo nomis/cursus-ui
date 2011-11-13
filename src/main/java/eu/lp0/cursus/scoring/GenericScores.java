@@ -25,8 +25,8 @@ import eu.lp0.cursus.db.data.Race;
 
 public class GenericScores extends AbstractScores {
 	protected final RaceLapsData raceLapsData;
-	protected final RacePenaltiesData racePenaltiesData;
 	protected final RacePointsData racePointsData;
+	protected final RacePenaltiesData racePenaltiesData;
 	protected final RacePositionsData racePositionsData;
 	protected final RaceDiscardsData raceDiscardsData;
 
@@ -38,8 +38,8 @@ public class GenericScores extends AbstractScores {
 		super(pilots, races, scoresFactory);
 
 		raceLapsData = scoresFactory.newRaceLapsData(this);
-		racePenaltiesData = scoresFactory.newRacePenaltiesData(this);
 		racePointsData = scoresFactory.newRacePointsData(this);
+		racePenaltiesData = scoresFactory.newRacePenaltiesData(this);
 		racePositionsData = scoresFactory.newRacePositionsData(this);
 		raceDiscardsData = scoresFactory.newRaceDiscardsData(this);
 
@@ -55,13 +55,13 @@ public class GenericScores extends AbstractScores {
 	}
 
 	@Override
-	protected RacePenaltiesData delegateRacePenaltiesData() {
-		return racePenaltiesData;
+	protected RacePointsData delegateRacePointsData() {
+		return racePointsData;
 	}
 
 	@Override
-	protected RacePointsData delegateRacePointsData() {
-		return racePointsData;
+	protected RacePenaltiesData delegateRacePenaltiesData() {
+		return racePenaltiesData;
 	}
 
 	@Override

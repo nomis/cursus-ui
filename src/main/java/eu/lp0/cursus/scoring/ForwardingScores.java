@@ -36,12 +36,12 @@ public abstract class ForwardingScores extends AbstractForwardingScores {
 	}
 
 	@Override
-	protected RacePenaltiesData delegateRacePenaltiesData() {
+	protected RacePointsData delegateRacePointsData() {
 		return delegate();
 	}
 
 	@Override
-	protected RacePointsData delegateRacePointsData() {
+	protected RacePenaltiesData delegateRacePenaltiesData() {
 		return delegate();
 	}
 

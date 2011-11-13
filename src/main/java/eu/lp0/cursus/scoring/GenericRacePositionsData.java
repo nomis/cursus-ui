@@ -18,8 +18,10 @@
 package eu.lp0.cursus.scoring;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -33,7 +35,7 @@ import com.google.common.collect.TreeMultimap;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public class GenericRacePositionsData<T extends ScoredData & RaceLapsData & RacePointsData> extends AbstractRacePositionsData<T> {
+public class GenericRacePositionsData<T extends ScoredData & RaceLapsData & RacePointsData & RacePenaltiesData> extends AbstractRacePositionsData<T> {
 	private final EqualPositioning equalPositioning;
 
 	public enum EqualPositioning {
@@ -55,9 +57,17 @@ public class GenericRacePositionsData<T extends ScoredData & RaceLapsData & Race
 		pilotsWithoutLaps.addAll(Sets.difference(new HashSet<Pilot>(scores.getPilots()), pilotsWithLaps));
 		lapOrder.addAll(pilotsWithoutLaps);
 
+		// Add penalties to race points
+		Map<Pilot, Integer> racePoints = scores.getRacePoints(race);
+		Map<Pilot, Integer> racePenalties = scores.getRacePenalties(race);
+		Map<Pilot, Integer> racePointsWithPenalties = new HashMap<Pilot, Integer>();
+		for (Pilot pilot : scores.getPilots()) {
+			racePointsWithPenalties.put(pilot, racePoints.get(pilot) + racePenalties.get(pilot));
+		}
+
 		// Invert race points with ordered lists of pilots
 		TreeMultimap<Integer, Pilot> invRacePoints = TreeMultimap.create(Ordering.natural(), Ordering.explicit(lapOrder));
-		Multimaps.invertFrom(Multimaps.forMap(scores.getRacePoints(race)), invRacePoints);
+		Multimaps.invertFrom(Multimaps.forMap(racePointsWithPenalties), invRacePoints);
 
 		// Calculate race positions
 		LinkedListMultimap<Integer, Pilot> racePositions = LinkedListMultimap.create();

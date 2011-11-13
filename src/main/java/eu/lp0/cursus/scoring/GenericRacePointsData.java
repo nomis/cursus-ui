@@ -24,7 +24,7 @@ import java.util.Map;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
-public class GenericRacePointsData<T extends ScoredData & RaceLapsData & RacePenaltiesData> extends AbstractRacePointsData<T> {
+public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends AbstractRacePointsData<T> {
 	public GenericRacePointsData(T scores) {
 		super(scores);
 	}
@@ -37,15 +37,14 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData & RacePen
 		// Score everyone who completed a lap
 		int points = 0;
 		for (Pilot pilot : lapOrder) {
-			racePoints.put(pilot, points + scores.getRacePenalties(pilot, race));
+			racePoints.put(pilot, points);
 			points += (points == 0) ? 2 : 1;
 		}
 
 		// Score everyone else
 		for (Pilot pilot : scores.getPilots()) {
 			if (!racePoints.containsKey(pilot)) {
-				// It is possible to have penalties but no laps
-				racePoints.put(pilot, getPointsForNoLaps(pilot, race) + scores.getRacePenalties(pilot, race));
+				racePoints.put(pilot, getPointsForNoLaps(pilot, race));
 			}
 		}
 

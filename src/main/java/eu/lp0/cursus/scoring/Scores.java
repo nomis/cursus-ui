@@ -24,6 +24,6 @@ package eu.lp0.cursus.scoring;
  * We don't extend {@code ScoresFactory} because creating a new {@code Scores} that uses a {@code ForwardingScoresFactory} is impossible (the method doesn't
  * supply a factory to be intercepted)
  */
-public interface Scores extends ScoredData, ScoresFactorySubset, RaceLapsData, RacePenaltiesData, RacePointsData, RacePositionsData, RaceDiscardsData,
+public interface Scores extends ScoredData, ScoresFactorySubset, RaceLapsData, RacePointsData, RacePenaltiesData, RacePositionsData, RaceDiscardsData,
 		OverallPenaltiesData, OverallPointsData, OverallPositionData {
 }
