@@ -56,6 +56,7 @@ public class OverallAssertUtil {
 		if (expectedDiscards == null) {
 			expectedDiscards = new Integer[0];
 		}
+
 		Assert.assertTrue("Pilot " + pilot.getName() + " does not exist in scores", actualOverallPoints.containsKey(pilot)); //$NON-NLS-1$//$NON-NLS-2$
 		Assert.assertArrayEquals(
 				"Overall discards mismatch for " + pilot, expectedDiscards, Iterables.toArray(Iterables.skip(actualRaceDiscards.row(pilot).values(), 1), Integer.class)); //$NON-NLS-1$
