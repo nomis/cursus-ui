@@ -44,7 +44,7 @@ public class GenericRaceLapsData<T extends ScoredData> extends AbstractRaceLapsD
 	private Set<Pilot> filteredPilots(Race race) {
 		ImmutableSet.Builder<Pilot> pilots = ImmutableSet.builder();
 		for (RaceAttendee attendee : race.getAttendees().values()) {
-			if (attendee.getType() == RaceAttendee.Type.PILOT) {
+			if (scores.getPilots().contains(attendee.getPilot()) && attendee.getType() == RaceAttendee.Type.PILOT) {
 				pilots.add(attendee.getPilot());
 			}
 		}
