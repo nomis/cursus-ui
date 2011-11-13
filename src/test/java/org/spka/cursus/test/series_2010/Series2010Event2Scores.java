@@ -151,7 +151,25 @@ public class Series2010Event2Scores extends Series2010Event1Scores {
 			race4AssertUtil.assertOrder();
 
 			OverallAssertUtil overallAssertUtil = new OverallAssertUtil(scores);
-			Assert.fail("TODO"); //$NON-NLS-1$
+			overallAssertUtil.assertPilot(sco200, 0, 0, 1, 2);
+			overallAssertUtil.assertPilot(sco068, 0, 7, 2, 7);
+			overallAssertUtil.assertPilot(sco808, 0, 8, 3, 14);
+			overallAssertUtil.assertPilot(sco179, 0, 8, 4, 4);
+			overallAssertUtil.assertPilot(sco019, 0, 8, 5, 11);
+			overallAssertUtil.assertPilot(sco159, 0, 11, 6, 4);
+			overallAssertUtil.assertPilot(sco081, 0, 13, 7, 8);
+			overallAssertUtil.assertPilot(sco116, 0, 17, 8, 8);
+			overallAssertUtil.assertPilot(sco248, 0, 21, 9, 14);
+			overallAssertUtil.assertPilot(sco087, 1, 22, 10, 18);
+			overallAssertUtil.assertPilot(sco060, 0, 23, 11, 12);
+			overallAssertUtil.assertPilot(sco249, 0, 26, 12, 14);
+			overallAssertUtil.assertPilot(sco042, 0, 31, 13, 14);
+			overallAssertUtil.assertPilot(sco018, 0, 32, 14, 14);
+			overallAssertUtil.assertPilot(sco197, 0, 39, 15, 18);
+			overallAssertUtil.assertPilot(sco153, 0, 40, 16, 18);
+			overallAssertUtil.assertPilot(sco136, 0, 50, 17, 18);
+			overallAssertUtil.assertPilot(sco156, 0, 50, 17, 18);
+			overallAssertUtil.assertPilot(sco158, 0, 50, 17, 18);
 			overallAssertUtil.assertOrder();
 
 			DatabaseSession.commit();
