@@ -80,16 +80,16 @@ public class SeriesPopupMenu<O extends Frame & DatabaseWindow> extends AbstractN
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_EVENT:
-			win = new EventDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(item)); //$NON-NLS-1$
+			win = new EventDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(item), false); //$NON-NLS-1$
 			break;
 		case EDIT_SERIES:
-			win = new SeriesDetailDialog<O>(owner, Messages.getString("menu.series.edit") + Constants.EN_DASH + item.getName(), item); //$NON-NLS-1$
+			win = new SeriesDetailDialog<O>(owner, Messages.getString("menu.series.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
 			break;
 		case DELETE_SERIES:
 			confirmDelete("menu.series.delete"); //$NON-NLS-1$
 			break;
 		case NEW_SERIES:
-			win = new SeriesDetailDialog<O>(owner, Messages.getString("menu.series.new"), new Series()); //$NON-NLS-1$
+			win = new SeriesDetailDialog<O>(owner, Messages.getString("menu.series.new"), new Series(), false); //$NON-NLS-1$
 			break;
 		}
 

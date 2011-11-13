@@ -76,13 +76,13 @@ public class ClassPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case EDIT_CLASS:
-			win = new ClassDetailDialog<O>(owner, tab, Messages.getString("menu.class.edit") + Constants.EN_DASH + item.getName(), item); //$NON-NLS-1$
+			win = new ClassDetailDialog<O>(owner, tab, Messages.getString("menu.class.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
 			break;
 		case DELETE_CLASS:
 			confirmDelete("menu.class.delete"); //$NON-NLS-1$
 			break;
 		case NEW_CLASS:
-			win = new ClassDetailDialog<O>(owner, tab, Messages.getString("menu.class.new"), new Class(item.getSeries())); //$NON-NLS-1$
+			win = new ClassDetailDialog<O>(owner, tab, Messages.getString("menu.class.new"), new Class(item.getSeries()), false); //$NON-NLS-1$
 			break;
 		}
 

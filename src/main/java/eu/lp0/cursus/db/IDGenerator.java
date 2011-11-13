@@ -15,24 +15,26 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.series;
+package eu.lp0.cursus.db;
 
-import java.awt.Frame;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
-import eu.lp0.cursus.db.dao.SeriesDAO;
-import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.ui.common.CommonDetailDialog;
-import eu.lp0.cursus.ui.component.DatabaseWindow;
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 
-public class SeriesDetailDialog<O extends Frame & DatabaseWindow> extends CommonDetailDialog<O, Series> {
-	private static final SeriesDAO seriesDAO = new SeriesDAO();
+public final class IDGenerator {
+	private static final Supplier<AtomicLong> value = Suppliers.memoizeWithExpiration(new Supplier<AtomicLong>() {
+		@Override
+		public AtomicLong get() {
+			return new AtomicLong(System.nanoTime());
+		}
+	}, 5, TimeUnit.MINUTES);
 
-	public SeriesDetailDialog(O win, String title, Series series, boolean isUpdate) {
-		super(win, title, seriesDAO, series, isUpdate);
+	private IDGenerator() {
 	}
 
-	@Override
-	protected void postSave() {
-		win.refreshRaceList();
+	public static final Long next() {
+		return value.get().getAndIncrement();
 	}
 }

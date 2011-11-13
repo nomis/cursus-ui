@@ -58,7 +58,8 @@ public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T ext
 	protected final O win;
 	private final String title;
 	private final NamedEntityDAO<T> dao;
-	private final T origItem;
+	private T origItem;
+	private boolean isUpdate;
 
 	private JTextField txtName;
 	private JTextField txtDesc;
@@ -67,12 +68,13 @@ public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T ext
 
 	private WindowAutoPrefs prefs = new WindowAutoPrefs(this);
 
-	public CommonDetailDialog(O win, String title, NamedEntityDAO<T> dao, T item) {
+	public CommonDetailDialog(O win, String title, NamedEntityDAO<T> dao, T item, boolean isUpdate) {
 		super(win, true);
 		this.win = win;
 		this.title = title;
 		this.dao = dao;
 		this.origItem = item;
+		this.isUpdate = isUpdate;
 
 		initialise();
 	}
@@ -144,24 +146,24 @@ public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T ext
 	private void doSave() {
 		final String name = txtName.getText();
 		final String desc = txtDesc.getText();
+		T item;
 
 		win.getDatabase().startSession();
 		try {
 			DatabaseSession.begin();
 
-			if (!dao.isNameOk(origItem, name)) {
+			if (!dao.isNameOk(origItem, isUpdate, name)) {
 				log.warn("Name already in use: " + name); //$NON-NLS-1$
 				DatabaseError.unableToSave(this, getTitle(), String.format(Messages.getString("db.name-in-use"), name)); //$NON-NLS-1$
 				DatabaseSession.rollback();
 				return;
 			}
 
-			T item;
-			if (origItem.isTransient()) {
+			if (isUpdate) {
+				item = dao.get(origItem);
+			} else {
 				item = (T)origItem.clone();
 				prePersist(item);
-			} else {
-				item = dao.get(origItem);
 			}
 
 			item.setName(name);
@@ -176,6 +178,9 @@ public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T ext
 		} finally {
 			win.getDatabase().endSession();
 		}
+
+		isUpdate = false;
+		origItem = item;
 
 		postSave();
 		dispose();

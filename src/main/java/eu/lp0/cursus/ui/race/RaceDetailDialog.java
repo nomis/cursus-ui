@@ -29,8 +29,8 @@ public class RaceDetailDialog<O extends Frame & DatabaseWindow> extends CommonDe
 	private static final EventDAO eventDAO = new EventDAO();
 	private static final RaceDAO raceDAO = new RaceDAO();
 
-	public RaceDetailDialog(O win, String title, Race race) {
-		super(win, title, raceDAO, race);
+	public RaceDetailDialog(O win, String title, Race race, boolean isUpdate) {
+		super(win, title, raceDAO, race, isUpdate);
 	}
 
 	@Override

@@ -72,13 +72,13 @@ public class RacePopupMenu<O extends Frame & DatabaseWindow> extends AbstractNam
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case EDIT_RACE:
-			win = new RaceDetailDialog<O>(owner, Messages.getString("menu.race.edit") + Constants.EN_DASH + item.getName(), item); //$NON-NLS-1$
+			win = new RaceDetailDialog<O>(owner, Messages.getString("menu.race.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
 			break;
 		case DELETE_RACE:
 			confirmDelete("menu.race.delete"); //$NON-NLS-1$
 			break;
 		case NEW_RACE:
-			win = new RaceDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(item.getEvent())); //$NON-NLS-1$
+			win = new RaceDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(item.getEvent()), false); //$NON-NLS-1$
 			break;
 		}
 

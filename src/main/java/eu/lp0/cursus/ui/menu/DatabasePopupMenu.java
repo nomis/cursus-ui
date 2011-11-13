@@ -54,7 +54,7 @@ public class DatabasePopupMenu<O extends Frame & DatabaseWindow> extends JPopupM
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_SERIES:
-			win = new SeriesDetailDialog<O>(owner, Messages.getString("menu.series.new"), new Series()); //$NON-NLS-1$
+			win = new SeriesDetailDialog<O>(owner, Messages.getString("menu.series.new"), new Series(), false); //$NON-NLS-1$
 			break;
 		}
 

@@ -80,16 +80,16 @@ public class EventPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_RACE:
-			win = new RaceDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(item)); //$NON-NLS-1$
+			win = new RaceDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(item), false); //$NON-NLS-1$
 			break;
 		case EDIT_EVENT:
-			win = new EventDetailDialog<O>(owner, Messages.getString("menu.event.edit") + Constants.EN_DASH + item.getName(), item); //$NON-NLS-1$
+			win = new EventDetailDialog<O>(owner, Messages.getString("menu.event.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
 			break;
 		case DELETE_EVENT:
 			confirmDelete("menu.event.delete"); //$NON-NLS-1$
 			break;
 		case NEW_EVENT:
-			win = new EventDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(item.getSeries())); //$NON-NLS-1$
+			win = new EventDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(item.getSeries()), false); //$NON-NLS-1$
 			break;
 		}
 

@@ -60,7 +60,7 @@ public class ClassesPopupMenu<O extends Frame & DatabaseWindow> extends JPopupMe
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_CLASS:
-			win = new ClassDetailDialog<O>(owner, tab, Messages.getString("menu.class.new"), new Class(series)); //$NON-NLS-1$
+			win = new ClassDetailDialog<O>(owner, tab, Messages.getString("menu.class.new"), new Class(series), false); //$NON-NLS-1$
 			break;
 		}
 

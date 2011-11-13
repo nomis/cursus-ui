@@ -31,8 +31,8 @@ public class ClassDetailDialog<O extends Frame & DatabaseWindow> extends CommonD
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 	private static final ClassDAO classDAO = new ClassDAO();
 
-	public ClassDetailDialog(O win, SeriesClassesTab<O> tab, String title, Class clazz) {
-		super(win, title, classDAO, clazz);
+	public ClassDetailDialog(O win, SeriesClassesTab<O> tab, String title, Class clazz, boolean isUpdate) {
+		super(win, title, classDAO, clazz, isUpdate);
 		this.tab = tab;
 	}
 

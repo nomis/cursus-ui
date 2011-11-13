@@ -29,8 +29,8 @@ public class EventDetailDialog<O extends Frame & DatabaseWindow> extends CommonD
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 	private static final EventDAO eventDAO = new EventDAO();
 
-	public EventDetailDialog(O win, String title, Event event) {
-		super(win, title, eventDAO, event);
+	public EventDetailDialog(O win, String title, Event event, boolean isUpdate) {
+		super(win, title, eventDAO, event, isUpdate);
 	}
 
 	@Override

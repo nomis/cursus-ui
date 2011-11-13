@@ -32,17 +32,18 @@ public class NamedEntityDAO<E extends AbstractEntity & NamedEntity> extends Abst
 		super(clazz);
 	}
 
-	public boolean isNameOk(E entity, String newName) {
+	public boolean isNameOk(E entity, boolean isUpdate, String newName) {
 		EntityManager em = getEntityManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
 		CriteriaQuery<E> q = cb.createQuery(clazz);
 		Root<E> rh = q.from(clazz);
 		q.select(rh);
-		if (entity.isTransient()) {
-			q.where(withParentRestriction(cb, rh, entity, cb.equal(rh.get("name"), newName))); //$NON-NLS-1$ 
-		} else {
+		if (isUpdate) {
+			// Exclude this entity when doing an update
 			q.where(withParentRestriction(cb, rh, entity, cb.notEqual(rh.get("id"), entity.getId()), cb.equal(rh.get("name"), newName))); //$NON-NLS-1$ //$NON-NLS-2$
+		} else {
+			q.where(withParentRestriction(cb, rh, entity, cb.equal(rh.get("name"), newName))); //$NON-NLS-1$ 
 		}
 
 		TypedQuery<E> tq = em.createQuery(q);

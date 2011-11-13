@@ -18,40 +18,36 @@
 package eu.lp0.cursus.db.data;
 
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
+
+import eu.lp0.cursus.db.IDGenerator;
 
 @MappedSuperclass
 public abstract class AbstractEntity implements Cloneable {
 	private Long id;
 
 	@Id
-	@GeneratedValue
 	@Column(nullable = false)
-	public Long getId() {
+	public final Long getId() {
+		if (id == null) {
+			setId(IDGenerator.next());
+		}
 		return id;
 	}
 
-	@SuppressWarnings("unused")
 	private void setId(long id) {
 		this.id = id;
 	}
 
-	@Transient
-	public boolean isTransient() {
-		return getId() == null;
-	}
-
 	@Override
 	public boolean equals(Object o) {
-		if (o == null) {
-			return false;
-		}
-
 		if (o == this) {
 			return true;
+		}
+
+		if (o == null) {
+			return false;
 		}
 
 		if (!getClass().equals(o.getClass())) {
@@ -59,20 +55,14 @@ public abstract class AbstractEntity implements Cloneable {
 		}
 
 		AbstractEntity e = (AbstractEntity)o;
-
-		if (isTransient() || e.isTransient()) {
-			return false;
-		}
-
+		// Don't implement lazy ID generation here as it's likely that a call to hashCode() will be made too
 		return getId().equals(e.getId());
 	}
 
 	@Override
 	public int hashCode() {
-		if (isTransient()) {
-			return super.hashCode();
-		}
-		return (int)(id ^ (id >>> 32));
+		long fixedId = getId();
+		return (int)(fixedId ^ (fixedId >>> 32));
 	}
 
 	@Override
