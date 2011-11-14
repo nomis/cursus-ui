@@ -19,6 +19,7 @@ package eu.lp0.cursus.scoring;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -58,8 +59,9 @@ public class GenericRaceDiscardsData<T extends ScoredData & RacePointsData> exte
 			pilotRaces.addAll(Maps.filterValues(racePoints, Predicates.notNull()).keySet());
 
 			// Discard the highest scoring races
-			for (Race race : Iterables.limit(pilotRaces, discards)) {
-				pilotDiscards.add(race);
+			Iterator<Race> it = Iterables.limit(pilotRaces, 2).iterator();
+			for (int i = 1; i <= discards; i++) {
+				pilotDiscards.add(it.hasNext() ? it.next() : null);
 			}
 		}
 
