@@ -19,13 +19,13 @@ package eu.lp0.cursus.scoring;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Ordering;
@@ -51,10 +51,11 @@ public class GenericRacePositionsData<T extends ScoredData & RaceLapsData & Race
 	@Override
 	protected LinkedListMultimap<Integer, Pilot> calculateRacePositionsWithOrder(Race race) {
 		// Create a lap order list containing all pilots
-		List<Pilot> lapOrder = new ArrayList<Pilot>(scores.getLapOrder(race));
-		Set<Pilot> pilotsWithLaps = new HashSet<Pilot>(lapOrder);
+		List<Pilot> lapOrder = new ArrayList<Pilot>(scores.getPilots().size());
+		lapOrder.addAll(scores.getLapOrder(race));
+		Set<Pilot> pilotsWithLaps = ImmutableSet.copyOf(lapOrder);
 		SortedSet<Pilot> pilotsWithoutLaps = new TreeSet<Pilot>(new PilotRaceNumberComparator());
-		pilotsWithoutLaps.addAll(Sets.difference(new HashSet<Pilot>(scores.getPilots()), pilotsWithLaps));
+		pilotsWithoutLaps.addAll(Sets.difference(scores.getPilots(), pilotsWithLaps));
 		lapOrder.addAll(pilotsWithoutLaps);
 
 		// Add penalties to race points

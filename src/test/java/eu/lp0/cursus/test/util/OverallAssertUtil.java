@@ -22,8 +22,6 @@ import java.util.Set;
 
 import org.junit.Assert;
 
-import com.google.common.collect.Iterables;
-
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.scoring.Scores;
 
@@ -45,8 +43,7 @@ public class OverallAssertUtil {
 		}
 
 		Assert.assertTrue("Pilot " + pilot.getName() + " does not exist in scores", scores.getPilots().contains(pilot)); //$NON-NLS-1$//$NON-NLS-2$
-		Assert.assertArrayEquals(
-				"Overall discards mismatch for " + pilot, expectedDiscards, Iterables.toArray(Iterables.skip(scores.getRaceDiscards(pilot).values(), 1), Integer.class)); //$NON-NLS-1$
+		Assert.assertArrayEquals("Overall discards mismatch for " + pilot, expectedDiscards, scores.getRaceDiscards(pilot).toArray()); //$NON-NLS-1$
 		Assert.assertEquals("Overall penalties mismatch for " + pilot, expectedPenalties, scores.getOverallPenalties(pilot)); //$NON-NLS-1$
 		Assert.assertEquals("Overall points mismatch for " + pilot, expectedPoints, scores.getOverallPoints(pilot)); //$NON-NLS-1$
 		Assert.assertEquals("Overall position mismatch for " + pilot, expectedPosition, scores.getOverallPosition(pilot)); //$NON-NLS-1$

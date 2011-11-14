@@ -31,13 +31,13 @@ public interface RacePositionsData {
 
 	public Map<Pilot, Integer> getRacePositions(Race race);
 
-	public Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositionsWithOrder();
+	public Map<Race, ? extends LinkedListMultimap<Integer, Pilot>> getRacePositionsWithOrder();
 
 	public LinkedListMultimap<Integer, Pilot> getRacePositionsWithOrder(Race race);
 
 	public int getRacePosition(Pilot pilot, Race race);
 
-	public Map<Race, List<Pilot>> getRaceOrders();
+	public Map<Race, ? extends List<Pilot>> getRaceOrders();
 
 	public List<Pilot> getRaceOrder(Race race);
 

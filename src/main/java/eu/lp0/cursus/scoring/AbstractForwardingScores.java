@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -145,12 +144,12 @@ public abstract class AbstractForwardingScores implements Scores {
 	}
 
 	@Override
-	public Map<Race, Collection<Pilot>> getSimulatedRacePoints() {
+	public Map<Race, ? extends Set<Pilot>> getSimulatedRacePoints() {
 		return Collections.unmodifiableMap(delegateRacePointsData().getSimulatedRacePoints());
 	}
 
 	@Override
-	public Map<Pilot, Collection<Race>> getSimulatedPilotPoints() {
+	public Map<Pilot, ? extends Set<Race>> getSimulatedPilotPoints() {
 		return Collections.unmodifiableMap(delegateRacePointsData().getSimulatedPilotPoints());
 	}
 
@@ -160,13 +159,13 @@ public abstract class AbstractForwardingScores implements Scores {
 	}
 
 	@Override
-	public Collection<Race> getSimulatedRacePoints(Pilot pilot) {
-		return Collections.unmodifiableCollection(delegateRacePointsData().getSimulatedRacePoints(pilot));
+	public Set<Race> getSimulatedRacePoints(Pilot pilot) {
+		return Collections.unmodifiableSet(delegateRacePointsData().getSimulatedRacePoints(pilot));
 	}
 
 	@Override
-	public Collection<Pilot> getSimulatedRacePoints(Race race) {
-		return Collections.unmodifiableCollection(delegateRacePointsData().getSimulatedRacePoints(race));
+	public Set<Pilot> getSimulatedRacePoints(Race race) {
+		return Collections.unmodifiableSet(delegateRacePointsData().getSimulatedRacePoints(race));
 	}
 
 	@Override
@@ -207,7 +206,7 @@ public abstract class AbstractForwardingScores implements Scores {
 	}
 
 	@Override
-	public Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositionsWithOrder() {
+	public Map<Race, ? extends LinkedListMultimap<Integer, Pilot>> getRacePositionsWithOrder() {
 		return Collections.unmodifiableMap(delegateRacePositionsData().getRacePositionsWithOrder());
 	}
 
@@ -222,7 +221,7 @@ public abstract class AbstractForwardingScores implements Scores {
 	}
 
 	@Override
-	public Map<Race, List<Pilot>> getRaceOrders() {
+	public Map<Race, ? extends List<Pilot>> getRaceOrders() {
 		return Collections.unmodifiableMap(delegateRacePositionsData().getRaceOrders());
 	}
 
@@ -233,18 +232,13 @@ public abstract class AbstractForwardingScores implements Scores {
 
 	// RaceDiscardsData
 	@Override
-	public Table<Pilot, Integer, Integer> getRaceDiscards() {
+	public Map<Pilot, ? extends List<Integer>> getRaceDiscards() {
 		return delegateRaceDiscardsData().getRaceDiscards();
 	}
 
 	@Override
-	public Map<Integer, Integer> getRaceDiscards(Pilot pilot) {
-		return Collections.unmodifiableMap(delegateRaceDiscardsData().getRaceDiscards(pilot));
-	}
-
-	@Override
-	public Map<Pilot, Integer> getRaceDiscards(int discard) {
-		return Collections.unmodifiableMap(delegateRaceDiscardsData().getRaceDiscards(discard));
+	public List<Integer> getRaceDiscards(Pilot pilot) {
+		return Collections.unmodifiableList(delegateRaceDiscardsData().getRaceDiscards(pilot));
 	}
 
 	@Override
@@ -253,13 +247,13 @@ public abstract class AbstractForwardingScores implements Scores {
 	}
 
 	@Override
-	public Table<Pilot, Integer, Race> getDiscardedRaces() {
-		return delegateRaceDiscardsData().getDiscardedRaces();
+	public Map<Pilot, ? extends Set<Race>> getDiscardedRaces() {
+		return Collections.unmodifiableMap(delegateRaceDiscardsData().getDiscardedRaces());
 	}
 
 	@Override
-	public Map<Integer, Race> getDiscardedRaces(Pilot pilot) {
-		return Collections.unmodifiableMap(delegateRaceDiscardsData().getDiscardedRaces(pilot));
+	public Set<Race> getDiscardedRaces(Pilot pilot) {
+		return Collections.unmodifiableSet(delegateRaceDiscardsData().getDiscardedRaces(pilot));
 	}
 
 	// OverallPenaltiesData

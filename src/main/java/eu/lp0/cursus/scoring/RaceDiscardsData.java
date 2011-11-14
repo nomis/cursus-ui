@@ -17,23 +17,21 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.Table;
+import java.util.Set;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
 public interface RaceDiscardsData {
-	public Table<Pilot, Integer, Integer> getRaceDiscards();
+	public Map<Pilot, ? extends List<Integer>> getRaceDiscards();
 
-	public Map<Integer, Integer> getRaceDiscards(Pilot pilot);
-
-	public Map<Pilot, Integer> getRaceDiscards(int discard);
+	public List<Integer> getRaceDiscards(Pilot pilot);
 
 	public int getRaceDiscard(Pilot pilot, int discard);
 
-	public Table<Pilot, Integer, Race> getDiscardedRaces();
+	public Map<Pilot, ? extends Set<Race>> getDiscardedRaces();
 
-	public Map<Integer, Race> getDiscardedRaces(Pilot pilot);
+	public Set<Race> getDiscardedRaces(Pilot pilot);
 }

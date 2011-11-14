@@ -84,7 +84,7 @@ public abstract class AbstractRacePositionsData<T extends ScoredData> implements
 	}
 
 	@Override
-	public final Map<Race, LinkedListMultimap<Integer, Pilot>> getRacePositionsWithOrder() {
+	public final Map<Race, ? extends LinkedListMultimap<Integer, Pilot>> getRacePositionsWithOrder() {
 		return lazyRacePositionsWithOrder.get();
 	}
 
@@ -99,7 +99,7 @@ public abstract class AbstractRacePositionsData<T extends ScoredData> implements
 	}
 
 	@Override
-	public final Map<Race, List<Pilot>> getRaceOrders() {
+	public final Map<Race, ? extends List<Pilot>> getRaceOrders() {
 		return lazyRaceOrders.get();
 	}
 

@@ -17,8 +17,8 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.collect.Table;
 
@@ -34,15 +34,15 @@ public interface RacePointsData {
 
 	public Map<Pilot, Integer> getRacePoints(Race race);
 
-	public Map<Race, Collection<Pilot>> getSimulatedRacePoints();
+	public Map<Race, ? extends Set<Pilot>> getSimulatedRacePoints();
 
-	public Map<Pilot, Collection<Race>> getSimulatedPilotPoints();
+	public Map<Pilot, ? extends Set<Race>> getSimulatedPilotPoints();
 
 	public boolean hasSimulatedRacePoints(Pilot pilot, Race race);
 
-	public Collection<Race> getSimulatedRacePoints(Pilot pilot);
+	public Set<Race> getSimulatedRacePoints(Pilot pilot);
 
-	public Collection<Pilot> getSimulatedRacePoints(Race race);
+	public Set<Pilot> getSimulatedRacePoints(Race race);
 
 	public int getFleetSize(Race race);
 }

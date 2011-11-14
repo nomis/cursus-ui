@@ -17,14 +17,15 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.base.Predicates;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ArrayTable;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
 
@@ -55,24 +56,24 @@ public abstract class AbstractRacePointsData<T extends ScoredData> implements Ra
 			return simulatedRacePoints;
 		}
 	});
-	protected final Supplier<Map<Race, Collection<Pilot>>> lazySimulatedRacePointsByRace = Suppliers.memoize(new Supplier<Map<Race, Collection<Pilot>>>() {
+	protected final Supplier<Map<Race, Set<Pilot>>> lazySimulatedRacePointsByRace = Suppliers.memoize(new Supplier<Map<Race, Set<Pilot>>>() {
 		@Override
-		public Map<Race, Collection<Pilot>> get() {
+		public Map<Race, Set<Pilot>> get() {
 			Table<Pilot, Race, Boolean> simulatedRacePoints = lazySimulatedRacePoints.get();
-			Map<Race, Collection<Pilot>> simulatedRacePointsByRace = new HashMap<Race, Collection<Pilot>>(scores.getRaces().size() * 2);
+			Map<Race, Set<Pilot>> simulatedRacePointsByRace = new HashMap<Race, Set<Pilot>>(scores.getRaces().size() * 2);
 			for (Race race : scores.getRaces()) {
-				simulatedRacePointsByRace.put(race, Maps.filterValues(simulatedRacePoints.column(race), Predicates.equalTo(true)).keySet());
+				simulatedRacePointsByRace.put(race, ImmutableSet.copyOf(Maps.filterValues(simulatedRacePoints.column(race), Predicates.equalTo(true)).keySet()));
 			}
 			return simulatedRacePointsByRace;
 		}
 	});
-	protected final Supplier<Map<Pilot, Collection<Race>>> lazySimulatedRacePointsByPilot = Suppliers.memoize(new Supplier<Map<Pilot, Collection<Race>>>() {
+	protected final Supplier<Map<Pilot, Set<Race>>> lazySimulatedRacePointsByPilot = Suppliers.memoize(new Supplier<Map<Pilot, Set<Race>>>() {
 		@Override
-		public Map<Pilot, Collection<Race>> get() {
+		public Map<Pilot, Set<Race>> get() {
 			Table<Pilot, Race, Boolean> simulatedRacePoints = lazySimulatedRacePoints.get();
-			Map<Pilot, Collection<Race>> simulatedRacePointsByPilot = new HashMap<Pilot, Collection<Race>>(scores.getPilots().size() * 2);
+			Map<Pilot, Set<Race>> simulatedRacePointsByPilot = new HashMap<Pilot, Set<Race>>(scores.getPilots().size() * 2);
 			for (Pilot pilot : scores.getPilots()) {
-				simulatedRacePointsByPilot.put(pilot, Maps.filterValues(simulatedRacePoints.row(pilot), Predicates.equalTo(true)).keySet());
+				simulatedRacePointsByPilot.put(pilot, ImmutableSet.copyOf(Maps.filterValues(simulatedRacePoints.row(pilot), Predicates.equalTo(true)).keySet()));
 			}
 			return simulatedRacePointsByPilot;
 		}
@@ -103,12 +104,12 @@ public abstract class AbstractRacePointsData<T extends ScoredData> implements Ra
 	}
 
 	@Override
-	public final Map<Race, Collection<Pilot>> getSimulatedRacePoints() {
+	public final Map<Race, ? extends Set<Pilot>> getSimulatedRacePoints() {
 		return lazySimulatedRacePointsByRace.get();
 	}
 
 	@Override
-	public final Map<Pilot, Collection<Race>> getSimulatedPilotPoints() {
+	public final Map<Pilot, ? extends Set<Race>> getSimulatedPilotPoints() {
 		return lazySimulatedRacePointsByPilot.get();
 	}
 
@@ -118,12 +119,12 @@ public abstract class AbstractRacePointsData<T extends ScoredData> implements Ra
 	}
 
 	@Override
-	public final Collection<Race> getSimulatedRacePoints(Pilot pilot) {
+	public final Set<Race> getSimulatedRacePoints(Pilot pilot) {
 		return lazySimulatedRacePointsByPilot.get().get(pilot);
 	}
 
 	@Override
-	public final Collection<Pilot> getSimulatedRacePoints(Race race) {
+	public final Set<Pilot> getSimulatedRacePoints(Race race) {
 		return lazySimulatedRacePointsByRace.get().get(race);
 	}
 

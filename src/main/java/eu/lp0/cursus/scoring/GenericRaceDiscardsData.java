@@ -17,15 +17,16 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.google.common.base.Predicates;
 import com.google.common.collect.ComparisonChain;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
 import eu.lp0.cursus.db.data.Pilot;
@@ -41,8 +42,8 @@ public class GenericRaceDiscardsData<T extends ScoredData & RacePointsData> exte
 	}
 
 	@Override
-	protected Map<Integer, Race> calculateDiscardedRaces(Pilot pilot) {
-		Map<Integer, Race> pilotDiscards = new TreeMap<Integer, Race>();
+	protected List<Race> calculateDiscardedRaces(Pilot pilot) {
+		List<Race> pilotDiscards = new ArrayList<Race>(discards);
 
 		if (discards > 0) {
 			final Map<Race, Integer> racePoints = scores.getRacePoints(pilot);
@@ -57,13 +58,8 @@ public class GenericRaceDiscardsData<T extends ScoredData & RacePointsData> exte
 			pilotRaces.addAll(Maps.filterValues(racePoints, Predicates.notNull()).keySet());
 
 			// Discard the highest scoring races
-			Iterator<Race> it = pilotRaces.iterator();
-			for (int discard = 1; discard <= discards; discard++) {
-				if (it.hasNext()) {
-					pilotDiscards.put(discard, it.next());
-				} else {
-					pilotDiscards.put(discard, null);
-				}
+			for (Race race : Iterables.limit(pilotRaces, discards)) {
+				pilotDiscards.add(race);
 			}
 		}
 

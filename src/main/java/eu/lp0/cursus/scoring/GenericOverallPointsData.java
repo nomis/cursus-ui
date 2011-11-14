@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -37,7 +36,7 @@ public class GenericOverallPointsData<T extends ScoredData & RacePointsData & Ra
 	protected int calculateOverallPoints(Pilot pilot) {
 		int points = 0;
 
-		Collection<Race> discardedRaces = scores.getDiscardedRaces(pilot).values();
+		Set<Race> discardedRaces = scores.getDiscardedRaces(pilot);
 
 		// Add race points but not discards
 		for (Entry<Race, Integer> racePoints : scores.getRacePoints(pilot).entrySet()) {

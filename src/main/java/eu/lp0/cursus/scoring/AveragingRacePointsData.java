@@ -18,7 +18,6 @@
 package eu.lp0.cursus.scoring;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -111,7 +110,7 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 	// together - but this is an very unusual scenario and relatively
 	// few simulated points need to be calculated for each race
 	private Set<Race> getOtherRacesForPilot(Pilot pilot, Race race, boolean checkDiscards) {
-		Set<Race> otherRaces = new HashSet<Race>();
+		Set<Race> otherRaces = new HashSet<Race>(scores.getRaces().size() * 2);
 
 		// Find other races where the pilot is not attending in a mandatory position
 		for (Race otherRace : Iterables.filter(scores.getRaces(), Predicates.not(Predicates.equalTo(race)))) {
@@ -122,7 +121,7 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 
 		// If averaging should occur after discards, remove discards... unless that removes all races
 		if (checkDiscards && !otherRaces.isEmpty() && method == Method.AFTER_DISCARDS) {
-			Collection<Race> discardedRaces = scoresBeforeAveraging.getDiscardedRaces(pilot).values();
+			Set<Race> discardedRaces = scoresBeforeAveraging.getDiscardedRaces(pilot);
 			if (!discardedRaces.containsAll(otherRaces)) {
 				otherRaces.removeAll(discardedRaces);
 			}
@@ -185,12 +184,12 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 					}
 
 					@Override
-					public Map<Race, Collection<Pilot>> getSimulatedRacePoints() {
+					public Map<Race, ? extends Set<Pilot>> getSimulatedRacePoints() {
 						return AveragingRacePointsData.this.getSimulatedRacePoints();
 					}
 
 					@Override
-					public Map<Pilot, Collection<Race>> getSimulatedPilotPoints() {
+					public Map<Pilot, ? extends Set<Race>> getSimulatedPilotPoints() {
 						return AveragingRacePointsData.this.getSimulatedPilotPoints();
 					}
 
@@ -200,12 +199,12 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 					}
 
 					@Override
-					public Collection<Race> getSimulatedRacePoints(Pilot pilot) {
+					public Set<Race> getSimulatedRacePoints(Pilot pilot) {
 						return AveragingRacePointsData.this.getSimulatedRacePoints(pilot);
 					}
 
 					@Override
-					public Collection<Pilot> getSimulatedRacePoints(Race race) {
+					public Set<Pilot> getSimulatedRacePoints(Race race) {
 						return AveragingRacePointsData.this.getSimulatedRacePoints(race);
 					}
 

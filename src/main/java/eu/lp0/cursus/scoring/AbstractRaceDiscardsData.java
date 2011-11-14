@@ -17,43 +17,44 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.base.Functions;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
-import com.google.common.collect.ArrayTable;
-import com.google.common.collect.Maps;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.util.IntegerSequence;
 
 public abstract class AbstractRaceDiscardsData<T extends ScoredData & RacePointsData> implements RaceDiscardsData {
 	protected final T scores;
 	protected final int discards;
-	protected final Supplier<Table<Pilot, Integer, Race>> lazyDiscardedRaces = Suppliers.memoize(new Supplier<Table<Pilot, Integer, Race>>() {
+	protected final Supplier<Map<Pilot, LinkedHashSet<Race>>> lazyDiscardedRaces = Suppliers.memoize(new Supplier<Map<Pilot, LinkedHashSet<Race>>>() {
 		@Override
-		public Table<Pilot, Integer, Race> get() {
-			// The first column is just nulls, as Tables must have at least one column
-			Table<Pilot, Integer, Race> discardedRaces = ArrayTable.create(scores.getPilots(), new IntegerSequence(0, discards));
+		public Map<Pilot, LinkedHashSet<Race>> get() {
+			Map<Pilot, LinkedHashSet<Race>> discardedRaces = new HashMap<Pilot, LinkedHashSet<Race>>(scores.getPilots().size() * 2);
 			for (Pilot pilot : scores.getPilots()) {
-				discardedRaces.row(pilot).putAll(calculateDiscardedRaces(pilot));
+				discardedRaces.put(pilot, new LinkedHashSet<Race>(calculateDiscardedRaces(pilot)));
 			}
 			return discardedRaces;
 		}
 	});
-	protected final Supplier<Table<Pilot, Integer, Integer>> lazyRaceDiscards = Suppliers.memoize(new Supplier<Table<Pilot, Integer, Integer>>() {
+	protected final Supplier<Map<Pilot, List<Integer>>> lazyRaceDiscards = Suppliers.memoize(new Supplier<Map<Pilot, List<Integer>>>() {
 		@Override
-		public Table<Pilot, Integer, Integer> get() {
-			// The first column is just nulls, as Tables must have at least one column
-			Table<Pilot, Integer, Integer> pilotDiscards = ArrayTable.create(scores.getPilots(), new IntegerSequence(0, discards));
+		public Map<Pilot, List<Integer>> get() {
+			Map<Pilot, List<Integer>> pilotDiscards = new HashMap<Pilot, List<Integer>>(scores.getPilots().size() * 2);
+			Map<Pilot, LinkedHashSet<Race>> discardedRaces = lazyDiscardedRaces.get();
 			Table<Pilot, Race, Integer> racePoints = scores.getRacePoints();
-			Table<Pilot, Integer, Race> discardedRaces = lazyDiscardedRaces.get();
 			for (Pilot pilot : scores.getPilots()) {
-				pilotDiscards.row(pilot).putAll(Maps.transformValues(discardedRaces.row(pilot), Functions.forMap(racePoints.row(pilot), null)));
+				pilotDiscards.put(pilot, Lists.newArrayList(Iterables.transform(discardedRaces.get(pilot), Functions.forMap(racePoints.row(pilot), 0))));
 			}
 			return pilotDiscards;
 		}
@@ -67,38 +68,31 @@ public abstract class AbstractRaceDiscardsData<T extends ScoredData & RacePoints
 	}
 
 	@Override
-	public final Table<Pilot, Integer, Integer> getRaceDiscards() {
+	public final Map<Pilot, ? extends List<Integer>> getRaceDiscards() {
 		return lazyRaceDiscards.get();
 	}
 
 	@Override
-	public final Map<Integer, Integer> getRaceDiscards(Pilot pilot) {
-		return lazyRaceDiscards.get().row(pilot);
-	}
-
-	@Override
-	public final Map<Pilot, Integer> getRaceDiscards(int discard) {
-		Preconditions.checkArgument(discards > 0);
-		Preconditions.checkElementIndex(discard, discards);
-		return lazyRaceDiscards.get().column(discard);
+	public final List<Integer> getRaceDiscards(Pilot pilot) {
+		return lazyRaceDiscards.get().get(pilot);
 	}
 
 	@Override
 	public final int getRaceDiscard(Pilot pilot, int discard) {
-		Preconditions.checkArgument(discards > 0);
+		Preconditions.checkArgument(discard > 0);
 		Preconditions.checkElementIndex(discard, discards);
-		return lazyRaceDiscards.get().get(pilot, discard);
+		return lazyRaceDiscards.get().get(pilot).get(discard - 1);
 	}
 
 	@Override
-	public final Table<Pilot, Integer, Race> getDiscardedRaces() {
+	public final Map<Pilot, ? extends Set<Race>> getDiscardedRaces() {
 		return lazyDiscardedRaces.get();
 	}
 
 	@Override
-	public final Map<Integer, Race> getDiscardedRaces(Pilot pilot) {
-		return lazyDiscardedRaces.get().row(pilot);
+	public final Set<Race> getDiscardedRaces(Pilot pilot) {
+		return lazyDiscardedRaces.get().get(pilot);
 	}
 
-	protected abstract Map<Integer, Race> calculateDiscardedRaces(Pilot pilot);
+	protected abstract List<Race> calculateDiscardedRaces(Pilot pilot);
 }

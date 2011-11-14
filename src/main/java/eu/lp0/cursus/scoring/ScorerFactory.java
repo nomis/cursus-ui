@@ -23,13 +23,16 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableMap;
+
 import eu.lp0.cursus.util.ReflectionsUtil;
 
 public class ScorerFactory {
-	private static final Map<String, Class<? extends Scorer>> scoringSystems = new HashMap<String, Class<? extends Scorer>>();
+	private static final Map<String, Class<? extends Scorer>> scoringSystems;
 	private static final Logger log = LoggerFactory.getLogger(ScorerFactory.class);
 
 	static {
+		Map<String, Class<? extends Scorer>> map = new HashMap<String, Class<? extends Scorer>>();
 		for (Class<? extends Scorer> clazz : ReflectionsUtil.getInstance().getSubTypesOf(Scorer.class)) {
 			try {
 				clazz.getConstructor();
@@ -43,14 +46,15 @@ public class ScorerFactory {
 
 			ScoringSystem scoringSystem = clazz.getAnnotation(ScoringSystem.class);
 			if (scoringSystem != null) {
-				if (scoringSystems.containsKey(scoringSystem.uuid())) {
+				if (map.containsKey(scoringSystem.uuid())) {
 					log.warn("Duplicate scoring system " + clazz + " as " + scoringSystem.uuid() + " ignored"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				} else {
-					scoringSystems.put(scoringSystem.uuid(), clazz);
+					map.put(scoringSystem.uuid(), clazz);
 					log.info("Registered scoring system " + clazz + " as " + scoringSystem.uuid()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 		}
+		scoringSystems = ImmutableMap.copyOf(map);
 	}
 
 	public static Scorer newScorer(String uuid) {
