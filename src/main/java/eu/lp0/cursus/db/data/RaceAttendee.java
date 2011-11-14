@@ -67,6 +67,9 @@ public class RaceAttendee extends AbstractEntity {
 		/** Voluntary marshal */
 		V_MARSHAL ("attendee.marshal.voluntary"), //$NON-NLS-1$
 
+		/** Disqualified participant */
+		DISQUALIFIED ("attendee.disqualified"), //$NON-NLS-1$ 
+
 		/** Other participant */
 		OTHER ("attendee.other"); //$NON-NLS-1$ 
 
