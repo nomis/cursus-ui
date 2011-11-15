@@ -190,8 +190,8 @@ public class Series2010Event2Scores extends Series2010Event1Scores {
 		overallAssertUtil.assertPilot(sco200, 0, 0, 1, 2);
 		overallAssertUtil.assertPilot(sco068, 0, 7, 2, 7);
 		overallAssertUtil.assertPilot(sco808, 0, 8, 3, 14);
+		overallAssertUtil.assertPilot(sco019, 0, 8, 4, 11);
 		overallAssertUtil.assertPilot(sco179, 0, 8, 4, 4);
-		overallAssertUtil.assertPilot(sco019, 0, 8, 5, 11);
 		overallAssertUtil.assertPilot(sco159, 0, 11, 6, 4);
 		overallAssertUtil.assertPilot(sco081, 0, 13, 7, 8);
 		overallAssertUtil.assertPilot(sco116, 0, 17, 8, 8);

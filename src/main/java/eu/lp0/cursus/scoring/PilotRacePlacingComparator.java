@@ -19,26 +19,60 @@ package eu.lp0.cursus.scoring;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
+import com.google.common.base.Predicates;
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
-import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Pilot;
-import eu.lp0.cursus.db.data.Race;
 
-public class PilotRacePlacingComparator implements Comparator<Pilot> {
-	private final Table<Pilot, Race, Integer> racePoints;
+public class PilotRacePlacingComparator<T extends ScoredData & RacePointsData & RaceDiscardsData> implements Comparator<Pilot> {
+	private final T scores;
+	private final PlacingMethod method;
+	private final Map<Pilot, Supplier<List<Integer>>> racePlacings;
 
-	public PilotRacePlacingComparator(Table<Pilot, Race, Integer> racePoints) {
-		this.racePoints = racePoints;
+	public enum PlacingMethod {
+		INCLUDING_DISCARDS, EXCLUDING_DISCARDS;
 	}
 
-	private List<Integer> getRacePlacing(Pilot pilot) {
-		return Ordering.natural().sortedCopy(racePoints.row(pilot).values());
+	public PilotRacePlacingComparator(T scores, PlacingMethod method) {
+		this.scores = scores;
+		this.method = method;
+
+		ImmutableMap.Builder<Pilot, Supplier<List<Integer>>> tmp = ImmutableMap.builder();
+		for (Pilot pilot : scores.getPilots()) {
+			tmp.put(pilot, Suppliers.memoize(new RacePlacingSupplier(pilot)));
+		}
+		racePlacings = tmp.build();
 	}
 
 	@Override
 	public int compare(Pilot o1, Pilot o2) {
-		return Ordering.<Integer> natural().lexicographical().compare(getRacePlacing(o1), getRacePlacing(o2));
+		return Ordering.<Integer> natural().lexicographical().compare(racePlacings.get(o1).get(), racePlacings.get(o2).get());
+	}
+
+	protected class RacePlacingSupplier implements Supplier<List<Integer>> {
+		private final Pilot pilot;
+
+		public RacePlacingSupplier(Pilot pilot) {
+			this.pilot = pilot;
+		}
+
+		@Override
+		public List<Integer> get() {
+			switch (method) {
+			case INCLUDING_DISCARDS:
+				return Ordering.natural().sortedCopy(scores.getRacePoints(pilot).values());
+
+			case EXCLUDING_DISCARDS:
+				return Ordering.natural().sortedCopy(
+						Maps.filterKeys(scores.getRacePoints(pilot), Predicates.not(Predicates.in(scores.getDiscardedRaces(pilot)))).values());
+			}
+			return null;
+		}
 	}
 }

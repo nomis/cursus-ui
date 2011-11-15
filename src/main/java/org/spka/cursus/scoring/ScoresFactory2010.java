@@ -31,6 +31,7 @@ import eu.lp0.cursus.scoring.GenericRacePositionsData;
 import eu.lp0.cursus.scoring.OverallPenaltiesData;
 import eu.lp0.cursus.scoring.OverallPointsData;
 import eu.lp0.cursus.scoring.OverallPositionData;
+import eu.lp0.cursus.scoring.PilotRacePlacingComparator;
 import eu.lp0.cursus.scoring.RaceDiscardsData;
 import eu.lp0.cursus.scoring.RaceLapsData;
 import eu.lp0.cursus.scoring.RacePenaltiesData;
@@ -77,6 +78,7 @@ public class ScoresFactory2010 extends AbstractScoresFactory {
 
 	@Override
 	public OverallPositionData newOverallPositionData(Scores scores) {
-		return new GenericOverallPositionData<Scores>(scores, GenericOverallPositionData.EqualPositioning.IF_REQUIRED);
+		return new GenericOverallPositionData<Scores>(scores, GenericOverallPositionData.EqualPositioning.IF_REQUIRED,
+				PilotRacePlacingComparator.PlacingMethod.EXCLUDING_DISCARDS);
 	}
 }

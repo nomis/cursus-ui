@@ -32,23 +32,25 @@ import com.google.common.collect.TreeMultimap;
 
 import eu.lp0.cursus.db.data.Pilot;
 
-public class GenericOverallPositionData<T extends ScoredData & RacePointsData & OverallPointsData> extends AbstractOverallPositionData<T> {
+public class GenericOverallPositionData<T extends ScoredData & RacePointsData & RaceDiscardsData & OverallPointsData> extends AbstractOverallPositionData<T> {
 	private final EqualPositioning equalPositioning;
+	private final PilotRacePlacingComparator.PlacingMethod placingMethod;
 
 	public enum EqualPositioning {
 		ALWAYS, IF_REQUIRED;
 	}
 
-	public GenericOverallPositionData(T scores, EqualPositioning equalPositioning) {
+	public GenericOverallPositionData(T scores, EqualPositioning equalPositioning, PilotRacePlacingComparator.PlacingMethod placingMethod) {
 		super(scores);
 
 		this.equalPositioning = equalPositioning;
+		this.placingMethod = placingMethod;
 	}
 
 	@Override
 	protected LinkedListMultimap<Integer, Pilot> calculateOverallPositionsWithOrder() {
 		// Invert race points with ordered lists of pilots
-		Comparator<Pilot> racePlacings = new PilotRacePlacingComparator(scores.getRacePoints());
+		Comparator<Pilot> racePlacings = new PilotRacePlacingComparator<T>(scores, placingMethod);
 		Comparator<Pilot> fallbackOrdering = new PilotRaceNumberComparator();
 		TreeMultimap<Integer, Pilot> invOverallPoints = TreeMultimap.create(Ordering.natural(), Ordering.from(racePlacings).compound(fallbackOrdering));
 		Multimaps.invertFrom(Multimaps.forMap(scores.getOverallPoints()), invOverallPoints);
