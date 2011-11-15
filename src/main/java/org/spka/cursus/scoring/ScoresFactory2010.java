@@ -47,7 +47,7 @@ public class ScoresFactory2010 extends AbstractScoresFactory {
 
 	@Override
 	public RacePenaltiesData newRacePenaltiesData(Scores scores) {
-		return new GenericRacePenaltiesData<Scores>(scores);
+		return new GenericRacePenaltiesData<Scores>(scores, GenericRacePenaltiesData.CumulativeMethod.EVENT);
 	}
 
 	@Override

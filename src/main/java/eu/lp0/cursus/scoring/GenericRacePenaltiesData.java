@@ -17,14 +17,26 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
 
 public class GenericRacePenaltiesData<T extends ScoredData> extends AbstractRacePenaltiesData<T> {
-	public GenericRacePenaltiesData(T scores) {
+	private final CumulativeMethod method;
+
+	public enum CumulativeMethod {
+		RACE, EVENT, SERIES;
+	}
+
+	public GenericRacePenaltiesData(T scores, CumulativeMethod method) {
 		super(scores);
+
+		this.method = method;
 	}
 
 	@Override
@@ -36,7 +48,22 @@ public class GenericRacePenaltiesData<T extends ScoredData> extends AbstractRace
 
 		// Count previous automatic penalties
 		int autoPenalties = 0;
-		for (Race previousRace : race.getEvent().getRaces()) {
+		List<Race> previousRaces = new ArrayList<Race>(scores.getRaces().size() * 2);
+		switch (method) {
+		case RACE:
+			break;
+
+		case EVENT:
+			previousRaces.addAll(race.getEvent().getRaces());
+			break;
+
+		case SERIES:
+			for (Event event : scores.getSeries().getEvents()) {
+				previousRaces.addAll(event.getRaces());
+			}
+			break;
+		}
+		for (Race previousRace : previousRaces) {
 			if (previousRace.equals(race)) {
 				break;
 			} else {
