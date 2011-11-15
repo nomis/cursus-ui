@@ -32,7 +32,7 @@ import eu.lp0.cursus.db.data.Race;
 
 public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends AbstractRacePointsData<T> {
 	private final FleetMethod fleetMethod;
-	private final Supplier<Map<Race, Integer>> lazyRaceFleetSize = Suppliers.memoize(new Supplier<Map<Race, Integer>>() {
+	protected final Supplier<Map<Race, Integer>> lazyRaceFleetSize = Suppliers.memoize(new Supplier<Map<Race, Integer>>() {
 		@Override
 		public Map<Race, Integer> get() {
 			return calculateFleetSizes();

@@ -37,7 +37,7 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 	private final ScoresBeforeAveraging scoresBeforeAveraging = new ScoresBeforeAveraging();
 	private final AveragingMethod method;
 	private final Rounding rounding;
-	private final Supplier<Table<Pilot, Race, Integer>> lazyRacePointsBeforeAveraging = Suppliers.memoize(new Supplier<Table<Pilot, Race, Integer>>() {
+	protected final Supplier<Table<Pilot, Race, Integer>> lazyRacePointsBeforeAveraging = Suppliers.memoize(new Supplier<Table<Pilot, Race, Integer>>() {
 		@Override
 		public Table<Pilot, Race, Integer> get() {
 			Table<Pilot, Race, Integer> racePoints = ArrayTable.create(scores.getPilots(), scores.getRaces());
