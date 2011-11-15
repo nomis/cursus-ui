@@ -35,7 +35,7 @@ import eu.lp0.cursus.db.data.RaceAttendee;
 
 public class AveragingRacePointsData<T extends Scores> extends GenericRacePointsData<T> {
 	private final ScoresBeforeAveraging scoresBeforeAveraging = new ScoresBeforeAveraging();
-	private final Method method;
+	private final AveragingMethod method;
 	private final Rounding rounding;
 	private final Supplier<Table<Pilot, Race, Integer>> lazyRacePointsBeforeAveraging = Suppliers.memoize(new Supplier<Table<Pilot, Race, Integer>>() {
 		@Override
@@ -55,7 +55,7 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 		}
 	});
 
-	public enum Method {
+	public enum AveragingMethod {
 		BEFORE_DISCARDS, AFTER_DISCARDS, SET_NULL;
 	}
 
@@ -86,10 +86,10 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 		}
 	}
 
-	public AveragingRacePointsData(T scores, Method method, Rounding rounding) {
-		super(scores);
+	public AveragingRacePointsData(T scores, FleetMethod fleetMethod, AveragingMethod averagingMethod, Rounding rounding) {
+		super(scores, fleetMethod);
 
-		this.method = method;
+		this.method = averagingMethod;
 		this.rounding = rounding;
 	}
 
@@ -120,7 +120,7 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 		}
 
 		// If averaging should occur after discards, remove discards... unless that removes all races
-		if (checkDiscards && !otherRaces.isEmpty() && method == Method.AFTER_DISCARDS) {
+		if (checkDiscards && !otherRaces.isEmpty() && method == AveragingMethod.AFTER_DISCARDS) {
 			Set<Race> discardedRaces = scoresBeforeAveraging.getDiscardedRaces(pilot);
 			if (!discardedRaces.containsAll(otherRaces)) {
 				otherRaces.removeAll(discardedRaces);
@@ -134,7 +134,7 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 	protected Map<Pilot, Integer> calculateRacePoints(Race race) {
 		Table<Pilot, Race, Integer> racePoints = ArrayTable.create(scoresBeforeAveraging.getRacePoints());
 
-		if (method != Method.SET_NULL) {
+		if (method != AveragingMethod.SET_NULL) {
 			for (Pilot pilot : scores.getPilots()) {
 				// Calculate an average score using the other races
 				if (racePoints.row(pilot).get(race) == null) {

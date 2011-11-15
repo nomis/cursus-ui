@@ -37,12 +37,6 @@ public abstract class AbstractOverallPointsData<T extends ScoredData> implements
 			return overallPoints;
 		}
 	});
-	private final Supplier<Integer> lazyOverallFleetSize = Suppliers.memoize(new Supplier<Integer>() {
-		@Override
-		public Integer get() {
-			return calculateOverallFleetSize();
-		}
-	});
 
 	public AbstractOverallPointsData(T scores) {
 		this.scores = scores;
@@ -56,11 +50,6 @@ public abstract class AbstractOverallPointsData<T extends ScoredData> implements
 	@Override
 	public final int getOverallPoints(Pilot pilot) {
 		return lazyOverallPoints.get().get(pilot);
-	}
-
-	@Override
-	public final int getOverallFleetSize() {
-		return lazyOverallFleetSize.get();
 	}
 
 	protected abstract int calculateOverallPoints(Pilot pilot);

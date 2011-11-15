@@ -83,7 +83,7 @@ public class Series2011Event1Scores extends AbstractSeries2011 {
 		Event event1 = eventDAO.find(series, EVENT1_NAME);
 		Race race1 = raceDAO.find(event1, RACE1_NAME);
 
-		Assert.assertEquals(SERIES_FLEET_AT_EVENT1, scores.getOverallFleetSize());
+		Assert.assertEquals(SERIES_FLEET, scores.getPilots().size());
 		Assert.assertEquals(SERIES_FLEET_AT_EVENT1, scores.getFleetSize(race1));
 
 		RaceAssertUtil race1AssertUtil = new RaceAssertUtil(scores, race1);
@@ -148,8 +148,8 @@ public class Series2011Event1Scores extends AbstractSeries2011 {
 			Race race1 = raceDAO.find(event1, RACE1_NAME);
 
 			Scores scores = scorer.scoreEvent(event1);
-			Assert.assertEquals(EVENT1_FLEET, scores.getOverallFleetSize());
-			Assert.assertEquals(EVENT1_FLEET, scores.getFleetSize(race1));
+			Assert.assertEquals(EVENT1_FLEET, scores.getPilots().size());
+			Assert.assertEquals(SERIES_FLEET_AT_EVENT1, scores.getFleetSize(race1));
 
 			RaceAssertUtil race1AssertUtil = new RaceAssertUtil(scores, race1);
 			race1AssertUtil.assertPilot(sco068, 5, 0, false, 0, 1);
@@ -218,8 +218,8 @@ public class Series2011Event1Scores extends AbstractSeries2011 {
 			Race race1 = raceDAO.find(event1, RACE1_NAME);
 
 			Scores scores = scorer.scoreRace(race1);
-			Assert.assertEquals(EVENT1_FLEET, scores.getOverallFleetSize());
-			Assert.assertEquals(EVENT1_FLEET, scores.getFleetSize(race1));
+			Assert.assertEquals(EVENT1_FLEET, scores.getPilots().size());
+			Assert.assertEquals(SERIES_FLEET_AT_EVENT1, scores.getFleetSize(race1));
 
 			RaceAssertUtil raceAssertUtil = new RaceAssertUtil(scores, race1);
 			raceAssertUtil.assertPilot(sco068, 5, 0, false, 0, 1);

@@ -34,10 +34,6 @@ import eu.lp0.cursus.test.db.AbstractDatabaseTest;
 public abstract class AbstractSeries2010 extends AbstractDatabaseTest {
 	protected final String SERIES_NAME = "SPKA Race Series 2010/11"; //$NON-NLS-1$
 	protected final int SERIES_FLEET = 19;
-	protected final int SERIES_FLEET_AT_EVENT1 = 17;
-	protected final int SERIES_FLEET_AT_EVENT2 = 17;
-	protected final int SERIES_FLEET_AT_EVENT3 = 18;
-	protected final int SERIES_FLEET_AT_EVENT4 = 19;
 
 	protected final String EVENT1_NAME = "Race Event 1"; //$NON-NLS-1$
 	protected final int EVENT1_FLEET = 17;

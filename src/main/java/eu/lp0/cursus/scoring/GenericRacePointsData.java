@@ -18,15 +18,34 @@
 package eu.lp0.cursus.scoring;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
+
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
 public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends AbstractRacePointsData<T> {
-	public GenericRacePointsData(T scores) {
+	private final FleetMethod fleetMethod;
+	private final Supplier<Map<Race, Integer>> lazyRaceFleetSize = Suppliers.memoize(new Supplier<Map<Race, Integer>>() {
+		@Override
+		public Map<Race, Integer> get() {
+			return calculateFleetSizes();
+		}
+	});
+
+	public enum FleetMethod {
+		RACE, EVENT, SERIES, PILOTS;
+	}
+
+	public GenericRacePointsData(T scores, FleetMethod fleetMethod) {
 		super(scores);
+		this.fleetMethod = fleetMethod;
 	}
 
 	@Override
@@ -60,7 +79,60 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 		return getFleetSize(race) + 1;
 	}
 
-	public int getFleetSize(Race race) {
-		return race.getAttendees().size();
+	@Override
+	public final int getFleetSize(Race race) {
+		return lazyRaceFleetSize.get().get(race);
+	}
+
+	protected Map<Race, Integer> calculateFleetSizes() {
+		Map<Race, Integer> fleetSizes = new HashMap<Race, Integer>();
+		switch (fleetMethod) {
+		case RACE:
+			for (Race race : scores.getRaces()) {
+				fleetSizes.put(race, race.getAttendees().size());
+			}
+			break;
+
+		case EVENT: {
+			Map<Event, Integer> eventFleetSizes = new HashMap<Event, Integer>();
+			for (Race race : scores.getRaces()) {
+				Event event = race.getEvent();
+
+				if (!eventFleetSizes.containsKey(event)) {
+					Set<Pilot> pilots = new HashSet<Pilot>(scores.getSeries().getPilots().size() * 2);
+					for (Race race2 : event.getRaces()) {
+						pilots.addAll(race2.getAttendees().keySet());
+					}
+					eventFleetSizes.put(event, pilots.size());
+				}
+
+				fleetSizes.put(race, eventFleetSizes.get(event));
+			}
+
+			break;
+		}
+
+		case SERIES: {
+			Set<Pilot> pilots = new HashSet<Pilot>(scores.getSeries().getPilots().size() * 2);
+			for (Event event : scores.getSeries().getEvents()) {
+				for (Race race : event.getRaces()) {
+					pilots.addAll(race.getAttendees().keySet());
+				}
+			}
+
+			for (Race race : scores.getRaces()) {
+				fleetSizes.put(race, pilots.size());
+			}
+
+			break;
+		}
+
+		case PILOTS:
+			for (Race race : scores.getRaces()) {
+				fleetSizes.put(race, scores.getSeries().getPilots().size());
+			}
+			break;
+		}
+		return fleetSizes;
 	}
 }

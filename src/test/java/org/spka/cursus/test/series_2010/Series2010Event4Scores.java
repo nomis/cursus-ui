@@ -102,7 +102,7 @@ public class Series2010Event4Scores extends Series2010Event3Scores {
 		Race race7 = raceDAO.find(event4, RACE7_NAME);
 		Race race8 = raceDAO.find(event4, RACE8_NAME);
 
-		Assert.assertEquals(SERIES_FLEET_AT_EVENT4, scores.getOverallFleetSize());
+		Assert.assertEquals(SERIES_FLEET, scores.getPilots().size());
 		Assert.assertEquals(EVENT1_FLEET, scores.getFleetSize(race1));
 		Assert.assertEquals(EVENT1_FLEET, scores.getFleetSize(race2));
 		Assert.assertEquals(EVENT1_FLEET, scores.getFleetSize(race3));
@@ -324,7 +324,7 @@ public class Series2010Event4Scores extends Series2010Event3Scores {
 			Race race8 = raceDAO.find(event4, RACE8_NAME);
 
 			Scores scores = scorer.scoreEvent(event4);
-			Assert.assertEquals(EVENT4_FLEET, scores.getOverallFleetSize());
+			Assert.assertEquals(EVENT4_FLEET, scores.getPilots().size());
 			Assert.assertEquals(EVENT4_FLEET, scores.getFleetSize(race6));
 			Assert.assertEquals(EVENT4_FLEET, scores.getFleetSize(race7));
 			Assert.assertEquals(EVENT4_FLEET, scores.getFleetSize(race8));
@@ -418,7 +418,7 @@ public class Series2010Event4Scores extends Series2010Event3Scores {
 			Race race6 = raceDAO.find(event4, RACE6_NAME);
 
 			Scores scores = scorer.scoreRace(race6);
-			Assert.assertEquals(EVENT4_FLEET, scores.getOverallFleetSize());
+			Assert.assertEquals(EVENT4_FLEET, scores.getPilots().size());
 			Assert.assertEquals(EVENT4_FLEET, scores.getFleetSize(race6));
 
 			RaceAssertUtil raceAssertUtil = new RaceAssertUtil(scores, race6);
@@ -474,7 +474,7 @@ public class Series2010Event4Scores extends Series2010Event3Scores {
 			Race race7 = raceDAO.find(event4, RACE7_NAME);
 
 			Scores scores = scorer.scoreRace(race7);
-			Assert.assertEquals(EVENT4_FLEET, scores.getOverallFleetSize());
+			Assert.assertEquals(EVENT4_FLEET, scores.getPilots().size());
 			Assert.assertEquals(EVENT4_FLEET, scores.getFleetSize(race7));
 
 			RaceAssertUtil raceAssertUtil = new RaceAssertUtil(scores, race7);
@@ -530,7 +530,7 @@ public class Series2010Event4Scores extends Series2010Event3Scores {
 			Race race8 = raceDAO.find(event4, RACE8_NAME);
 
 			Scores scores = scorer.scoreRace(race8);
-			Assert.assertEquals(EVENT4_FLEET, scores.getOverallFleetSize());
+			Assert.assertEquals(EVENT4_FLEET, scores.getPilots().size());
 			Assert.assertEquals(EVENT4_FLEET, scores.getFleetSize(race8));
 
 			RaceAssertUtil raceAssertUtil = new RaceAssertUtil(scores, race8);

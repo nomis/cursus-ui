@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,10 +27,12 @@ import com.google.common.collect.ImmutableSet;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.db.data.Series;
 
 public abstract class AbstractScores extends AbstractForwardingScores {
 	protected final Set<Pilot> pilots;
 	protected final List<Race> races;
+	protected final Series series;
 	private final ScoresFactory scoresFactory;
 
 	public AbstractScores(Set<Pilot> pilots, List<Race> races, ScoresFactory scoresFactory) {
@@ -39,6 +42,16 @@ public abstract class AbstractScores extends AbstractForwardingScores {
 
 		Preconditions.checkArgument(!this.pilots.isEmpty(), "No pilots"); //$NON-NLS-1$
 		Preconditions.checkArgument(!this.races.isEmpty(), "No races"); //$NON-NLS-1$
+
+		Set<Series> checkSeries = new HashSet<Series>(2);
+		for (Pilot pilot : pilots) {
+			checkSeries.add(pilot.getSeries());
+		}
+		for (Race race : races) {
+			checkSeries.add(race.getEvent().getSeries());
+		}
+		Preconditions.checkArgument(checkSeries.size() == 1, "Multiple series not allowed"); //$NON-NLS-1$
+		series = checkSeries.iterator().next();
 	}
 
 	// ForwardingScores
@@ -61,5 +74,10 @@ public abstract class AbstractScores extends AbstractForwardingScores {
 	@Override
 	public List<Race> getRaces() {
 		return races;
+	}
+
+	@Override
+	public Series getSeries() {
+		return series;
 	}
 }
