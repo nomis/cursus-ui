@@ -87,7 +87,7 @@ public class GenericOverallPositionData<T extends ScoredData & RacePointsData & 
 
 					// Add them all to this position
 					overallPositions.putAll(position, collectedPilots);
-					position++;
+					position += collectedPilots.size();
 
 					collectedPilots.clear();
 				}
