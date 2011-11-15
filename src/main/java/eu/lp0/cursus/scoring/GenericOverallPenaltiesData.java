@@ -17,17 +17,7 @@
  */
 package eu.lp0.cursus.scoring;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import eu.lp0.cursus.db.data.Event;
-import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
-import eu.lp0.cursus.db.data.PilotAtEvent;
-import eu.lp0.cursus.db.data.Race;
 
 public class GenericOverallPenaltiesData<T extends ScoredData & RacePenaltiesData> extends AbstractOverallPenaltiesData<T> {
 	public GenericOverallPenaltiesData(T scores) {
@@ -38,60 +28,8 @@ public class GenericOverallPenaltiesData<T extends ScoredData & RacePenaltiesDat
 	protected int calculateOverallPenalties(Pilot pilot) {
 		int penalties = 0;
 
-		// Add race penalties
 		for (Integer racePenalties : scores.getRacePenalties(pilot).values()) {
 			penalties += racePenalties;
-		}
-
-		// Get event/series penalties
-		List<Penalty> overallPenalties = new ArrayList<Penalty>();
-		Set<Event> events = new HashSet<Event>(scores.getRaces().size());
-		for (Race race : scores.getRaces()) {
-			events.add(race.getEvent());
-		}
-		Iterator<Event> it = events.iterator();
-		while (it.hasNext()) {
-			Event event = it.next();
-			// Only add event penalties if all the races from this event are included
-			if (scores.getRaces().containsAll(event.getRaces())) {
-				PilotAtEvent pilotAtEvent = event.getPilots().get(pilot);
-				if (pilotAtEvent != null) {
-					overallPenalties.addAll(pilotAtEvent.getPenalties());
-				}
-			} else {
-				it.remove();
-			}
-		}
-		// Only add series penalties if all the events from this series are included
-		if (events.containsAll(pilot.getSeries().getEvents())) {
-			overallPenalties.addAll(pilot.getSeriesPenalties());
-		}
-
-		// Calculate overall penalties
-		int autoPenalties = 0;
-		for (Penalty penalty : overallPenalties) {
-			switch (penalty.getType()) {
-			case AUTOMATIC:
-				if (penalty.getValue() >= 0) {
-					// Add multiple automatic penalties
-					for (int i = 0; i < penalty.getValue(); i++) {
-						penalties += ++autoPenalties;
-					}
-				} else {
-					// Remove multiple automatic penalties
-					for (int i = penalty.getValue(); i > 0; i--) {
-						if (autoPenalties > 0) {
-							penalties -= autoPenalties--;
-						}
-					}
-				}
-				break;
-
-			case FIXED:
-				// Fixed penalty added/removed
-				penalties += penalty.getValue();
-				break;
-			}
 		}
 
 		return penalties;

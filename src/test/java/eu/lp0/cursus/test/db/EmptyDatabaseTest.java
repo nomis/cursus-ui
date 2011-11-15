@@ -66,7 +66,6 @@ public class EmptyDatabaseTest extends AbstractDatabaseTest {
 
 			Assert.assertEquals(0, pilots.size());
 			Assert.assertEquals(0, series.get(0).getPilots().size());
-			Assert.assertEquals(0, events.get(0).getPilots().size());
 			Assert.assertEquals(0, races.get(0).getAttendees().size());
 
 			DatabaseSession.commit();

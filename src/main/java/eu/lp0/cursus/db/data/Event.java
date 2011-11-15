@@ -18,16 +18,13 @@
 package eu.lp0.cursus.db.data;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
@@ -120,18 +117,6 @@ public class Event extends AbstractEntity implements Comparable<Event>, RaceEnti
 		while (races.remove(null)) {
 		}
 		this.races = races;
-	}
-
-	private Map<Pilot, PilotAtEvent> pilots = new HashMap<Pilot, PilotAtEvent>();
-
-	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "event", orphanRemoval = true)
-	@MapKeyJoinColumn(name = "pilot_id", nullable = false)
-	public Map<Pilot, PilotAtEvent> getPilots() {
-		return pilots;
-	}
-
-	public void setPilots(Map<Pilot, PilotAtEvent> pilots) {
-		this.pilots = pilots;
 	}
 
 	@Override

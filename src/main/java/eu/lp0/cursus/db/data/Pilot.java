@@ -17,17 +17,13 @@
  */
 package eu.lp0.cursus.db.data;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -37,7 +33,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -157,18 +152,6 @@ public class Pilot extends AbstractEntity {
 		this.classes = classes;
 	}
 
-	private Map<Event, PilotAtEvent> events = new HashMap<Event, PilotAtEvent>();
-
-	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "pilot", orphanRemoval = true)
-	@MapKeyJoinColumn(name = "event_id", nullable = false)
-	public Map<Event, PilotAtEvent> getEvents() {
-		return events;
-	}
-
-	public void setEvents(Map<Event, PilotAtEvent> events) {
-		this.events = events;
-	}
-
 	private Map<Race, RaceAttendee> races = new HashMap<Race, RaceAttendee>();
 
 	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "pilot", orphanRemoval = true)
@@ -179,22 +162,6 @@ public class Pilot extends AbstractEntity {
 
 	public void setRaces(Map<Race, RaceAttendee> races) {
 		this.races = races;
-	}
-
-	private List<Penalty> seriesPenalties = new ArrayList<Penalty>();
-
-	/**
-	 * Pilot series penalties
-	 */
-	@ElementCollection
-	@CollectionTable(name = "pilot_series_penalties", joinColumns = @JoinColumn(name = "pilot_id"))
-	@OrderColumn(name = "penalties_order")
-	public List<Penalty> getSeriesPenalties() {
-		return seriesPenalties;
-	}
-
-	public void setSeriesPenalties(List<Penalty> seriesPenalties) {
-		this.seriesPenalties = seriesPenalties;
 	}
 
 	@Override
