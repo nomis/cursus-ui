@@ -40,7 +40,6 @@ import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseTabSync;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
-import eu.lp0.cursus.ui.event.EventPenaltiesTab;
 import eu.lp0.cursus.ui.event.EventResultsTab;
 import eu.lp0.cursus.ui.menu.MainMenu;
 import eu.lp0.cursus.ui.preferences.JFrameAutoPrefs;
@@ -49,7 +48,6 @@ import eu.lp0.cursus.ui.race.RaceLapsTab;
 import eu.lp0.cursus.ui.race.RacePenaltiesTab;
 import eu.lp0.cursus.ui.race.RaceResultsTab;
 import eu.lp0.cursus.ui.series.SeriesClassesTab;
-import eu.lp0.cursus.ui.series.SeriesPenaltiesTab;
 import eu.lp0.cursus.ui.series.SeriesPilotsTab;
 import eu.lp0.cursus.ui.series.SeriesResultsTab;
 import eu.lp0.cursus.ui.tree.RaceTree;
@@ -73,10 +71,8 @@ public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 	private JTabbedPane tabbedPane;
 	private AbstractDatabaseTab<MainWindow, Series> serPilotsTab;
 	private AbstractDatabaseTab<MainWindow, Series> serClassesTab;
-	private AbstractDatabaseTab<MainWindow, Series> serPenaltiesTab;
 	private AbstractDatabaseTab<MainWindow, Series> serResultsTab;
 	private List<AbstractDatabaseTab<MainWindow, Series>> seriesTabs;
-	private AbstractDatabaseTab<MainWindow, Event> evtPenaltiesTab;
 	private AbstractDatabaseTab<MainWindow, Event> evtResultsTab;
 	private List<AbstractDatabaseTab<MainWindow, Event>> eventTabs;
 	private AbstractDatabaseTab<MainWindow, Race> racAttendeesTab;
@@ -152,16 +148,14 @@ public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 		{ // Series
 			serClassesTab = new SeriesClassesTab<MainWindow>(this);
 			serPilotsTab = new SeriesPilotsTab<MainWindow>(this);
-			serPenaltiesTab = new SeriesPenaltiesTab<MainWindow>(this);
 			serResultsTab = new SeriesResultsTab<MainWindow>(this);
-			seriesTabs = Arrays.asList(serPilotsTab, serClassesTab, serPenaltiesTab, serResultsTab);
+			seriesTabs = Arrays.asList(serPilotsTab, serClassesTab, serResultsTab);
 		}
 
 		{ // Event
-			evtPenaltiesTab = new EventPenaltiesTab<MainWindow>(this);
 			evtResultsTab = new EventResultsTab<MainWindow>(this);
 
-			eventTabs = Arrays.asList(evtPenaltiesTab, evtResultsTab);
+			eventTabs = Arrays.asList(evtResultsTab);
 		}
 
 		{ // Race
