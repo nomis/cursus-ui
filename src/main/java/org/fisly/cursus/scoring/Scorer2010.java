@@ -23,6 +23,7 @@ import java.util.Set;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.AbstractScorer;
+import eu.lp0.cursus.scoring.FleetFilter;
 import eu.lp0.cursus.scoring.Scorer;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.scoring.ScoringSystem;
@@ -30,7 +31,7 @@ import eu.lp0.cursus.scoring.ScoringSystem;
 @ScoringSystem(uuid = FISLYConstants.UUID_2010, name = FISLYConstants.NAME_2010)
 public class Scorer2010 extends AbstractScorer implements Scorer {
 	@Override
-	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots) {
-		return new FISLYScoresFactory2010().newScores(pilots, races);
+	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots, FleetFilter fleetFilter) {
+		return new FISLYScoresFactory2010().newScores(pilots, races, fleetFilter);
 	}
 }

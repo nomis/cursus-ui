@@ -24,5 +24,5 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
 public interface ScoresFactory extends ScoresFactorySubset {
-	public Scores newScores(Set<Pilot> pilots, List<Race> races);
+	public Scores newScores(Set<Pilot> pilots, List<Race> races, FleetFilter fleetFilter);
 }

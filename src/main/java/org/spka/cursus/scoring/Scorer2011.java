@@ -22,13 +22,14 @@ import java.util.Set;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.scoring.FleetFilter;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.scoring.ScoringSystem;
 
 @ScoringSystem(uuid = SPKAConstants.UUID_2011, name = SPKAConstants.NAME_2011)
 public class Scorer2011 extends Scorer2010 {
 	@Override
-	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots) {
-		return new SPKAScoresFactory2011().newScores(pilots, races);
+	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots, FleetFilter fleetFilter) {
+		return new SPKAScoresFactory2011().newScores(pilots, races, fleetFilter);
 	}
 }

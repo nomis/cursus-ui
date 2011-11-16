@@ -66,6 +66,11 @@ public abstract class AbstractForwardingScores implements Scores {
 		return delegateScoredData().getSeries();
 	}
 
+	@Override
+	public Set<Pilot> getFleet() {
+		return delegateScoredData().getFleet();
+	}
+
 	// ScoresFactorySubset
 	@Override
 	public RaceLapsData newRaceLapsData(Scores scores) {

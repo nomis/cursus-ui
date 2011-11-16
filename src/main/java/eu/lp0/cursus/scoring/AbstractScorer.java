@@ -32,44 +32,87 @@ import eu.lp0.cursus.db.data.Series;
 public abstract class AbstractScorer implements Scorer {
 	@Override
 	public Scores scoreSeries(Series series) {
-		return scoreSeries(series, series.getPilots());
+		return scoreSeries(series, FleetFilter.any());
+	}
+
+	@Override
+	public Scores scoreSeries(Series series, FleetFilter fleetFilter) {
+		return scoreSeries(series, fleetFilter.apply(series.getPilots()), fleetFilter);
 	}
 
 	@Override
 	public Scores scoreSeries(Series series, Set<Pilot> pilots) {
+		return scoreSeries(series, pilots, FleetFilter.any());
+	}
+
+	@Override
+	public Scores scoreSeries(Series series, Set<Pilot> pilots, FleetFilter fleetFilter) {
 		List<Race> races = new ArrayList<Race>();
 		for (Event event : series.getEvents()) {
 			races.addAll(event.getRaces());
 		}
-		return scoreRaces(races, pilots);
+		return scoreRaces(races, pilots, fleetFilter);
 	}
 
 	@Override
 	public Scores scoreEvent(Event event) {
-		return scoreRaces(event.getRaces());
+		return scoreEvent(event, FleetFilter.any());
+	}
+
+	@Override
+	public Scores scoreEvent(Event event, FleetFilter fleetFilter) {
+		return scoreRaces(event.getRaces(), fleetFilter);
 	}
 
 	@Override
 	public Scores scoreEvent(Event event, Set<Pilot> pilots) {
-		return scoreRaces(event.getRaces(), pilots);
+		return scoreEvent(event, pilots, FleetFilter.any());
+	}
+
+	@Override
+	public Scores scoreEvent(Event event, Set<Pilot> pilots, FleetFilter fleetFilter) {
+		return scoreRaces(event.getRaces(), pilots, fleetFilter);
 	}
 
 	@Override
 	public Scores scoreRace(Race race) {
-		return scoreRace(race, race.getAttendees().keySet());
+		return scoreRace(race, FleetFilter.any());
+	}
+
+	@Override
+	public Scores scoreRace(Race race, FleetFilter fleetFilter) {
+		return scoreRace(race, fleetFilter.apply(race.getAttendees().keySet()), fleetFilter);
 	}
 
 	@Override
 	public Scores scoreRace(Race race, Set<Pilot> pilots) {
-		return scoreRaces(ImmutableList.of(race), pilots);
+		return scoreRace(race, pilots, FleetFilter.any());
+	}
+
+	@Override
+	public Scores scoreRace(Race race, Set<Pilot> pilots, FleetFilter fleetFilter) {
+		return scoreRaces(ImmutableList.of(race), pilots, fleetFilter);
 	}
 
 	@Override
 	public Scores scoreRaces(List<Race> races) {
+		return scoreRaces(races, FleetFilter.any());
+	}
+
+	@Override
+	public Scores scoreRaces(List<Race> races, FleetFilter fleetFilter) {
 		Set<Pilot> pilots = new HashSet<Pilot>();
 		for (Race race : races) {
 			pilots.addAll(race.getAttendees().keySet());
 		}
-		return scoreRaces(races, pilots);
+		return scoreRaces(races, fleetFilter.apply(pilots), fleetFilter);
 	}
+
+	@Override
+	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots) {
+		return scoreRaces(races, pilots, FleetFilter.any());
+	}
+
+	@Override
+	public abstract Scores scoreRaces(List<Race> races, Set<Pilot> pilots, FleetFilter fleetFilter);
 }

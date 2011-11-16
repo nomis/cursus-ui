@@ -30,4 +30,6 @@ public interface ScoredData {
 	public List<Race> getRaces();
 
 	public Series getSeries();
+
+	public Set<Pilot> getFleet();
 }

@@ -25,7 +25,7 @@ import eu.lp0.cursus.db.data.Race;
 
 public abstract class AbstractScoresFactory implements ScoresFactory {
 	@Override
-	public Scores newScores(Set<Pilot> pilots, List<Race> races) {
-		return new GenericScores(pilots, races, this);
+	public Scores newScores(Set<Pilot> pilots, List<Race> races, FleetFilter fleetFilter) {
+		return new GenericScores(pilots, races, fleetFilter, this);
 	}
 }

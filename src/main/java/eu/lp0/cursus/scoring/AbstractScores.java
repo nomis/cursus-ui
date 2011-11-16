@@ -33,9 +33,10 @@ public abstract class AbstractScores extends AbstractForwardingScores {
 	protected final Set<Pilot> pilots;
 	protected final List<Race> races;
 	protected final Series series;
+	protected final Set<Pilot> fleet;
 	private final ScoresFactory scoresFactory;
 
-	public AbstractScores(Set<Pilot> pilots, List<Race> races, ScoresFactory scoresFactory) {
+	public AbstractScores(Set<Pilot> pilots, List<Race> races, FleetFilter fleetFilter, ScoresFactory scoresFactory) {
 		this.pilots = ImmutableSet.copyOf(pilots);
 		this.races = ImmutableList.copyOf(races);
 		this.scoresFactory = scoresFactory;
@@ -52,6 +53,8 @@ public abstract class AbstractScores extends AbstractForwardingScores {
 		}
 		Preconditions.checkArgument(checkSeries.size() == 1, "Multiple series not allowed"); //$NON-NLS-1$
 		series = checkSeries.iterator().next();
+
+		fleet = ImmutableSet.copyOf(fleetFilter.apply(series.getPilots()));
 	}
 
 	// ForwardingScores
@@ -79,5 +82,10 @@ public abstract class AbstractScores extends AbstractForwardingScores {
 	@Override
 	public Series getSeries() {
 		return series;
+	}
+
+	@Override
+	public Set<Pilot> getFleet() {
+		return fleet;
 	}
 }

@@ -25,6 +25,7 @@ import java.util.Set;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+import com.google.common.collect.Sets;
 
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
@@ -89,7 +90,7 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 		switch (fleetMethod) {
 		case RACE:
 			for (Race race : scores.getRaces()) {
-				fleetSizes.put(race, race.getAttendees().size());
+				fleetSizes.put(race, Sets.intersection(race.getAttendees().keySet(), scores.getFleet()).size());
 			}
 			break;
 
@@ -103,7 +104,7 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 					for (Race race2 : event.getRaces()) {
 						pilots.addAll(race2.getAttendees().keySet());
 					}
-					eventFleetSizes.put(event, pilots.size());
+					eventFleetSizes.put(event, Sets.intersection(pilots, scores.getFleet()).size());
 				}
 
 				fleetSizes.put(race, eventFleetSizes.get(event));
@@ -120,8 +121,9 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 				}
 			}
 
+			int fleetSize = Sets.intersection(pilots, scores.getFleet()).size();
 			for (Race race : scores.getRaces()) {
-				fleetSizes.put(race, pilots.size());
+				fleetSizes.put(race, fleetSize);
 			}
 
 			break;
@@ -129,7 +131,7 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 
 		case PILOTS:
 			for (Race race : scores.getRaces()) {
-				fleetSizes.put(race, scores.getSeries().getPilots().size());
+				fleetSizes.put(race, scores.getFleet().size());
 			}
 			break;
 		}
