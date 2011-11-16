@@ -31,6 +31,6 @@ import eu.lp0.cursus.scoring.ScoringSystem;
 public class Scorer2010 extends AbstractScorer implements Scorer {
 	@Override
 	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots) {
-		return new ScoresFactory2010().newScores(pilots, races);
+		return new SPKAScoresFactory2010().newScores(pilots, races);
 	}
 }

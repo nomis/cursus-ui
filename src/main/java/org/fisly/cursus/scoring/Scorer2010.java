@@ -15,20 +15,22 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.spka.cursus.scoring;
+package org.fisly.cursus.scoring;
 
 import java.util.List;
 import java.util.Set;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.scoring.AbstractScorer;
+import eu.lp0.cursus.scoring.Scorer;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.scoring.ScoringSystem;
 
-@ScoringSystem(uuid = SPKAConstants.UUID_2011, name = SPKAConstants.NAME_2011)
-public class Scorer2011 extends Scorer2010 {
+@ScoringSystem(uuid = FISLYConstants.UUID_2010, name = FISLYConstants.NAME_2010)
+public class Scorer2010 extends AbstractScorer implements Scorer {
 	@Override
 	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots) {
-		return new SPKAScoresFactory2011().newScores(pilots, races);
+		return new FISLYScoresFactory2010().newScores(pilots, races);
 	}
 }

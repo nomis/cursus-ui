@@ -15,24 +15,9 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.spka.cursus.scoring;
+package org.fisly.cursus.scoring;
 
-import eu.lp0.cursus.db.data.Pilot;
-import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.scoring.AveragingRacePointsData;
-import eu.lp0.cursus.scoring.Scores;
-
-public class RacePointsData2011<T extends Scores> extends AveragingRacePointsData<T> {
-	public RacePointsData2011(T scores, FleetMethod fleetMethod, AveragingMethod averagingMethod, Rounding rounding) {
-		super(scores, fleetMethod, averagingMethod, rounding);
-	}
-
-	@Override
-	protected int getPointsForNoLaps(Pilot pilot, Race race) {
-		if (race.getAttendees().containsKey(pilot)) {
-			return getFleetSize(race) + 1;
-		} else {
-			return getFleetSize(race) + 2;
-		}
-	}
+public class FISLYConstants {
+	public static final String NAME_2010 = "FISLY 2010-09-29"; //$NON-NLS-1$
+	public static final String UUID_2010 = "ca03de48-6931-ca71-a566-09f613584dd9"; //$NON-NLS-1$
 }

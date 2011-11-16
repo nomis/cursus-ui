@@ -17,15 +17,7 @@
  */
 package org.spka.cursus.scoring;
 
-import eu.lp0.cursus.scoring.AveragingRacePointsData;
-import eu.lp0.cursus.scoring.GenericRacePointsData;
-import eu.lp0.cursus.scoring.RacePointsData;
-import eu.lp0.cursus.scoring.Scores;
+import org.fisly.cursus.scoring.FISLYScoresFactory2010;
 
-public class ScoresFactory2011 extends ScoresFactory2010 {
-	@Override
-	public RacePointsData newRacePointsData(Scores scores) {
-		return new RacePointsData2011<Scores>(scores, GenericRacePointsData.FleetMethod.SERIES, AveragingRacePointsData.AveragingMethod.AFTER_DISCARDS,
-				AveragingRacePointsData.Rounding.ROUND_HALF_UP);
-	}
+public class SPKAScoresFactory2010 extends FISLYScoresFactory2010 {
 }

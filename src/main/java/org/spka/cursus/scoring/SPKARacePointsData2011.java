@@ -17,18 +17,22 @@
  */
 package org.spka.cursus.scoring;
 
-import java.util.List;
-import java.util.Set;
-
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.scoring.AveragingRacePointsData;
 import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.scoring.ScoringSystem;
 
-@ScoringSystem(uuid = SPKAConstants.UUID_2011, name = SPKAConstants.NAME_2011)
-public class Scorer2011 extends Scorer2010 {
+public class SPKARacePointsData2011<T extends Scores> extends AveragingRacePointsData<T> {
+	public SPKARacePointsData2011(T scores, FleetMethod fleetMethod, AveragingMethod averagingMethod, Rounding rounding) {
+		super(scores, fleetMethod, averagingMethod, rounding);
+	}
+
 	@Override
-	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots) {
-		return new SPKAScoresFactory2011().newScores(pilots, races);
+	protected int getPointsForNoLaps(Pilot pilot, Race race) {
+		if (race.getAttendees().containsKey(pilot)) {
+			return getFleetSize(race) + 1;
+		} else {
+			return getFleetSize(race) + 2;
+		}
 	}
 }

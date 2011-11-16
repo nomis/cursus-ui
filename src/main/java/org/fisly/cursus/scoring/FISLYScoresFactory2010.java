@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.spka.cursus.scoring;
+package org.fisly.cursus.scoring;
 
 import eu.lp0.cursus.scoring.AbstractScoresFactory;
 import eu.lp0.cursus.scoring.AveragingRacePointsData;
@@ -39,7 +39,9 @@ import eu.lp0.cursus.scoring.RacePointsData;
 import eu.lp0.cursus.scoring.RacePositionsData;
 import eu.lp0.cursus.scoring.Scores;
 
-public class ScoresFactory2010 extends AbstractScoresFactory {
+public class FISLYScoresFactory2010 extends AbstractScoresFactory {
+	protected static final int RACES_PER_DISCARD = 4;
+
 	@Override
 	public RaceLapsData newRaceLapsData(Scores scores) {
 		return new GenericRaceLapsData<Scores>(scores, false, true);
@@ -63,7 +65,7 @@ public class ScoresFactory2010 extends AbstractScoresFactory {
 
 	@Override
 	public RaceDiscardsData newRaceDiscardsData(Scores scores) {
-		return new GenericRaceDiscardsData<Scores>(scores, new GenericDiscardCalculator(SPKAConstants.RACES_PER_DISCARD));
+		return new GenericRaceDiscardsData<Scores>(scores, new GenericDiscardCalculator(RACES_PER_DISCARD));
 	}
 
 	@Override
