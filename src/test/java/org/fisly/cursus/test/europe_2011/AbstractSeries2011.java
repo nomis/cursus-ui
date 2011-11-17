@@ -38,7 +38,7 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 	protected final int SERIES_M_FLEET = 61;
 	protected final int SERIES_F_FLEET = 13;
 
-	protected final String EVENT1_NAME = "FISLY European Championships 2011"; //$NON-NLS-1$
+	protected final String EVENT1_NAME = "Class 8"; //$NON-NLS-1$
 	protected final int EVENT1_M_FLEET = 61;
 	protected final int EVENT1_F_FLEET = 12;
 	protected final String RACE1_NAME = "Race 1"; //$NON-NLS-1$

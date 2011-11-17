@@ -31,9 +31,9 @@ import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.test.util.OverallAssertUtil;
 
 /**
- * Scores for the championship (06/06/2011 to 09/09/2011)
+ * Scores for the Class 8 championship (06/06/2011 to 09/09/2011)
  */
-public class Series2011Scores extends AbstractSeries2011 {
+public class Series2011Class8Scores extends AbstractSeries2011 {
 	@Before
 	public void createData() throws Exception {
 		createEvent1Races();
