@@ -39,7 +39,7 @@ import eu.lp0.cursus.util.Messages;
  */
 @Entity(name = "race_attendee")
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "race_id", "pilot_id" }) })
-public class RaceAttendee extends AbstractEntity {
+public final class RaceAttendee extends AbstractEntity {
 	/**
 	 * The fleet consists only of the PILOTs
 	 * 

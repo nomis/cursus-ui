@@ -54,7 +54,7 @@ import eu.lp0.cursus.ui.tree.RaceTree;
 import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
 
-public class MainWindow extends JFrame implements Displayable, DatabaseWindow {
+public final class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 	private final Main main;
 
 	private JFrameAutoPrefs prefs = new JFrameAutoPrefs(this);

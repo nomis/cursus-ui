@@ -24,10 +24,10 @@ import java.util.concurrent.atomic.AtomicLong;
 import eu.lp0.cursus.util.Messages;
 
 public class MemoryDatabase extends Database {
-	private static final AtomicLong untitled = new AtomicLong();
+	private static final AtomicLong UNTITLED = new AtomicLong();
 
 	public MemoryDatabase() throws SQLException, InvalidDatabaseException {
-		super(String.format(Messages.getString("db.untitled"), untitled.incrementAndGet()), "jdbc:hsqldb:mem:" + UUID.randomUUID(), "SA", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		super(String.format(Messages.getString("db.untitled"), UNTITLED.incrementAndGet()), "jdbc:hsqldb:mem:" + UUID.randomUUID(), "SA", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	@Override

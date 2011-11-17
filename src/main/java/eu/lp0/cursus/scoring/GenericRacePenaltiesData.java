@@ -46,43 +46,7 @@ public class GenericRacePenaltiesData<T extends ScoredData> extends AbstractRace
 			return 0;
 		}
 
-		// Count previous automatic penalties
-		int autoPenalties = 0;
-		List<Race> previousRaces = new ArrayList<Race>(scores.getRaces().size() * 2);
-		switch (method) {
-		case RACE:
-			break;
-
-		case EVENT:
-			previousRaces.addAll(race.getEvent().getRaces());
-			break;
-
-		case SERIES:
-			for (Event event : scores.getSeries().getEvents()) {
-				previousRaces.addAll(event.getRaces());
-			}
-			break;
-		}
-		for (Race previousRace : previousRaces) {
-			if (previousRace.equals(race)) {
-				break;
-			} else {
-				RaceAttendee previousAttendee = previousRace.getAttendees().get(pilot);
-				if (previousAttendee != null) {
-					for (Penalty penalty : previousAttendee.getPenalties()) {
-						if (penalty.getType() == Penalty.Type.AUTOMATIC) {
-							autoPenalties += penalty.getValue();
-							// Don't allow negative automatic penalties, that just gets silly
-							if (autoPenalties < 0) {
-								autoPenalties = 0;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		// Calculate race penalties
+		int autoPenalties = countPreviousAutomaticPenalties(pilot, race);
 		int penalties = 0;
 		for (Penalty penalty : attendee.getPenalties()) {
 			switch (penalty.getType()) {
@@ -117,5 +81,47 @@ public class GenericRacePenaltiesData<T extends ScoredData> extends AbstractRace
 		}
 
 		return penalties;
+	}
+
+	protected int countPreviousAutomaticPenalties(Pilot pilot, Race race) {
+		int autoPenalties = 0;
+		for (Race previousRace : findPreviousRaces(race)) {
+			if (previousRace.equals(race)) {
+				break;
+			} else {
+				RaceAttendee previousAttendee = previousRace.getAttendees().get(pilot);
+				if (previousAttendee != null) {
+					for (Penalty penalty : previousAttendee.getPenalties()) {
+						if (penalty.getType() == Penalty.Type.AUTOMATIC) {
+							autoPenalties += penalty.getValue();
+							// Don't allow negative automatic penalties, that just gets silly
+							if (autoPenalties < 0) {
+								autoPenalties = 0;
+							}
+						}
+					}
+				}
+			}
+		}
+		return autoPenalties;
+	}
+
+	protected final List<Race> findPreviousRaces(Race race) {
+		List<Race> previousRaces = new ArrayList<Race>(scores.getRaces().size() * 2);
+		switch (method) {
+		case RACE:
+			break;
+
+		case EVENT:
+			previousRaces.addAll(race.getEvent().getRaces());
+			break;
+
+		case SERIES:
+			for (Event event : scores.getSeries().getEvents()) {
+				previousRaces.addAll(event.getRaces());
+			}
+			break;
+		}
+		return previousRaces;
 	}
 }

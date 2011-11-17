@@ -24,7 +24,7 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 
 public final class IDGenerator {
-	private static final Supplier<AtomicLong> value = Suppliers.memoizeWithExpiration(new Supplier<AtomicLong>() {
+	private static final Supplier<AtomicLong> VALUE = Suppliers.memoizeWithExpiration(new Supplier<AtomicLong>() {
 		@Override
 		public AtomicLong get() {
 			return new AtomicLong(System.nanoTime());
@@ -35,6 +35,6 @@ public final class IDGenerator {
 	}
 
 	public static final Long next() {
-		return value.get().getAndIncrement();
+		return VALUE.get().getAndIncrement();
 	}
 }

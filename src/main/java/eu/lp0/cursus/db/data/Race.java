@@ -44,7 +44,7 @@ import eu.lp0.cursus.util.Constants;
  */
 @Entity(name = "race")
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "event_id", "name" }) })
-public class Race extends AbstractEntity implements Comparable<Race>, RaceEntity {
+public final class Race extends AbstractEntity implements Comparable<Race>, RaceEntity {
 	Race() {
 	}
 

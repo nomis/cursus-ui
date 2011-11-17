@@ -23,7 +23,7 @@ import javax.persistence.EntityTransaction;
 import com.google.common.base.Preconditions;
 
 public class DatabaseSession {
-	private static final ThreadLocal<EntityManager> threads = new ThreadLocal<EntityManager>();
+	private static final ThreadLocal<EntityManager> THREADS = new ThreadLocal<EntityManager>();
 	private final Database database;
 
 	DatabaseSession(Database database) {
@@ -31,12 +31,12 @@ public class DatabaseSession {
 	}
 
 	void startSession() {
-		Preconditions.checkState(threads.get() == null, "Session already open"); //$NON-NLS-1$
-		threads.set(database.createEntityManager());
+		Preconditions.checkState(THREADS.get() == null, "Session already open"); //$NON-NLS-1$
+		THREADS.set(database.createEntityManager());
 	}
 
 	public static EntityManager getEntityManager() {
-		EntityManager em = threads.get();
+		EntityManager em = THREADS.get();
 		Preconditions.checkState(em != null, "Session not open"); //$NON-NLS-1$
 		return em;
 	}
@@ -63,6 +63,6 @@ public class DatabaseSession {
 
 	void endSession() {
 		getEntityManager().close();
-		threads.set(null);
+		THREADS.set(null);
 	}
 }

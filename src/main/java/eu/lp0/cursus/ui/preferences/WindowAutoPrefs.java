@@ -76,7 +76,7 @@ public class WindowAutoPrefs {
 		});
 	}
 
-	protected String makePrefName(String key) {
+	protected final String makePrefName(String key) {
 		return window.getClass().getSimpleName() + key;
 	}
 

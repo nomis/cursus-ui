@@ -73,11 +73,11 @@ public abstract class Database {
 		return emf.createEntityManager();
 	}
 
-	public void startSession() {
+	public final void startSession() {
 		session.startSession();
 	}
 
-	public void endSession() {
+	public final void endSession() {
 		session.endSession();
 	}
 

@@ -28,7 +28,7 @@ import eu.lp0.cursus.util.Constants;
  * Penalty
  */
 @Embeddable
-public class Penalty {
+public final class Penalty {
 	public enum Type {
 		/** Number of penalties where the points given for them are calculated automatically */
 		AUTOMATIC,

@@ -24,7 +24,7 @@ import com.google.common.base.Preconditions;
 import eu.lp0.cursus.db.data.Race;
 
 public class GenericDiscardCalculator implements DiscardCalculator {
-	private int racesPerDiscard;
+	private final int racesPerDiscard;
 
 	public GenericDiscardCalculator(int racesPerDiscard) {
 		Preconditions.checkArgument(racesPerDiscard > 1);

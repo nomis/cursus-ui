@@ -41,7 +41,7 @@ public abstract class AbstractEntity implements Cloneable {
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public final boolean equals(Object o) {
 		if (o == this) {
 			return true;
 		}
@@ -60,7 +60,7 @@ public abstract class AbstractEntity implements Cloneable {
 	}
 
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		long fixedId = getId();
 		return (int)(fixedId ^ (fixedId >>> 32));
 	}

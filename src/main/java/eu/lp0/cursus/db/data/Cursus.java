@@ -26,7 +26,7 @@ import eu.lp0.cursus.util.Constants;
  * Database identifier
  */
 @Entity(name = "cursus")
-public class Cursus extends AbstractEntity {
+public final class Cursus extends AbstractEntity {
 	public Cursus() {
 	}
 

@@ -33,7 +33,7 @@ import eu.lp0.cursus.util.Constants;
  */
 // TODO this needs a better name
 @Embeddable
-public class RaceEvent {
+public final class RaceEvent {
 	public enum Type {
 		START, LAP, INVALID_LAP, FINISH;
 	}

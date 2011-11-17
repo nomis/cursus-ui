@@ -34,7 +34,7 @@ import eu.lp0.cursus.util.Constants;
  * Race series
  */
 @Entity(name = "series")
-public class Series extends AbstractEntity implements Comparable<Series>, RaceEntity {
+public final class Series extends AbstractEntity implements Comparable<Series>, RaceEntity {
 	public Series() {
 		this("", ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}

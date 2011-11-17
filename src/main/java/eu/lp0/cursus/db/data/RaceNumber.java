@@ -34,7 +34,7 @@ import eu.lp0.cursus.util.Constants;
 
 @Entity(name = "race_no")
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "series_id", "organisation", "number" }) })
-public class RaceNumber extends AbstractEntity implements Comparable<RaceNumber> {
+public final class RaceNumber extends AbstractEntity implements Comparable<RaceNumber> {
 	public static final Pattern RACE_NUMBER_PATTERN = Pattern.compile("^([^0-9]+)([0-9]+)$"); //$NON-NLS-1$
 
 	private String organisation;

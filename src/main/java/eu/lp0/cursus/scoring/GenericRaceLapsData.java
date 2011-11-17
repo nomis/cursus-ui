@@ -54,18 +54,17 @@ public class GenericRaceLapsData<T extends ScoredData> extends AbstractRaceLapsD
 	protected Iterable<Pilot> calculateRaceLaps(Race race) {
 		// Convert a list of race events into a list of valid pilot laps
 		return Iterables.filter(Iterables.transform(Iterables.unmodifiableIterable(race.getEvents()), new Function<RaceEvent, Pilot>() {
-			boolean beforeStart = true;
-			boolean afterFinish = false;
+			boolean scoring = scoreBeforeStart;
 
 			@Override
 			public Pilot apply(RaceEvent event) {
 				switch (event.getType()) {
 				case START:
-					beforeStart = false;
+					scoring = true;
 					break;
 
 				case LAP:
-					if ((!beforeStart || scoreBeforeStart) && (!afterFinish || scoreAfterFinish)) {
+					if (scoring) {
 						return event.getPilot();
 					}
 					break;
@@ -74,7 +73,7 @@ public class GenericRaceLapsData<T extends ScoredData> extends AbstractRaceLapsD
 					break;
 
 				case FINISH:
-					afterFinish = true;
+					scoring = scoreAfterFinish;
 					break;
 				}
 

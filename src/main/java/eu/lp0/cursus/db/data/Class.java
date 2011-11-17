@@ -38,7 +38,7 @@ import eu.lp0.cursus.util.Constants;
  */
 @Entity(name = "class")
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "series_id", "name" }) })
-public class Class extends AbstractEntity implements Comparable<Class>, NamedEntity {
+public final class Class extends AbstractEntity implements Comparable<Class>, NamedEntity {
 	private String name;
 
 	Class() {

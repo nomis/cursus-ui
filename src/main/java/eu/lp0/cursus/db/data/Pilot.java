@@ -44,7 +44,7 @@ import eu.lp0.cursus.util.Constants;
  */
 @Entity(name = "pilot")
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "series_id", "race_no_id" }) })
-public class Pilot extends AbstractEntity {
+public final class Pilot extends AbstractEntity {
 	Pilot() {
 	}
 
