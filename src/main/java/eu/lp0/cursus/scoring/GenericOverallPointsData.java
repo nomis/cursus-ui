@@ -28,10 +28,6 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
 public class GenericOverallPointsData<T extends ScoredData & RacePointsData & RaceDiscardsData & OverallPenaltiesData> extends AbstractOverallPointsData<T> {
-	public enum OverallFleetMethod {
-		FILTERED, UNFILTERED;
-	}
-
 	public GenericOverallPointsData(T scores) {
 		super(scores);
 	}
