@@ -17,8 +17,8 @@
  */
 package eu.lp0.cursus.ui.menu;
 
+import java.awt.Frame;
 import java.awt.Toolkit;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -32,11 +32,12 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import eu.lp0.cursus.ui.AboutDialog;
 import eu.lp0.cursus.ui.DatabaseManager;
 import eu.lp0.cursus.util.Messages;
 
 public class MainMenu extends JMenuBar {
-	private final Window win;
+	private final Frame win;
 	private final DatabaseManager dbMgr;
 
 	private JMenu mnuFile;
@@ -50,7 +51,7 @@ public class MainMenu extends JMenuBar {
 	private JMenu mnuHelp;
 	private JMenuItem mnuHelpAbout;
 
-	public MainMenu(Window win, DatabaseManager dbMgr) {
+	public MainMenu(Frame win, DatabaseManager dbMgr) {
 		this.win = win;
 		this.dbMgr = dbMgr;
 
@@ -132,6 +133,11 @@ public class MainMenu extends JMenuBar {
 		mnuHelp.add(mnuHelpAbout);
 		mnuHelpAbout.setText(Messages.getString("menu.help.about")); //$NON-NLS-1$
 		mnuHelpAbout.setMnemonic(Messages.getKeyEvent("menu.help.about")); //$NON-NLS-1$
+		mnuHelpAbout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				new AboutDialog(win).display();
+			}
+		});
 	}
 
 	public void enableOpen(boolean enabled) {
