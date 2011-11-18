@@ -22,8 +22,10 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
@@ -36,7 +38,7 @@ public abstract class AbstractScores extends AbstractForwardingScores {
 	protected final Set<Pilot> fleet;
 	private final ScoresFactory scoresFactory;
 
-	public AbstractScores(Set<Pilot> pilots, List<Race> races, FleetFilter fleetFilter, ScoresFactory scoresFactory) {
+	public AbstractScores(Set<Pilot> pilots, List<Race> races, Predicate<Pilot> fleetFilter, ScoresFactory scoresFactory) {
 		this.pilots = ImmutableSet.copyOf(pilots);
 		this.races = ImmutableList.copyOf(races);
 		this.scoresFactory = scoresFactory;
@@ -54,7 +56,7 @@ public abstract class AbstractScores extends AbstractForwardingScores {
 		Preconditions.checkArgument(checkSeries.size() == 1, "Multiple series not allowed"); //$NON-NLS-1$
 		series = checkSeries.iterator().next();
 
-		fleet = ImmutableSet.copyOf(fleetFilter.apply(series.getPilots()));
+		fleet = ImmutableSet.copyOf(Sets.filter(series.getPilots(), fleetFilter));
 	}
 
 	// ForwardingScores

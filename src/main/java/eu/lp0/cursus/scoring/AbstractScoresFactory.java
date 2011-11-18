@@ -20,12 +20,14 @@ package eu.lp0.cursus.scoring;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.base.Predicate;
+
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
 public abstract class AbstractScoresFactory implements ScoresFactory {
 	@Override
-	public Scores newScores(Set<Pilot> pilots, List<Race> races, FleetFilter fleetFilter) {
+	public Scores newScores(Set<Pilot> pilots, List<Race> races, Predicate<Pilot> fleetFilter) {
 		return new GenericScores(pilots, races, fleetFilter, this);
 	}
 }

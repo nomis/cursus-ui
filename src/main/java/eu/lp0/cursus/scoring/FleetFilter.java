@@ -20,30 +20,20 @@ package eu.lp0.cursus.scoring;
 import java.util.Set;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.Sets;
 
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Pilot;
 
-public abstract class FleetFilter implements Predicate<Pilot> {
-	public abstract boolean apply(Pilot pilot);
+public class FleetFilter {
+	public static Predicate<Pilot> from(final Set<Class> classes) {
+		if (classes.isEmpty()) {
+			return Predicates.alwaysTrue();
+		}
 
-	public final Set<Pilot> apply(Set<Pilot> pilots) {
-		return Sets.filter(pilots, this);
-	}
-
-	public static FleetFilter any() {
-		return new FleetFilter() {
-			@Override
-			public boolean apply(Pilot pilot) {
-				return true;
-			}
-		};
-	}
-
-	public static FleetFilter from(final Set<Class> classes) {
-		return new FleetFilter() {
+		return new Predicate<Pilot>() {
 			@Override
 			public boolean apply(Pilot pilot) {
 				return !Sets.intersection(pilot.getClasses(), classes).isEmpty();
@@ -51,20 +41,32 @@ public abstract class FleetFilter implements Predicate<Pilot> {
 		};
 	}
 
-	public static FleetFilter from(final Gender gender) {
-		return new FleetFilter() {
+	public static Predicate<Pilot> from(final Gender gender) {
+		if (gender == null) {
+			return Predicates.alwaysTrue();
+		}
+
+		return new Predicate<Pilot>() {
 			@Override
 			public boolean apply(Pilot pilot) {
-				return gender == null || pilot.getGender() == gender || pilot.getGender() == null;
+				return pilot.getGender() == gender || pilot.getGender() == null;
 			}
 		};
 	}
 
-	public static FleetFilter from(final Set<Class> classes, final Gender gender) {
-		final FleetFilter classFilter = FleetFilter.from(classes);
-		final FleetFilter genderFilter = FleetFilter.from(gender);
+	public static Predicate<Pilot> from(final Set<Class> classes, final Gender gender) {
+		if (classes.isEmpty()) {
+			return from(gender);
+		}
 
-		return new FleetFilter() {
+		if (gender == null) {
+			return from(classes);
+		}
+
+		final Predicate<Pilot> classFilter = FleetFilter.from(classes);
+		final Predicate<Pilot> genderFilter = FleetFilter.from(gender);
+
+		return new Predicate<Pilot>() {
 			@Override
 			public boolean apply(Pilot pilot) {
 				return genderFilter.apply(pilot) && classFilter.apply(pilot);

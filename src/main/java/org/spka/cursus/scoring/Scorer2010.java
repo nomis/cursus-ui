@@ -20,10 +20,11 @@ package org.spka.cursus.scoring;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.base.Predicate;
+
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.AbstractScorer;
-import eu.lp0.cursus.scoring.FleetFilter;
 import eu.lp0.cursus.scoring.Scorer;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.scoring.ScoringSystem;
@@ -31,7 +32,7 @@ import eu.lp0.cursus.scoring.ScoringSystem;
 @ScoringSystem(uuid = SPKAConstants.UUID_2010, name = SPKAConstants.NAME_2010)
 public class Scorer2010 extends AbstractScorer implements Scorer {
 	@Override
-	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots, FleetFilter fleetFilter) {
+	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots, Predicate<Pilot> fleetFilter) {
 		return new SPKAScoresFactory2010().newScores(pilots, races, fleetFilter);
 	}
 }
