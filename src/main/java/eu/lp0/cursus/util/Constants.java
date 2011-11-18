@@ -22,17 +22,6 @@ public class Constants {
 	public static final String APP_VERSION = "0.0.1"; //$NON-NLS-1$
 	public static final String APP_URL = "http://cursus.lp0.eu/"; //$NON-NLS-1$
 	public static final String APP_DESC = APP_NAME + " " + APP_VERSION; //$NON-NLS-1$
-	public static final String COPYRIGHT_NOTICE = "Copyright 2011  Simon Arlott\n" //$NON-NLS-1$
-			+ "\n" //$NON-NLS-1$
-			+ "This program is free software: you can redistribute it and/or modify\n" //$NON-NLS-1$
-			+ "it under the terms of the GNU General Public License as published by\n" //$NON-NLS-1$
-			+ "the Free Software Foundation, either version 3 of the License, or\n" //$NON-NLS-1$
-			+ "(at your option) any later version.\n" //$NON-NLS-1$
-			+ "\n" //$NON-NLS-1$
-			+ "This program is distributed in the hope that it will be useful,\n" //$NON-NLS-1$
-			+ "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" //$NON-NLS-1$
-			+ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" //$NON-NLS-1$
-			+ "GNU General Public License for more details."; //$NON-NLS-1$
 
 	public static final String EN_DASH = " \u2013 "; //$NON-NLS-1$
 

@@ -27,6 +27,8 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.Iterator;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -54,7 +56,7 @@ import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
 public class AboutDialog extends JDialog implements Displayable, ActionListener {
-	private static final String TEXT_SPLIT = "\n\n------------------------------------------------------------------------\n\n"; //$NON-NLS-1$
+	private static final String TEXT_SPLIT = "\n------------------------------------------------------------------------\n\n"; //$NON-NLS-1$
 
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -111,14 +113,7 @@ public class AboutDialog extends JDialog implements Displayable, ActionListener 
 		JScrollPane scrCopying = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		getContentPane().add(scrCopying, "2, 6, 3, 1"); //$NON-NLS-1$
 
-		String strCopying;
-		try {
-			strCopying = IOUtils.toString(Main.class.getResource("COPYING"), "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
-		} catch (IOException e) {
-			log.error("Unable to load COPYING file", e); //$NON-NLS-1$
-			strCopying = "Error loading COPYING file: " + e.getLocalizedMessage(); //$NON-NLS-1$
-		}
-		JTextArea txtCopying = new JTextArea(Constants.COPYRIGHT_NOTICE + TEXT_SPLIT + strCopying);
+		JTextArea txtCopying = new JTextArea(loadResources("COPYRIGHT", "LICENCE")); //$NON-NLS-1$ //$NON-NLS-2$
 		txtCopying.setFont(Font.decode(Font.MONOSPACED));
 		txtCopying.setEditable(false);
 		scrCopying.setViewportView(txtCopying);
@@ -141,6 +136,28 @@ public class AboutDialog extends JDialog implements Displayable, ActionListener 
 		setMinimumSize(getSize());
 		setSize(getSize().width, getSize().height * 3 / 2);
 		btnClose.requestFocusInWindow();
+	}
+
+	private String loadResources(String... names) {
+		StringBuilder sb = new StringBuilder();
+		Iterator<String> it = Arrays.asList(names).iterator();
+		while (it.hasNext()) {
+			String name = it.next();
+
+			String tmp;
+			try {
+				tmp = IOUtils.toString(Main.class.getResource(name), "UTF-8"); //$NON-NLS-1$
+			} catch (IOException e) {
+				log.error("Unable to load " + name + " resource", e); //$NON-NLS-1$ //$NON-NLS-2$
+				tmp = "Error loading " + name + " resource: " + e.getLocalizedMessage(); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+			sb.append(tmp);
+
+			if (it.hasNext()) {
+				sb.append(TEXT_SPLIT);
+			}
+		}
+		return sb.toString();
 	}
 
 	@Override
