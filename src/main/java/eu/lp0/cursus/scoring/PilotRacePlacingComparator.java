@@ -52,7 +52,7 @@ public class PilotRacePlacingComparator<T extends ScoredData & RacePointsData & 
 
 	@Override
 	public int compare(Pilot o1, Pilot o2) {
-		return Ordering.<Integer> natural().lexicographical().compare(racePlacings.get(o1).get(), racePlacings.get(o2).get());
+		return Ordering.<Integer>natural().lexicographical().compare(racePlacings.get(o1).get(), racePlacings.get(o2).get());
 	}
 
 	protected class RacePlacingSupplier implements Supplier<List<Integer>> {

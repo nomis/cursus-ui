@@ -100,7 +100,7 @@ public class SeriesPilotsTab<O extends Frame & DatabaseWindow> extends AbstractD
 			@Override
 			public void run() {
 				currentSeries = null;
-				model.updateModel(Collections.<Pilot> emptyList());
+				model.updateModel(Collections.<Pilot>emptyList());
 			}
 		});
 	}
