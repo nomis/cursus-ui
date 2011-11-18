@@ -76,14 +76,14 @@ public class AboutDialog extends JDialog implements Displayable, ActionListener 
 
 	private void initialise() {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle(Messages.getString("about.title")); //$NON-NLS-1$
+		setTitle(String.format(Messages.getString("about.title"), Constants.APP_DESC)); //$NON-NLS-1$
 		DefaultUnitConverter duc = DefaultUnitConverter.getInstance();
 
 		FormLayout layout = new FormLayout("2dlu, pref, fill:pref:grow, max(30dlu;pref), 2dlu", //$NON-NLS-1$
 				"2dlu, max(15dlu;pref), 2dlu, max(15dlu;pref), 2dlu, fill:max(100dlu;pref):grow, 2dlu, max(16dlu;pref), 2dlu"); //$NON-NLS-1$
 		getContentPane().setLayout(layout);
 
-		JLabel lblName = new JLabel(Constants.APP_DESC + ": " + Messages.getString("about.description")); //$NON-NLS-1$ //$NON-NLS-2$
+		JLabel lblName = new JLabel(Constants.APP_NAME + ": " + Messages.getString("about.description")); //$NON-NLS-1$ //$NON-NLS-2$
 		getContentPane().add(lblName, "2, 2, 3, 1"); //$NON-NLS-1$
 
 		JButton btnLink = new JButton();
