@@ -90,7 +90,7 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 		switch (fleetMethod) {
 		case RACE:
 			for (Race race : scores.getRaces()) {
-				fleetSizes.put(race, Sets.intersection(race.getAttendees().keySet(), scores.getFleet()).size());
+				fleetSizes.put(race, Sets.intersection(scores.getFleet(), race.getAttendees().keySet()).size());
 			}
 			break;
 
@@ -104,7 +104,7 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 					for (Race race2 : event.getRaces()) {
 						pilots.addAll(race2.getAttendees().keySet());
 					}
-					eventFleetSizes.put(event, Sets.intersection(pilots, scores.getFleet()).size());
+					eventFleetSizes.put(event, Sets.intersection(scores.getFleet(), pilots).size());
 				}
 
 				fleetSizes.put(race, eventFleetSizes.get(event));
@@ -121,7 +121,7 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 				}
 			}
 
-			int fleetSize = Sets.intersection(pilots, scores.getFleet()).size();
+			int fleetSize = Sets.intersection(scores.getFleet(), pilots).size();
 			for (Race race : scores.getRaces()) {
 				fleetSizes.put(race, fleetSize);
 			}
