@@ -27,6 +27,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -144,14 +145,18 @@ public class AboutDialog extends JDialog implements Displayable, ActionListener 
 		while (it.hasNext()) {
 			String name = it.next();
 
-			String tmp;
+			String content;
 			try {
-				tmp = IOUtils.toString(Main.class.getResource(name), "UTF-8"); //$NON-NLS-1$
+				URL resource = Main.class.getResource(name);
+				if (resource == null) {
+					throw new IOException("Not found"); //$NON-NLS-1$
+				}
+				content = IOUtils.toString(resource, "UTF-8"); //$NON-NLS-1$
 			} catch (IOException e) {
 				log.error("Unable to load " + name + " resource", e); //$NON-NLS-1$ //$NON-NLS-2$
-				tmp = "Error loading " + name + " resource: " + e.getLocalizedMessage(); //$NON-NLS-1$ //$NON-NLS-2$
+				content = "Error loading " + name + " resource: " + e.getLocalizedMessage() + "\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
-			sb.append(tmp);
+			sb.append(content);
 
 			if (it.hasNext()) {
 				sb.append(TEXT_SPLIT);
