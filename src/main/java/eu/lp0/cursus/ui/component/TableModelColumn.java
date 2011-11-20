@@ -30,4 +30,6 @@ public @interface TableModelColumn {
 	public int index();
 
 	public String name();
+
+	public Class<?> type() default Object.class;
 }

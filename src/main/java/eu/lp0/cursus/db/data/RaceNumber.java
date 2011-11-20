@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.db.data;
 
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,11 +65,11 @@ public final class RaceNumber extends AbstractEntity implements Comparable<RaceN
 
 	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getOrganisation() {
-		return organisation.replaceAll("[0-9]", ""); //$NON-NLS-1$ //$NON-NLS-2$;
+		return organisation.replaceAll("[0-9]", "").toUpperCase(Locale.ENGLISH); //$NON-NLS-1$ //$NON-NLS-2$;
 	}
 
 	public void setOrganisation(String organisation) {
-		this.organisation = organisation.replaceAll("[0-9]", ""); //$NON-NLS-1$ //$NON-NLS-2$
+		this.organisation = organisation.replaceAll("[0-9]", "").toUpperCase(Locale.ENGLISH); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Column(nullable = false)
@@ -94,7 +95,8 @@ public final class RaceNumber extends AbstractEntity implements Comparable<RaceN
 
 	@Override
 	public int compareTo(RaceNumber o) {
-		return ComparisonChain.start().compare(getOrganisation(), o.getOrganisation()).compare(getNumber(), o.getNumber()).result();
+		return ComparisonChain.start().compare(getOrganisation(), o.getOrganisation()).compare(getNumber(), o.getNumber()).compare(getSeries(), o.getSeries())
+				.result();
 	}
 
 	@Override
@@ -108,12 +110,15 @@ public final class RaceNumber extends AbstractEntity implements Comparable<RaceN
 		String organisation = matcher.group(1);
 		int number = Integer.valueOf(matcher.group(2));
 
-		RaceNumber raceNumber = new RaceNumber(pilot, organisation, number);
-		for (RaceNumber pilotRaceNumber : pilot.getRaceNumbers()) {
-			if (pilotRaceNumber.compareTo(raceNumber) == 0) {
-				raceNumber = pilotRaceNumber;
+		return new RaceNumber(pilot, organisation, number).directReference();
+	}
+
+	private RaceNumber directReference() {
+		for (RaceNumber pilotRaceNumber : getPilot().getRaceNumbers()) {
+			if (pilotRaceNumber.compareTo(this) == 0) {
+				return pilotRaceNumber;
 			}
 		}
-		return raceNumber;
+		return this;
 	}
 }

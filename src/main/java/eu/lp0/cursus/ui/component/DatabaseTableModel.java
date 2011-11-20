@@ -37,7 +37,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -48,10 +50,13 @@ import org.slf4j.LoggerFactory;
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.AbstractDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
+import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 import eu.lp0.cursus.util.Messages;
 
+// TODO refactor this as the race number editing is a mess
 public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & DatabaseWindow> extends AbstractTableModel {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	protected O win;
@@ -117,11 +122,6 @@ public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & Data
 			log.error(String.format("get row=%d, column=%d", rowIndex, columnIndex), e); //$NON-NLS-1$
 			return null;
 		}
-	}
-
-	@Override
-	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return true;
 	}
 
 	public boolean setEditedValueAt(int rowIndex, int columnIndex, Object newValue) {
@@ -213,30 +213,64 @@ public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & Data
 		Enumeration<TableColumn> cols = table.getColumnModel().getColumns();
 		while (cols.hasMoreElements()) {
 			TableColumn col = cols.nextElement();
-			col.setCellEditor(getCellEditor(col.getModelIndex()));
+			col.setCellRenderer(createCellRenderer(col.getModelIndex()));
+			if (isCellEditable(col.getModelIndex())) {
+				col.setCellEditor(createCellEditor(col.getModelIndex()));
+			}
 		}
 	}
 
-	public TableCellEditor getCellEditor(int modelIndex) {
+	private TableCellRenderer createCellRenderer(int modelIndex) {
+		Class<?> type = getColumnClass(modelIndex);
+		if (type == List.class) {
+			TableModelColumn col = columnGetters.get(modelIndex).getAnnotation(TableModelColumn.class);
+			if (col.type() == RaceNumber.class) {
+				return new RaceNumberDatabaseTableCellRenderer();
+			}
+		}
+		return new DefaultTableCellRenderer();
+	}
+
+	private boolean isCellEditable(int columnIndex) {
+		return columnGetters.get(columnIndex).isAnnotationPresent(TableModelColumn.class);
+	}
+
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		return isCellEditable(columnIndex);
+	}
+
+	private TableCellEditor createCellEditor(int modelIndex) {
 		Class<?> type = getColumnClass(modelIndex);
 		if (type.isEnum()) {
 			Column col = columnGetters.get(modelIndex).getAnnotation(Column.class);
-			Vector<Object> values = new Vector<Object>();
-			if (col == null || col.nullable() == true) {
-				values.add(""); //$NON-NLS-1$
-			}
-			values.addAll(Arrays.asList((Object[])type.getEnumConstants()));
-			return new DatabaseTableCellEditor(new JComboBox(values));
+			return new EnumDatabaseTableCellEditor(type, col == null || col.nullable() == true);
 		} else if (type == String.class) {
-			return new DatabaseTableCellEditor(new JTextField());
+			return new DatabaseTableCellEditor<String>(new JTextField());
 		} else if (type == boolean.class) {
-			return new DatabaseTableCellEditor(new JCheckBox());
-		} else {
-			return null;
+			return new DatabaseTableCellEditor<Boolean>(new JCheckBox());
+		} else if (type == List.class) {
+			TableModelColumn col = columnGetters.get(modelIndex).getAnnotation(TableModelColumn.class);
+			if (col.type() == RaceNumber.class) {
+				return new RaceNumberDatabaseTableCellEditor();
+			}
+		}
+		return null;
+	}
+
+	private class DatabaseTableCellRenderer<R> extends DefaultTableCellRenderer {
+		@Override
+		@SuppressWarnings("unchecked")
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			return super.getTableCellRendererComponent(table, convertFromDatabase((R)value), isSelected, hasFocus, row, column);
+		}
+
+		protected Object convertFromDatabase(R value) {
+			return value;
 		}
 	}
 
-	public class DatabaseTableCellEditor extends DefaultCellEditor {
+	public class DatabaseTableCellEditor<E> extends DefaultCellEditor {
 		protected Integer rowIndex = null;
 		protected Integer columnIndex = null;
 
@@ -256,24 +290,101 @@ public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & Data
 		}
 
 		@Override
+		@SuppressWarnings("unchecked")
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 			rowIndex = table.convertRowIndexToModel(row);
 			columnIndex = table.convertColumnIndexToModel(column);
-			return super.getTableCellEditorComponent(table, value, isSelected, row, column);
+			return super.getTableCellEditorComponent(table, convertFromDatabase(getValueAt(rowIndex), (E)value), isSelected, row, column);
+		}
+
+		protected Object convertFromDatabase(T row, E value) {
+			return value;
+		}
+
+		@SuppressWarnings("unchecked")
+		protected E convertToDatabase(T row, Object value) {
+			return (E)value;
 		}
 
 		@Override
 		public boolean stopCellEditing() {
-			Object value = getCellEditorValue();
-			if (value != null && value.equals("") && DatabaseTableModel.this.getColumnClass(columnIndex).isEnum()) { //$NON-NLS-1$
-				value = null;
-			}
-
-			boolean ok = DatabaseTableModel.this.setEditedValueAt(rowIndex, columnIndex, value);
+			boolean ok = DatabaseTableModel.this.setEditedValueAt(rowIndex, columnIndex, convertToDatabase(getValueAt(rowIndex), getCellEditorValue()));
 			if (ok) {
 				cancelCellEditing();
 			}
 			return ok;
+		}
+	}
+
+	private static Vector<Object> generateEnumValues(Class<?> type, boolean nullable) {
+		Vector<Object> values = new Vector<Object>();
+		if (nullable) {
+			values.add(""); //$NON-NLS-1$
+		}
+		values.addAll(Arrays.asList((Object[])type.getEnumConstants()));
+		return values;
+	}
+
+	private class EnumDatabaseTableCellEditor extends DatabaseTableCellEditor<Enum<?>> {
+		public EnumDatabaseTableCellEditor(Class<?> type, boolean nullable) {
+			super(new JComboBox(generateEnumValues(type, nullable)));
+		}
+
+		@Override
+		protected Object convertFromDatabase(T row, Enum<?> value) {
+			if (value == null) {
+				return ""; //$NON-NLS-1$
+			}
+			return value;
+		}
+
+		@Override
+		protected Enum<?> convertToDatabase(T row, Object value) {
+			if (value.equals("")) { //$NON-NLS-1$
+				value = null;
+			}
+			return (Enum<?>)value;
+		}
+	}
+
+	private static String convertFromDatabase(List<RaceNumber> raceNos) {
+		StringBuilder sb = new StringBuilder();
+		for (RaceNumber raceNo : raceNos) {
+			if (sb.length() > 0) {
+				sb.append(", "); //$NON-NLS-1$
+			}
+			sb.append(raceNo);
+		}
+		return sb.toString();
+	}
+
+	private class RaceNumberDatabaseTableCellRenderer extends DatabaseTableCellRenderer<List<RaceNumber>> {
+		@Override
+		protected Object convertFromDatabase(List<RaceNumber> value) {
+			return DatabaseTableModel.convertFromDatabase(value);
+		}
+	}
+
+	private class RaceNumberDatabaseTableCellEditor extends DatabaseTableCellEditor<List<RaceNumber>> {
+		public RaceNumberDatabaseTableCellEditor() {
+			super(new JTextField());
+		}
+
+		@Override
+		protected Object convertFromDatabase(T row, List<RaceNumber> value) {
+			return DatabaseTableModel.convertFromDatabase(value);
+		}
+
+		@Override
+		protected List<RaceNumber> convertToDatabase(T row, Object values) {
+			Pilot pilot = (Pilot)row;
+			List<RaceNumber> raceNos = new ArrayList<RaceNumber>();
+			for (String value : values.toString().split("[ ,;/]+")) { //$NON-NLS-1$
+				if (value.length() > 0) {
+					raceNos.add(RaceNumber.valueOfFor(value, pilot));
+				}
+			}
+			return raceNos;
 		}
 	}
 }
