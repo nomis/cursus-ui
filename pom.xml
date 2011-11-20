@@ -119,28 +119,25 @@
 			<plugin>
 				<groupId>org.codehaus.mojo.webstart</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
-				<version>1.0-beta-1</version>
+				<version>1.0-beta-2</version>
 				<configuration>
 					<jnlp>
 						<mainClass>eu.lp0.cursus.app.Main</mainClass>
 					</jnlp>
 					<sign>
 						<keystore>${user.home}/.keystore-cursus.jks</keystore>
-						<keypass>password</keypass>
-						<storepass>password</storepass>
-						<storetype>jks</storetype>
 						<alias>cursus</alias>
-						<verify>true</verify>
+						<storepass>password</storepass>
+						<keypass>password</keypass>
 					</sign>
-					<pack200>true</pack200>
 					<resourcesDirectory>${project.basedir}/src/main/jnlp/resources</resourcesDirectory>
+					<pack200>true</pack200>
 					<gzip>true</gzip>
-					<unsign>true</unsign>
 				</configuration>
 				<executions>
 					<execution>
 						<goals>
-							<goal>jnlp</goal>
+							<goal>jnlp-inline</goal>
 						</goals>
 						<phase>package</phase>
 					</execution>
