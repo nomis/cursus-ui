@@ -94,8 +94,6 @@ public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T ext
 		Dimension min = new Dimension(duc.dialogUnitXAsPixel(150, this), duc.dialogUnitYAsPixel(75, this));
 		min.width += getInsets().left + getInsets().right;
 		min.height += getInsets().top + getInsets().bottom;
-		// setSize(min);
-		// setMinimumSize(min);
 
 		FormLayout layout = new FormLayout("2dlu, right:max(30dlu;pref), 2dlu, fill:max(0dlu;pref):grow, max(30dlu;pref), 2dlu, max(30dlu;pref), 2dlu", //$NON-NLS-1$
 				"2dlu, max(15dlu;pref), 2dlu, max(15dlu;pref), 2dlu:grow, max(16dlu;pref), 2dlu"); //$NON-NLS-1$
