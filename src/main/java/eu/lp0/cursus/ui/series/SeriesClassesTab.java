@@ -55,6 +55,7 @@ public class SeriesClassesTab<O extends Frame & DatabaseWindow> extends Abstract
 
 		list = new ClassTree<O>(win, this);
 		list.setBorder(new EmptyBorder(2, 2, 2, 2));
+		list.setShowsRootHandles(false);
 		leftScrollPane.setViewportView(list);
 		leftScrollPane.setBorder(null);
 
