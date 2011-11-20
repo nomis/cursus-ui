@@ -48,7 +48,7 @@ public class ClassPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 	}
 
 	public ClassPopupMenu(O owner, SeriesClassesTab<O> tab, Class clazz) {
-		super(owner, clazz, classDAO);
+		super(owner, clazz);
 		this.tab = tab;
 
 		mnuEditClass = new JMenuItem(Messages.getString("menu.class.edit")); //$NON-NLS-1$
@@ -89,5 +89,11 @@ public class ClassPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 		if (win != null) {
 			win.display();
 		}
+	}
+
+	@Override
+	protected void doDelete() {
+		Class clazz = classDAO.get(item);
+		clazz.getSeries().getClasses().remove(clazz);
 	}
 }

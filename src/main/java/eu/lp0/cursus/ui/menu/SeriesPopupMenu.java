@@ -48,7 +48,7 @@ public class SeriesPopupMenu<O extends Frame & DatabaseWindow> extends AbstractN
 	}
 
 	public SeriesPopupMenu(O owner, Series series) {
-		super(owner, series, seriesDAO);
+		super(owner, series);
 
 		mnuNewEvent = new JMenuItem(Messages.getString("menu.event.new")); //$NON-NLS-1$
 		mnuNewEvent.setActionCommand(Commands.NEW_EVENT.toString());
@@ -96,5 +96,11 @@ public class SeriesPopupMenu<O extends Frame & DatabaseWindow> extends AbstractN
 		if (win != null) {
 			win.display();
 		}
+	}
+
+	@Override
+	protected void doDelete() {
+		Series series = seriesDAO.get(item);
+		seriesDAO.remove(series);
 	}
 }

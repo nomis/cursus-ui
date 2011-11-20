@@ -105,7 +105,7 @@ public final class Event extends AbstractEntity implements Comparable<Event>, Ra
 
 	private List<Race> races = new ArrayList<Race>();
 
-	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "event")
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "event", orphanRemoval = true)
 	@OrderColumn(name = "event_order", nullable = false)
 	public List<Race> getRaces() {
 		while (races.remove(null)) {

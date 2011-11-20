@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.lp0.cursus.db.DatabaseSession;
-import eu.lp0.cursus.db.dao.NamedEntityDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
 import eu.lp0.cursus.db.data.NamedEntity;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
@@ -40,12 +39,10 @@ public abstract class AbstractNamedEntityPopupMenu<O extends Frame & DatabaseWin
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 	protected final O owner;
 	protected final T item;
-	private final NamedEntityDAO<T> dao;
 
-	public AbstractNamedEntityPopupMenu(O owner, T item, NamedEntityDAO<T> dao) {
+	public AbstractNamedEntityPopupMenu(O owner, T item) {
 		this.owner = owner;
 		this.item = item;
-		this.dao = dao;
 	}
 
 	protected void confirmDelete(String action) {
@@ -68,7 +65,7 @@ public abstract class AbstractNamedEntityPopupMenu<O extends Frame & DatabaseWin
 				owner.getDatabase().startSession();
 				try {
 					DatabaseSession.begin();
-					dao.remove(dao.get(item));
+					doDelete();
 					DatabaseSession.commit();
 				} catch (PersistenceException e) {
 					log.error("Unable to delete", e); //$NON-NLS-1$
@@ -82,4 +79,6 @@ public abstract class AbstractNamedEntityPopupMenu<O extends Frame & DatabaseWin
 			}
 		});
 	}
+
+	protected abstract void doDelete();
 }

@@ -48,7 +48,7 @@ public class EventPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 	}
 
 	public EventPopupMenu(O owner, Event event) {
-		super(owner, event, eventDAO);
+		super(owner, event);
 
 		mnuNewRace = new JMenuItem(Messages.getString("menu.race.new")); //$NON-NLS-1$
 		mnuNewRace.setActionCommand(Commands.NEW_RACE.toString());
@@ -96,5 +96,11 @@ public class EventPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 		if (win != null) {
 			win.display();
 		}
+	}
+
+	@Override
+	protected void doDelete() {
+		Event event = eventDAO.get(item);
+		event.getSeries().getEvents().remove(event);
 	}
 }

@@ -72,7 +72,7 @@ public final class Series extends AbstractEntity implements Comparable<Series>, 
 
 	private List<Event> events = new ArrayList<Event>();
 
-	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "series")
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "series", orphanRemoval = true)
 	@OrderColumn(name = "series_order", nullable = false)
 	public List<Event> getEvents() {
 		while (events.remove(null)) {
@@ -88,7 +88,7 @@ public final class Series extends AbstractEntity implements Comparable<Series>, 
 
 	private Set<Pilot> pilots = new HashSet<Pilot>();
 
-	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "series")
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "series", orphanRemoval = true)
 	public Set<Pilot> getPilots() {
 		return pilots;
 	}
@@ -99,7 +99,7 @@ public final class Series extends AbstractEntity implements Comparable<Series>, 
 
 	private Set<RaceNumber> raceNumbers = new HashSet<RaceNumber>();
 
-	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "series")
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "series", orphanRemoval = true)
 	public Set<RaceNumber> getRaceNumbers() {
 		return raceNumbers;
 	}
@@ -110,7 +110,7 @@ public final class Series extends AbstractEntity implements Comparable<Series>, 
 
 	private Set<Class> classes = new HashSet<Class>();
 
-	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "series")
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "series", orphanRemoval = true)
 	public Set<Class> getClasses() {
 		return classes;
 	}

@@ -45,7 +45,7 @@ public class RacePopupMenu<O extends Frame & DatabaseWindow> extends AbstractNam
 	}
 
 	public RacePopupMenu(O owner, Race race) {
-		super(owner, race, raceDAO);
+		super(owner, race);
 
 		mnuEditRace = new JMenuItem(Messages.getString("menu.race.edit")); //$NON-NLS-1$
 		mnuEditRace.setActionCommand(Commands.EDIT_RACE.toString());
@@ -85,5 +85,11 @@ public class RacePopupMenu<O extends Frame & DatabaseWindow> extends AbstractNam
 		if (win != null) {
 			win.display();
 		}
+	}
+
+	@Override
+	protected void doDelete() {
+		Race race = raceDAO.get(item);
+		race.getEvent().getRaces().remove(race);
 	}
 }
