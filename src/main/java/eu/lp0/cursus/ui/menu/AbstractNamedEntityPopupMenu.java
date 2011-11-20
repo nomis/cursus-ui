@@ -75,10 +75,12 @@ public abstract class AbstractNamedEntityPopupMenu<O extends Frame & DatabaseWin
 					owner.getDatabase().endSession();
 				}
 
-				owner.refreshRaceList();
+				doRefresh();
 			}
 		});
 	}
 
 	protected abstract void doDelete();
+
+	protected abstract void doRefresh();
 }

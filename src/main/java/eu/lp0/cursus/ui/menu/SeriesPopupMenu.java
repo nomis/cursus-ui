@@ -103,4 +103,9 @@ public class SeriesPopupMenu<O extends Frame & DatabaseWindow> extends AbstractN
 		Series series = seriesDAO.get(item);
 		seriesDAO.remove(series);
 	}
+
+	@Override
+	protected void doRefresh() {
+		owner.refreshRaceList();
+	}
 }

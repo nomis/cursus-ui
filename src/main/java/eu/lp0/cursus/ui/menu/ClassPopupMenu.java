@@ -96,4 +96,9 @@ public class ClassPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 		Class clazz = classDAO.get(item);
 		clazz.getSeries().getClasses().remove(clazz);
 	}
+
+	@Override
+	protected void doRefresh() {
+		owner.refreshTab(tab);
+	}
 }

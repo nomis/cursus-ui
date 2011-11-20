@@ -92,4 +92,9 @@ public class RacePopupMenu<O extends Frame & DatabaseWindow> extends AbstractNam
 		Race race = raceDAO.get(item);
 		race.getEvent().getRaces().remove(race);
 	}
+
+	@Override
+	protected void doRefresh() {
+		owner.refreshRaceList();
+	}
 }

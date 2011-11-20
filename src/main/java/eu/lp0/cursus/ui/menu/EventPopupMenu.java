@@ -103,4 +103,9 @@ public class EventPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 		Event event = eventDAO.get(item);
 		event.getSeries().getEvents().remove(event);
 	}
+
+	@Override
+	protected void doRefresh() {
+		owner.refreshRaceList();
+	}
 }
