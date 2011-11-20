@@ -78,16 +78,6 @@ public abstract class AbstractDAO<E extends AbstractEntity> {
 	}
 
 	public E get(E entity) {
-		EntityManager em = getEntityManager();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-
-		CriteriaQuery<E> q = cb.createQuery(clazz);
-		Root<E> s = q.from(clazz);
-		q.select(s);
-		q.where(cb.equal(s.get("id"), entity.getId())); //$NON-NLS-1$
-
-		TypedQuery<E> tq = em.createQuery(q);
-		return tq.getSingleResult();
 		Preconditions.checkNotNull(entity);
 		return getEntityManager().find(clazz, entity.getId());
 	}
