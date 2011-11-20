@@ -94,6 +94,8 @@ public class DatabaseManager implements ActionListener {
 				win.getDatabase().close(true);
 				break;
 			case JOptionPane.CANCEL_OPTION:
+			case JOptionPane.CLOSED_OPTION:
+			default:
 				return false;
 			}
 		}
