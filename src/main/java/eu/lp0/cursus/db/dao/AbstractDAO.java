@@ -25,6 +25,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import com.google.common.base.Preconditions;
+
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.data.AbstractEntity;
 
@@ -43,6 +45,7 @@ public abstract class AbstractDAO<E extends AbstractEntity> {
 	 * Save/update transient/persisted (but not detached) entity
 	 */
 	public void persist(E entity) {
+		Preconditions.checkNotNull(entity);
 		DatabaseSession.getEntityManager().persist(entity);
 	}
 
@@ -52,6 +55,7 @@ public abstract class AbstractDAO<E extends AbstractEntity> {
 	 * Merge behaviour may cause unexpected changes (override with DIY merge)
 	 */
 	protected E merge(E entity) {
+		Preconditions.checkNotNull(entity);
 		return DatabaseSession.getEntityManager().merge(entity);
 	}
 
@@ -59,6 +63,7 @@ public abstract class AbstractDAO<E extends AbstractEntity> {
 	 * Remove persisted entity
 	 */
 	public void remove(E entity) {
+		Preconditions.checkNotNull(entity);
 		DatabaseSession.getEntityManager().remove(entity);
 	}
 
@@ -67,7 +72,8 @@ public abstract class AbstractDAO<E extends AbstractEntity> {
 	 */
 	public void detach(E entity) {
 		// Don't detach during a transaction as there may be persisted changes not yet committed
-		assert (!DatabaseSession.isActive());
+		Preconditions.checkState(!DatabaseSession.isActive(), "Transaction active"); //$NON-NLS-1$
+		Preconditions.checkNotNull(entity);
 		DatabaseSession.getEntityManager().detach(entity);
 	}
 
@@ -82,6 +88,8 @@ public abstract class AbstractDAO<E extends AbstractEntity> {
 
 		TypedQuery<E> tq = em.createQuery(q);
 		return tq.getSingleResult();
+		Preconditions.checkNotNull(entity);
+		return getEntityManager().find(clazz, entity.getId());
 	}
 
 	public List<E> findAll() {
