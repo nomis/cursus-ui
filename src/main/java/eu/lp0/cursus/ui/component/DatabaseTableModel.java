@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.ui.component;
 
-import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +27,11 @@ import javax.swing.table.TableRowSorter;
 
 import eu.lp0.cursus.db.data.AbstractEntity;
 
-public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & DatabaseWindow> extends AbstractTableModel {
-	private final DatabaseRowModel<T, O> rowModel;
+public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableModel {
+	private final DatabaseRowModel<T, ?> rowModel;
 	private final ArrayList<T> rows = new ArrayList<T>();
 
-	public DatabaseTableModel(DatabaseRowModel<T, O> rowModel) {
+	public DatabaseTableModel(DatabaseRowModel<T, ?> rowModel) {
 		this.rowModel = rowModel;
 	}
 

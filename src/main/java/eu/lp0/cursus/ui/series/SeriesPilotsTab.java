@@ -42,7 +42,7 @@ import eu.lp0.cursus.util.Background;
 public class SeriesPilotsTab<O extends Frame & DatabaseWindow> extends AbstractDatabaseTab<O, Series> {
 	private JScrollPane scrollPane;
 	private JTable table;
-	private DatabaseTableModel<Pilot, O> model;
+	private DatabaseTableModel<Pilot> model;
 	@SuppressWarnings("unused")
 	private Series currentSeries = null;
 
@@ -63,7 +63,7 @@ public class SeriesPilotsTab<O extends Frame & DatabaseWindow> extends AbstractD
 		table = new JTable();
 		scrollPane.setViewportView(table);
 
-		model = new DatabaseTableModel<Pilot, O>(new DatabaseRowModel<Pilot, O>(win, Pilot.class, pilotDAO));
+		model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot, O>(win, Pilot.class, pilotDAO));
 		model.setupEditableModel(table);
 	}
 
