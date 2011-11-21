@@ -17,37 +17,19 @@
  */
 package eu.lp0.cursus.ui.component;
 
-import java.awt.Frame;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 
-import eu.lp0.cursus.db.dao.AbstractDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
 
-public class DatabaseRowModel<T extends AbstractEntity, O extends Frame & DatabaseWindow> {
-	private final List<DatabaseColumnModel<T, ?>> columns = new ArrayList<DatabaseColumnModel<T, ?>>();
-
-	// TODO remove this as the race number editing is a mess
-	public DatabaseRowModel(O win, Class<T> clazz, AbstractDAO<T> dao) {
-		SortedMap<Integer, DatabaseColumnModel<T, ?>> columnModels = new TreeMap<Integer, DatabaseColumnModel<T, ?>>();
-		for (Method m : clazz.getMethods()) {
-			TableModelColumn a = m.getAnnotation(TableModelColumn.class);
-			if (a != null) {
-				columnModels.put(a.index(), new ReflectionDatabaseColumnModel<T, O>(win, clazz, dao, m, a));
-			}
-		}
-		columns.addAll(columnModels.values());
-	}
+public class DatabaseRowModel<T extends AbstractEntity> {
+	private final List<DatabaseColumnModel<T, ?>> columns;
 
 	public DatabaseRowModel(List<DatabaseColumnModel<T, ?>> columns) {
-		columns.addAll(columns);
+		this.columns = columns;
 	}
 
 	public String getColumnName(int mCol) {

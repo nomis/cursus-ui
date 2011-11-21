@@ -34,9 +34,9 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
-import eu.lp0.cursus.ui.component.DatabaseRowModel;
 import eu.lp0.cursus.ui.component.DatabaseTableModel;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
+import eu.lp0.cursus.ui.component.ReflectionDatabaseRowModel;
 import eu.lp0.cursus.util.Background;
 
 public class SeriesPilotsTab<O extends Frame & DatabaseWindow> extends AbstractDatabaseTab<O, Series> {
@@ -63,7 +63,7 @@ public class SeriesPilotsTab<O extends Frame & DatabaseWindow> extends AbstractD
 		table = new JTable();
 		scrollPane.setViewportView(table);
 
-		model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot, O>(win, Pilot.class, pilotDAO));
+		model = new DatabaseTableModel<Pilot>(new ReflectionDatabaseRowModel<Pilot, O>(win, Pilot.class, pilotDAO));
 		model.setupEditableModel(table);
 	}
 

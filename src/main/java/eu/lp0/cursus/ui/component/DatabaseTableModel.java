@@ -28,10 +28,10 @@ import javax.swing.table.TableRowSorter;
 import eu.lp0.cursus.db.data.AbstractEntity;
 
 public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableModel {
-	private final DatabaseRowModel<T, ?> rowModel;
+	private final DatabaseRowModel<T> rowModel;
 	private final ArrayList<T> rows = new ArrayList<T>();
 
-	public DatabaseTableModel(DatabaseRowModel<T, ?> rowModel) {
+	public DatabaseTableModel(DatabaseRowModel<T> rowModel) {
 		this.rowModel = rowModel;
 	}
 
