@@ -63,7 +63,7 @@ public class SeriesPilotsTab<O extends Frame & DatabaseWindow> extends AbstractD
 		table = new JTable();
 		scrollPane.setViewportView(table);
 
-		model = new DatabaseTableModel<Pilot, O>(win, new DatabaseRowModel<Pilot, O>(win, Pilot.class, pilotDAO));
+		model = new DatabaseTableModel<Pilot, O>(new DatabaseRowModel<Pilot, O>(win, Pilot.class, pilotDAO));
 		model.setupEditableModel(table);
 	}
 

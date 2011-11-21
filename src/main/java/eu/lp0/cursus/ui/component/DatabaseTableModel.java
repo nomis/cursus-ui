@@ -28,14 +28,11 @@ import javax.swing.table.TableRowSorter;
 
 import eu.lp0.cursus.db.data.AbstractEntity;
 
-// TODO refactor this as the race number editing is a mess
 public class DatabaseTableModel<T extends AbstractEntity, O extends Frame & DatabaseWindow> extends AbstractTableModel {
-	protected O win;
-	private DatabaseRowModel<T, O> rowModel;
-	private ArrayList<T> rows = new ArrayList<T>();
+	private final DatabaseRowModel<T, O> rowModel;
+	private final ArrayList<T> rows = new ArrayList<T>();
 
-	public DatabaseTableModel(O win, DatabaseRowModel<T, O> rowModel) {
-		this.win = win;
+	public DatabaseTableModel(DatabaseRowModel<T, O> rowModel) {
 		this.rowModel = rowModel;
 	}
 
