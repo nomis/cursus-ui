@@ -17,23 +17,19 @@
  */
 package eu.lp0.cursus.ui.component;
 
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
+import java.awt.Component;
+
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import eu.lp0.cursus.db.data.AbstractEntity;
 
-public abstract class DatabaseColumnModel<T extends AbstractEntity, V> {
-	protected boolean isCellEditable() {
-		return false;
+public abstract class DatabaseTableCellRenderer<T extends AbstractEntity> extends DefaultTableCellRenderer {
+	@Override
+	@SuppressWarnings("unchecked")
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int vRow, int vCol) {
+		return super.getTableCellRendererComponent(table, convertFromDatabase((T)value), isSelected, hasFocus, vRow, vCol);
 	}
 
-	public void setupEditableModel(TableColumn col) {
-		col.setCellRenderer(createCellRenderer());
-	}
-
-	public abstract String getColumnName();
-
-	protected abstract V getValue(T row);
-
-	protected abstract TableCellRenderer createCellRenderer();
+	protected abstract Object convertFromDatabase(T row);
 }

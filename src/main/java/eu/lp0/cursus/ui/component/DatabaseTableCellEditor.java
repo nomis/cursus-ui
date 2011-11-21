@@ -1,0 +1,75 @@
+/*
+	cursus - Race series management program
+	Copyright 2011  Simon Arlott
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package eu.lp0.cursus.ui.component;
+
+import java.awt.Component;
+
+import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+
+import eu.lp0.cursus.db.data.AbstractEntity;
+
+public abstract class DatabaseTableCellEditor<T extends AbstractEntity, V> extends DefaultCellEditor {
+	private final CellSaver<T, V> cellSaver;
+	protected Integer mRow = null;
+	protected Integer mCol = null;
+	protected T mVal = null;
+
+	public static interface CellSaver<T extends AbstractEntity, V> {
+		public boolean saveEditedValue(T row, V newValue);
+	}
+
+	public DatabaseTableCellEditor(CellSaver<T, V> cellSaver, JCheckBox checkBox) {
+		super(checkBox);
+		this.cellSaver = cellSaver;
+		checkBox.setBorder(null);
+	}
+
+	public DatabaseTableCellEditor(CellSaver<T, V> cellSaver, JComboBox comboBox) {
+		super(comboBox);
+		this.cellSaver = cellSaver;
+		comboBox.setBorder(null);
+	}
+
+	public DatabaseTableCellEditor(CellSaver<T, V> cellSaver, JTextField textField) {
+		super(textField);
+		this.cellSaver = cellSaver;
+		textField.setBorder(null);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int vRow, int vCol) {
+		mRow = table.convertRowIndexToModel(vRow);
+		mCol = table.convertColumnIndexToModel(vCol);
+		mVal = (T)value;
+		return super.getTableCellEditorComponent(table, convertFromDatabase(mVal), isSelected, vRow, vCol);
+	}
+
+	@Override
+	public boolean stopCellEditing() {
+		return cellSaver.saveEditedValue(mVal, convertToDatabase(mVal, getCellEditorValue())) && super.stopCellEditing();
+	}
+
+	protected abstract Object convertFromDatabase(T row);
+
+	protected abstract V convertToDatabase(T row, Object value);
+}

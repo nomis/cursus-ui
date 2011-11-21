@@ -32,21 +32,21 @@ import eu.lp0.cursus.db.dao.AbstractDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
 
 public class DatabaseRowModel<T extends AbstractEntity, O extends Frame & DatabaseWindow> {
-	private final List<DatabaseColumnModel<T, O>> columns = new ArrayList<DatabaseColumnModel<T, O>>();
+	private final List<DatabaseColumnModel<T, ?>> columns = new ArrayList<DatabaseColumnModel<T, ?>>();
 
 	// TODO remove this as the race number editing is a mess
 	public DatabaseRowModel(O win, Class<T> clazz, AbstractDAO<T> dao) {
-		SortedMap<Integer, DatabaseColumnModel<T, O>> columnModels = new TreeMap<Integer, DatabaseColumnModel<T, O>>();
+		SortedMap<Integer, DatabaseColumnModel<T, ?>> columnModels = new TreeMap<Integer, DatabaseColumnModel<T, ?>>();
 		for (Method m : clazz.getMethods()) {
 			TableModelColumn a = m.getAnnotation(TableModelColumn.class);
 			if (a != null) {
-				columnModels.put(a.index(), new DatabaseColumnModel<T, O>(win, clazz, dao, m, a));
+				columnModels.put(a.index(), new ReflectionDatabaseColumnModel<T, O>(win, clazz, dao, m, a));
 			}
 		}
 		columns.addAll(columnModels.values());
 	}
 
-	public DatabaseRowModel(List<DatabaseColumnModel<T, O>> columns) {
+	public DatabaseRowModel(List<DatabaseColumnModel<T, ?>> columns) {
 		columns.addAll(columns);
 	}
 
