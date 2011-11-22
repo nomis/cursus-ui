@@ -26,6 +26,8 @@ import java.util.List;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
 
 import eu.lp0.cursus.db.DatabaseSession;
@@ -108,6 +110,9 @@ public class SeriesPilotsTab<O extends Frame & DatabaseWindow> extends AbstractD
 					}
 				})));
 		model.setupModel(table);
+		table.getRowSorter().setSortKeys(
+				Arrays.asList(new RowSorter.SortKey(0, SortOrder.ASCENDING), new RowSorter.SortKey(1, SortOrder.ASCENDING), new RowSorter.SortKey(2,
+						SortOrder.ASCENDING), new RowSorter.SortKey(3, SortOrder.ASCENDING)));
 	}
 
 	@Override
