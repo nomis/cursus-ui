@@ -20,6 +20,7 @@ package eu.lp0.cursus.ui.series;
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,14 +31,20 @@ import javax.swing.SwingUtilities;
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.PilotDAO;
 import eu.lp0.cursus.db.dao.SeriesDAO;
+import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
+import eu.lp0.cursus.ui.component.DatabaseColumnModel;
+import eu.lp0.cursus.ui.component.DatabaseRowModel;
 import eu.lp0.cursus.ui.component.DatabaseTableModel;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
-import eu.lp0.cursus.ui.component.ReflectionDatabaseRowModel;
+import eu.lp0.cursus.ui.component.EnumDatabaseColumnModel;
+import eu.lp0.cursus.ui.component.RaceNumbersDatabaseColumnModel;
+import eu.lp0.cursus.ui.component.StringDatabaseColumnModel;
 import eu.lp0.cursus.util.Background;
+import eu.lp0.cursus.util.Constants;
 
 public class SeriesPilotsTab<O extends Frame & DatabaseWindow> extends AbstractDatabaseTab<O, Series> {
 	private JScrollPane scrollPane;
@@ -54,6 +61,7 @@ public class SeriesPilotsTab<O extends Frame & DatabaseWindow> extends AbstractD
 		initialise();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void initialise() {
 		setLayout(new BorderLayout(0, 0));
 
@@ -63,8 +71,42 @@ public class SeriesPilotsTab<O extends Frame & DatabaseWindow> extends AbstractD
 		table = new JTable();
 		scrollPane.setViewportView(table);
 
-		model = new DatabaseTableModel<Pilot>(new ReflectionDatabaseRowModel<Pilot, O>(win, Pilot.class, pilotDAO));
-		// model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot>());
+		model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot>(Arrays.<DatabaseColumnModel<Pilot, ?, ?>>asList(
+				new RaceNumbersDatabaseColumnModel<O>("pilot.race-number", win), //$NON-NLS-1$
+				new StringDatabaseColumnModel<Pilot, O>("pilot.name", win, pilotDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
+					@Override
+					protected String getValue(Pilot row) {
+						return row.getName();
+					}
+
+					@Override
+					protected boolean setValue(Pilot row, String value) {
+						row.setName(value);
+						return true;
+					}
+				}, new EnumDatabaseColumnModel<Pilot, Gender, O>("pilot.gender", win, pilotDAO, Gender.class, true) { //$NON-NLS-1$
+					@Override
+					protected Gender getEnumValue(Pilot row) {
+						return row.getGender();
+					}
+
+					@Override
+					protected boolean setEnumValue(Pilot row, Gender value) {
+						row.setGender(value);
+						return true;
+					}
+				}, new StringDatabaseColumnModel<Pilot, O>("pilot.country", win, pilotDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
+					@Override
+					protected String getValue(Pilot row) {
+						return row.getCountry();
+					}
+
+					@Override
+					protected boolean setValue(Pilot row, String value) {
+						row.setCountry(value);
+						return true;
+					}
+				})));
 		model.setupModel(table);
 	}
 

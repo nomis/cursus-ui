@@ -20,7 +20,6 @@ package eu.lp0.cursus.util;
 import java.awt.Component;
 import java.util.LinkedList;
 
-import javax.persistence.PersistenceException;
 import javax.swing.JOptionPane;
 
 public class DatabaseError {
@@ -28,8 +27,8 @@ public class DatabaseError {
 		JOptionPane.showMessageDialog(c, message, Constants.APP_NAME + Constants.EN_DASH + context, JOptionPane.ERROR_MESSAGE);
 	}
 
-	public static void errorSaving(Component c, String context, PersistenceException e) {
-		JOptionPane.showMessageDialog(c, Messages.getString("db.error-saving") + ":\n\n" + createMessage(e), Constants.APP_NAME + Constants.EN_DASH + context, //$NON-NLS-1$ //$NON-NLS-2$
+	public static void errorSaving(Component c, String context, Throwable t) {
+		JOptionPane.showMessageDialog(c, Messages.getString("db.error-saving") + ":\n\n" + createMessage(t), Constants.APP_NAME + Constants.EN_DASH + context, //$NON-NLS-1$ //$NON-NLS-2$
 				JOptionPane.ERROR_MESSAGE);
 	}
 

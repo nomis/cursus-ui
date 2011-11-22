@@ -32,6 +32,10 @@ public class DatabaseTextField extends JTextField {
 	private static final String UNDO = "UNDO"; //$NON-NLS-1$
 	private static final String REDO = "REDO"; //$NON-NLS-1$
 
+	public DatabaseTextField(int maxLength) {
+		this("", maxLength, 0); //$NON-NLS-1$
+	}
+
 	public DatabaseTextField(String text, int maxLength) {
 		this(text, maxLength, 0);
 	}

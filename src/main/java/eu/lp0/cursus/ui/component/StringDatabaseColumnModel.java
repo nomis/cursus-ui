@@ -17,19 +17,28 @@
  */
 package eu.lp0.cursus.ui.component;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.awt.Frame;
 
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-@Inherited
-public @interface TableModelColumn {
-	public int index();
+import javax.swing.table.TableCellEditor;
 
-	public String name();
+import eu.lp0.cursus.db.dao.AbstractDAO;
+import eu.lp0.cursus.db.data.AbstractEntity;
 
-	public Class<?> type() default Object.class;
+public abstract class StringDatabaseColumnModel<T extends AbstractEntity, O extends Frame & DatabaseWindow> extends DatabaseColumnModel<T, String, O> {
+	private final int maxLength;
+
+	public StringDatabaseColumnModel(String name) {
+		super(name);
+		this.maxLength = 0;
+	}
+
+	public StringDatabaseColumnModel(String name, O win, AbstractDAO<T> dao, int maxLength) {
+		super(name, win, dao);
+		this.maxLength = maxLength;
+	}
+
+	@Override
+	protected TableCellEditor createCellEditor() {
+		return new DatabaseTableCellEditor<T, String>(this, new DatabaseTextField(maxLength));
+	}
 }

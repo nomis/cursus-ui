@@ -35,26 +35,34 @@ import eu.lp0.cursus.db.dao.AbstractDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
+import eu.lp0.cursus.util.Messages;
 
-public abstract class DatabaseColumnModel<T extends AbstractEntity, V, O extends Frame & DatabaseWindow> implements DatabaseTableCellEditor.CellSaver<T, V> {
+public abstract class DatabaseColumnModel<T extends AbstractEntity, V, O extends Frame & DatabaseWindow> implements DatabaseTableCellEditor.Column<T, V> {
 	private final Logger log = LoggerFactory.getLogger(getClass());
-	private final O win;
+	protected final O win;
 	private final AbstractDAO<T> dao;
+	private final String name;
 	private final boolean editable;
 
-	public DatabaseColumnModel() {
+	public DatabaseColumnModel(String name) {
 		this.win = null;
 		this.dao = null;
+		this.name = Messages.getString(name);
 		this.editable = false;
 	}
 
-	public DatabaseColumnModel(O win, AbstractDAO<T> dao) {
+	public DatabaseColumnModel(String name, O win, AbstractDAO<T> dao) {
 		this.win = win;
 		this.dao = dao;
+		this.name = Messages.getString(name);
 		this.editable = true;
 	}
 
-	public final boolean isCellEditable() {
+	public String getName() {
+		return name;
+	}
+
+	public boolean isCellEditable() {
 		return editable;
 	}
 
@@ -63,6 +71,15 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V, O extends
 		if (isCellEditable()) {
 			col.setCellEditor(createCellEditor());
 		}
+	}
+
+	protected TableCellRenderer createCellRenderer() {
+		return new DatabaseTableCellRenderer<T>(this);
+	}
+
+	@Override
+	public V loadValue(T row) {
+		return getValue(row);
 	}
 
 	@Override
@@ -74,49 +91,42 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V, O extends
 			return true;
 		}
 
-		boolean revert = false;
 		win.getDatabase().startSession();
 		try {
 			DatabaseSession.begin();
 
+			if (!setValue(row, newValue)) {
+				log.error(String.format("Unable to set row=%s#%d, column=%s, oldValue=%s, newValue=%s", row.getClass().getSimpleName(), row.getId(), //$NON-NLS-1$
+						getName(), oldValue, newValue));
+				return false;
+			}
+
 			T item = dao.get(row);
 			if (!setValue(item, newValue)) {
-				revert = true;
 				log.error(String.format("Unable to update row=%s#%d, column=%s, oldValue=%s, newValue=%s", row.getClass().getSimpleName(), row.getId(), //$NON-NLS-1$
-						getColumnName(), oldValue, newValue));
+						getName(), oldValue, newValue));
+
+				if (!setValue(row, oldValue)) {
+					log.error(String.format("Unable to revert row=%s#%d, column=%s, oldValue=%s, newValue=%s", row.getClass().getSimpleName(), row.getId(), //$NON-NLS-1$
+							getName(), oldValue, newValue));
+				}
 				return false;
 			}
 			dao.persist(item);
 
 			DatabaseSession.commit();
+			return true;
 		} catch (PersistenceException e) {
-			revert = true;
 			log.error(String.format("Unable to save changes: row=%s#%d, column=%s, oldValue=%s, newValue=%s", row.getClass().getSimpleName(), row.getId(), //$NON-NLS-1$
-					getColumnName(), oldValue, newValue), e);
+					getName(), oldValue, newValue), e);
 			DatabaseError.errorSaving(win, Constants.APP_NAME, e);
 			return false;
 		} finally {
-			if (revert && !setValue(row, oldValue)) {
-				log.error(String.format("Unable to revert row=%s#%d, column=%s, oldValue=%s, newValue=%s", row.getClass().getSimpleName(), row.getId(), //$NON-NLS-1$
-						getColumnName(), oldValue, newValue));
-			}
-
 			win.getDatabase().endSession();
 		}
-
-		if (!setValue(row, newValue)) {
-			log.error(String.format("Unable to set row=%s#%d, column=%s, oldValue=%s, newValue=%s", row.getClass().getSimpleName(), row.getId(), //$NON-NLS-1$
-					getColumnName(), oldValue, newValue));
-			return false;
-		}
-		return true;
 	}
 
-	public abstract String getColumnName();
-
 	protected abstract V getValue(T row);
-
-	protected abstract TableCellRenderer createCellRenderer();
 
 	protected abstract boolean setValue(T row, V value);
 

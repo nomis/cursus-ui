@@ -24,12 +24,20 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import eu.lp0.cursus.db.data.AbstractEntity;
 
-public abstract class DatabaseTableCellRenderer<T extends AbstractEntity> extends DefaultTableCellRenderer {
+public class DatabaseTableCellRenderer<T extends AbstractEntity> extends DefaultTableCellRenderer {
+	private final Column<T, ?> column;
+
+	public static interface Column<T extends AbstractEntity, V> {
+		public V loadValue(T row);
+	}
+
+	public DatabaseTableCellRenderer(Column<T, ?> column) {
+		this.column = column;
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int vRow, int vCol) {
-		return super.getTableCellRendererComponent(table, convertFromDatabase((T)value), isSelected, hasFocus, vRow, vCol);
+		return super.getTableCellRendererComponent(table, column.loadValue((T)value), isSelected, hasFocus, vRow, vCol);
 	}
-
-	protected abstract Object convertFromDatabase(T row);
 }

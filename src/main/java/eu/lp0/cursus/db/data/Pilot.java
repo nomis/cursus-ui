@@ -17,13 +17,8 @@
  */
 package eu.lp0.cursus.db.data;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,14 +34,8 @@ import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
-import eu.lp0.cursus.ui.component.TableModelColumn;
 import eu.lp0.cursus.util.Constants;
 
 /**
@@ -88,7 +77,6 @@ public final class Pilot extends AbstractEntity {
 	private String name;
 
 	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
-	@TableModelColumn(index = 1, name = "pilot.name")
 	public String getName() {
 		return name;
 	}
@@ -100,7 +88,6 @@ public final class Pilot extends AbstractEntity {
 	private Gender gender;
 
 	@Enumerated(EnumType.STRING)
-	@TableModelColumn(index = 2, name = "pilot.gender")
 	public Gender getGender() {
 		return gender;
 	}
@@ -112,7 +99,6 @@ public final class Pilot extends AbstractEntity {
 	private String country;
 
 	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
-	@TableModelColumn(index = 3, name = "pilot.country")
 	public String getCountry() {
 		return country;
 	}
@@ -148,28 +134,6 @@ public final class Pilot extends AbstractEntity {
 
 	public void setRaceNumbers(Set<RaceNumber> numbers) {
 		this.numbers = numbers;
-	}
-
-	@Transient
-	@TableModelColumn(index = 0, name = "pilot.race-number", type = RaceNumber.class)
-	public List<RaceNumber> getRaceNumberList() {
-		if (getRaceNumber() == null) {
-			List<RaceNumber> raceNos = Arrays.asList(getRaceNumbers().toArray(new RaceNumber[0]));
-			Collections.sort(raceNos);
-			return raceNos;
-		} else {
-			List<RaceNumber> raceNos = Arrays.asList(Sets.difference(getRaceNumbers(), Collections.singleton(getRaceNumber())).toArray(new RaceNumber[0]));
-			Collections.sort(raceNos);
-			return Lists.asList(getRaceNumber(), raceNos.toArray(new RaceNumber[0]));
-		}
-	}
-
-	public void setRaceNumberList(List<RaceNumber> list) {
-		LinkedHashSet<RaceNumber> set = new LinkedHashSet<RaceNumber>(list);
-		Iterator<RaceNumber> it = set.iterator();
-		setRaceNumber(it.hasNext() ? it.next() : null);
-		getRaceNumbers().retainAll(set);
-		getRaceNumbers().addAll(ImmutableSet.copyOf(Sets.difference(set, getRaceNumbers())));
 	}
 
 	private Set<Class> classes = new HashSet<Class>();

@@ -33,7 +33,7 @@ public class DatabaseRowModel<T extends AbstractEntity> {
 	}
 
 	public String getColumnName(int mCol) {
-		return columns.get(mCol).getColumnName();
+		return columns.get(mCol).getName();
 	}
 
 	public int getColumnCount() {

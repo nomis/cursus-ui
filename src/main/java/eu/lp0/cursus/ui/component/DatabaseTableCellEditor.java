@@ -27,31 +27,31 @@ import javax.swing.JTextField;
 
 import eu.lp0.cursus.db.data.AbstractEntity;
 
-public abstract class DatabaseTableCellEditor<T extends AbstractEntity, V> extends DefaultCellEditor {
-	private final CellSaver<T, V> cellSaver;
+public class DatabaseTableCellEditor<T extends AbstractEntity, V> extends DefaultCellEditor {
+	private final Column<T, V> column;
 	protected Integer mRow = null;
 	protected Integer mCol = null;
 	protected T mVal = null;
 
-	public static interface CellSaver<T extends AbstractEntity, V> {
+	public static interface Column<T extends AbstractEntity, V> extends DatabaseTableCellRenderer.Column<T, V> {
 		public boolean saveEditedValue(T row, V newValue);
 	}
 
-	public DatabaseTableCellEditor(CellSaver<T, V> cellSaver, JCheckBox checkBox) {
+	public DatabaseTableCellEditor(Column<T, V> column, JCheckBox checkBox) {
 		super(checkBox);
-		this.cellSaver = cellSaver;
+		this.column = column;
 		checkBox.setBorder(null);
 	}
 
-	public DatabaseTableCellEditor(CellSaver<T, V> cellSaver, JComboBox comboBox) {
+	public DatabaseTableCellEditor(Column<T, V> cellSaver, JComboBox comboBox) {
 		super(comboBox);
-		this.cellSaver = cellSaver;
+		this.column = cellSaver;
 		comboBox.setBorder(null);
 	}
 
-	public DatabaseTableCellEditor(CellSaver<T, V> cellSaver, JTextField textField) {
+	public DatabaseTableCellEditor(Column<T, V> cellSaver, JTextField textField) {
 		super(textField);
-		this.cellSaver = cellSaver;
+		this.column = cellSaver;
 		textField.setBorder(null);
 	}
 
@@ -61,15 +61,12 @@ public abstract class DatabaseTableCellEditor<T extends AbstractEntity, V> exten
 		mRow = table.convertRowIndexToModel(vRow);
 		mCol = table.convertColumnIndexToModel(vCol);
 		mVal = (T)value;
-		return super.getTableCellEditorComponent(table, convertFromDatabase(mVal), isSelected, vRow, vCol);
+		return super.getTableCellEditorComponent(table, column.loadValue(mVal), isSelected, vRow, vCol);
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public boolean stopCellEditing() {
-		return cellSaver.saveEditedValue(mVal, convertToDatabase(mVal, getCellEditorValue())) && super.stopCellEditing();
+		return column.saveEditedValue(mVal, (V)getCellEditorValue()) && super.stopCellEditing();
 	}
-
-	protected abstract Object convertFromDatabase(T row);
-
-	protected abstract V convertToDatabase(T row, Object value);
 }

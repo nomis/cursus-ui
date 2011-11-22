@@ -17,10 +17,30 @@
  */
 package eu.lp0.cursus.db.dao;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import eu.lp0.cursus.db.data.RaceNumber;
 
 public class RaceNumberDAO extends AbstractDAO<RaceNumber> {
 	public RaceNumberDAO() {
 		super(RaceNumber.class);
+	}
+
+	public boolean isRaceNumberOk(RaceNumber newRaceNumber) {
+		EntityManager em = getEntityManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+
+		CriteriaQuery<RaceNumber> q = cb.createQuery(RaceNumber.class);
+		Root<RaceNumber> rn = q.from(RaceNumber.class);
+		q.select(rn);
+		q.where(cb.equal(rn.get("series"), newRaceNumber.getSeries()), cb.notEqual(rn.get("pilot"), newRaceNumber.getPilot()), //$NON-NLS-1$ //$NON-NLS-2$
+				cb.equal(rn.get("organisation"), newRaceNumber.getOrganisation()), cb.equal(rn.get("number"), newRaceNumber.getNumber())); //$NON-NLS-1$ //$NON-NLS-2$ 
+
+		TypedQuery<RaceNumber> tq = em.createQuery(q);
+		return tq.getResultList().isEmpty();
 	}
 }
