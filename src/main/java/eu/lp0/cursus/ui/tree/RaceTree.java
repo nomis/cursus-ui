@@ -18,12 +18,13 @@
 package eu.lp0.cursus.ui.tree;
 
 import java.awt.Frame;
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.TreePath;
+
+import com.google.common.collect.Ordering;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.EventDAO;
@@ -93,7 +94,7 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends AbstractTree<O, 
 		try {
 			DatabaseSession.begin();
 
-			seriesList = seriesDAO.findAll();
+			seriesList = Ordering.natural().sortedCopy(seriesDAO.findAll());
 			for (Series series : seriesList) {
 				for (Event event : series.getEvents()) {
 					event.getRaces();
@@ -114,8 +115,6 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends AbstractTree<O, 
 		} finally {
 			win.getDatabase().endSession();
 		}
-
-		Collections.sort(seriesList);
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override

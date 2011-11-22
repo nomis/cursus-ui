@@ -18,14 +18,14 @@
 package eu.lp0.cursus.ui.tree;
 
 import java.awt.Frame;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
+
+import com.google.common.collect.Ordering;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.ClassDAO;
@@ -88,7 +88,7 @@ public class ClassTree<O extends Frame & DatabaseWindow> extends AbstractTree<O,
 			DatabaseSession.begin();
 
 			newSeries = seriesDAO.get(series);
-			newClasses = new ArrayList<Class>(newSeries.getClasses());
+			newClasses = Ordering.natural().sortedCopy(newSeries.getClasses());
 			DatabaseSession.commit();
 
 			for (Class cls : newClasses) {
@@ -98,8 +98,6 @@ public class ClassTree<O extends Frame & DatabaseWindow> extends AbstractTree<O,
 		} finally {
 			win.getDatabase().endSession();
 		}
-
-		Collections.sort(newClasses);
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override

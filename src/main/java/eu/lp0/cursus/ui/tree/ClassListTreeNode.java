@@ -17,9 +17,9 @@
  */
 package eu.lp0.cursus.ui.tree;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import com.google.common.collect.Ordering;
 
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Series;
@@ -45,8 +45,6 @@ public class ClassListTreeNode extends HierarchicalTreeRoot<Series, Class, Class
 
 	@Override
 	public List<Class> getChildItems(Series series) {
-		List<Class> classes = new ArrayList<Class>(series.getClasses());
-		Collections.sort(classes);
-		return classes;
+		return Ordering.natural().sortedCopy(series.getClasses());
 	}
 }
