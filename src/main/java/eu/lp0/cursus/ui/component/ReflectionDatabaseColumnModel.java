@@ -41,7 +41,7 @@ import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.util.Messages;
 
 // TODO refactor this as the race number editing is a mess
-public class ReflectionDatabaseColumnModel<T extends AbstractEntity, O extends Frame & DatabaseWindow> extends EditableDatabaseColumnModel<T, Object, O> {
+public class ReflectionDatabaseColumnModel<T extends AbstractEntity, O extends Frame & DatabaseWindow> extends DatabaseColumnModel<T, Object, O> {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private final TableModelColumn annotation;
@@ -87,11 +87,6 @@ public class ReflectionDatabaseColumnModel<T extends AbstractEntity, O extends F
 			log.error(String.format("invoke error row=%s#%d, method=%s, value=%s", row.getClass().getSimpleName(), row.getId(), setter.getName(), value), e); //$NON-NLS-1$
 			return false;
 		}
-	}
-
-	@Override
-	protected boolean isCellEditable() {
-		return true;
 	}
 
 	private Class<?> getColumnClass() {

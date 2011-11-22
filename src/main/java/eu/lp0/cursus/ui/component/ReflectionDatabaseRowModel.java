@@ -33,15 +33,15 @@ public class ReflectionDatabaseRowModel<T extends AbstractEntity, O extends Fram
 		super(generateColumnModels(win, clazz, dao));
 	}
 
-	private static <T extends AbstractEntity, O extends Frame & DatabaseWindow> List<DatabaseColumnModel<T, ?>> generateColumnModels(O win, Class<T> clazz,
+	private static <T extends AbstractEntity, O extends Frame & DatabaseWindow> List<DatabaseColumnModel<T, ?, ?>> generateColumnModels(O win, Class<T> clazz,
 			AbstractDAO<T> dao) {
-		SortedMap<Integer, DatabaseColumnModel<T, ?>> columnModels = new TreeMap<Integer, DatabaseColumnModel<T, ?>>();
+		SortedMap<Integer, DatabaseColumnModel<T, ?, ?>> columnModels = new TreeMap<Integer, DatabaseColumnModel<T, ?, ?>>();
 		for (Method m : clazz.getMethods()) {
 			TableModelColumn a = m.getAnnotation(TableModelColumn.class);
 			if (a != null) {
 				columnModels.put(a.index(), new ReflectionDatabaseColumnModel<T, O>(win, clazz, dao, m, a));
 			}
 		}
-		return new ArrayList<DatabaseColumnModel<T, ?>>(columnModels.values());
+		return new ArrayList<DatabaseColumnModel<T, ?, ?>>(columnModels.values());
 	}
 }

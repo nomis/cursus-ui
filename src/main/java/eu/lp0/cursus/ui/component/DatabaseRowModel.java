@@ -26,9 +26,9 @@ import javax.swing.table.TableColumn;
 import eu.lp0.cursus.db.data.AbstractEntity;
 
 public class DatabaseRowModel<T extends AbstractEntity> {
-	private final List<DatabaseColumnModel<T, ?>> columns;
+	private final List<DatabaseColumnModel<T, ?, ?>> columns;
 
-	public DatabaseRowModel(List<DatabaseColumnModel<T, ?>> columns) {
+	public DatabaseRowModel(List<DatabaseColumnModel<T, ?, ?>> columns) {
 		this.columns = columns;
 	}
 
@@ -40,11 +40,11 @@ public class DatabaseRowModel<T extends AbstractEntity> {
 		return columns.size();
 	}
 
-	public void setupEditableModel(JTable table) {
+	public void setupModel(JTable table) {
 		Enumeration<TableColumn> cols = table.getColumnModel().getColumns();
 		while (cols.hasMoreElements()) {
 			TableColumn col = cols.nextElement();
-			columns.get(col.getModelIndex()).setupEditableModel(col);
+			columns.get(col.getModelIndex()).setupModel(col);
 		}
 	}
 

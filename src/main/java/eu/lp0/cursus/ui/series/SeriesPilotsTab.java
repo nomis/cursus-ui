@@ -64,7 +64,8 @@ public class SeriesPilotsTab<O extends Frame & DatabaseWindow> extends AbstractD
 		scrollPane.setViewportView(table);
 
 		model = new DatabaseTableModel<Pilot>(new ReflectionDatabaseRowModel<Pilot, O>(win, Pilot.class, pilotDAO));
-		model.setupEditableModel(table);
+		// model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot>());
+		model.setupModel(table);
 	}
 
 	@Override

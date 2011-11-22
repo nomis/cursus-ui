@@ -64,14 +64,14 @@ public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableM
 		return rowModel.isCellEditable(mCol);
 	}
 
-	public void setupEditableModel(JTable table) {
+	public void setupModel(JTable table) {
 		table.setModel(this);
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(this);
 		sorter.setSortsOnUpdates(true);
 		table.setRowSorter(sorter);
 
-		rowModel.setupEditableModel(table);
+		rowModel.setupModel(table);
 	}
 
 	public void updateModel(List<T> newRows) {
