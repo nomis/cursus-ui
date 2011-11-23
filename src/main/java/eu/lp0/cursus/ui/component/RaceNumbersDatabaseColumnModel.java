@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.ui.component;
 
-import java.awt.Frame;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -34,7 +33,7 @@ import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.util.DatabaseError;
 import eu.lp0.cursus.util.Messages;
 
-public class RaceNumbersDatabaseColumnModel<O extends Frame & DatabaseWindow> extends StringDatabaseColumnModel<Pilot, O> {
+public class RaceNumbersDatabaseColumnModel extends StringDatabaseColumnModel<Pilot> {
 	private static final PilotDAO pilotDAO = new PilotDAO();
 	private static final RaceNumberDAO raceNumberDAO = new RaceNumberDAO();
 
@@ -42,7 +41,7 @@ public class RaceNumbersDatabaseColumnModel<O extends Frame & DatabaseWindow> ex
 		super(name);
 	}
 
-	public RaceNumbersDatabaseColumnModel(String name, O win) {
+	public RaceNumbersDatabaseColumnModel(String name, DatabaseWindow win) {
 		super(name, win, pilotDAO, Integer.MAX_VALUE);
 	}
 
@@ -80,12 +79,12 @@ public class RaceNumbersDatabaseColumnModel<O extends Frame & DatabaseWindow> ex
 				try {
 					raceNo = RaceNumber.valueOfFor(value, row);
 				} catch (IllegalArgumentException e) {
-					DatabaseError.unableToSave(win, getName(), String.format(Messages.getString("pilot.race-number.invalid"), value)); //$NON-NLS-1$
+					DatabaseError.unableToSave(win.getFrame(), getName(), String.format(Messages.getString("pilot.race-number.invalid"), value)); //$NON-NLS-1$
 					return false;
 				}
 
 				if (!raceNumberDAO.isRaceNumberOk(raceNo)) {
-					DatabaseError.unableToSave(win, getName(), String.format(Messages.getString("pilot.race-number.in-use"), raceNo)); //$NON-NLS-1$
+					DatabaseError.unableToSave(win.getFrame(), getName(), String.format(Messages.getString("pilot.race-number.in-use"), raceNo)); //$NON-NLS-1$
 					return false;
 				}
 

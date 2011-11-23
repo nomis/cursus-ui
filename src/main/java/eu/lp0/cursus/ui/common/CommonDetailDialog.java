@@ -18,7 +18,6 @@
 package eu.lp0.cursus.ui.common;
 
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -54,10 +53,9 @@ import eu.lp0.cursus.util.DatabaseError;
 import eu.lp0.cursus.util.Messages;
 import eu.lp0.cursus.util.SwingHacks;
 
-public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T extends AbstractEntity & NamedEntity> extends JDialog implements Displayable,
-		ActionListener {
+public abstract class CommonDetailDialog<T extends AbstractEntity & NamedEntity> extends JDialog implements Displayable, ActionListener {
 	protected final Logger log = LoggerFactory.getLogger(getClass());
-	protected final O win;
+	protected final DatabaseWindow win;
 	private final String title;
 	private final NamedEntityDAO<T> dao;
 	private T origItem;
@@ -70,8 +68,8 @@ public abstract class CommonDetailDialog<O extends Frame & DatabaseWindow, T ext
 
 	private WindowAutoPrefs prefs = new WindowAutoPrefs(this);
 
-	public CommonDetailDialog(O win, String title, NamedEntityDAO<T> dao, T item, boolean isUpdate) {
-		super(win, true);
+	public CommonDetailDialog(DatabaseWindow win, String title, NamedEntityDAO<T> dao, T item, boolean isUpdate) {
+		super(win.getFrame(), true);
 		this.win = win;
 		this.title = title;
 		this.dao = dao;

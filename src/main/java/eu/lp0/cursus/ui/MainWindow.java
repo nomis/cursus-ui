@@ -19,6 +19,7 @@ package eu.lp0.cursus.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.util.Arrays;
 import java.util.List;
 
@@ -67,19 +68,19 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 	private MainMenu menuBar;
 	private JSplitPane splitPane;
 	private JScrollPane scrollPane;
-	private RaceTree<MainWindow> raceList;
+	private RaceTree raceList;
 	private JTabbedPane tabbedPane;
-	private AbstractDatabaseTab<MainWindow, Series> serPilotsTab;
-	private AbstractDatabaseTab<MainWindow, Series> serClassesTab;
-	private AbstractDatabaseTab<MainWindow, Series> serResultsTab;
-	private List<AbstractDatabaseTab<MainWindow, Series>> seriesTabs;
-	private AbstractDatabaseTab<MainWindow, Event> evtResultsTab;
-	private List<AbstractDatabaseTab<MainWindow, Event>> eventTabs;
-	private AbstractDatabaseTab<MainWindow, Race> racAttendeesTab;
-	private AbstractDatabaseTab<MainWindow, Race> racLapsTab;
-	private AbstractDatabaseTab<MainWindow, Race> racPenaltiesTab;
-	private AbstractDatabaseTab<MainWindow, Race> racResultsTab;
-	private List<AbstractDatabaseTab<MainWindow, Race>> raceTabs;
+	private AbstractDatabaseTab<Series> serPilotsTab;
+	private AbstractDatabaseTab<Series> serClassesTab;
+	private AbstractDatabaseTab<Series> serResultsTab;
+	private List<AbstractDatabaseTab<Series>> seriesTabs;
+	private AbstractDatabaseTab<Event> evtResultsTab;
+	private List<AbstractDatabaseTab<Event>> eventTabs;
+	private AbstractDatabaseTab<Race> racAttendeesTab;
+	private AbstractDatabaseTab<Race> racLapsTab;
+	private AbstractDatabaseTab<Race> racPenaltiesTab;
+	private AbstractDatabaseTab<Race> racResultsTab;
+	private List<AbstractDatabaseTab<Race>> raceTabs;
 
 	public MainWindow(Main main) {
 		super();
@@ -98,6 +99,10 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 
 	public Main getMain() {
 		return main;
+	}
+
+	public Frame getFrame() {
+		return this;
 	}
 
 	public MainMenu getMenu() {
@@ -136,7 +141,7 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 			scrollPane.setPreferredSize(new Dimension(150, 0));
 			splitPane.setLeftComponent(scrollPane);
 
-			raceList = new RaceTree<MainWindow>(this);
+			raceList = new RaceTree(this);
 			raceList.setBorder(new EmptyBorder(2, 2, 2, 2));
 			scrollPane.setViewportView(raceList);
 
@@ -146,23 +151,23 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 		}
 
 		{ // Series
-			serClassesTab = new SeriesClassesTab<MainWindow>(this);
-			serPilotsTab = new SeriesPilotsTab<MainWindow>(this);
-			serResultsTab = new SeriesResultsTab<MainWindow>(this);
+			serClassesTab = new SeriesClassesTab(this);
+			serPilotsTab = new SeriesPilotsTab(this);
+			serResultsTab = new SeriesResultsTab(this);
 			seriesTabs = Arrays.asList(serPilotsTab, serClassesTab, serResultsTab);
 		}
 
 		{ // Event
-			evtResultsTab = new EventResultsTab<MainWindow>(this);
+			evtResultsTab = new EventResultsTab(this);
 
 			eventTabs = Arrays.asList(evtResultsTab);
 		}
 
 		{ // Race
-			racAttendeesTab = new RaceAttendeesTab<MainWindow>(this);
-			racLapsTab = new RaceLapsTab<MainWindow>(this);
-			racPenaltiesTab = new RacePenaltiesTab<MainWindow>(this);
-			racResultsTab = new RaceResultsTab<MainWindow>(this);
+			racAttendeesTab = new RaceAttendeesTab(this);
+			racLapsTab = new RaceLapsTab(this);
+			racPenaltiesTab = new RacePenaltiesTab(this);
+			racResultsTab = new RaceResultsTab(this);
 
 			raceTabs = Arrays.asList(racAttendeesTab, racLapsTab, racPenaltiesTab, racResultsTab);
 		}

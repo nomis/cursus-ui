@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.ui.menu;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -33,8 +32,8 @@ import eu.lp0.cursus.ui.series.SeriesClassesTab;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-public class ClassPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNamedEntityPopupMenu<O, Class> implements ActionListener {
-	private final SeriesClassesTab<O> tab;
+public class ClassPopupMenu extends AbstractNamedEntityPopupMenu<Class> implements ActionListener {
+	private final SeriesClassesTab tab;
 
 	private JMenuItem mnuEditClass;
 	private JMenuItem mnuDeleteClass;
@@ -47,8 +46,8 @@ public class ClassPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 		NEW_CLASS, EDIT_CLASS, DELETE_CLASS;
 	}
 
-	public ClassPopupMenu(O owner, SeriesClassesTab<O> tab, Class clazz) {
-		super(owner, clazz);
+	public ClassPopupMenu(DatabaseWindow win, SeriesClassesTab tab, Class clazz) {
+		super(win, clazz);
 		this.tab = tab;
 
 		mnuEditClass = new JMenuItem(Messages.getString("menu.class.edit")); //$NON-NLS-1$
@@ -72,22 +71,22 @@ public class ClassPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		Displayable win = null;
+		Displayable dialog = null;
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case EDIT_CLASS:
-			win = new ClassDetailDialog<O>(owner, tab, Messages.getString("menu.class.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
+			dialog = new ClassDetailDialog(win, tab, Messages.getString("menu.class.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
 			break;
 		case DELETE_CLASS:
 			confirmDelete("menu.class.delete"); //$NON-NLS-1$
 			break;
 		case NEW_CLASS:
-			win = new ClassDetailDialog<O>(owner, tab, Messages.getString("menu.class.new"), new Class(item.getSeries()), false); //$NON-NLS-1$
+			dialog = new ClassDetailDialog(win, tab, Messages.getString("menu.class.new"), new Class(item.getSeries()), false); //$NON-NLS-1$
 			break;
 		}
 
-		if (win != null) {
-			win.display();
+		if (dialog != null) {
+			dialog.display();
 		}
 	}
 
@@ -99,6 +98,6 @@ public class ClassPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 
 	@Override
 	protected void doRefresh() {
-		owner.refreshTab(tab);
+		win.refreshTab(tab);
 	}
 }

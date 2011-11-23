@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.ui.menu;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -32,7 +31,7 @@ import eu.lp0.cursus.ui.race.RaceDetailDialog;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-public class RacePopupMenu<O extends Frame & DatabaseWindow> extends AbstractNamedEntityPopupMenu<O, Race> implements ActionListener {
+public class RacePopupMenu extends AbstractNamedEntityPopupMenu<Race> implements ActionListener {
 	private JMenuItem mnuEditRace;
 	private JMenuItem mnuDeleteRace;
 	private JSeparator mnuSeparator1;
@@ -44,8 +43,8 @@ public class RacePopupMenu<O extends Frame & DatabaseWindow> extends AbstractNam
 		EDIT_RACE, DELETE_RACE, NEW_RACE;
 	}
 
-	public RacePopupMenu(O owner, Race race) {
-		super(owner, race);
+	public RacePopupMenu(DatabaseWindow win, Race race) {
+		super(win, race);
 
 		mnuEditRace = new JMenuItem(Messages.getString("menu.race.edit")); //$NON-NLS-1$
 		mnuEditRace.setActionCommand(Commands.EDIT_RACE.toString());
@@ -68,22 +67,22 @@ public class RacePopupMenu<O extends Frame & DatabaseWindow> extends AbstractNam
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		Displayable win = null;
+		Displayable dialog = null;
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case EDIT_RACE:
-			win = new RaceDetailDialog<O>(owner, Messages.getString("menu.race.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
+			dialog = new RaceDetailDialog(win, Messages.getString("menu.race.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
 			break;
 		case DELETE_RACE:
 			confirmDelete("menu.race.delete"); //$NON-NLS-1$
 			break;
 		case NEW_RACE:
-			win = new RaceDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(item.getEvent()), false); //$NON-NLS-1$
+			dialog = new RaceDetailDialog(win, item.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(item.getEvent()), false); //$NON-NLS-1$
 			break;
 		}
 
-		if (win != null) {
-			win.display();
+		if (dialog != null) {
+			dialog.display();
 		}
 	}
 
@@ -95,6 +94,6 @@ public class RacePopupMenu<O extends Frame & DatabaseWindow> extends AbstractNam
 
 	@Override
 	protected void doRefresh() {
-		owner.refreshRaceList();
+		win.refreshRaceList();
 	}
 }

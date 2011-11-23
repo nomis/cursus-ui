@@ -19,7 +19,6 @@ package eu.lp0.cursus.ui.series;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Frame;
 
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -31,14 +30,14 @@ import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.tree.ClassTree;
 
-public class SeriesClassesTab<O extends Frame & DatabaseWindow> extends AbstractDatabaseTab<O, Series> {
+public class SeriesClassesTab extends AbstractDatabaseTab<Series> {
 	private JSplitPane splitPane;
 	private JScrollPane leftScrollPane;
-	private ClassTree<O> list;
+	private ClassTree list;
 	private JScrollPane rightScrollPane;
 	private JTable table;
 
-	public SeriesClassesTab(O win) {
+	public SeriesClassesTab(DatabaseWindow win) {
 		super(Series.class, win, "tab.classes"); //$NON-NLS-1$
 		initialise();
 	}
@@ -53,7 +52,7 @@ public class SeriesClassesTab<O extends Frame & DatabaseWindow> extends Abstract
 		leftScrollPane.setPreferredSize(new Dimension(150, 0));
 		splitPane.setLeftComponent(leftScrollPane);
 
-		list = new ClassTree<O>(win, this);
+		list = new ClassTree(win, this);
 		list.setBorder(new EmptyBorder(2, 2, 2, 2));
 		list.setShowsRootHandles(false);
 		leftScrollPane.setViewportView(list);

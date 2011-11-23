@@ -17,17 +17,15 @@
  */
 package eu.lp0.cursus.ui.series;
 
-import java.awt.Frame;
-
 import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.common.CommonDetailDialog;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class SeriesDetailDialog<O extends Frame & DatabaseWindow> extends CommonDetailDialog<O, Series> {
+public class SeriesDetailDialog extends CommonDetailDialog<Series> {
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 
-	public SeriesDetailDialog(O win, String title, Series series, boolean isUpdate) {
+	public SeriesDetailDialog(DatabaseWindow win, String title, Series series, boolean isUpdate) {
 		super(win, title, seriesDAO, series, isUpdate);
 	}
 

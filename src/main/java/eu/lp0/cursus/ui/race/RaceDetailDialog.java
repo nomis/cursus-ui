@@ -17,19 +17,17 @@
  */
 package eu.lp0.cursus.ui.race;
 
-import java.awt.Frame;
-
 import eu.lp0.cursus.db.dao.EventDAO;
 import eu.lp0.cursus.db.dao.RaceDAO;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.ui.common.CommonDetailDialog;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class RaceDetailDialog<O extends Frame & DatabaseWindow> extends CommonDetailDialog<O, Race> {
+public class RaceDetailDialog extends CommonDetailDialog<Race> {
 	private static final EventDAO eventDAO = new EventDAO();
 	private static final RaceDAO raceDAO = new RaceDAO();
 
-	public RaceDetailDialog(O win, String title, Race race, boolean isUpdate) {
+	public RaceDetailDialog(DatabaseWindow win, String title, Race race, boolean isUpdate) {
 		super(win, title, raceDAO, race, isUpdate);
 	}
 

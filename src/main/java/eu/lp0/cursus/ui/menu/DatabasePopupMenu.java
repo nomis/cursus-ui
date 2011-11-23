@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.ui.menu;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -30,8 +29,8 @@ import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.series.SeriesDetailDialog;
 import eu.lp0.cursus.util.Messages;
 
-public class DatabasePopupMenu<O extends Frame & DatabaseWindow> extends JPopupMenu implements ActionListener {
-	private final O owner;
+public class DatabasePopupMenu extends JPopupMenu implements ActionListener {
+	private final DatabaseWindow win;
 
 	private JMenuItem mnuNewSeries;
 
@@ -39,8 +38,8 @@ public class DatabasePopupMenu<O extends Frame & DatabaseWindow> extends JPopupM
 		NEW_SERIES;
 	}
 
-	public DatabasePopupMenu(O owner) {
-		this.owner = owner;
+	public DatabasePopupMenu(DatabaseWindow win) {
+		this.win = win;
 
 		mnuNewSeries = new JMenuItem(Messages.getString("menu.series.new")); //$NON-NLS-1$
 		mnuNewSeries.setActionCommand(Commands.NEW_SERIES.toString());
@@ -50,16 +49,16 @@ public class DatabasePopupMenu<O extends Frame & DatabaseWindow> extends JPopupM
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		Displayable win = null;
+		Displayable dialog = null;
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_SERIES:
-			win = new SeriesDetailDialog<O>(owner, Messages.getString("menu.series.new"), new Series(), false); //$NON-NLS-1$
+			dialog = new SeriesDetailDialog(win, Messages.getString("menu.series.new"), new Series(), false); //$NON-NLS-1$
 			break;
 		}
 
-		if (win != null) {
-			win.display();
+		if (dialog != null) {
+			dialog.display();
 		}
 	}
 }

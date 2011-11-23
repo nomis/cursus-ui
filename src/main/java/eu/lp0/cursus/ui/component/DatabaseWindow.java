@@ -17,10 +17,14 @@
  */
 package eu.lp0.cursus.ui.component;
 
+import java.awt.Frame;
+
 import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.data.RaceEntity;
 
 public interface DatabaseWindow {
+	public Frame getFrame();
+
 	public Database getDatabase();
 
 	public RaceEntity getSelected();

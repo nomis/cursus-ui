@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.ui.menu;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -32,9 +31,9 @@ import eu.lp0.cursus.ui.series.ClassDetailDialog;
 import eu.lp0.cursus.ui.series.SeriesClassesTab;
 import eu.lp0.cursus.util.Messages;
 
-public class ClassesPopupMenu<O extends Frame & DatabaseWindow> extends JPopupMenu implements ActionListener {
-	private final O owner;
-	private final SeriesClassesTab<O> tab;
+public class ClassesPopupMenu extends JPopupMenu implements ActionListener {
+	private final DatabaseWindow win;
+	private final SeriesClassesTab tab;
 	private final Series series;
 
 	private JMenuItem mnuNewClass;
@@ -43,8 +42,8 @@ public class ClassesPopupMenu<O extends Frame & DatabaseWindow> extends JPopupMe
 		NEW_CLASS;
 	}
 
-	public ClassesPopupMenu(O owner, SeriesClassesTab<O> tab, Series series) {
-		this.owner = owner;
+	public ClassesPopupMenu(DatabaseWindow win, SeriesClassesTab tab, Series series) {
+		this.win = win;
 		this.tab = tab;
 		this.series = series;
 
@@ -56,16 +55,16 @@ public class ClassesPopupMenu<O extends Frame & DatabaseWindow> extends JPopupMe
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		Displayable win = null;
+		Displayable dialog = null;
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_CLASS:
-			win = new ClassDetailDialog<O>(owner, tab, Messages.getString("menu.class.new"), new Class(series), false); //$NON-NLS-1$
+			dialog = new ClassDetailDialog(win, tab, Messages.getString("menu.class.new"), new Class(series), false); //$NON-NLS-1$
 			break;
 		}
 
-		if (win != null) {
-			win.display();
+		if (dialog != null) {
+			dialog.display();
 		}
 	}
 }

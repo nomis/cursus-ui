@@ -26,9 +26,9 @@ import javax.swing.table.TableColumn;
 import eu.lp0.cursus.db.data.AbstractEntity;
 
 public class DatabaseRowModel<T extends AbstractEntity> {
-	private final List<DatabaseColumnModel<T, ?, ?>> columns;
+	private final List<DatabaseColumnModel<T, ?>> columns;
 
-	public DatabaseRowModel(List<DatabaseColumnModel<T, ?, ?>> columns) {
+	public DatabaseRowModel(List<DatabaseColumnModel<T, ?>> columns) {
 		this.columns = columns;
 	}
 

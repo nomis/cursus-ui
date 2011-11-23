@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.ui.tree;
 
-import java.awt.Frame;
 import java.util.List;
 
 import javax.swing.JPopupMenu;
@@ -43,12 +42,12 @@ import eu.lp0.cursus.ui.menu.RacePopupMenu;
 import eu.lp0.cursus.ui.menu.SeriesPopupMenu;
 import eu.lp0.cursus.util.Background;
 
-public class RaceTree<O extends Frame & DatabaseWindow> extends AbstractTree<O, DatabaseTreeNode, RaceEntity> implements DatabaseSync {
+public class RaceTree extends AbstractTree<DatabaseTreeNode, RaceEntity> implements DatabaseSync {
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 	private static final EventDAO eventDAO = new EventDAO();
 	private static final RaceDAO raceDAO = new RaceDAO();
 
-	public RaceTree(O win) {
+	public RaceTree(DatabaseWindow win) {
 		super(win, new DatabaseTreeNode());
 	}
 
@@ -72,13 +71,13 @@ public class RaceTree<O extends Frame & DatabaseWindow> extends AbstractTree<O, 
 	@Override
 	protected JPopupMenu menuFromUserObject(RaceEntity item) {
 		if (item instanceof Series) {
-			return new SeriesPopupMenu<O>(win, (Series)item);
+			return new SeriesPopupMenu(win, (Series)item);
 		} else if (item instanceof Event) {
-			return new EventPopupMenu<O>(win, (Event)item);
+			return new EventPopupMenu(win, (Event)item);
 		} else if (item instanceof Race) {
-			return new RacePopupMenu<O>(win, (Race)item);
+			return new RacePopupMenu(win, (Race)item);
 		} else if (item == null) {
-			return new DatabasePopupMenu<O>(win);
+			return new DatabasePopupMenu(win);
 		} else {
 			return null;
 		}

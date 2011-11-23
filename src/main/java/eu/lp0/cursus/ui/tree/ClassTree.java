@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.ui.tree;
 
-import java.awt.Frame;
 import java.util.List;
 
 import javax.swing.JPopupMenu;
@@ -40,14 +39,14 @@ import eu.lp0.cursus.ui.menu.ClassesPopupMenu;
 import eu.lp0.cursus.ui.series.SeriesClassesTab;
 import eu.lp0.cursus.util.Background;
 
-public class ClassTree<O extends Frame & DatabaseWindow> extends AbstractTree<O, ClassListTreeNode, Class> implements DatabaseTabSync<Series> {
-	private final SeriesClassesTab<O> tab;
+public class ClassTree extends AbstractTree<ClassListTreeNode, Class> implements DatabaseTabSync<Series> {
+	private final SeriesClassesTab tab;
 	private Series currentSeries = null;
 
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 	private static final ClassDAO classDAO = new ClassDAO();
 
-	public ClassTree(O win, SeriesClassesTab<O> tab) {
+	public ClassTree(DatabaseWindow win, SeriesClassesTab tab) {
 		super(win, new ClassListTreeNode());
 		this.tab = tab;
 
@@ -68,9 +67,9 @@ public class ClassTree<O extends Frame & DatabaseWindow> extends AbstractTree<O,
 	@Override
 	protected JPopupMenu menuFromUserObject(Class item) {
 		if (item instanceof Class) {
-			return new ClassPopupMenu<O>(win, tab, item);
+			return new ClassPopupMenu(win, tab, item);
 		} else if (item == null) {
-			return new ClassesPopupMenu<O>(win, tab, currentSeries);
+			return new ClassesPopupMenu(win, tab, currentSeries);
 		} else {
 			return null;
 		}

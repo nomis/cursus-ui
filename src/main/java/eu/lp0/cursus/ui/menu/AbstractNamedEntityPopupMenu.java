@@ -17,8 +17,6 @@
  */
 package eu.lp0.cursus.ui.menu;
 
-import java.awt.Frame;
-
 import javax.persistence.PersistenceException;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -35,18 +33,18 @@ import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 import eu.lp0.cursus.util.Messages;
 
-public abstract class AbstractNamedEntityPopupMenu<O extends Frame & DatabaseWindow, T extends AbstractEntity & NamedEntity> extends JPopupMenu {
+public abstract class AbstractNamedEntityPopupMenu<T extends AbstractEntity & NamedEntity> extends JPopupMenu {
 	protected final Logger log = LoggerFactory.getLogger(getClass());
-	protected final O owner;
+	protected final DatabaseWindow win;
 	protected final T item;
 
-	public AbstractNamedEntityPopupMenu(O owner, T item) {
-		this.owner = owner;
+	public AbstractNamedEntityPopupMenu(DatabaseWindow win, T item) {
+		this.win = win;
 		this.item = item;
 	}
 
 	protected void confirmDelete(String action) {
-		switch (JOptionPane.showConfirmDialog(owner, String.format(Messages.getString(action + ".confirm"), item.getName()), //$NON-NLS-1$
+		switch (JOptionPane.showConfirmDialog(win.getFrame(), String.format(Messages.getString(action + ".confirm"), item.getName()), //$NON-NLS-1$
 				Messages.getString(action) + Constants.EN_DASH + item.getName(), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
 		case JOptionPane.YES_OPTION:
 			doDelete(action);
@@ -62,17 +60,17 @@ public abstract class AbstractNamedEntityPopupMenu<O extends Frame & DatabaseWin
 		Background.execute(new Runnable() {
 			@Override
 			public void run() {
-				owner.getDatabase().startSession();
+				win.getDatabase().startSession();
 				try {
 					DatabaseSession.begin();
 					doDelete();
 					DatabaseSession.commit();
 				} catch (PersistenceException e) {
 					log.error("Unable to delete", e); //$NON-NLS-1$
-					DatabaseError.errorSaving(owner, Messages.getString(action) + Constants.EN_DASH + item.getName(), e);
+					DatabaseError.errorSaving(win.getFrame(), Messages.getString(action) + Constants.EN_DASH + item.getName(), e);
 					return;
 				} finally {
-					owner.getDatabase().endSession();
+					win.getDatabase().endSession();
 				}
 
 				doRefresh();

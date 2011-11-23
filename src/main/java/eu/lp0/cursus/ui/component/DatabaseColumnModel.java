@@ -17,8 +17,6 @@
  */
 package eu.lp0.cursus.ui.component;
 
-import java.awt.Frame;
-
 import javax.persistence.PersistenceException;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
@@ -37,9 +35,9 @@ import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 import eu.lp0.cursus.util.Messages;
 
-public abstract class DatabaseColumnModel<T extends AbstractEntity, V, O extends Frame & DatabaseWindow> implements DatabaseTableCellEditor.Column<T, V> {
+public abstract class DatabaseColumnModel<T extends AbstractEntity, V> implements DatabaseTableCellEditor.Column<T, V> {
 	private final Logger log = LoggerFactory.getLogger(getClass());
-	protected final O win;
+	protected final DatabaseWindow win;
 	private final AbstractDAO<T> dao;
 	private final String name;
 	private final boolean editable;
@@ -51,7 +49,7 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V, O extends
 		this.editable = false;
 	}
 
-	public DatabaseColumnModel(String name, O win, AbstractDAO<T> dao) {
+	public DatabaseColumnModel(String name, DatabaseWindow win, AbstractDAO<T> dao) {
 		this.win = win;
 		this.dao = dao;
 		this.name = Messages.getString(name);
@@ -119,7 +117,7 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V, O extends
 		} catch (PersistenceException e) {
 			log.error(String.format("Unable to save changes: row=%s#%d, column=%s, oldValue=%s, newValue=%s", row.getClass().getSimpleName(), row.getId(), //$NON-NLS-1$
 					getName(), oldValue, newValue), e);
-			DatabaseError.errorSaving(win, Constants.APP_NAME, e);
+			DatabaseError.errorSaving(win.getFrame(), Constants.APP_NAME, e);
 			return false;
 		} finally {
 			win.getDatabase().endSession();

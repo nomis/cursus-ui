@@ -17,21 +17,19 @@
  */
 package eu.lp0.cursus.ui.series;
 
-import java.awt.Frame;
-
 import eu.lp0.cursus.db.dao.ClassDAO;
 import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.ui.common.CommonDetailDialog;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class ClassDetailDialog<O extends Frame & DatabaseWindow> extends CommonDetailDialog<O, Class> {
-	private final SeriesClassesTab<O> tab;
+public class ClassDetailDialog extends CommonDetailDialog<Class> {
+	private final SeriesClassesTab tab;
 
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 	private static final ClassDAO classDAO = new ClassDAO();
 
-	public ClassDetailDialog(O win, SeriesClassesTab<O> tab, String title, Class clazz, boolean isUpdate) {
+	public ClassDetailDialog(DatabaseWindow win, SeriesClassesTab tab, String title, Class clazz, boolean isUpdate) {
 		super(win, title, classDAO, clazz, isUpdate);
 		this.tab = tab;
 	}

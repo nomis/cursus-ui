@@ -17,8 +17,6 @@
  */
 package eu.lp0.cursus.ui.component;
 
-import java.awt.Frame;
-
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
@@ -27,14 +25,14 @@ import javax.swing.border.EmptyBorder;
 import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.util.Messages;
 
-public abstract class AbstractDatabaseTab<O extends Frame & DatabaseWindow, T extends RaceEntity> extends JPanel implements DatabaseTabSync<T> {
+public abstract class AbstractDatabaseTab<T extends RaceEntity> extends JPanel implements DatabaseTabSync<T> {
 	private final Class<T> clazz;
-	protected final O win;
+	protected final DatabaseWindow win;
 
 	private final String title;
 	private final int mnemonic;
 
-	public AbstractDatabaseTab(Class<T> clazz, O win, String messagesKey) {
+	public AbstractDatabaseTab(Class<T> clazz, DatabaseWindow win, String messagesKey) {
 		this.clazz = clazz;
 		this.win = win;
 

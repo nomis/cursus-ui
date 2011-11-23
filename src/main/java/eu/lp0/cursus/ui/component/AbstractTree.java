@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.ui.component;
 
-import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -31,11 +30,11 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-public abstract class AbstractTree<O extends Frame & DatabaseWindow, R extends TreeNode, T> extends JTree {
-	protected final O win;
+public abstract class AbstractTree<R extends TreeNode, T> extends JTree {
+	protected final DatabaseWindow win;
 	protected final R root;
 
-	public AbstractTree(O win, R root) {
+	public AbstractTree(DatabaseWindow win, R root) {
 		super();
 		this.win = win;
 		this.root = root;

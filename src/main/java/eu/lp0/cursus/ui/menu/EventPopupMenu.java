@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.ui.menu;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -34,7 +33,7 @@ import eu.lp0.cursus.ui.race.RaceDetailDialog;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-public class EventPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNamedEntityPopupMenu<O, Event> implements ActionListener {
+public class EventPopupMenu extends AbstractNamedEntityPopupMenu<Event> implements ActionListener {
 	private JMenuItem mnuNewRace;
 	private JMenuItem mnuEditEvent;
 	private JMenuItem mnuDeleteEvent;
@@ -47,8 +46,8 @@ public class EventPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 		NEW_RACE, EDIT_EVENT, DELETE_EVENT, NEW_EVENT;
 	}
 
-	public EventPopupMenu(O owner, Event event) {
-		super(owner, event);
+	public EventPopupMenu(DatabaseWindow win, Event event) {
+		super(win, event);
 
 		mnuNewRace = new JMenuItem(Messages.getString("menu.race.new")); //$NON-NLS-1$
 		mnuNewRace.setActionCommand(Commands.NEW_RACE.toString());
@@ -76,25 +75,25 @@ public class EventPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		Displayable win = null;
+		Displayable dialog = null;
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_RACE:
-			win = new RaceDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(item), false); //$NON-NLS-1$
+			dialog = new RaceDetailDialog(win, item.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(item), false); //$NON-NLS-1$
 			break;
 		case EDIT_EVENT:
-			win = new EventDetailDialog<O>(owner, Messages.getString("menu.event.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
+			dialog = new EventDetailDialog(win, Messages.getString("menu.event.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
 			break;
 		case DELETE_EVENT:
 			confirmDelete("menu.event.delete"); //$NON-NLS-1$
 			break;
 		case NEW_EVENT:
-			win = new EventDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(item.getSeries()), false); //$NON-NLS-1$
+			dialog = new EventDetailDialog(win, item.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(item.getSeries()), false); //$NON-NLS-1$
 			break;
 		}
 
-		if (win != null) {
-			win.display();
+		if (dialog != null) {
+			dialog.display();
 		}
 	}
 
@@ -106,6 +105,6 @@ public class EventPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNa
 
 	@Override
 	protected void doRefresh() {
-		owner.refreshRaceList();
+		win.refreshRaceList();
 	}
 }

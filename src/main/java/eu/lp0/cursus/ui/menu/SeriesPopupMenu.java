@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.ui.menu;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -34,7 +33,7 @@ import eu.lp0.cursus.ui.series.SeriesDetailDialog;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
-public class SeriesPopupMenu<O extends Frame & DatabaseWindow> extends AbstractNamedEntityPopupMenu<O, Series> implements ActionListener {
+public class SeriesPopupMenu extends AbstractNamedEntityPopupMenu<Series> implements ActionListener {
 	private JMenuItem mnuNewEvent;
 	private JMenuItem mnuEditSeries;
 	private JMenuItem mnuDeleteSeries;
@@ -47,8 +46,8 @@ public class SeriesPopupMenu<O extends Frame & DatabaseWindow> extends AbstractN
 		NEW_SERIES, NEW_EVENT, EDIT_SERIES, DELETE_SERIES;
 	}
 
-	public SeriesPopupMenu(O owner, Series series) {
-		super(owner, series);
+	public SeriesPopupMenu(DatabaseWindow win, Series series) {
+		super(win, series);
 
 		mnuNewEvent = new JMenuItem(Messages.getString("menu.event.new")); //$NON-NLS-1$
 		mnuNewEvent.setActionCommand(Commands.NEW_EVENT.toString());
@@ -76,25 +75,25 @@ public class SeriesPopupMenu<O extends Frame & DatabaseWindow> extends AbstractN
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		Displayable win = null;
+		Displayable dialog = null;
 
 		switch (Commands.valueOf(ae.getActionCommand())) {
 		case NEW_EVENT:
-			win = new EventDetailDialog<O>(owner, item.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(item), false); //$NON-NLS-1$
+			dialog = new EventDetailDialog(win, item.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(item), false); //$NON-NLS-1$
 			break;
 		case EDIT_SERIES:
-			win = new SeriesDetailDialog<O>(owner, Messages.getString("menu.series.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
+			dialog = new SeriesDetailDialog(win, Messages.getString("menu.series.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
 			break;
 		case DELETE_SERIES:
 			confirmDelete("menu.series.delete"); //$NON-NLS-1$
 			break;
 		case NEW_SERIES:
-			win = new SeriesDetailDialog<O>(owner, Messages.getString("menu.series.new"), new Series(), false); //$NON-NLS-1$
+			dialog = new SeriesDetailDialog(win, Messages.getString("menu.series.new"), new Series(), false); //$NON-NLS-1$
 			break;
 		}
 
-		if (win != null) {
-			win.display();
+		if (dialog != null) {
+			dialog.display();
 		}
 	}
 
@@ -106,6 +105,6 @@ public class SeriesPopupMenu<O extends Frame & DatabaseWindow> extends AbstractN
 
 	@Override
 	protected void doRefresh() {
-		owner.refreshRaceList();
+		win.refreshRaceList();
 	}
 }
