@@ -126,6 +126,8 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 	}
 
 	private Series getCurrentSeries() {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		return currentSeries;
 	}
 
