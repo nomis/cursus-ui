@@ -100,7 +100,13 @@ public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableM
 		rows.trimToSize();
 	}
 
-	public void deleteRow(int index) {
+	protected void addRow(T row) {
+		int idxNew = rows.size();
+		rows.add(row);
+		fireTableRowsInserted(idxNew, idxNew);
+	}
+
+	protected void deleteRow(int index) {
 		rows.remove(index);
 		fireTableRowsDeleted(index, index);
 	}

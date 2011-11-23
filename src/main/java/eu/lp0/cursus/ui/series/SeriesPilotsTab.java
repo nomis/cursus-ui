@@ -53,7 +53,6 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 	private JScrollPane scrollPane;
 	private JTable table;
 	private DatabaseTableModel<Pilot> model;
-	@SuppressWarnings("unused")
 	private Series currentSeries = null;
 
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
@@ -114,11 +113,20 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 					protected String getValue(Pilot row) {
 						return row.getName();
 					}
+
+					@Override
+					protected Pilot newRow() {
+						return new Pilot(getCurrentSeries(), ""); //$NON-NLS-1$
+					}
 				})));
 		model.setupModel(table);
 		table.getRowSorter().setSortKeys(
 				Arrays.asList(new RowSorter.SortKey(0, SortOrder.ASCENDING), new RowSorter.SortKey(1, SortOrder.ASCENDING), new RowSorter.SortKey(2,
 						SortOrder.ASCENDING), new RowSorter.SortKey(3, SortOrder.ASCENDING)));
+	}
+
+	private Series getCurrentSeries() {
+		return currentSeries;
 	}
 
 	@Override

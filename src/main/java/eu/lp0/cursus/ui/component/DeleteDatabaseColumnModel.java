@@ -23,8 +23,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.persistence.PersistenceException;
 import javax.swing.AbstractCellEditor;
@@ -52,7 +52,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 	private final AbstractDAO<T> dao;
 
 	public DeleteDatabaseColumnModel(DatabaseWindow win, AbstractDAO<T> dao) {
-		super("+", win, dao); //$NON-NLS-1$
+		super("", win, dao); //$NON-NLS-1$
 		this.dao = dao;
 	}
 
@@ -63,7 +63,113 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 		col.setPreferredWidth(25);
 		col.setMaxWidth(25);
 
+		col.setHeaderRenderer(new HeaderRenderer());
+
 		sorter.setSortable(col.getModelIndex(), false);
+	}
+
+	protected abstract T newRow();
+
+	protected void addRow(DatabaseTableModel<T> model) {
+		assert (SwingUtilities.isEventDispatchThread());
+		T row = null;
+
+		win.getDatabase().startSession();
+		try {
+			DatabaseSession.begin();
+
+			row = newRow();
+			dao.persist(row);
+
+			DatabaseSession.commit();
+		} catch (PersistenceException e) {
+			if (row != null) {
+				log.error(String.format("Unable to save row: %s#%d", row.getClass().getSimpleName(), row.getId()), e); //$NON-NLS-1$
+			}
+			DatabaseError.errorSaving(win.getFrame(), Constants.APP_NAME, e);
+		} finally {
+			win.getDatabase().endSession();
+		}
+
+		model.addRow(row);
+	}
+
+	protected boolean deleteRow(T row) {
+		assert (SwingUtilities.isEventDispatchThread());
+
+		win.getDatabase().startSession();
+		try {
+			DatabaseSession.begin();
+
+			T item = dao.get(row);
+			dao.remove(item);
+
+			DatabaseSession.commit();
+			return true;
+		} catch (PersistenceException e) {
+			log.error(String.format("Unable to delete row: row=%s#%d", row.getClass().getSimpleName(), row.getId()), e); //$NON-NLS-1$
+			DatabaseError.errorSaving(win.getFrame(), Constants.APP_NAME, e);
+			return false;
+		} finally {
+			win.getDatabase().endSession();
+		}
+	}
+
+	private class HeaderRenderer extends DefaultTableCellRenderer implements ActionListener, MouseListener {
+		private final CellJButton button = new CellJButton("+"); //$NON-NLS-1$
+		private DatabaseTableModel<T> model;
+
+		public HeaderRenderer() {
+			// button.addMouseListener(new MouseAdapter() {
+			// @Override
+			// public void mouseExited(MouseEvent e) {
+			// button.setEnabled(false);
+			// button.setEnabled(true);
+			// }
+			// });
+			button.addActionListener(this);
+		}
+
+		@Override
+		@SuppressWarnings("unchecked")
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int vRow, int vCol) {
+			if (model == null) {
+				table.getTableHeader().addMouseListener(this);
+				model = (DatabaseTableModel<T>)table.getModel();
+			}
+			button.setSelected(isSelected);
+			button.setFocus(hasFocus);
+			return button;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			addRow(model);
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent me) {
+			button.getModel().setArmed(true);
+		}
+
+		@Override
+		public void mousePressed(MouseEvent me) {
+			button.getModel().setPressed(true);
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent me) {
+			button.getModel().setPressed(false);
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent me) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent me) {
+			button.getModel().setArmed(false);
+		}
 	}
 
 	@Override
@@ -77,8 +183,8 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 		private boolean focus;
 		private boolean painting;
 
-		public CellJButton() {
-			super("-"); //$NON-NLS-1$
+		public CellJButton(String text) {
+			super(text);
 		}
 
 		public void setFocus(boolean focus) {
@@ -109,10 +215,16 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 
 		@Override
 		public void repaint(long tm, int x, int y, int width, int height) {
+			if (focus) {
+				super.repaint(tm, x, y, width, height);
+			}
 		}
 
 		@Override
 		public void repaint(Rectangle r) {
+			if (focus) {
+				super.repaint(r);
+			}
 		}
 
 		@Override
@@ -125,7 +237,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 	}
 
 	private class CellRenderer extends DefaultTableCellRenderer {
-		private final CellJButton button = new CellJButton();
+		private final CellJButton button = new CellJButton("-"); //$NON-NLS-1$
 
 		public CellRenderer() {
 			setOpaque(true);
@@ -145,47 +257,19 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 		throw new UnsupportedOperationException();
 	}
 
-	protected boolean deleteRow(T row) {
-		assert (SwingUtilities.isEventDispatchThread());
-
-		win.getDatabase().startSession();
-		try {
-			DatabaseSession.begin();
-
-			T item = dao.get(row);
-			dao.remove(item);
-
-			DatabaseSession.commit();
-			return true;
-		} catch (PersistenceException e) {
-			log.error(String.format("Unable to delete row: row=%s#%d", row.getClass().getSimpleName(), row.getId()), e); //$NON-NLS-1$
-			DatabaseError.errorSaving(win.getFrame(), Constants.APP_NAME, e);
-			return false;
-		} finally {
-			win.getDatabase().endSession();
-		}
-	}
-
 	@Override
 	protected TableCellEditor createCellEditor() {
 		return new CellEditor();
 	}
 
 	private class CellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
-		private final CellJButton button = new CellJButton();
+		private final CellJButton button = new CellJButton("-"); //$NON-NLS-1$
 		private DatabaseTableModel<T> model;
 		private Integer mRow;
 		private T mVal;
 
 		public CellEditor() {
 			button.setFocus(true);
-			button.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseExited(MouseEvent e) {
-					button.setEnabled(false);
-					button.setEnabled(true);
-				}
-			});
 			button.addActionListener(this);
 		}
 
