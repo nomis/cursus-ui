@@ -120,13 +120,6 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 		private DatabaseTableModel<T> model;
 
 		public HeaderRenderer() {
-			// button.addMouseListener(new MouseAdapter() {
-			// @Override
-			// public void mouseExited(MouseEvent e) {
-			// button.setEnabled(false);
-			// button.setEnabled(true);
-			// }
-			// });
 			button.addActionListener(this);
 		}
 
