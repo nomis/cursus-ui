@@ -41,11 +41,13 @@ import eu.lp0.cursus.ui.component.DatabaseColumnModel;
 import eu.lp0.cursus.ui.component.DatabaseRowModel;
 import eu.lp0.cursus.ui.component.DatabaseTableModel;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
+import eu.lp0.cursus.ui.component.DeleteDatabaseColumnModel;
 import eu.lp0.cursus.ui.component.EnumDatabaseColumnModel;
 import eu.lp0.cursus.ui.component.RaceNumbersDatabaseColumnModel;
 import eu.lp0.cursus.ui.component.StringDatabaseColumnModel;
 import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
+import eu.lp0.cursus.util.Messages;
 
 public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 	private JScrollPane scrollPane;
@@ -72,9 +74,9 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 		table = new JTable();
 		scrollPane.setViewportView(table);
 
-		model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot>(Arrays.<DatabaseColumnModel<Pilot, ?>>asList(new RaceNumbersDatabaseColumnModel(
-				"pilot.race-number", win), //$NON-NLS-1$
-				new StringDatabaseColumnModel<Pilot>("pilot.name", win, pilotDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
+		model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot>(Arrays.<DatabaseColumnModel<Pilot, ?>>asList( //
+				new RaceNumbersDatabaseColumnModel(Messages.getString("pilot.race-number"), win), //$NON-NLS-1$
+				new StringDatabaseColumnModel<Pilot>(Messages.getString("pilot.name"), win, pilotDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
 					@Override
 					protected String getValue(Pilot row) {
 						return row.getName();
@@ -85,7 +87,7 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 						row.setName(value);
 						return true;
 					}
-				}, new EnumDatabaseColumnModel<Pilot, Gender>("pilot.gender", win, pilotDAO, Gender.class, true) { //$NON-NLS-1$
+				}, new EnumDatabaseColumnModel<Pilot, Gender>(Messages.getString("pilot.gender"), win, pilotDAO, Gender.class, true) { //$NON-NLS-1$
 					@Override
 					protected Gender getEnumValue(Pilot row) {
 						return row.getGender();
@@ -96,7 +98,7 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 						row.setGender(value);
 						return true;
 					}
-				}, new StringDatabaseColumnModel<Pilot>("pilot.country", win, pilotDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
+				}, new StringDatabaseColumnModel<Pilot>(Messages.getString("pilot.country"), win, pilotDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
 					@Override
 					protected String getValue(Pilot row) {
 						return row.getCountry();
@@ -106,6 +108,11 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 					protected boolean setValue(Pilot row, String value) {
 						row.setCountry(value);
 						return true;
+					}
+				}, new DeleteDatabaseColumnModel<Pilot>(win, pilotDAO) {
+					@Override
+					protected String getValue(Pilot row) {
+						return row.getName();
 					}
 				})));
 		model.setupModel(table);

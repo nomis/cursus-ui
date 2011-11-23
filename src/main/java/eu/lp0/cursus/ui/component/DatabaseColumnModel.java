@@ -22,6 +22,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +35,6 @@ import eu.lp0.cursus.db.dao.AbstractDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
-import eu.lp0.cursus.util.Messages;
 
 public abstract class DatabaseColumnModel<T extends AbstractEntity, V> implements DatabaseTableCellEditor.Column<T, V> {
 	private final Logger log = LoggerFactory.getLogger(getClass());
@@ -45,14 +46,14 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V> implement
 	public DatabaseColumnModel(String name) {
 		this.win = null;
 		this.dao = null;
-		this.name = Messages.getString(name);
+		this.name = name;
 		this.editable = false;
 	}
 
 	public DatabaseColumnModel(String name, DatabaseWindow win, AbstractDAO<T> dao) {
 		this.win = win;
 		this.dao = dao;
-		this.name = Messages.getString(name);
+		this.name = name;
 		this.editable = true;
 	}
 
@@ -64,7 +65,7 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V> implement
 		return editable;
 	}
 
-	public void setupModel(TableColumn col) {
+	public void setupModel(TableRowSorter<TableModel> sorter, TableColumn col) {
 		col.setCellRenderer(createCellRenderer());
 		if (isCellEditable()) {
 			col.setCellEditor(createCellEditor());

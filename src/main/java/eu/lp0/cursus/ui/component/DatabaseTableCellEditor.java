@@ -30,7 +30,6 @@ import eu.lp0.cursus.db.data.AbstractEntity;
 public class DatabaseTableCellEditor<T extends AbstractEntity, V> extends DefaultCellEditor {
 	private final Column<T, V> column;
 	protected Integer mRow = null;
-	protected Integer mCol = null;
 	protected T mVal = null;
 
 	public static interface Column<T extends AbstractEntity, V> extends DatabaseTableCellRenderer.Column<T, V> {
@@ -59,14 +58,25 @@ public class DatabaseTableCellEditor<T extends AbstractEntity, V> extends Defaul
 	@SuppressWarnings("unchecked")
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int vRow, int vCol) {
 		mRow = table.convertRowIndexToModel(vRow);
-		mCol = table.convertColumnIndexToModel(vCol);
 		mVal = (T)value;
 		return super.getTableCellEditorComponent(table, column.loadValue(mVal), isSelected, vRow, vCol);
 	}
 
 	@Override
+	public void cancelCellEditing() {
+		super.cancelCellEditing();
+		mRow = null;
+		mVal = null;
+	}
+
+	@Override
 	@SuppressWarnings("unchecked")
 	public boolean stopCellEditing() {
-		return column.saveEditedValue(mVal, (V)getCellEditorValue()) && super.stopCellEditing();
+		try {
+			return column.saveEditedValue(mVal, (V)getCellEditorValue()) && super.stopCellEditing();
+		} finally {
+			mRow = null;
+			mVal = null;
+		}
 	}
 }

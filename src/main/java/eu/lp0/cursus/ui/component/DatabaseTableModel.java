@@ -71,7 +71,10 @@ public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableM
 		sorter.setSortsOnUpdates(true);
 		table.setRowSorter(sorter);
 
-		rowModel.setupModel(table);
+		rowModel.setupModel(table, sorter);
+
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		table.doLayout();
 	}
 
 	public void updateModel(List<T> newRows) {
@@ -95,5 +98,10 @@ public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableM
 		}
 
 		rows.trimToSize();
+	}
+
+	public void deleteRow(int index) {
+		rows.remove(index);
+		fireTableRowsDeleted(index, index);
 	}
 }

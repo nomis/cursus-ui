@@ -22,6 +22,8 @@ import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import eu.lp0.cursus.db.data.AbstractEntity;
 
@@ -40,11 +42,11 @@ public class DatabaseRowModel<T extends AbstractEntity> {
 		return columns.size();
 	}
 
-	public void setupModel(JTable table) {
+	public void setupModel(JTable table, TableRowSorter<TableModel> sorter) {
 		Enumeration<TableColumn> cols = table.getColumnModel().getColumns();
 		while (cols.hasMoreElements()) {
 			TableColumn col = cols.nextElement();
-			columns.get(col.getModelIndex()).setupModel(col);
+			columns.get(col.getModelIndex()).setupModel(sorter, col);
 		}
 	}
 
