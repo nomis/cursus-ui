@@ -23,6 +23,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -117,7 +119,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 		}
 	}
 
-	private class HeaderRenderer extends DefaultTableCellRenderer implements ActionListener, MouseListener, MouseMotionListener {
+	private class HeaderRenderer extends DefaultTableCellRenderer implements ActionListener, MouseListener, MouseMotionListener, KeyListener {
 		private final CellJButton button = new CellJButton("+"); //$NON-NLS-1$
 		private JTable cTable;
 		private JTableHeader cHeader;
@@ -137,12 +139,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 				cModel = (DatabaseTableModel<T>)table.getModel();
 				cHeader.addMouseListener(this);
 				cHeader.addMouseMotionListener(this);
-			} else if (table == null) {
-				cHeader.removeMouseListener(this);
-				cHeader.removeMouseMotionListener(this);
-				cTable = null;
-				cHeader = null;
-				cModel = null;
+				cHeader.addKeyListener(this);
 			}
 			mCol = table.convertColumnIndexToModel(vCol);
 			button.setSelected(isSelected);
@@ -207,6 +204,33 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 				button.getModel().setArmed(false);
 			}
 		}
+
+		@Override
+		public void keyTyped(KeyEvent ke) {
+			if (button.hasFakeFocus()) {
+				button.dispatchEvent(ke);
+			}
+		}
+
+		@Override
+		public void keyPressed(KeyEvent ke) {
+			// There's a side effect here in that the button won't
+			// get the key press that was used to change focus
+			if (button.hasFakeFocus()) {
+				// This works but the button's not really visible
+				// so there's no visual feedback when activated
+				button.dispatchEvent(ke);
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent ke) {
+			// There's a side effect here in that the button won't
+			// get the key release that was used to change focus
+			if (button.hasFakeFocus()) {
+				button.dispatchEvent(ke);
+			}
+		}
 	}
 
 	@Override
@@ -226,6 +250,10 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 
 		public void setFocus(boolean focus) {
 			this.focus = focus;
+		}
+
+		public boolean hasFakeFocus() {
+			return focus;
 		}
 
 		@Override
