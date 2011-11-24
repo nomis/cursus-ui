@@ -78,7 +78,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 
 	protected abstract T newRow();
 
-	protected void addRow(DatabaseTableModel<T> model) {
+	protected void addRow(JTable table, DatabaseTableModel<T> model, int mCol) {
 		assert (SwingUtilities.isEventDispatchThread());
 		T row = null;
 
@@ -99,7 +99,11 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 			win.getDatabase().endSession();
 		}
 
+		int mRow = model.getRowCount();
 		model.addRow(row);
+		int vRow = table.convertRowIndexToView(mRow);
+		table.getSelectionModel().setSelectionInterval(vRow, vRow);
+		table.scrollRectToVisible(table.getCellRect(mRow, table.convertColumnIndexToView(mCol), true));
 	}
 
 	protected boolean confirmDelete(T row) {
@@ -158,6 +162,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 				cHeader.addMouseMotionListener(this);
 				cHeader.addKeyListener(this);
 			}
+			// This renderer is only used by one column
 			mCol = table.convertColumnIndexToModel(vCol);
 			button.setSelected(isSelected);
 			button.setFocus(hasFocus);
@@ -166,7 +171,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 
 		@Override
 		public void actionPerformed(ActionEvent ae) {
-			addRow(cModel);
+			addRow(cTable, cModel, mCol);
 		}
 
 		private boolean ourColumn(MouseEvent me) {
