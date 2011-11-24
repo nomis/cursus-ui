@@ -65,7 +65,7 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V> implement
 		return editable;
 	}
 
-	public void setupModel(TableRowSorter<TableModel> sorter, TableColumn col) {
+	public void setupModel(TableRowSorter<? extends TableModel> sorter, TableColumn col) {
 		col.setCellRenderer(createCellRenderer());
 		if (isCellEditable()) {
 			col.setCellEditor(createCellEditor());

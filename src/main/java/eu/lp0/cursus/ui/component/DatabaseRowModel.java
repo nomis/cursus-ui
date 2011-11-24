@@ -34,6 +34,10 @@ public class DatabaseRowModel<T extends AbstractEntity> {
 		this.columns = columns;
 	}
 
+	protected List<DatabaseColumnModel<T, ?>> getColumns() {
+		return columns;
+	}
+
 	public String getColumnName(int mCol) {
 		return columns.get(mCol).getName();
 	}
@@ -42,15 +46,19 @@ public class DatabaseRowModel<T extends AbstractEntity> {
 		return columns.size();
 	}
 
-	public void setupModel(JTable table, TableRowSorter<TableModel> sorter) {
+	public boolean isCellEditable(int mCol) {
+		return columns.get(mCol).isCellEditable();
+	}
+
+	public Object getValueAt(T row, int mCol) {
+		return columns.get(mCol).getValue(row);
+	}
+
+	public void setupModel(JTable table, TableRowSorter<? extends TableModel> sorter) {
 		Enumeration<TableColumn> cols = table.getColumnModel().getColumns();
 		while (cols.hasMoreElements()) {
 			TableColumn col = cols.nextElement();
 			columns.get(col.getModelIndex()).setupModel(sorter, col);
 		}
-	}
-
-	public boolean isCellEditable(int mCol) {
-		return columns.get(mCol).isCellEditable();
 	}
 }

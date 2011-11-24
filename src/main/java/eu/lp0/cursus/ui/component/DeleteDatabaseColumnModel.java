@@ -61,7 +61,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 	}
 
 	@Override
-	public void setupModel(TableRowSorter<TableModel> sorter, TableColumn col) {
+	public void setupModel(TableRowSorter<? extends TableModel> sorter, TableColumn col) {
 		super.setupModel(sorter, col);
 		col.setMinWidth(25);
 		col.setPreferredWidth(25);

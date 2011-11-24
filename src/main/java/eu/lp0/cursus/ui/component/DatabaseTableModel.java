@@ -67,7 +67,7 @@ public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableM
 	public void setupModel(JTable table) {
 		table.setModel(this);
 
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(this);
+		TableRowSorter<? extends TableModel> sorter = new TableRowSorter<TableModel>(getRealModel());
 		sorter.setSortsOnUpdates(true);
 		table.setRowSorter(sorter);
 
@@ -75,6 +75,27 @@ public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableM
 
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		table.doLayout();
+	}
+
+	private TableModel getRealModel() {
+		// The sorter needs to get a real view of the data
+		// otherwise it'll sort on the row object itself
+		return new AbstractTableModel() {
+			@Override
+			public Object getValueAt(int mRow, int mCol) {
+				return rowModel.getValueAt(rows.get(mRow), mCol);
+			}
+
+			@Override
+			public int getRowCount() {
+				return DatabaseTableModel.this.getRowCount();
+			}
+
+			@Override
+			public int getColumnCount() {
+				return DatabaseTableModel.this.getColumnCount();
+			}
+		};
 	}
 
 	public void updateModel(List<T> newRows) {
