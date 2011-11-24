@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import javax.persistence.PersistenceException;
 import javax.swing.AbstractCellEditor;
@@ -32,6 +33,7 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -115,9 +117,12 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 		}
 	}
 
-	private class HeaderRenderer extends DefaultTableCellRenderer implements ActionListener, MouseListener {
+	private class HeaderRenderer extends DefaultTableCellRenderer implements ActionListener, MouseListener, MouseMotionListener {
 		private final CellJButton button = new CellJButton("+"); //$NON-NLS-1$
-		private DatabaseTableModel<T> model;
+		private JTable cTable;
+		private JTableHeader cHeader;
+		private DatabaseTableModel<T> cModel;
+		private int mCol = -1;
 
 		public HeaderRenderer() {
 			button.addActionListener(this);
@@ -126,10 +131,20 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 		@Override
 		@SuppressWarnings("unchecked")
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int vRow, int vCol) {
-			if (model == null) {
-				table.getTableHeader().addMouseListener(this);
-				model = (DatabaseTableModel<T>)table.getModel();
+			if (cTable == null) {
+				cTable = table;
+				cHeader = table.getTableHeader();
+				cModel = (DatabaseTableModel<T>)table.getModel();
+				cHeader.addMouseListener(this);
+				cHeader.addMouseMotionListener(this);
+			} else if (table == null) {
+				cHeader.removeMouseListener(this);
+				cHeader.removeMouseMotionListener(this);
+				cTable = null;
+				cHeader = null;
+				cModel = null;
 			}
+			mCol = table.convertColumnIndexToModel(vCol);
 			button.setSelected(isSelected);
 			button.setFocus(hasFocus);
 			return button;
@@ -137,31 +152,60 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 
 		@Override
 		public void actionPerformed(ActionEvent ae) {
-			addRow(model);
+			addRow(cModel);
+		}
+
+		private boolean ourColumn(MouseEvent me) {
+			return mCol == cTable.convertColumnIndexToModel(cHeader.columnAtPoint(me.getPoint()));
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent me) {
-			button.getModel().setArmed(true);
+			// If the mouse moves onto the header, do nothing as the mouseMoved event will be triggered
 		}
 
 		@Override
 		public void mousePressed(MouseEvent me) {
-			button.getModel().setPressed(true);
+			// Only depress the button if the mouse is over our column
+			if (ourColumn(me)) {
+				button.getModel().setPressed(true);
+			}
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent me) {
+			// Always depress the button as the mouse may now be over another column
 			button.getModel().setPressed(false);
 		}
 
 		@Override
 		public void mouseClicked(MouseEvent me) {
+			// Do nothing as the button should have been successfully pressed while armed
 		}
 
 		@Override
 		public void mouseExited(MouseEvent me) {
+			// If the mouse moves off the header, disarm the button
 			button.getModel().setArmed(false);
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent me) {
+			// Can't check the column here:
+			// it would work for the original location,
+			// but also for the new location... so it'd
+			// be clicked on column moves
+			button.getModel().setArmed(false);
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent me) {
+			// If the mouse moves over our column, arm the button
+			if (ourColumn(me)) {
+				button.getModel().setArmed(true);
+			} else {
+				button.getModel().setArmed(false);
+			}
 		}
 	}
 
