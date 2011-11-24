@@ -108,7 +108,7 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 						row.setCountry(value);
 						return true;
 					}
-				}, new DeleteDatabaseColumnModel<Pilot>(win, pilotDAO) {
+				}, new DeleteDatabaseColumnModel<Pilot>(win, pilotDAO, "menu.pilot.delete") { //$NON-NLS-1$
 					@Override
 					protected String getValue(Pilot row) {
 						return row.getName();

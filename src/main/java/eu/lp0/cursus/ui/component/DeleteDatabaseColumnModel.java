@@ -32,6 +32,7 @@ import java.awt.event.MouseMotionListener;
 import javax.persistence.PersistenceException;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -50,14 +51,17 @@ import eu.lp0.cursus.db.dao.AbstractDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
+import eu.lp0.cursus.util.Messages;
 
 public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extends DatabaseColumnModel<T, String> {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final AbstractDAO<T> dao;
+	private final String action;
 
-	public DeleteDatabaseColumnModel(DatabaseWindow win, AbstractDAO<T> dao) {
+	public DeleteDatabaseColumnModel(DatabaseWindow win, AbstractDAO<T> dao, String action) {
 		super("", win, dao); //$NON-NLS-1$
 		this.dao = dao;
+		this.action = action;
 	}
 
 	@Override
@@ -96,6 +100,19 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 		}
 
 		model.addRow(row);
+	}
+
+	protected boolean confirmDelete(T row) {
+		String value = getValue(row);
+		switch (JOptionPane.showConfirmDialog(win.getFrame(), String.format(Messages.getString(action + ".confirm"), value), //$NON-NLS-1$
+				Messages.getString(action) + Constants.EN_DASH + value, JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
+		case JOptionPane.YES_OPTION:
+			return true;
+		case JOptionPane.NO_OPTION:
+		case JOptionPane.CLOSED_OPTION:
+		default:
+			return false;
+		}
 	}
 
 	protected boolean deleteRow(T row) {
@@ -354,9 +371,11 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 
 		@Override
 		public void actionPerformed(ActionEvent ae) {
-			if (deleteRow(mVal)) {
-				super.stopCellEditing();
-				model.deleteRow(mRow);
+			if (confirmDelete(mVal)) {
+				if (deleteRow(mVal)) {
+					super.stopCellEditing();
+					model.deleteRow(mRow);
+				}
 			}
 		}
 
