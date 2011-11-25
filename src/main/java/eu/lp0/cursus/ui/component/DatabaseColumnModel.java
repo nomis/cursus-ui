@@ -18,6 +18,7 @@
 package eu.lp0.cursus.ui.component;
 
 import javax.persistence.PersistenceException;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -65,7 +66,7 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V> implement
 		return editable;
 	}
 
-	public void setupModel(TableRowSorter<? extends TableModel> sorter, TableColumn col) {
+	public void setupModel(JTable table, DatabaseTableModel<T> model, TableRowSorter<? extends TableModel> sorter, TableColumn col) {
 		col.setCellRenderer(createCellRenderer());
 		if (isCellEditable()) {
 			col.setCellEditor(createCellEditor());

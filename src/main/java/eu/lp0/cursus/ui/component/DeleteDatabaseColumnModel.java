@@ -57,6 +57,10 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final AbstractDAO<T> dao;
 	private final String action;
+	private JTable table;
+	private JTableHeader header;
+	private DatabaseTableModel<T> model;
+	private int mCol;
 
 	public DeleteDatabaseColumnModel(DatabaseWindow win, AbstractDAO<T> dao, String action) {
 		super("", win, dao); //$NON-NLS-1$
@@ -65,20 +69,30 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 	}
 
 	@Override
-	public void setupModel(TableRowSorter<? extends TableModel> sorter, TableColumn col) {
-		super.setupModel(sorter, col);
+	public void setupModel(JTable table, DatabaseTableModel<T> model, TableRowSorter<? extends TableModel> sorter, TableColumn col) {
+		super.setupModel(table, model, sorter, col);
+
+		this.table = table;
+		this.header = table.getTableHeader();
+		this.model = model;
+		this.mCol = col.getModelIndex();
+
 		col.setMinWidth(25);
 		col.setPreferredWidth(25);
 		col.setMaxWidth(25);
 
-		col.setHeaderRenderer(new HeaderRenderer());
+		HeaderRenderer headerRenderer = new HeaderRenderer();
+		header.addMouseListener(headerRenderer);
+		header.addMouseMotionListener(headerRenderer);
+		header.addKeyListener(headerRenderer);
+		col.setHeaderRenderer(headerRenderer);
 
 		sorter.setSortable(col.getModelIndex(), false);
 	}
 
 	protected abstract T newRow();
 
-	protected void addRow(JTable table, DatabaseTableModel<T> model, int mCol) {
+	public void addRow() {
 		assert (SwingUtilities.isEventDispatchThread());
 		T row = null;
 
@@ -142,28 +156,14 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 
 	private class HeaderRenderer extends DefaultTableCellRenderer implements ActionListener, MouseListener, MouseMotionListener, KeyListener {
 		private final CellJButton button = new CellJButton("+"); //$NON-NLS-1$
-		private JTable cTable;
-		private JTableHeader cHeader;
-		private DatabaseTableModel<T> cModel;
-		private int mCol = -1;
 
 		public HeaderRenderer() {
 			button.addActionListener(this);
 		}
 
 		@Override
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("hiding")
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int vRow, int vCol) {
-			if (cTable == null) {
-				cTable = table;
-				cHeader = table.getTableHeader();
-				cModel = (DatabaseTableModel<T>)table.getModel();
-				cHeader.addMouseListener(this);
-				cHeader.addMouseMotionListener(this);
-				cHeader.addKeyListener(this);
-			}
-			// This renderer is only used by one column
-			mCol = table.convertColumnIndexToModel(vCol);
 			button.setSelected(isSelected);
 			button.setFocus(hasFocus);
 			return button;
@@ -171,11 +171,11 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 
 		@Override
 		public void actionPerformed(ActionEvent ae) {
-			addRow(cTable, cModel, mCol);
+			addRow();
 		}
 
 		private boolean ourColumn(MouseEvent me) {
-			return mCol == cTable.convertColumnIndexToModel(cHeader.columnAtPoint(me.getPoint()));
+			return mCol == table.convertColumnIndexToModel(header.columnAtPoint(me.getPoint()));
 		}
 
 		@Override
@@ -348,6 +348,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 		}
 
 		@Override
+		@SuppressWarnings("hiding")
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int vRow, int vCol) {
 			button.setSelected(table, isSelected);
 			button.setFocus(hasFocus);
@@ -367,7 +368,6 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 
 	private class CellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
 		private final CellJButton button = new CellJButton("-"); //$NON-NLS-1$
-		private DatabaseTableModel<T> model;
 		private Integer mRow;
 		private T mVal;
 
@@ -378,8 +378,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 
 		@Override
 		@SuppressWarnings("unchecked")
-		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int vRow, int vCol) {
-			model = (DatabaseTableModel<T>)table.getModel();
+		public Component getTableCellEditorComponent(@SuppressWarnings("hiding") JTable table, Object value, boolean isSelected, int vRow, int vCol) {
 			mRow = table.convertRowIndexToModel(vRow);
 			mVal = (T)value;
 			return button;

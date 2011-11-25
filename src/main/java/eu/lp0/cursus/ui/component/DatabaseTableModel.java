@@ -71,7 +71,7 @@ public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableM
 		sorter.setSortsOnUpdates(true);
 		table.setRowSorter(sorter);
 
-		rowModel.setupModel(table, sorter);
+		rowModel.setupModel(table, this, sorter);
 
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		table.doLayout();

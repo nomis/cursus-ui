@@ -54,11 +54,11 @@ public class DatabaseRowModel<T extends AbstractEntity> {
 		return columns.get(mCol).getValue(row, editing);
 	}
 
-	public void setupModel(JTable table, TableRowSorter<? extends TableModel> sorter) {
+	public void setupModel(JTable table, DatabaseTableModel<T> model, TableRowSorter<? extends TableModel> sorter) {
 		Enumeration<TableColumn> cols = table.getColumnModel().getColumns();
 		while (cols.hasMoreElements()) {
 			TableColumn col = cols.nextElement();
-			columns.get(col.getModelIndex()).setupModel(sorter, col);
+			columns.get(col.getModelIndex()).setupModel(table, model, sorter, col);
 		}
 	}
 }
