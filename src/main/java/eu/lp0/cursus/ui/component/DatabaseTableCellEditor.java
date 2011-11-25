@@ -63,20 +63,8 @@ public class DatabaseTableCellEditor<T extends AbstractEntity, V> extends Defaul
 	}
 
 	@Override
-	public void cancelCellEditing() {
-		super.cancelCellEditing();
-		mRow = null;
-		mVal = null;
-	}
-
-	@Override
 	@SuppressWarnings("unchecked")
 	public boolean stopCellEditing() {
-		try {
-			return column.saveEditedValue(mVal, (V)getCellEditorValue()) && super.stopCellEditing();
-		} finally {
-			mRow = null;
-			mVal = null;
-		}
+		return column.saveEditedValue(mVal, (V)getCellEditorValue()) && super.stopCellEditing();
 	}
 }
