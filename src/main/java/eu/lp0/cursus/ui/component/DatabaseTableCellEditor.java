@@ -59,7 +59,7 @@ public class DatabaseTableCellEditor<T extends AbstractEntity, V> extends Defaul
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int vRow, int vCol) {
 		mRow = table.convertRowIndexToModel(vRow);
 		mVal = (T)value;
-		return super.getTableCellEditorComponent(table, column.loadValue(mVal), isSelected, vRow, vCol);
+		return super.getTableCellEditorComponent(table, column.loadValue(mVal, true), isSelected, vRow, vCol);
 	}
 
 	@Override

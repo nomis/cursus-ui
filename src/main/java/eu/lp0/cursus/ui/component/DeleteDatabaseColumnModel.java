@@ -107,7 +107,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 	}
 
 	protected boolean confirmDelete(T row) {
-		String value = getValue(row);
+		String value = getValue(row, false);
 		switch (JOptionPane.showConfirmDialog(win.getFrame(), String.format(Messages.getString(action + ".confirm"), value), //$NON-NLS-1$
 				Messages.getString(action) + Constants.EN_DASH + value, JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
 		case JOptionPane.YES_OPTION:

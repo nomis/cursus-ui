@@ -55,12 +55,12 @@ public class RaceNumbersDatabaseColumnModel extends StringDatabaseColumnModel<Pi
 	}
 
 	@Override
-	protected String getValue(Pilot row) {
+	protected String getValue(Pilot row, boolean editing) {
 		StringBuilder sb = new StringBuilder();
 		boolean first = true;
 		for (RaceNumber raceNo : getRaceNumberList(row)) {
 			if (sb.length() > 0) {
-				sb.append(first ? "; " : ", "); //$NON-NLS-1$ //$NON-NLS-2$
+				sb.append(editing ? " " : first ? "; " : ", "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				first = false;
 			}
 			sb.append(raceNo);

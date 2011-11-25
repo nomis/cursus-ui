@@ -50,8 +50,8 @@ public class DatabaseRowModel<T extends AbstractEntity> {
 		return columns.get(mCol).isCellEditable();
 	}
 
-	public Object getValueAt(T row, int mCol) {
-		return columns.get(mCol).getValue(row);
+	public Object getValueAt(T row, int mCol, boolean editing) {
+		return columns.get(mCol).getValue(row, editing);
 	}
 
 	public void setupModel(JTable table, TableRowSorter<? extends TableModel> sorter) {

@@ -53,7 +53,7 @@ public abstract class EnumDatabaseColumnModel<T extends AbstractEntity, V extend
 	}
 
 	@Override
-	protected final Object getValue(T row) {
+	protected final Object getValue(T row, boolean editing) {
 		Object value = getEnumValue(row);
 		if (value == null) {
 			assert (nullable);

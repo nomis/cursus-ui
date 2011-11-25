@@ -77,15 +77,15 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V> implement
 	}
 
 	@Override
-	public V loadValue(T row) {
-		return getValue(row);
+	public V loadValue(T row, boolean editing) {
+		return getValue(row, editing);
 	}
 
 	@Override
 	public boolean saveEditedValue(T row, V newValue) {
 		assert (SwingUtilities.isEventDispatchThread());
 
-		V oldValue = getValue(row);
+		V oldValue = getValue(row, true);
 		if (Objects.equal(oldValue, newValue)) {
 			return true;
 		}
@@ -125,7 +125,7 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V> implement
 		}
 	}
 
-	protected abstract V getValue(T row);
+	protected abstract V getValue(T row, boolean editing);
 
 	protected abstract boolean setValue(T row, V value);
 

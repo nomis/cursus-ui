@@ -77,7 +77,7 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 				new RaceNumbersDatabaseColumnModel(Messages.getString("pilot.race-number"), win), //$NON-NLS-1$
 				new StringDatabaseColumnModel<Pilot>(Messages.getString("pilot.name"), win, pilotDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
 					@Override
-					protected String getValue(Pilot row) {
+					protected String getValue(Pilot row, boolean editing) {
 						return row.getName();
 					}
 
@@ -99,7 +99,7 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 					}
 				}, new StringDatabaseColumnModel<Pilot>(Messages.getString("pilot.country"), win, pilotDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
 					@Override
-					protected String getValue(Pilot row) {
+					protected String getValue(Pilot row, boolean editing) {
 						return row.getCountry();
 					}
 
@@ -110,7 +110,7 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 					}
 				}, new DeleteDatabaseColumnModel<Pilot>(win, pilotDAO, "menu.pilot.delete") { //$NON-NLS-1$
 					@Override
-					protected String getValue(Pilot row) {
+					protected String getValue(Pilot row, boolean editing) {
 						return row.getName();
 					}
 

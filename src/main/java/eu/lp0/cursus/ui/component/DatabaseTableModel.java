@@ -83,7 +83,7 @@ public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableM
 		return new AbstractTableModel() {
 			@Override
 			public Object getValueAt(int mRow, int mCol) {
-				return rowModel.getValueAt(rows.get(mRow), mCol);
+				return rowModel.getValueAt(rows.get(mRow), mCol, false);
 			}
 
 			@Override

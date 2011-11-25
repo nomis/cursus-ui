@@ -28,7 +28,7 @@ public class DatabaseTableCellRenderer<T extends AbstractEntity> extends Default
 	private final Column<T, ?> column;
 
 	public static interface Column<T extends AbstractEntity, V> {
-		public V loadValue(T row);
+		public V loadValue(T row, boolean editing);
 	}
 
 	public DatabaseTableCellRenderer(Column<T, ?> column) {
@@ -38,6 +38,6 @@ public class DatabaseTableCellRenderer<T extends AbstractEntity> extends Default
 	@Override
 	@SuppressWarnings("unchecked")
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int vRow, int vCol) {
-		return super.getTableCellRendererComponent(table, column.loadValue((T)value), isSelected, hasFocus, vRow, vCol);
+		return super.getTableCellRendererComponent(table, column.loadValue((T)value, false), isSelected, hasFocus, vRow, vCol);
 	}
 }
