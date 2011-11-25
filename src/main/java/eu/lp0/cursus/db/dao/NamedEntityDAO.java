@@ -37,13 +37,13 @@ public class NamedEntityDAO<E extends AbstractEntity & NamedEntity> extends Abst
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
 		CriteriaQuery<E> q = cb.createQuery(clazz);
-		Root<E> rh = q.from(clazz);
-		q.select(rh);
+		Root<E> ne = q.from(clazz);
+		q.select(ne);
 		if (isUpdate) {
 			// Exclude this entity when doing an update
-			q.where(withParentRestriction(cb, rh, entity, cb.notEqual(rh.get("id"), entity.getId()), cb.equal(rh.get("name"), newName))); //$NON-NLS-1$ //$NON-NLS-2$
+			q.where(withParentRestriction(cb, ne, entity, cb.notEqual(ne.get("id"), entity.getId()), cb.equal(ne.get("name"), newName))); //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
-			q.where(withParentRestriction(cb, rh, entity, cb.equal(rh.get("name"), newName))); //$NON-NLS-1$ 
+			q.where(withParentRestriction(cb, ne, entity, cb.equal(ne.get("name"), newName))); //$NON-NLS-1$ 
 		}
 
 		TypedQuery<E> tq = em.createQuery(q);

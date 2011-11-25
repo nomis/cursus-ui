@@ -17,10 +17,31 @@
  */
 package eu.lp0.cursus.db.dao;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.db.data.Series;
 
 public class PilotDAO extends AbstractDAO<Pilot> {
 	public PilotDAO() {
 		super(Pilot.class);
+	}
+
+	public Pilot find(Series series, String name) {
+		EntityManager em = getEntityManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+
+		CriteriaQuery<Pilot> q = cb.createQuery(Pilot.class);
+		Root<Pilot> s = q.from(Pilot.class);
+		q.select(s);
+		q.where(cb.equal(s.get("series"), series)); //$NON-NLS-1$
+		q.where(cb.equal(s.get("name"), name)); //$NON-NLS-1$
+
+		TypedQuery<Pilot> tq = em.createQuery(q);
+		return tq.getSingleResult();
 	}
 }

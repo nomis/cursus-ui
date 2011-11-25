@@ -39,10 +39,10 @@ public class RaceDAO extends NamedEntityDAO<Race> {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
 		CriteriaQuery<Race> q = cb.createQuery(Race.class);
-		Root<Race> s = q.from(Race.class);
-		q.select(s);
-		q.where(cb.equal(s.get("event"), event)); //$NON-NLS-1$
-		q.where(cb.equal(s.get("name"), name)); //$NON-NLS-1$
+		Root<Race> r = q.from(Race.class);
+		q.select(r);
+		q.where(cb.equal(r.get("event"), event)); //$NON-NLS-1$
+		q.where(cb.equal(r.get("name"), name)); //$NON-NLS-1$
 
 		TypedQuery<Race> tq = em.createQuery(q);
 		return tq.getSingleResult();

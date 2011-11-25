@@ -39,10 +39,10 @@ public class EventDAO extends NamedEntityDAO<Event> {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
 		CriteriaQuery<Event> q = cb.createQuery(Event.class);
-		Root<Event> s = q.from(Event.class);
-		q.select(s);
-		q.where(cb.equal(s.get("series"), series)); //$NON-NLS-1$
-		q.where(cb.equal(s.get("name"), name)); //$NON-NLS-1$
+		Root<Event> e = q.from(Event.class);
+		q.select(e);
+		q.where(cb.equal(e.get("series"), series)); //$NON-NLS-1$
+		q.where(cb.equal(e.get("name"), name)); //$NON-NLS-1$
 
 		TypedQuery<Event> tq = em.createQuery(q);
 		return tq.getSingleResult();
