@@ -64,6 +64,12 @@ public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableM
 	}
 
 	@Override
+	public void setValueAt(Object value, int mRow, int mCol) {
+		// The update has already been committed as it had to be verified before allowing editing to stop
+		fireTableCellUpdated(mRow, mCol);
+	}
+
+	@Override
 	public boolean isCellEditable(int mRow, int mCol) {
 		return rowModel.isCellEditable(mCol);
 	}
