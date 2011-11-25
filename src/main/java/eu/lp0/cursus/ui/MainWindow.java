@@ -118,7 +118,7 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 	}
 
 	public RaceEntity getSelected() {
-		return isOpen() ? tabMgr.getSelected() : null;
+		return isOpen() ? raceList.getSelected() : null;
 	}
 
 	@SuppressWarnings("unchecked")

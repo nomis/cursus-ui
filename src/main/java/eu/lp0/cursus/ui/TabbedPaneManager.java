@@ -29,11 +29,9 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JTabbedPane;
-import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.TreePath;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +45,7 @@ import eu.lp0.cursus.ui.tree.RaceTree;
 
 public class TabbedPaneManager implements TreeSelectionListener {
 	private final Logger log = LoggerFactory.getLogger(getClass());
-	private final JTree tree;
+	private final RaceTree tree;
 	private final JTabbedPane tabbedPane;
 	private final List<AbstractDatabaseTab<Series>> seriesTabs;
 	private final List<AbstractDatabaseTab<Event>> eventTabs;
@@ -55,7 +53,7 @@ public class TabbedPaneManager implements TreeSelectionListener {
 	private final List<Component> ordering = new ArrayList<Component>();
 	private Map<Class<? extends RaceEntity>, AbstractDatabaseTab<? extends RaceEntity>> previousTabs = new HashMap<Class<? extends RaceEntity>, AbstractDatabaseTab<? extends RaceEntity>>();
 
-	public TabbedPaneManager(JTree tree, JTabbedPane tabbedPane, List<AbstractDatabaseTab<Series>> seriesTabs, List<AbstractDatabaseTab<Event>> eventTabs,
+	public TabbedPaneManager(RaceTree tree, JTabbedPane tabbedPane, List<AbstractDatabaseTab<Series>> seriesTabs, List<AbstractDatabaseTab<Event>> eventTabs,
 			List<AbstractDatabaseTab<Race>> raceTabs) {
 		this.tree = tree;
 		this.tabbedPane = tabbedPane;
@@ -75,17 +73,10 @@ public class TabbedPaneManager implements TreeSelectionListener {
 	@Override
 	public void valueChanged(final TreeSelectionEvent tse) {
 		if (tse.isAddedPath()) {
-			showSelected(RaceTree.raceEntityFromPathComponent(tse.getPath().getLastPathComponent()));
+			showSelected(tree.getSelected());
 		} else {
 			showSelected(null);
 		}
-	}
-
-	public RaceEntity getSelected() {
-		assert (SwingUtilities.isEventDispatchThread());
-
-		TreePath path = tree.getSelectionPath();
-		return path != null ? RaceTree.raceEntityFromPathComponent(path.getLastPathComponent()) : null;
 	}
 
 	public void showSelected(final RaceEntity item) {

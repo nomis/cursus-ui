@@ -53,10 +53,6 @@ public class RaceTree extends AbstractTree<DatabaseTreeNode, RaceEntity> impleme
 
 	@Override
 	protected RaceEntity userObjectFromPathComponent(Object component) {
-		return raceEntityFromPathComponent(component);
-	}
-
-	public static RaceEntity raceEntityFromPathComponent(Object component) {
 		if (component instanceof SeriesTreeNode) {
 			return ((SeriesTreeNode)component).getUserObject();
 		} else if (component instanceof EventTreeNode) {

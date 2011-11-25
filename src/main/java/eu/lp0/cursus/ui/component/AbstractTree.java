@@ -154,4 +154,14 @@ public abstract class AbstractTree<R extends TreeNode, T> extends JTree {
 			return false;
 		}
 	}
+
+	public T getSelected() {
+		TreePath path = getSelectionPath();
+
+		if (path != null) {
+			return userObjectFromPathComponent(path.getLastPathComponent());
+		} else {
+			return null;
+		}
+	}
 }
