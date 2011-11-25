@@ -152,7 +152,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 				})));
 		model.setupModel(table);
 		table.getRowSorter().setSortKeys(
-				Arrays.asList(new RowSorter.SortKey(0, SortOrder.ASCENDING), new RowSorter.SortKey(1, SortOrder.ASCENDING), new RowSorter.SortKey(2,
+				Arrays.asList(new RowSorter.SortKey(0, SortOrder.DESCENDING), new RowSorter.SortKey(1, SortOrder.ASCENDING), new RowSorter.SortKey(2,
 						SortOrder.ASCENDING), new RowSorter.SortKey(3, SortOrder.ASCENDING), new RowSorter.SortKey(4, SortOrder.ASCENDING)));
 
 		table.setEnabled(false);
