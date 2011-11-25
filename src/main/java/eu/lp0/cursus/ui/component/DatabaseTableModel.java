@@ -50,6 +50,10 @@ public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableM
 		return rowModel.getColumnCount();
 	}
 
+	public T getValueAt(int mRow) {
+		return rows.get(mRow);
+	}
+
 	// Every cell value is the row entity object, which avoids
 	// unnecessary intermediate representations but requires
 	// the renderer and editor to obtain the column value from
@@ -127,7 +131,7 @@ public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableM
 		fireTableRowsInserted(idxNew, idxNew);
 	}
 
-	protected void deleteRow(int index) {
+	public void deleteRow(int index) {
 		rows.remove(index);
 		fireTableRowsDeleted(index, index);
 	}
