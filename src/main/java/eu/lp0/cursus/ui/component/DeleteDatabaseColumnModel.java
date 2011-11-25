@@ -192,6 +192,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 			if (ourColumn(me)) {
 				button.getModel().setArmed(true);
 				button.getModel().setPressed(true);
+				me.consume();
 			}
 		}
 
@@ -202,6 +203,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 			}
 			// Always depress the button as the mouse may now be over another column
 			button.getModel().setPressed(false);
+			me.consume();
 		}
 
 		@Override
@@ -216,6 +218,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 			}
 			// If the mouse moves off the header, disarm the button
 			button.getModel().setArmed(false);
+			me.consume();
 		}
 
 		@Override
@@ -228,6 +231,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 			// but also for the new location... so it'd
 			// be clicked on column moves
 			button.getModel().setArmed(false);
+			me.consume();
 		}
 
 		@Override
@@ -241,6 +245,7 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 			} else {
 				button.getModel().setArmed(false);
 			}
+			me.consume();
 		}
 
 		@Override

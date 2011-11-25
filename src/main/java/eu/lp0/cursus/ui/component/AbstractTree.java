@@ -52,6 +52,7 @@ public abstract class AbstractTree<R extends TreeNode, T> extends JTree {
 				}
 				if (ke.getKeyCode() == KeyEvent.VK_CONTEXT_MENU) {
 					showMenu(ke);
+					ke.consume();
 				}
 			}
 		});
@@ -65,6 +66,7 @@ public abstract class AbstractTree<R extends TreeNode, T> extends JTree {
 				ensureSelection(me);
 				if (me.isPopupTrigger()) {
 					showMenu(me);
+					me.consume();
 				}
 			}
 
@@ -76,6 +78,7 @@ public abstract class AbstractTree<R extends TreeNode, T> extends JTree {
 				ensureSelection(me);
 				if (me.isPopupTrigger()) {
 					showMenu(me);
+					me.consume();
 				}
 			}
 		});
