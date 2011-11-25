@@ -47,6 +47,9 @@ public abstract class AbstractTree<R extends TreeNode, T> extends JTree {
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent ke) {
+				if (ke.isConsumed()) {
+					return;
+				}
 				if (ke.getKeyCode() == KeyEvent.VK_CONTEXT_MENU) {
 					showMenu(ke);
 				}
@@ -56,6 +59,9 @@ public abstract class AbstractTree<R extends TreeNode, T> extends JTree {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent me) {
+				if (me.isConsumed()) {
+					return;
+				}
 				ensureSelection(me);
 				if (me.isPopupTrigger()) {
 					showMenu(me);
@@ -64,6 +70,9 @@ public abstract class AbstractTree<R extends TreeNode, T> extends JTree {
 
 			@Override
 			public void mouseReleased(MouseEvent me) {
+				if (me.isConsumed()) {
+					return;
+				}
 				ensureSelection(me);
 				if (me.isPopupTrigger()) {
 					showMenu(me);

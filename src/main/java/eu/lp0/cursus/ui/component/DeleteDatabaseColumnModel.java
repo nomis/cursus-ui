@@ -185,14 +185,21 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 
 		@Override
 		public void mousePressed(MouseEvent me) {
+			if (me.isConsumed()) {
+				return;
+			}
 			// Only depress the button if the mouse is over our column
 			if (ourColumn(me)) {
+				button.getModel().setArmed(true);
 				button.getModel().setPressed(true);
 			}
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent me) {
+			if (me.isConsumed()) {
+				return;
+			}
 			// Always depress the button as the mouse may now be over another column
 			button.getModel().setPressed(false);
 		}
@@ -204,12 +211,18 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 
 		@Override
 		public void mouseExited(MouseEvent me) {
+			if (me.isConsumed()) {
+				return;
+			}
 			// If the mouse moves off the header, disarm the button
 			button.getModel().setArmed(false);
 		}
 
 		@Override
 		public void mouseDragged(MouseEvent me) {
+			if (me.isConsumed()) {
+				return;
+			}
 			// Can't check the column here:
 			// it would work for the original location,
 			// but also for the new location... so it'd
@@ -219,6 +232,9 @@ public abstract class DeleteDatabaseColumnModel<T extends AbstractEntity> extend
 
 		@Override
 		public void mouseMoved(MouseEvent me) {
+			if (me.isConsumed()) {
+				return;
+			}
 			// If the mouse moves over our column, arm the button
 			if (ourColumn(me)) {
 				button.getModel().setArmed(true);
