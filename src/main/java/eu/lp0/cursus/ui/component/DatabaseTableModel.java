@@ -74,6 +74,7 @@ public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableM
 		TableRowSorter<? extends TableModel> sorter = new TableRowSorter<TableModel>(getRealModel());
 		sorter.setSortsOnUpdates(true);
 		table.setRowSorter(sorter);
+		table.setSurrendersFocusOnKeystroke(true);
 
 		rowModel.setupModel(table, this, sorter);
 
