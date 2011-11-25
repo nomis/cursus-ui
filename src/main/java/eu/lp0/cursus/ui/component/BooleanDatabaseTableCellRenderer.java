@@ -50,11 +50,12 @@ public class BooleanDatabaseTableCellRenderer<T extends AbstractEntity> extends 
 			value = false;
 		}
 		checkBox.setSelected((Boolean)value);
-		checkBox.setEnabled(table.isEnabled());
 		if (isSelected) {
+			checkBox.setEnabled(true);
 			checkBox.setForeground(table.getSelectionForeground());
 			checkBox.setBackground(table.getSelectionBackground());
 		} else {
+			checkBox.setEnabled(table.isEnabled());
 			checkBox.setForeground(table.getForeground());
 			checkBox.setBackground(table.getBackground());
 		}
