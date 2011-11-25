@@ -53,6 +53,14 @@ public abstract class AbstractTree<R extends TreeNode, T> extends JTree {
 				if (ke.getKeyCode() == KeyEvent.VK_CONTEXT_MENU) {
 					showMenu(ke);
 					ke.consume();
+				} else if (ke.getKeyCode() == KeyEvent.VK_INSERT) {
+					if (doInsert()) {
+						ke.consume();
+					}
+				} else if (ke.getKeyCode() == KeyEvent.VK_DELETE) {
+					if (doDelete()) {
+						ke.consume();
+					}
 				}
 			}
 		});
@@ -121,5 +129,29 @@ public abstract class AbstractTree<R extends TreeNode, T> extends JTree {
 			menu = menuFromUserObject(null);
 		}
 		menu.show(this, x, y);
+	}
+
+	protected abstract void insertFromUserObject(T item);
+
+	protected abstract void deleteFromUserObject(T item);
+
+	private boolean doInsert() {
+		TreePath path = getSelectionPath();
+		if (path != null) {
+			insertFromUserObject(userObjectFromPathComponent(path.getLastPathComponent()));
+		} else {
+			insertFromUserObject(null);
+		}
+		return true;
+	}
+
+	private boolean doDelete() {
+		TreePath path = getSelectionPath();
+		if (path != null) {
+			deleteFromUserObject(userObjectFromPathComponent(path.getLastPathComponent()));
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

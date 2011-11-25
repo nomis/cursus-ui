@@ -38,7 +38,7 @@ public class ClassesPopupMenu extends JPopupMenu implements ActionListener {
 
 	private JMenuItem mnuNewClass;
 
-	private enum Commands {
+	public enum Command {
 		NEW_CLASS;
 	}
 
@@ -48,16 +48,20 @@ public class ClassesPopupMenu extends JPopupMenu implements ActionListener {
 		this.series = series;
 
 		mnuNewClass = new JMenuItem(Messages.getString("menu.class.new")); //$NON-NLS-1$
-		mnuNewClass.setActionCommand(Commands.NEW_CLASS.toString());
+		mnuNewClass.setActionCommand(Command.NEW_CLASS.toString());
 		mnuNewClass.addActionListener(this);
 		add(mnuNewClass);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		doCommand(Command.valueOf(ae.getActionCommand()));
+	}
+
+	public void doCommand(Command cmd) {
 		Displayable dialog = null;
 
-		switch (Commands.valueOf(ae.getActionCommand())) {
+		switch (cmd) {
 		case NEW_CLASS:
 			dialog = new ClassDetailDialog(win, tab, Messages.getString("menu.class.new"), new Class(series), false); //$NON-NLS-1$
 			break;

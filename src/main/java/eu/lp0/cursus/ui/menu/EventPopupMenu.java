@@ -42,7 +42,7 @@ public class EventPopupMenu extends AbstractNamedEntityPopupMenu<Event> implemen
 
 	private static final EventDAO eventDAO = new EventDAO();
 
-	private enum Commands {
+	public enum Command {
 		NEW_RACE, EDIT_EVENT, DELETE_EVENT, NEW_EVENT;
 	}
 
@@ -50,17 +50,17 @@ public class EventPopupMenu extends AbstractNamedEntityPopupMenu<Event> implemen
 		super(win, event);
 
 		mnuNewRace = new JMenuItem(Messages.getString("menu.race.new")); //$NON-NLS-1$
-		mnuNewRace.setActionCommand(Commands.NEW_RACE.toString());
+		mnuNewRace.setActionCommand(Command.NEW_RACE.toString());
 		mnuNewRace.addActionListener(this);
 		add(mnuNewRace);
 
 		mnuEditEvent = new JMenuItem(Messages.getString("menu.event.edit")); //$NON-NLS-1$
-		mnuEditEvent.setActionCommand(Commands.EDIT_EVENT.toString());
+		mnuEditEvent.setActionCommand(Command.EDIT_EVENT.toString());
 		mnuEditEvent.addActionListener(this);
 		add(mnuEditEvent);
 
 		mnuDeleteEvent = new JMenuItem(Messages.getString("menu.event.delete")); //$NON-NLS-1$
-		mnuDeleteEvent.setActionCommand(Commands.DELETE_EVENT.toString());
+		mnuDeleteEvent.setActionCommand(Command.DELETE_EVENT.toString());
 		mnuDeleteEvent.addActionListener(this);
 		add(mnuDeleteEvent);
 
@@ -68,16 +68,20 @@ public class EventPopupMenu extends AbstractNamedEntityPopupMenu<Event> implemen
 		add(mnuSeparator1);
 
 		mnuNewEvent = new JMenuItem(Messages.getString("menu.event.new")); //$NON-NLS-1$
-		mnuNewEvent.setActionCommand(Commands.NEW_EVENT.toString());
+		mnuNewEvent.setActionCommand(Command.NEW_EVENT.toString());
 		mnuNewEvent.addActionListener(this);
 		add(mnuNewEvent);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		doCommand(Command.valueOf(ae.getActionCommand()));
+	}
+
+	public void doCommand(Command cmd) {
 		Displayable dialog = null;
 
-		switch (Commands.valueOf(ae.getActionCommand())) {
+		switch (cmd) {
 		case NEW_RACE:
 			dialog = new RaceDetailDialog(win, item.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(item), false); //$NON-NLS-1$
 			break;

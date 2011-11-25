@@ -76,6 +76,22 @@ public class ClassTree extends AbstractTree<ClassListTreeNode, Class> implements
 	}
 
 	@Override
+	protected void insertFromUserObject(Class item) {
+		if (item instanceof Class) {
+			new ClassPopupMenu(win, tab, item).doCommand(ClassPopupMenu.Command.NEW_CLASS);
+		} else if (item == null) {
+			new ClassesPopupMenu(win, tab, currentSeries).doCommand(ClassesPopupMenu.Command.NEW_CLASS);
+		}
+	}
+
+	@Override
+	protected void deleteFromUserObject(Class item) {
+		if (item instanceof Class) {
+			new ClassPopupMenu(win, tab, item).doCommand(ClassPopupMenu.Command.DELETE_CLASS);
+		}
+	}
+
+	@Override
 	public void tabRefresh(Series series) {
 		assert (Background.isExecutorThread());
 

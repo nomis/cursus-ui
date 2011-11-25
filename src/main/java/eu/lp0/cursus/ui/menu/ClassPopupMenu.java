@@ -42,7 +42,7 @@ public class ClassPopupMenu extends AbstractNamedEntityPopupMenu<Class> implemen
 
 	private static final ClassDAO classDAO = new ClassDAO();
 
-	private enum Commands {
+	public enum Command {
 		NEW_CLASS, EDIT_CLASS, DELETE_CLASS;
 	}
 
@@ -51,12 +51,12 @@ public class ClassPopupMenu extends AbstractNamedEntityPopupMenu<Class> implemen
 		this.tab = tab;
 
 		mnuEditClass = new JMenuItem(Messages.getString("menu.class.edit")); //$NON-NLS-1$
-		mnuEditClass.setActionCommand(Commands.EDIT_CLASS.toString());
+		mnuEditClass.setActionCommand(Command.EDIT_CLASS.toString());
 		mnuEditClass.addActionListener(this);
 		add(mnuEditClass);
 
 		mnuDeleteClass = new JMenuItem(Messages.getString("menu.class.delete")); //$NON-NLS-1$
-		mnuDeleteClass.setActionCommand(Commands.DELETE_CLASS.toString());
+		mnuDeleteClass.setActionCommand(Command.DELETE_CLASS.toString());
 		mnuDeleteClass.addActionListener(this);
 		add(mnuDeleteClass);
 
@@ -64,16 +64,20 @@ public class ClassPopupMenu extends AbstractNamedEntityPopupMenu<Class> implemen
 		add(mnuSeparator1);
 
 		mnuNewClass = new JMenuItem(Messages.getString("menu.class.new")); //$NON-NLS-1$
-		mnuNewClass.setActionCommand(Commands.NEW_CLASS.toString());
+		mnuNewClass.setActionCommand(Command.NEW_CLASS.toString());
 		mnuNewClass.addActionListener(this);
 		add(mnuNewClass);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		doCommand(Command.valueOf(ae.getActionCommand()));
+	}
+
+	public void doCommand(Command cmd) {
 		Displayable dialog = null;
 
-		switch (Commands.valueOf(ae.getActionCommand())) {
+		switch (cmd) {
 		case EDIT_CLASS:
 			dialog = new ClassDetailDialog(win, tab, Messages.getString("menu.class.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
 			break;

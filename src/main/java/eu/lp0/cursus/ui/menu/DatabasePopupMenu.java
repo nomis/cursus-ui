@@ -34,7 +34,7 @@ public class DatabasePopupMenu extends JPopupMenu implements ActionListener {
 
 	private JMenuItem mnuNewSeries;
 
-	private enum Commands {
+	public enum Command {
 		NEW_SERIES;
 	}
 
@@ -42,16 +42,20 @@ public class DatabasePopupMenu extends JPopupMenu implements ActionListener {
 		this.win = win;
 
 		mnuNewSeries = new JMenuItem(Messages.getString("menu.series.new")); //$NON-NLS-1$
-		mnuNewSeries.setActionCommand(Commands.NEW_SERIES.toString());
+		mnuNewSeries.setActionCommand(Command.NEW_SERIES.toString());
 		mnuNewSeries.addActionListener(this);
 		add(mnuNewSeries);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		doCommand(Command.valueOf(ae.getActionCommand()));
+	}
+
+	public void doCommand(Command cmd) {
 		Displayable dialog = null;
 
-		switch (Commands.valueOf(ae.getActionCommand())) {
+		switch (cmd) {
 		case NEW_SERIES:
 			dialog = new SeriesDetailDialog(win, Messages.getString("menu.series.new"), new Series(), false); //$NON-NLS-1$
 			break;

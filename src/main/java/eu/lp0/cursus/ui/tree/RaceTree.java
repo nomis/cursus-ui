@@ -84,6 +84,30 @@ public class RaceTree extends AbstractTree<DatabaseTreeNode, RaceEntity> impleme
 	}
 
 	@Override
+	protected void insertFromUserObject(RaceEntity item) {
+		if (item instanceof Series) {
+			new SeriesPopupMenu(win, (Series)item).doCommand(SeriesPopupMenu.Command.NEW_EVENT);
+		} else if (item instanceof Event) {
+			new EventPopupMenu(win, (Event)item).doCommand(EventPopupMenu.Command.NEW_RACE);
+		} else if (item instanceof Race) {
+			new RacePopupMenu(win, (Race)item).doCommand(RacePopupMenu.Command.NEW_RACE);
+		} else if (item == null) {
+			new DatabasePopupMenu(win).doCommand(DatabasePopupMenu.Command.NEW_SERIES);
+		}
+	}
+
+	@Override
+	protected void deleteFromUserObject(RaceEntity item) {
+		if (item instanceof Series) {
+			new SeriesPopupMenu(win, (Series)item).doCommand(SeriesPopupMenu.Command.DELETE_SERIES);
+		} else if (item instanceof Event) {
+			new EventPopupMenu(win, (Event)item).doCommand(EventPopupMenu.Command.DELETE_EVENT);
+		} else if (item instanceof Race) {
+			new RacePopupMenu(win, (Race)item).doCommand(RacePopupMenu.Command.DELETE_RACE);
+		}
+	}
+
+	@Override
 	public void databaseRefresh() {
 		assert (Background.isExecutorThread());
 

@@ -39,7 +39,7 @@ public class RacePopupMenu extends AbstractNamedEntityPopupMenu<Race> implements
 
 	private static final RaceDAO raceDAO = new RaceDAO();
 
-	private enum Commands {
+	public enum Command {
 		EDIT_RACE, DELETE_RACE, NEW_RACE;
 	}
 
@@ -47,12 +47,12 @@ public class RacePopupMenu extends AbstractNamedEntityPopupMenu<Race> implements
 		super(win, race);
 
 		mnuEditRace = new JMenuItem(Messages.getString("menu.race.edit")); //$NON-NLS-1$
-		mnuEditRace.setActionCommand(Commands.EDIT_RACE.toString());
+		mnuEditRace.setActionCommand(Command.EDIT_RACE.toString());
 		mnuEditRace.addActionListener(this);
 		add(mnuEditRace);
 
 		mnuDeleteRace = new JMenuItem(Messages.getString("menu.race.delete")); //$NON-NLS-1$
-		mnuDeleteRace.setActionCommand(Commands.DELETE_RACE.toString());
+		mnuDeleteRace.setActionCommand(Command.DELETE_RACE.toString());
 		mnuDeleteRace.addActionListener(this);
 		add(mnuDeleteRace);
 
@@ -60,16 +60,20 @@ public class RacePopupMenu extends AbstractNamedEntityPopupMenu<Race> implements
 		add(mnuSeparator1);
 
 		mnuNewRace = new JMenuItem(Messages.getString("menu.race.new")); //$NON-NLS-1$
-		mnuNewRace.setActionCommand(Commands.NEW_RACE.toString());
+		mnuNewRace.setActionCommand(Command.NEW_RACE.toString());
 		mnuNewRace.addActionListener(this);
 		add(mnuNewRace);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		doCommand(Command.valueOf(ae.getActionCommand()));
+	}
+
+	public void doCommand(Command cmd) {
 		Displayable dialog = null;
 
-		switch (Commands.valueOf(ae.getActionCommand())) {
+		switch (cmd) {
 		case EDIT_RACE:
 			dialog = new RaceDetailDialog(win, Messages.getString("menu.race.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
 			break;

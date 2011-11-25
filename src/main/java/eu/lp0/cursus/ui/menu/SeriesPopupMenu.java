@@ -42,7 +42,7 @@ public class SeriesPopupMenu extends AbstractNamedEntityPopupMenu<Series> implem
 
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 
-	private enum Commands {
+	public enum Command {
 		NEW_SERIES, NEW_EVENT, EDIT_SERIES, DELETE_SERIES;
 	}
 
@@ -50,17 +50,17 @@ public class SeriesPopupMenu extends AbstractNamedEntityPopupMenu<Series> implem
 		super(win, series);
 
 		mnuNewEvent = new JMenuItem(Messages.getString("menu.event.new")); //$NON-NLS-1$
-		mnuNewEvent.setActionCommand(Commands.NEW_EVENT.toString());
+		mnuNewEvent.setActionCommand(Command.NEW_EVENT.toString());
 		mnuNewEvent.addActionListener(this);
 		add(mnuNewEvent);
 
 		mnuEditSeries = new JMenuItem(Messages.getString("menu.series.edit")); //$NON-NLS-1$
-		mnuEditSeries.setActionCommand(Commands.EDIT_SERIES.toString());
+		mnuEditSeries.setActionCommand(Command.EDIT_SERIES.toString());
 		mnuEditSeries.addActionListener(this);
 		add(mnuEditSeries);
 
 		mnuDeleteSeries = new JMenuItem(Messages.getString("menu.series.delete")); //$NON-NLS-1$
-		mnuDeleteSeries.setActionCommand(Commands.DELETE_SERIES.toString());
+		mnuDeleteSeries.setActionCommand(Command.DELETE_SERIES.toString());
 		mnuDeleteSeries.addActionListener(this);
 		add(mnuDeleteSeries);
 
@@ -68,16 +68,20 @@ public class SeriesPopupMenu extends AbstractNamedEntityPopupMenu<Series> implem
 		add(mnuSeparator1);
 
 		mnuNewSeries = new JMenuItem(Messages.getString("menu.series.new")); //$NON-NLS-1$
-		mnuNewSeries.setActionCommand(Commands.NEW_SERIES.toString());
+		mnuNewSeries.setActionCommand(Command.NEW_SERIES.toString());
 		mnuNewSeries.addActionListener(this);
 		add(mnuNewSeries);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
+		doCommand(Command.valueOf(ae.getActionCommand()));
+	}
+
+	public void doCommand(Command cmd) {
 		Displayable dialog = null;
 
-		switch (Commands.valueOf(ae.getActionCommand())) {
+		switch (cmd) {
 		case NEW_EVENT:
 			dialog = new EventDetailDialog(win, item.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(item), false); //$NON-NLS-1$
 			break;
