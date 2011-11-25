@@ -28,6 +28,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
@@ -138,7 +139,8 @@ public final class Pilot extends AbstractEntity {
 
 	private Set<Class> classes = new HashSet<Class>();
 
-	@ManyToMany(mappedBy = "pilots")
+	@ManyToMany
+	@JoinTable
 	public Set<Class> getClasses() {
 		return classes;
 	}

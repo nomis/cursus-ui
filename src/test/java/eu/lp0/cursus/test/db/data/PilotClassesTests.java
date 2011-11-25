@@ -75,7 +75,7 @@ public class PilotClassesTests extends AbstractDatabaseTest {
 			db.endSession();
 		}
 
-		checkData();
+		checkData(true);
 	}
 
 	@Test
@@ -122,10 +122,10 @@ public class PilotClassesTests extends AbstractDatabaseTest {
 			db.endSession();
 		}
 
-		checkData();
+		checkData(false);
 	}
 
-	private void checkData() {
+	private void checkData(boolean correctDirection) {
 		db.startSession();
 		try {
 			DatabaseSession.begin();
@@ -148,19 +148,29 @@ public class PilotClassesTests extends AbstractDatabaseTest {
 			Assert.assertNotNull(pilot2);
 			Assert.assertNotNull(pilot3);
 
-			Assert.assertArrayEquals(Ordering.usingToString().sortedCopy(Arrays.asList(pilot1, pilot3)).toArray(),
-					Ordering.usingToString().sortedCopy(class1.getPilots()).toArray());
-			Assert.assertArrayEquals(Ordering.usingToString().sortedCopy(Arrays.asList(pilot1, pilot2)).toArray(),
-					Ordering.usingToString().sortedCopy(class2.getPilots()).toArray());
-			Assert.assertArrayEquals(Ordering.usingToString().sortedCopy(Arrays.asList(pilot2, pilot3)).toArray(),
-					Ordering.usingToString().sortedCopy(class3.getPilots()).toArray());
+			if (correctDirection) {
+				Assert.assertArrayEquals(Ordering.usingToString().sortedCopy(Arrays.asList(pilot1, pilot3)).toArray(),
+						Ordering.usingToString().sortedCopy(class1.getPilots()).toArray());
+				Assert.assertArrayEquals(Ordering.usingToString().sortedCopy(Arrays.asList(pilot1, pilot2)).toArray(),
+						Ordering.usingToString().sortedCopy(class2.getPilots()).toArray());
+				Assert.assertArrayEquals(Ordering.usingToString().sortedCopy(Arrays.asList(pilot2, pilot3)).toArray(),
+						Ordering.usingToString().sortedCopy(class3.getPilots()).toArray());
 
-			Assert.assertArrayEquals(Ordering.usingToString().sortedCopy(Arrays.asList(class1, class2)).toArray(),
-					Ordering.usingToString().sortedCopy(pilot1.getClasses()).toArray());
-			Assert.assertArrayEquals(Ordering.usingToString().sortedCopy(Arrays.asList(class2, class3)).toArray(),
-					Ordering.usingToString().sortedCopy(pilot2.getClasses()).toArray());
-			Assert.assertArrayEquals(Ordering.usingToString().sortedCopy(Arrays.asList(class3, class1)).toArray(),
-					Ordering.usingToString().sortedCopy(pilot3.getClasses()).toArray());
+				Assert.assertArrayEquals(Ordering.usingToString().sortedCopy(Arrays.asList(class1, class2)).toArray(),
+						Ordering.usingToString().sortedCopy(pilot1.getClasses()).toArray());
+				Assert.assertArrayEquals(Ordering.usingToString().sortedCopy(Arrays.asList(class2, class3)).toArray(),
+						Ordering.usingToString().sortedCopy(pilot2.getClasses()).toArray());
+				Assert.assertArrayEquals(Ordering.usingToString().sortedCopy(Arrays.asList(class3, class1)).toArray(),
+						Ordering.usingToString().sortedCopy(pilot3.getClasses()).toArray());
+			} else {
+				Assert.assertEquals(0, class1.getPilots().size());
+				Assert.assertEquals(0, class2.getPilots().size());
+				Assert.assertEquals(0, class3.getPilots().size());
+
+				Assert.assertEquals(0, pilot1.getClasses().size());
+				Assert.assertEquals(0, pilot2.getClasses().size());
+				Assert.assertEquals(0, pilot3.getClasses().size());
+			}
 
 			DatabaseSession.commit();
 		} finally {

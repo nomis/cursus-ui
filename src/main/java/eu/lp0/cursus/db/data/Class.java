@@ -23,7 +23,6 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -92,8 +91,7 @@ public final class Class extends AbstractEntity implements Comparable<Class>, Na
 
 	private Set<Pilot> pilots = new HashSet<Pilot>();
 
-	@ManyToMany
-	@JoinTable
+	@ManyToMany(mappedBy = "classes")
 	public Set<Pilot> getPilots() {
 		return pilots;
 	}
