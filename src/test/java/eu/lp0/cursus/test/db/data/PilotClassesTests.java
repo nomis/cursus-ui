@@ -60,19 +60,72 @@ public class PilotClassesTests extends AbstractDatabaseTest {
 
 			pilot1.getClasses().add(class1);
 			pilot1.getClasses().add(class2);
+			pilotDAO.persist(pilot1);
 
 			pilot2.getClasses().add(class2);
 			pilot2.getClasses().add(class3);
+			pilotDAO.persist(pilot2);
 
 			pilot3.getClasses().add(class3);
 			pilot3.getClasses().add(class1);
+			pilotDAO.persist(pilot3);
 
 			DatabaseSession.commit();
 		} finally {
 			db.endSession();
 		}
 
-		// Check data
+		checkData();
+	}
+
+	@Test
+	public void classPilots() {
+		// Save data
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.findAll().get(0);
+
+			Pilot pilot1 = new Pilot(series, "Pilot 1"); //$NON-NLS-1$
+			pilotDAO.persist(pilot1);
+
+			Pilot pilot2 = new Pilot(series, "Pilot 2"); //$NON-NLS-1$
+			pilotDAO.persist(pilot2);
+
+			Pilot pilot3 = new Pilot(series, "Pilot 3"); //$NON-NLS-1$
+			pilotDAO.persist(pilot3);
+
+			Class class1 = new Class(series, "Class 1"); //$NON-NLS-1$
+			classDAO.persist(class1);
+
+			Class class2 = new Class(series, "Class 2"); //$NON-NLS-1$
+			classDAO.persist(class2);
+
+			Class class3 = new Class(series, "Class 3"); //$NON-NLS-1$
+			classDAO.persist(class3);
+
+			class1.getPilots().add(pilot1);
+			class1.getPilots().add(pilot3);
+			classDAO.persist(class1);
+
+			class2.getPilots().add(pilot1);
+			class2.getPilots().add(pilot2);
+			classDAO.persist(class2);
+
+			class3.getPilots().add(pilot2);
+			class3.getPilots().add(pilot3);
+			classDAO.persist(class3);
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+
+		checkData();
+	}
+
+	private void checkData() {
 		db.startSession();
 		try {
 			DatabaseSession.begin();
