@@ -24,6 +24,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import eu.lp0.cursus.db.data.AbstractEntity;
 
@@ -39,7 +40,8 @@ public class DatabaseTableCellEditor<T extends AbstractEntity, V> extends Defaul
 	public DatabaseTableCellEditor(Column<T, V> column, JCheckBox checkBox) {
 		super(checkBox);
 		this.column = column;
-		checkBox.setBorder(null);
+		checkBox.setHorizontalAlignment(SwingConstants.CENTER);
+		checkBox.setBorderPainted(true);
 	}
 
 	public DatabaseTableCellEditor(Column<T, V> cellSaver, JComboBox comboBox) {
@@ -59,7 +61,10 @@ public class DatabaseTableCellEditor<T extends AbstractEntity, V> extends Defaul
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int vRow, int vCol) {
 		mRow = table.convertRowIndexToModel(vRow);
 		mVal = (T)value;
-		return super.getTableCellEditorComponent(table, column.loadValue(mVal, true), isSelected, vRow, vCol);
+		if (value != null) {
+			value = column.loadValue((T)value, true);
+		}
+		return super.getTableCellEditorComponent(table, value, isSelected, vRow, vCol);
 	}
 
 	@Override

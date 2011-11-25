@@ -125,6 +125,12 @@ public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableM
 		rows.trimToSize();
 	}
 
+	public void reloadModel() {
+		if (!rows.isEmpty()) {
+			fireTableRowsUpdated(0, rows.size() - 1);
+		}
+	}
+
 	protected void addRow(T row) {
 		int idxNew = rows.size();
 		rows.add(row);

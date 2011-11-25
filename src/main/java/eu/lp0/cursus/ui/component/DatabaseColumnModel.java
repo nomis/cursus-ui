@@ -74,7 +74,7 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V> implement
 	}
 
 	protected TableCellRenderer createCellRenderer() {
-		return new DatabaseTableCellRenderer<T>(this);
+		return new StringDatabaseTableCellRenderer<T>(this);
 	}
 
 	@Override

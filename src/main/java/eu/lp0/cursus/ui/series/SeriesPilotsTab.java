@@ -231,6 +231,7 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 	}
 
 	@Override
+	@SuppressWarnings("unused")
 	public void tabRefresh(Series series) {
 		assert (Background.isExecutorThread());
 
@@ -244,8 +245,7 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 			newSeries = seriesDAO.get(series);
 			newPilots = new ArrayList<Pilot>(newSeries.getPilots());
 			for (Pilot pilot : newPilots) {
-				for (@SuppressWarnings("unused")
-				RaceNumber raceNumber : pilot.getRaceNumbers()) {
+				for (RaceNumber raceNumber : pilot.getRaceNumbers()) {
 					;
 				}
 			}

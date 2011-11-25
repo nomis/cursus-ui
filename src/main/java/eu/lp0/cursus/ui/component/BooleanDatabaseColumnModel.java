@@ -17,12 +17,29 @@
  */
 package eu.lp0.cursus.ui.component;
 
+import javax.swing.JCheckBox;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import eu.lp0.cursus.db.dao.AbstractDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
 
-public abstract class DatabaseTableCellRenderer<T extends AbstractEntity> implements TableCellRenderer {
-	public static interface Column<T extends AbstractEntity, V> {
-		public V loadValue(T row, boolean editing);
+public abstract class BooleanDatabaseColumnModel<T extends AbstractEntity> extends DatabaseColumnModel<T, Boolean> {
+	public BooleanDatabaseColumnModel(String name) {
+		super(name);
+	}
+
+	public BooleanDatabaseColumnModel(String name, DatabaseWindow win, AbstractDAO<T> dao) {
+		super(name, win, dao);
+	}
+
+	@Override
+	protected TableCellRenderer createCellRenderer() {
+		return new BooleanDatabaseTableCellRenderer<T>(this);
+	}
+
+	@Override
+	protected TableCellEditor createCellEditor() {
+		return new DatabaseTableCellEditor<T, Boolean>(this, new JCheckBox());
 	}
 }

@@ -19,29 +19,61 @@ package eu.lp0.cursus.ui.series;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 
+import com.google.common.collect.Ordering;
+
+import eu.lp0.cursus.db.DatabaseSession;
+import eu.lp0.cursus.db.dao.PilotDAO;
+import eu.lp0.cursus.db.dao.SeriesDAO;
+import eu.lp0.cursus.db.data.Class;
+import eu.lp0.cursus.db.data.Gender;
+import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
+import eu.lp0.cursus.ui.component.BooleanDatabaseColumnModel;
+import eu.lp0.cursus.ui.component.DatabaseColumnModel;
+import eu.lp0.cursus.ui.component.DatabaseRowModel;
+import eu.lp0.cursus.ui.component.DatabaseTableModel;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
+import eu.lp0.cursus.ui.component.EnumDatabaseColumnModel;
+import eu.lp0.cursus.ui.component.RaceNumbersDatabaseColumnModel;
+import eu.lp0.cursus.ui.component.StringDatabaseColumnModel;
 import eu.lp0.cursus.ui.tree.ClassTree;
+import eu.lp0.cursus.util.Background;
+import eu.lp0.cursus.util.Messages;
 
-public class SeriesClassesTab extends AbstractDatabaseTab<Series> {
+public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements TreeSelectionListener {
 	private JSplitPane splitPane;
 	private JScrollPane leftScrollPane;
 	private ClassTree list;
 	private JScrollPane rightScrollPane;
 	private JTable table;
+	private DatabaseTableModel<Pilot> model;
+
+	private static final SeriesDAO seriesDAO = new SeriesDAO();
+	private static final PilotDAO pilotDAO = new PilotDAO();
 
 	public SeriesClassesTab(DatabaseWindow win) {
 		super(Series.class, win, "tab.classes"); //$NON-NLS-1$
 		initialise();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void initialise() {
 		setLayout(new BorderLayout(0, 0));
 
@@ -55,6 +87,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> {
 		list = new ClassTree(win, this);
 		list.setBorder(new EmptyBorder(2, 2, 2, 2));
 		list.setShowsRootHandles(false);
+		list.addTreeSelectionListener(this);
 		leftScrollPane.setViewportView(list);
 		leftScrollPane.setBorder(null);
 
@@ -64,15 +97,129 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> {
 
 		table = new JTable();
 		rightScrollPane.setViewportView(table);
+
+		model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot>(Arrays.<DatabaseColumnModel<Pilot, ?>>asList( //
+				new BooleanDatabaseColumnModel<Pilot>("", win, pilotDAO) { //$NON-NLS-1$
+					@Override
+					protected Boolean getValue(Pilot row, boolean editing) {
+						return row.getClasses().contains(list.getSelected());
+					}
+
+					@Override
+					protected boolean setValue(Pilot row, Boolean value) {
+						Class clazz = list.getSelected();
+						if (value) {
+							row.getClasses().add(clazz);
+						} else {
+							row.getClasses().remove(clazz);
+						}
+						return true;
+					}
+				}, new RaceNumbersDatabaseColumnModel(Messages.getString("pilot.race-number")), //$NON-NLS-1$
+				new StringDatabaseColumnModel<Pilot>(Messages.getString("pilot.name")) { //$NON-NLS-1$
+					@Override
+					protected String getValue(Pilot row, boolean editing) {
+						return row.getName();
+					}
+
+					@Override
+					protected boolean setValue(Pilot row, String value) {
+						row.setName(value);
+						return true;
+					}
+				}, new EnumDatabaseColumnModel<Pilot, Gender>(Messages.getString("pilot.gender"), Gender.class, true) { //$NON-NLS-1$
+					@Override
+					protected Gender getEnumValue(Pilot row) {
+						return row.getGender();
+					}
+
+					@Override
+					protected boolean setEnumValue(Pilot row, Gender value) {
+						row.setGender(value);
+						return true;
+					}
+				}, new StringDatabaseColumnModel<Pilot>(Messages.getString("pilot.country")) { //$NON-NLS-1$
+					@Override
+					protected String getValue(Pilot row, boolean editing) {
+						return row.getCountry();
+					}
+
+					@Override
+					protected boolean setValue(Pilot row, String value) {
+						row.setCountry(value);
+						return true;
+					}
+				})));
+		model.setupModel(table);
+		table.getRowSorter().setSortKeys(
+				Arrays.asList(new RowSorter.SortKey(0, SortOrder.ASCENDING), new RowSorter.SortKey(1, SortOrder.ASCENDING), new RowSorter.SortKey(2,
+						SortOrder.ASCENDING), new RowSorter.SortKey(3, SortOrder.ASCENDING), new RowSorter.SortKey(4, SortOrder.ASCENDING)));
+
+		table.setEnabled(false);
 	}
 
 	@Override
+	public void valueChanged(final TreeSelectionEvent tse) {
+		if (tse.isAddedPath()) {
+			model.reloadModel();
+			table.setEnabled(true);
+		} else {
+			table.setEnabled(false);
+			model.reloadModel();
+		}
+	}
+
+	@Override
+	@SuppressWarnings("unused")
 	public void tabRefresh(Series series) {
-		list.tabRefresh(series);
+		assert (Background.isExecutorThread());
+
+		final Series newSeries;
+		final List<Class> newClasses;
+		final List<Pilot> newPilots;
+
+		win.getDatabase().startSession();
+		try {
+			DatabaseSession.begin();
+
+			newSeries = seriesDAO.get(series);
+			newClasses = Ordering.natural().sortedCopy(newSeries.getClasses());
+			newPilots = new ArrayList<Pilot>(newSeries.getPilots());
+			for (Pilot pilot : newPilots) {
+				for (RaceNumber raceNumber : pilot.getRaceNumbers()) {
+					;
+				}
+				for (Class cls : pilot.getClasses()) {
+					;
+				}
+			}
+			DatabaseSession.commit();
+
+			seriesDAO.detach(newSeries);
+		} finally {
+			win.getDatabase().endSession();
+		}
+
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				model.updateModel(newPilots);
+				list.updateModel(newSeries, newClasses);
+			}
+		});
 	}
 
 	@Override
 	public void tabClear() {
-		list.tabClear();
+		assert (Background.isExecutorThread());
+
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				model.updateModel(Collections.<Pilot>emptyList());
+				// This will de-select the current class and fire valueChanged to reload the pilots model too
+				list.updateModel(null, null);
+			}
+		});
 	}
 }

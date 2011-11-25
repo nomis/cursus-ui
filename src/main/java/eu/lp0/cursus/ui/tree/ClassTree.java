@@ -24,27 +24,17 @@ import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
-import com.google.common.collect.Ordering;
-
-import eu.lp0.cursus.db.DatabaseSession;
-import eu.lp0.cursus.db.dao.ClassDAO;
-import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.AbstractTree;
-import eu.lp0.cursus.ui.component.DatabaseTabSync;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.menu.ClassPopupMenu;
 import eu.lp0.cursus.ui.menu.ClassesPopupMenu;
 import eu.lp0.cursus.ui.series.SeriesClassesTab;
-import eu.lp0.cursus.util.Background;
 
-public class ClassTree extends AbstractTree<ClassListTreeNode, Class> implements DatabaseTabSync<Series> {
+public class ClassTree extends AbstractTree<ClassListTreeNode, Class> {
 	private final SeriesClassesTab tab;
 	private Series currentSeries = null;
-
-	private static final SeriesDAO seriesDAO = new SeriesDAO();
-	private static final ClassDAO classDAO = new ClassDAO();
 
 	public ClassTree(DatabaseWindow win, SeriesClassesTab tab) {
 		super(win, new ClassListTreeNode());
@@ -91,59 +81,10 @@ public class ClassTree extends AbstractTree<ClassListTreeNode, Class> implements
 		}
 	}
 
-	@Override
-	public void tabRefresh(Series series) {
-		assert (Background.isExecutorThread());
-
-		final Series newSeries;
-		final List<Class> newClasses;
-
-		win.getDatabase().startSession();
-		try {
-			DatabaseSession.begin();
-
-			newSeries = seriesDAO.get(series);
-			newClasses = Ordering.natural().sortedCopy(newSeries.getClasses());
-			DatabaseSession.commit();
-
-			for (Class cls : newClasses) {
-				classDAO.detach(cls);
-			}
-			seriesDAO.detach(newSeries);
-		} finally {
-			win.getDatabase().endSession();
-		}
-
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				currentSeries = newSeries;
-				updateModel(newClasses);
-			}
-		});
-	}
-
-	@Override
-	public void tabClear() {
-		assert (Background.isExecutorThread());
-
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				currentSeries = null;
-				updateModel(null);
-			}
-		});
-	}
-
-	private void updateModel(List<Class> list) {
+	public void updateModel(Series newSeries, List<Class> list) {
 		assert (SwingUtilities.isEventDispatchThread());
 
+		currentSeries = newSeries;
 		root.updateTree(this, new TreePath(root), list);
-	}
-
-	@Override
-	public java.lang.Class<Series> getType() {
-		return Series.class;
 	}
 }
