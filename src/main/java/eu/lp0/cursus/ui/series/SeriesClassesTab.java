@@ -19,11 +19,15 @@ package eu.lp0.cursus.ui.series;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.PersistenceException;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -33,6 +37,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Ordering;
 
@@ -55,9 +62,12 @@ import eu.lp0.cursus.ui.component.RaceNumbersDatabaseColumnModel;
 import eu.lp0.cursus.ui.component.StringDatabaseColumnModel;
 import eu.lp0.cursus.ui.tree.ClassTree;
 import eu.lp0.cursus.util.Background;
+import eu.lp0.cursus.util.Constants;
+import eu.lp0.cursus.util.DatabaseError;
 import eu.lp0.cursus.util.Messages;
 
 public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements TreeSelectionListener {
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	private JSplitPane splitPane;
 	private JScrollPane leftScrollPane;
 	private ClassTree list;
@@ -155,6 +165,21 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 				Arrays.asList(new RowSorter.SortKey(0, SortOrder.DESCENDING), new RowSorter.SortKey(1, SortOrder.ASCENDING), new RowSorter.SortKey(2,
 						SortOrder.ASCENDING), new RowSorter.SortKey(3, SortOrder.ASCENDING), new RowSorter.SortKey(4, SortOrder.ASCENDING)));
 
+		table.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent ke) {
+				if (ke.isConsumed()) {
+					return;
+				}
+				if (ke.getKeyCode() == KeyEvent.VK_INSERT) {
+					addSelectedPilots();
+					ke.consume();
+				} else if (ke.getKeyCode() == KeyEvent.VK_DELETE) {
+					removeSelectedPilots();
+					ke.consume();
+				}
+			}
+		});
 		table.setEnabled(false);
 	}
 
@@ -165,7 +190,82 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 			table.setEnabled(true);
 		} else {
 			table.setEnabled(false);
+			table.clearSelection();
 			model.reloadModel();
+		}
+	}
+
+	private void addSelectedPilots() {
+		applySelectedPilots(true);
+	}
+
+	private void removeSelectedPilots() {
+		applySelectedPilots(false);
+	}
+
+	private void applySelectedPilots(boolean action) {
+		int[] selected = table.getSelectedRows();
+		for (int i = 0; i < selected.length; i++) {
+			selected[i] = table.convertRowIndexToModel(selected[i]);
+		}
+
+		List<Pilot> rows = new ArrayList<Pilot>(selected.length);
+		for (int mRow : selected) {
+			rows.add(model.getValueAt(mRow));
+		}
+
+		if (!rows.isEmpty()) {
+			applyRows(rows, action);
+
+			for (int mRow : selected) {
+				model.fireTableCellUpdated(mRow, 0);
+			}
+		}
+	}
+
+	private void applyClasses(Set<Class> classes, Class cls, boolean action) {
+		if (action) {
+			classes.add(cls);
+		} else {
+			classes.remove(cls);
+		}
+	}
+
+	private void applyRows(List<Pilot> rows, boolean action) {
+		assert (SwingUtilities.isEventDispatchThread());
+
+		Class cls = list.getSelected();
+		if (cls == null) {
+			return;
+		}
+
+		Pilot item = null;
+		win.getDatabase().startSession();
+		try {
+			DatabaseSession.begin();
+
+			for (Pilot row : rows) {
+				item = row;
+
+				row = pilotDAO.get(row);
+				applyClasses(row.getClasses(), cls, action);
+				pilotDAO.persist(row);
+
+				applyClasses(item.getClasses(), cls, action);
+			}
+
+			DatabaseSession.commit();
+		} catch (PersistenceException e) {
+			if (item != null) {
+				log.error(String.format("Unable to update row: row=%s#%d", Pilot.class.getSimpleName(), item.getId()), e); //$NON-NLS-1$
+			}
+			DatabaseError.errorSaving(win.getFrame(), Constants.APP_NAME, e);
+		} finally {
+			win.getDatabase().endSession();
+		}
+
+		for (Pilot row : rows) {
+			applyClasses(row.getClasses(), cls, action);
 		}
 	}
 

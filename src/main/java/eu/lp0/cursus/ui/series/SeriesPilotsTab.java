@@ -208,7 +208,8 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 
 			for (Pilot row : rows) {
 				item = row;
-				pilotDAO.remove(pilotDAO.get(item));
+				row = pilotDAO.get(row);
+				pilotDAO.remove(row);
 			}
 
 			DatabaseSession.commit();

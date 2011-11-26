@@ -144,8 +144,8 @@ public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableM
 		fireTableRowsInserted(idxNew, idxNew);
 	}
 
-	public void deleteRow(int index) {
-		rows.remove(index);
-		fireTableRowsDeleted(index, index);
+	public void deleteRow(int mRow) {
+		rows.remove(mRow);
+		fireTableRowsDeleted(mRow, mRow);
 	}
 }
