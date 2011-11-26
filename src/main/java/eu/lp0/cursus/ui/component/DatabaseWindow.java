@@ -32,4 +32,6 @@ public interface DatabaseWindow {
 	public void refreshRaceList();
 
 	public void refreshTab(final DatabaseTabSync<?> tab);
+
+	public void reloadCurrentTabs();
 }

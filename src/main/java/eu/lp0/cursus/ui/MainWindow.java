@@ -231,4 +231,14 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 			}
 		});
 	}
+
+	public void reloadCurrentTabs() {
+		Background.execute(new Runnable() {
+			@Override
+			public void run() {
+				selMgr.databaseClosed();
+				selMgr.databaseRefresh();
+			}
+		});
+	}
 }

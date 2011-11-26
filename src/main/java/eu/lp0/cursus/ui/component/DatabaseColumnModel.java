@@ -119,6 +119,7 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V> implement
 		} catch (PersistenceException e) {
 			log.error(String.format("Unable to save changes: row=%s#%d, column=%s, oldValue=%s, newValue=%s", row.getClass().getSimpleName(), row.getId(), //$NON-NLS-1$
 					getName(), oldValue, newValue), e);
+			win.reloadCurrentTabs();
 			DatabaseError.errorSaving(win.getFrame(), Constants.APP_NAME, e);
 			return false;
 		} finally {
