@@ -20,6 +20,8 @@ package eu.lp0.cursus.scoring;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Ordering;
+
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
@@ -48,7 +50,7 @@ public class GenericRacePenaltiesData<T extends ScoredData> extends AbstractRace
 
 		int autoPenalties = countPreviousAutomaticPenalties(pilot, race);
 		int penalties = 0;
-		for (Penalty penalty : attendee.getPenalties()) {
+		for (Penalty penalty : Ordering.natural().sortedCopy(attendee.getPenalties())) {
 			switch (penalty.getType()) {
 			case AUTOMATIC:
 				if (penalty.getValue() >= 0) {

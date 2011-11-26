@@ -22,13 +22,15 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import com.google.common.collect.ComparisonChain;
+
 import eu.lp0.cursus.util.Constants;
 
 /**
  * Penalty
  */
 @Embeddable
-public final class Penalty {
+public final class Penalty implements Comparable<Penalty> {
 	public enum Type {
 		/** Number of penalties where the points given for them are calculated automatically */
 		AUTOMATIC,
@@ -90,5 +92,10 @@ public final class Penalty {
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+
+	@Override
+	public int compareTo(Penalty o) {
+		return ComparisonChain.start().compare(getType(), o.getType()).compare(o.getValue(), getValue()).compare(getReason(), o.getReason()).result();
 	}
 }
