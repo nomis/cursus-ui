@@ -93,28 +93,27 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V> implement
 
 		win.getDatabase().startSession();
 		try {
+			boolean reload = false;
 			DatabaseSession.begin();
-
-			if (!setValue(row, newValue)) {
-				log.error(String.format("Unable to set row=%s#%d, column=%s, oldValue=%s, newValue=%s", row.getClass().getSimpleName(), row.getId(), //$NON-NLS-1$
-						getName(), oldValue, newValue));
-				return false;
-			}
 
 			T item = dao.get(row);
 			if (!setValue(item, newValue)) {
 				log.error(String.format("Unable to update row=%s#%d, column=%s, oldValue=%s, newValue=%s", row.getClass().getSimpleName(), row.getId(), //$NON-NLS-1$
 						getName(), oldValue, newValue));
-
-				if (!setValue(row, oldValue)) {
-					log.error(String.format("Unable to revert row=%s#%d, column=%s, oldValue=%s, newValue=%s", row.getClass().getSimpleName(), row.getId(), //$NON-NLS-1$
-							getName(), oldValue, newValue));
-				}
 				return false;
 			}
 			dao.persist(item);
+			if (!setValue(row, newValue)) {
+				log.error(String.format("Unable to set row=%s#%d, column=%s, oldValue=%s, newValue=%s", row.getClass().getSimpleName(), row.getId(), //$NON-NLS-1$
+						getName(), oldValue, newValue));
+				reload = true;
+			}
 
 			DatabaseSession.commit();
+			dao.detach(item);
+			if (reload) {
+				win.reloadCurrentTabs();
+			}
 			return true;
 		} catch (PersistenceException e) {
 			log.error(String.format("Unable to save changes: row=%s#%d, column=%s, oldValue=%s, newValue=%s", row.getClass().getSimpleName(), row.getId(), //$NON-NLS-1$
