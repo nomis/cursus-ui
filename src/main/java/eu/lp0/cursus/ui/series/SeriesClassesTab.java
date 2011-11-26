@@ -204,6 +204,11 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 	}
 
 	private void applySelectedPilots(boolean action) {
+		Class cls = list.getSelected();
+		if (cls == null) {
+			return;
+		}
+
 		int[] selected = table.getSelectedRows();
 		for (int i = 0; i < selected.length; i++) {
 			selected[i] = table.convertRowIndexToModel(selected[i]);
@@ -215,10 +220,13 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 		}
 
 		if (!rows.isEmpty()) {
-			applyRows(rows, action);
+			applyRows(rows, cls, action);
 
-			for (int mRow : selected) {
-				model.fireTableCellUpdated(mRow, 0);
+			// It's very important for resorting that no other rows
+			// have been modified when firing individual updates
+			for (int i = 0; i < selected.length; i++) {
+				applyClasses(rows.get(i).getClasses(), cls, action);
+				model.fireTableCellUpdated(selected[i], 0);
 			}
 		}
 	}
@@ -231,13 +239,8 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 		}
 	}
 
-	private void applyRows(List<Pilot> rows, boolean action) {
+	private void applyRows(List<Pilot> rows, Class cls, boolean action) {
 		assert (SwingUtilities.isEventDispatchThread());
-
-		Class cls = list.getSelected();
-		if (cls == null) {
-			return;
-		}
 
 		Pilot item = null;
 		win.getDatabase().startSession();
@@ -260,10 +263,6 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 			DatabaseError.errorSaving(win.getFrame(), Constants.APP_NAME, e);
 		} finally {
 			win.getDatabase().endSession();
-		}
-
-		for (Pilot row : rows) {
-			applyClasses(row.getClasses(), cls, action);
 		}
 	}
 
