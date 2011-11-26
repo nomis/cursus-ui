@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.component;
+package eu.lp0.cursus.ui.table;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -30,6 +30,8 @@ import eu.lp0.cursus.db.dao.PilotDAO;
 import eu.lp0.cursus.db.dao.RaceNumberDAO;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.RaceNumber;
+import eu.lp0.cursus.ui.component.DatabaseWindow;
+import eu.lp0.cursus.ui.component.StringDatabaseColumnModel;
 import eu.lp0.cursus.util.DatabaseError;
 import eu.lp0.cursus.util.Messages;
 
