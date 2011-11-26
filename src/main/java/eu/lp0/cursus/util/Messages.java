@@ -21,6 +21,7 @@ import java.awt.event.KeyEvent;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.prefs.Preferences;
 
 import org.slf4j.Logger;
@@ -36,6 +37,7 @@ public class Messages {
 	private static final Preferences pref = Preferences.userNodeForPackage(Messages.class);
 
 	private static final ResourceBundle RESOURCE_BUNDLE;
+	private static final ConcurrentHashMap<String, Boolean> MISSING_KEYS = new ConcurrentHashMap<String, Boolean>();
 	static {
 		Locale loadLocale = Locale.getDefault();
 		try {
@@ -65,6 +67,9 @@ public class Messages {
 		try {
 			return RESOURCE_BUNDLE.getString(key);
 		} catch (MissingResourceException e) {
+			if (MISSING_KEYS.putIfAbsent(key, true) == null) {
+				log.warn("Missing resource bundle key \"" + key + "\" in locale \"" + RESOURCE_BUNDLE.getLocale() + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			}
 			return '!' + key + '!';
 		}
 	}
