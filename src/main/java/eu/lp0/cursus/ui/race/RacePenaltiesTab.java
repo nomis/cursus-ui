@@ -20,12 +20,12 @@ package eu.lp0.cursus.ui.race;
 import java.awt.BorderLayout;
 
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.ui.common.AbstractPenaltiesTab;
+import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class RacePenaltiesTab extends AbstractPenaltiesTab<Race> {
+public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 	public RacePenaltiesTab(DatabaseWindow win) {
-		super(Race.class, win);
+		super(Race.class, win, "tab.penalties"); //$NON-NLS-1$
 		initialise();
 	}
 
