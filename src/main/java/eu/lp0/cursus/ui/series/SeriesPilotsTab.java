@@ -130,7 +130,7 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 
 					@Override
 					protected Pilot newRow() {
-						return new Pilot(getCurrentSeries(), ""); //$NON-NLS-1$
+						return new Pilot(currentSeries, ""); //$NON-NLS-1$
 					}
 				})));
 		model.setupModel(table);
@@ -223,12 +223,6 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 		} finally {
 			win.getDatabase().endSession();
 		}
-	}
-
-	private Series getCurrentSeries() {
-		assert (SwingUtilities.isEventDispatchThread());
-
-		return currentSeries;
 	}
 
 	@Override
