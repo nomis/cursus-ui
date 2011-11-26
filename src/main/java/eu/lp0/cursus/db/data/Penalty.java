@@ -79,7 +79,7 @@ public final class Penalty implements Comparable<Penalty> {
 		return value;
 	}
 
-	private void setValue(int value) {
+	public void setValue(int value) {
 		this.value = value;
 	}
 
