@@ -29,7 +29,7 @@ import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.data.Cursus;
 import eu.lp0.cursus.util.Messages;
 
-public class CursusDAO extends AbstractDAO<Cursus> {
+public class CursusDAO extends AbstractEntityDAO<Cursus> {
 	public CursusDAO() {
 		super(Cursus.class);
 	}

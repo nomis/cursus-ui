@@ -25,7 +25,7 @@ import javax.persistence.criteria.Root;
 
 import eu.lp0.cursus.db.data.RaceNumber;
 
-public class RaceNumberDAO extends AbstractDAO<RaceNumber> {
+public class RaceNumberDAO extends AbstractEntityDAO<RaceNumber> {
 	public RaceNumberDAO() {
 		super(RaceNumber.class);
 	}

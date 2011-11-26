@@ -26,7 +26,7 @@ import javax.persistence.criteria.Root;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Series;
 
-public class PilotDAO extends AbstractDAO<Pilot> {
+public class PilotDAO extends AbstractEntityDAO<Pilot> {
 	public PilotDAO() {
 		super(Pilot.class);
 	}

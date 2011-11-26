@@ -19,7 +19,7 @@ package eu.lp0.cursus.ui.component;
 
 import javax.swing.table.TableCellEditor;
 
-import eu.lp0.cursus.db.dao.AbstractDAO;
+import eu.lp0.cursus.db.dao.AbstractEntityDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
 
 public abstract class StringDatabaseColumnModel<T extends AbstractEntity> extends DatabaseColumnModel<T, String> {
@@ -30,7 +30,7 @@ public abstract class StringDatabaseColumnModel<T extends AbstractEntity> extend
 		this.maxLength = 0;
 	}
 
-	public StringDatabaseColumnModel(String name, DatabaseWindow win, AbstractDAO<T> dao, int maxLength) {
+	public StringDatabaseColumnModel(String name, DatabaseWindow win, AbstractEntityDAO<T> dao, int maxLength) {
 		super(name, win, dao);
 		this.maxLength = maxLength;
 	}

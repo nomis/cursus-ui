@@ -27,7 +27,7 @@ import javax.persistence.criteria.Root;
 import eu.lp0.cursus.db.data.AbstractEntity;
 import eu.lp0.cursus.db.data.NamedEntity;
 
-public class NamedEntityDAO<E extends AbstractEntity & NamedEntity> extends AbstractDAO<E> {
+public class NamedEntityDAO<E extends AbstractEntity & NamedEntity> extends AbstractEntityDAO<E> {
 	public NamedEntityDAO(Class<E> clazz) {
 		super(clazz);
 	}

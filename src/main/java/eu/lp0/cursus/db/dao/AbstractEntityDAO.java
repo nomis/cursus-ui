@@ -30,10 +30,10 @@ import com.google.common.base.Preconditions;
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.data.AbstractEntity;
 
-public abstract class AbstractDAO<E extends AbstractEntity> {
+public abstract class AbstractEntityDAO<E extends AbstractEntity> {
 	protected final Class<E> clazz;
 
-	public AbstractDAO(Class<E> clazz) {
+	public AbstractEntityDAO(Class<E> clazz) {
 		this.clazz = clazz;
 	}
 

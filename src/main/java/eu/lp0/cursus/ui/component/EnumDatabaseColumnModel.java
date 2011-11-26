@@ -23,7 +23,7 @@ import java.util.Vector;
 import javax.swing.JComboBox;
 import javax.swing.table.TableCellEditor;
 
-import eu.lp0.cursus.db.dao.AbstractDAO;
+import eu.lp0.cursus.db.dao.AbstractEntityDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
 
 public abstract class EnumDatabaseColumnModel<T extends AbstractEntity, V extends Enum<?>> extends DatabaseColumnModel<T, Object> {
@@ -36,7 +36,7 @@ public abstract class EnumDatabaseColumnModel<T extends AbstractEntity, V extend
 		this.nullable = nullable;
 	}
 
-	public EnumDatabaseColumnModel(String name, DatabaseWindow win, AbstractDAO<T> dao, Class<V> type, boolean nullable) {
+	public EnumDatabaseColumnModel(String name, DatabaseWindow win, AbstractEntityDAO<T> dao, Class<V> type, boolean nullable) {
 		super(name, win, dao);
 		this.type = type;
 		this.nullable = nullable;
