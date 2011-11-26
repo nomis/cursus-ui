@@ -20,18 +20,14 @@ package eu.lp0.cursus.ui.component;
 import java.awt.Component;
 
 import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import eu.lp0.cursus.db.data.Entity;
 
-public abstract class DatabaseTableCellRenderer<T extends Entity, V> implements TableCellRenderer {
-	private final Column<T, V> column;
+public abstract class DatabaseDefaultTableCellRenderer<T extends Entity, V> extends DefaultTableCellRenderer {
+	private final DatabaseTableCellRenderer.Column<T, V> column;
 
-	public static interface Column<T, V> {
-		public V loadValue(T row, boolean editing);
-	}
-
-	public DatabaseTableCellRenderer(Column<T, V> column) {
+	public DatabaseDefaultTableCellRenderer(DatabaseTableCellRenderer.Column<T, V> column) {
 		this.column = column;
 	}
 
@@ -47,5 +43,7 @@ public abstract class DatabaseTableCellRenderer<T extends Entity, V> implements 
 		return getTableCellRendererComponent_(table, (V)value, isSelected, hasFocus, vRow, vCol);
 	}
 
-	protected abstract Component getTableCellRendererComponent_(JTable table, V value, boolean isSelected, boolean hasFocus, int vRow, int vCol);
+	protected Component getTableCellRendererComponent_(JTable table, V value, boolean isSelected, boolean hasFocus, int vRow, int vCol) {
+		return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, vRow, vCol);
+	}
 }

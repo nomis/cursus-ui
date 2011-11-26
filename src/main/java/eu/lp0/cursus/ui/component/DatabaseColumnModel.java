@@ -32,15 +32,15 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Objects;
 
 import eu.lp0.cursus.db.DatabaseSession;
-import eu.lp0.cursus.db.dao.AbstractEntityDAO;
-import eu.lp0.cursus.db.data.AbstractEntity;
+import eu.lp0.cursus.db.dao.EntityDAO;
+import eu.lp0.cursus.db.data.Entity;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 
-public abstract class DatabaseColumnModel<T extends AbstractEntity, V> implements DatabaseTableCellEditor.Column<T, V> {
+public abstract class DatabaseColumnModel<T extends Entity, V> implements DatabaseTableCellEditor.Column<T, V> {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	protected final DatabaseWindow win;
-	private final AbstractEntityDAO<T> dao;
+	private final EntityDAO<T> dao;
 	private final String name;
 	private final boolean editable;
 
@@ -51,7 +51,7 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V> implement
 		this.editable = false;
 	}
 
-	public DatabaseColumnModel(String name, DatabaseWindow win, AbstractEntityDAO<T> dao) {
+	public DatabaseColumnModel(String name, DatabaseWindow win, EntityDAO<T> dao) {
 		this.win = win;
 		this.dao = dao;
 		this.name = name;
@@ -74,7 +74,7 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V> implement
 	}
 
 	protected TableCellRenderer createCellRenderer() {
-		return new StringDatabaseTableCellRenderer<T>(this);
+		return new StringDatabaseTableCellRenderer<T, V>(this);
 	}
 
 	@Override

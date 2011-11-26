@@ -25,9 +25,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import eu.lp0.cursus.db.data.AbstractEntity;
+import eu.lp0.cursus.db.data.Entity;
 
-public class DatabaseTableModel<T extends AbstractEntity> extends AbstractTableModel {
+public class DatabaseTableModel<T extends Entity> extends AbstractTableModel {
 	private final DatabaseRowModel<T> rowModel;
 	private final ArrayList<T> rows = new ArrayList<T>();
 

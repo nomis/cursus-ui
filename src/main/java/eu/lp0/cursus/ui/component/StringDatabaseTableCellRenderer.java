@@ -20,26 +20,17 @@ package eu.lp0.cursus.ui.component;
 import java.awt.Component;
 
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 
-import eu.lp0.cursus.db.data.AbstractEntity;
+import eu.lp0.cursus.db.data.Entity;
 
-public class StringDatabaseTableCellRenderer<T extends AbstractEntity> extends DefaultTableCellRenderer {
-	private final DatabaseTableCellRenderer.Column<T, ?> column;
-
-	public StringDatabaseTableCellRenderer(DatabaseTableCellRenderer.Column<T, ?> column) {
-		this.column = column;
+public class StringDatabaseTableCellRenderer<T extends Entity, V> extends DatabaseDefaultTableCellRenderer<T, V> {
+	public StringDatabaseTableCellRenderer(DatabaseTableCellRenderer.Column<T, V> column) {
+		super(column);
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int vRow, int vCol) {
-		if (value instanceof AbstractEntity) {
-			value = column.loadValue((T)value, false);
-		} else {
-			value = null;
-		}
+	protected Component getTableCellRendererComponent_(JTable table, V value, boolean isSelected, boolean hasFocus, int vRow, int vCol) {
 		setEnabled(table.isEnabled());
-		return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, vRow, vCol);
+		return super.getTableCellRendererComponent_(table, value, isSelected, hasFocus, vRow, vCol);
 	}
 }

@@ -21,15 +21,15 @@ import javax.swing.JCheckBox;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import eu.lp0.cursus.db.dao.AbstractEntityDAO;
-import eu.lp0.cursus.db.data.AbstractEntity;
+import eu.lp0.cursus.db.dao.EntityDAO;
+import eu.lp0.cursus.db.data.Entity;
 
-public abstract class BooleanDatabaseColumnModel<T extends AbstractEntity> extends DatabaseColumnModel<T, Boolean> {
+public abstract class BooleanDatabaseColumnModel<T extends Entity> extends DatabaseColumnModel<T, Boolean> {
 	public BooleanDatabaseColumnModel(String name) {
 		super(name);
 	}
 
-	public BooleanDatabaseColumnModel(String name, DatabaseWindow win, AbstractEntityDAO<T> dao) {
+	public BooleanDatabaseColumnModel(String name, DatabaseWindow win, EntityDAO<T> dao) {
 		super(name, win, dao);
 	}
 

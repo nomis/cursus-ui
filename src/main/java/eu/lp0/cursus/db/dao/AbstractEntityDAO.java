@@ -30,7 +30,7 @@ import com.google.common.base.Preconditions;
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.data.AbstractEntity;
 
-public abstract class AbstractEntityDAO<E extends AbstractEntity> {
+public abstract class AbstractEntityDAO<E extends AbstractEntity> implements EntityDAO<E> {
 	protected final Class<E> clazz;
 
 	public AbstractEntityDAO(Class<E> clazz) {
@@ -54,7 +54,7 @@ public abstract class AbstractEntityDAO<E extends AbstractEntity> {
 	 * 
 	 * Merge behaviour may cause unexpected changes (override with DIY merge)
 	 */
-	protected E merge(E entity) {
+	public E merge(E entity) {
 		Preconditions.checkNotNull(entity);
 		return DatabaseSession.getEntityManager().merge(entity);
 	}

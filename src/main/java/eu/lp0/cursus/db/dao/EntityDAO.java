@@ -15,28 +15,22 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.component;
+package eu.lp0.cursus.db.dao;
 
-import javax.swing.table.TableCellEditor;
+import java.util.List;
 
-import eu.lp0.cursus.db.dao.EntityDAO;
 import eu.lp0.cursus.db.data.Entity;
 
-public abstract class StringDatabaseColumnModel<T extends Entity> extends DatabaseColumnModel<T, String> {
-	private final int maxLength;
+public interface EntityDAO<E extends Entity> {
+	public void persist(E entity);
 
-	public StringDatabaseColumnModel(String name) {
-		super(name);
-		this.maxLength = 0;
-	}
+	public E merge(E entity);
 
-	public StringDatabaseColumnModel(String name, DatabaseWindow win, EntityDAO<T> dao, int maxLength) {
-		super(name, win, dao);
-		this.maxLength = maxLength;
-	}
+	public void remove(E entity);
 
-	@Override
-	protected TableCellEditor createCellEditor() {
-		return new DatabaseTableCellEditor<T, String>(this, new DatabaseTextField(maxLength));
-	}
+	public void detach(E entity);
+
+	public E get(E entity);
+
+	public List<E> findAll();
 }

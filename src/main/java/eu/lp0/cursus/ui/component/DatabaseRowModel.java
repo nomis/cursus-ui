@@ -25,9 +25,9 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import eu.lp0.cursus.db.data.AbstractEntity;
+import eu.lp0.cursus.db.data.Entity;
 
-public class DatabaseRowModel<T extends AbstractEntity> {
+public class DatabaseRowModel<T extends Entity> {
 	private final List<DatabaseColumnModel<T, ?>> columns;
 
 	public DatabaseRowModel(List<DatabaseColumnModel<T, ?>> columns) {

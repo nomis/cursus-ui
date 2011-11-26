@@ -26,14 +26,14 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import eu.lp0.cursus.db.data.AbstractEntity;
+import eu.lp0.cursus.db.data.Entity;
 
-public class DatabaseTableCellEditor<T extends AbstractEntity, V> extends DefaultCellEditor {
+public class DatabaseTableCellEditor<T extends Entity, V> extends DefaultCellEditor {
 	private final Column<T, V> column;
 	protected Integer mRow = null;
 	protected T mVal = null;
 
-	public static interface Column<T extends AbstractEntity, V> extends DatabaseTableCellRenderer.Column<T, V> {
+	public static interface Column<T, V> extends DatabaseTableCellRenderer.Column<T, V> {
 		public boolean saveEditedValue(T row, V newValue);
 	}
 

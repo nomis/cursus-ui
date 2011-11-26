@@ -24,7 +24,7 @@ import javax.persistence.MappedSuperclass;
 import eu.lp0.cursus.db.IDGenerator;
 
 @MappedSuperclass
-public abstract class AbstractEntity implements Cloneable {
+public abstract class AbstractEntity implements Entity, Cloneable {
 	private Long id;
 
 	@Id

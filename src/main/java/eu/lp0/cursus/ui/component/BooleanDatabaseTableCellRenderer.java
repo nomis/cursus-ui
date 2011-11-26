@@ -26,30 +26,22 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import eu.lp0.cursus.db.data.AbstractEntity;
+import eu.lp0.cursus.db.data.Entity;
 
-public class BooleanDatabaseTableCellRenderer<T extends AbstractEntity> extends DatabaseTableCellRenderer<T> {
-	private final Column<T, Boolean> column;
+public class BooleanDatabaseTableCellRenderer<T extends Entity> extends DatabaseTableCellRenderer<T, Boolean> {
 	private final Border EMPTY_BORDER = new EmptyBorder(1, 1, 1, 1);
 	private final JCheckBox checkBox = new JCheckBox();
 
 	public BooleanDatabaseTableCellRenderer(Column<T, Boolean> column) {
-		this.column = column;
+		super(column);
 		checkBox.setHorizontalAlignment(SwingConstants.CENTER);
 		checkBox.setBorderPainted(true);
 		checkBox.setOpaque(true);
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int vRow, int vCol) {
-		if (value instanceof AbstractEntity) {
-			value = column.loadValue((T)value, false);
-		} else {
-			// DefaultCellEditor may try to be smart and obtain the renderer by passing us a converted Boolean value
-			value = false;
-		}
-		checkBox.setSelected((Boolean)value);
+	protected Component getTableCellRendererComponent_(JTable table, Boolean value, boolean isSelected, boolean hasFocus, int vRow, int vCol) {
+		checkBox.setSelected(value);
 		checkBox.setEnabled(table.isEnabled());
 		if (isSelected) {
 			checkBox.setForeground(table.getSelectionForeground());
