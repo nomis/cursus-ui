@@ -250,8 +250,6 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 				row = pilotDAO.get(row);
 				applyClasses(row.getClasses(), cls, action);
 				pilotDAO.persist(row);
-
-				applyClasses(item.getClasses(), cls, action);
 			}
 
 			DatabaseSession.commit();
