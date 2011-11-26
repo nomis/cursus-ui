@@ -174,7 +174,7 @@ public abstract class DeleteDatabaseColumnModel<T extends Entity> extends Databa
 		}
 
 		private boolean ourColumn(MouseEvent me) {
-			return mCol == table.convertColumnIndexToModel(header.columnAtPoint(me.getPoint()));
+			return table.isEnabled() && mCol == table.convertColumnIndexToModel(header.columnAtPoint(me.getPoint()));
 		}
 
 		@Override
@@ -249,7 +249,7 @@ public abstract class DeleteDatabaseColumnModel<T extends Entity> extends Databa
 
 		@Override
 		public void keyTyped(KeyEvent ke) {
-			if (button.hasFakeFocus()) {
+			if (table.isEnabled() && button.hasFakeFocus()) {
 				button.dispatchEvent(ke);
 			}
 		}
@@ -258,7 +258,7 @@ public abstract class DeleteDatabaseColumnModel<T extends Entity> extends Databa
 		public void keyPressed(KeyEvent ke) {
 			// There's a side effect here in that the button won't
 			// get the key press that was used to change focus
-			if (button.hasFakeFocus()) {
+			if (table.isEnabled() && button.hasFakeFocus()) {
 				// This works but the button's not really visible
 				// so there's no visual feedback when activated
 				button.dispatchEvent(ke);
@@ -269,7 +269,7 @@ public abstract class DeleteDatabaseColumnModel<T extends Entity> extends Databa
 		public void keyReleased(KeyEvent ke) {
 			// There's a side effect here in that the button won't
 			// get the key release that was used to change focus
-			if (button.hasFakeFocus()) {
+			if (table.isEnabled() && button.hasFakeFocus()) {
 				button.dispatchEvent(ke);
 			}
 		}
