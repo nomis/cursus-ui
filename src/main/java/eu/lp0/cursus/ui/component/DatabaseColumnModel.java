@@ -103,14 +103,15 @@ public abstract class DatabaseColumnModel<T extends AbstractEntity, V> implement
 				return false;
 			}
 			dao.persist(item);
+			DatabaseSession.commit();
+
+			dao.detach(item);
 			if (!setValue(row, newValue)) {
 				log.error(String.format("Unable to set row=%s#%d, column=%s, oldValue=%s, newValue=%s", row.getClass().getSimpleName(), row.getId(), //$NON-NLS-1$
 						getName(), oldValue, newValue));
 				reload = true;
 			}
 
-			DatabaseSession.commit();
-			dao.detach(item);
 			if (reload) {
 				win.reloadCurrentTabs();
 			}
