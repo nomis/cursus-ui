@@ -22,6 +22,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.data.Cursus;
 import eu.lp0.cursus.db.data.Event;
@@ -58,9 +59,9 @@ public class EmptyDatabaseTest extends AbstractDatabaseTest {
 			Assert.assertEquals(1, events.get(0).getRaces().size());
 			Assert.assertSame(races.get(0), events.get(0).getRaces().get(0));
 
-			Assert.assertEquals(Messages.getString("series.untitled"), series.get(0).getName()); //$NON-NLS-1$
-			Assert.assertEquals(Messages.getString("event.untitled"), events.get(0).getName()); //$NON-NLS-1$
-			Assert.assertEquals(Messages.getString("race.untitled"), races.get(0).getName()); //$NON-NLS-1$
+			Assert.assertEquals(Messages.getString(Database.UNTITLED_SERIES), series.get(0).getName());
+			Assert.assertEquals(Messages.getString(Database.UNTITLED_EVENT), events.get(0).getName());
+			Assert.assertEquals(Messages.getString(Database.UNTITLED_RACE), races.get(0).getName());
 
 			List<Pilot> pilots = pilotDAO.findAll();
 

@@ -40,6 +40,9 @@ import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.Messages;
 
 public abstract class Database {
+	public static final String UNTITLED_SERIES = "series.untitled"; //$NON-NLS-1$
+	public static final String UNTITLED_EVENT = "event.untitled"; //$NON-NLS-1$
+	public static final String UNTITLED_RACE = "race.untitled"; //$NON-NLS-1$
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final String name;
 	private final EntityManagerFactory emf;
@@ -105,13 +108,13 @@ public abstract class Database {
 			if (seriesList.isEmpty()) {
 				log.info("Database \"" + name + "\" has no series, creating untitled series"); //$NON-NLS-1$ //$NON-NLS-2$
 
-				Series series = new Series(Messages.getString("series.untitled")); //$NON-NLS-1$
+				Series series = new Series(Messages.getString(UNTITLED_SERIES));
 				seriesDAO.persist(series);
 
-				Event event = new Event(series, Messages.getString("event.untitled")); //$NON-NLS-1$
+				Event event = new Event(series, Messages.getString(UNTITLED_EVENT));
 				eventDAO.persist(event);
 
-				Race race = new Race(event, Messages.getString("race.untitled")); //$NON-NLS-1$
+				Race race = new Race(event, Messages.getString(UNTITLED_RACE));
 				raceDAO.persist(race);
 			}
 
