@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.util;
 
+import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -95,5 +96,31 @@ public class Messages {
 		pref.put(PREF_LOCALE_COUNTRY, locale.getCountry());
 		pref.put(PREF_LOCALE_VARIANT, locale.getVariant());
 		log.trace("Set preferred locale to \"" + locale + "\""); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	public static String getAccessibleName(String key) {
+		return getString(String.format("accessible.%s.name", key)); //$NON-NLS-1$
+	}
+
+	public static String getAccessibleName(String key, Object... args) {
+		return String.format(getString(String.format("accessible.%s.name", key)), args); //$NON-NLS-1$
+	}
+
+	public static String getAccessibleDesc(String key) {
+		return getString(String.format("accessible.%s.desc", key)); //$NON-NLS-1$
+	}
+
+	public static String getAccessibleDesc(String key, Object... args) {
+		return String.format(getString(String.format("accessible.%s.desc", key)), args); //$NON-NLS-1$
+	}
+
+	public static void setAccessible(Component c, String key) {
+		c.getAccessibleContext().setAccessibleName(getAccessibleName(key));
+		c.getAccessibleContext().setAccessibleDescription(getAccessibleDesc(key));
+	}
+
+	public static void setAccessible(Component c, String key, Object... args) {
+		c.getAccessibleContext().setAccessibleName(getAccessibleName(key, args));
+		c.getAccessibleContext().setAccessibleDescription(getAccessibleDesc(key, args));
 	}
 }

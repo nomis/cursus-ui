@@ -52,8 +52,10 @@ import eu.lp0.cursus.ui.series.SeriesClassesTab;
 import eu.lp0.cursus.ui.series.SeriesPilotsTab;
 import eu.lp0.cursus.ui.series.SeriesResultsTab;
 import eu.lp0.cursus.ui.tree.RaceTree;
+import eu.lp0.cursus.ui.util.AccessibleComponents;
 import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
+import eu.lp0.cursus.util.Messages;
 
 public final class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 	private final Main main;
@@ -145,6 +147,7 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 
 			raceList = new RaceTree(this);
 			raceList.setBorder(new EmptyBorder(2, 2, 2, 2));
+			Messages.setAccessible(raceList, AccessibleComponents.RACE_TREE);
 			scrollPane.setViewportView(raceList);
 
 			tabbedPane = new JTabbedPane();
