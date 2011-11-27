@@ -72,11 +72,7 @@ public class TabbedPaneManager implements TreeSelectionListener {
 
 	@Override
 	public void valueChanged(final TreeSelectionEvent tse) {
-		if (tse.isAddedPath()) {
-			showSelected(tree.getSelected());
-		} else {
-			showSelected(null);
-		}
+		showSelected(tree.getSelected());
 	}
 
 	public void showSelected(final RaceEntity item) {
