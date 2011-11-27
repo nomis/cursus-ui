@@ -172,8 +172,9 @@ public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 	private void updateModel(Race race) {
 		assert (SwingUtilities.isEventDispatchThread());
 
+		// Remove everything when the race changes
 		if (!Objects.equal(race, currentRace)) {
-			model.updateModel(generateRaceAttendeePenalties(null));
+			model.updateModel(Collections.<RaceAttendeePenalty>emptyList());
 			raceAttendeesColumn.setRace(null);
 		}
 
@@ -189,9 +190,23 @@ public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 			return Collections.<RaceAttendeePenalty>emptyList();
 		} else {
 			List<RaceAttendeePenalty> penalties = new ArrayList<RaceAttendeePenalty>(race.getAttendees().size());
+			// Add all penalties from the database
 			for (RaceAttendee attendee : race.getAttendees().values()) {
 				for (Penalty penalty : attendee.getPenalties()) {
 					penalties.add(new RaceAttendeePenalty(attendee, penalty));
+				}
+			}
+			// Add all unsaved penalties
+			for (RaceAttendeePenalty penalty : model) {
+				if (penalty.getDatabaseAttendee() == null) {
+					// But only if there is no pilot set or the pilot is attending the race
+					//
+					// Note: it is not safe to modify the penalty here (to unset the pilot)
+					// as it would require the model to fire an update... but the pilot
+					// must be null otherwise the penalty should have been saved
+					if (penalty.getPilot() == null || race.getAttendees().containsKey(penalty.getPilot())) {
+						penalties.add(penalty);
+					}
 				}
 			}
 			return penalties;

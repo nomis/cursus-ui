@@ -18,6 +18,7 @@
 package eu.lp0.cursus.ui.component;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -25,9 +26,11 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import com.google.common.collect.Iterators;
+
 import eu.lp0.cursus.db.data.Entity;
 
-public class DatabaseTableModel<T extends Entity> extends AbstractTableModel {
+public class DatabaseTableModel<T extends Entity> extends AbstractTableModel implements Iterable<T> {
 	private final DatabaseRowModel<T> rowModel;
 	private final ArrayList<T> rows = new ArrayList<T>();
 
@@ -136,6 +139,11 @@ public class DatabaseTableModel<T extends Entity> extends AbstractTableModel {
 		if (!rows.isEmpty()) {
 			fireTableRowsUpdated(0, rows.size() - 1);
 		}
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return Iterators.unmodifiableIterator(rows.iterator());
 	}
 
 	protected void addRow(T row) {
