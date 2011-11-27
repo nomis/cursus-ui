@@ -120,15 +120,7 @@ public abstract class AbstractTree<R extends TreeNode, T> extends JTree {
 	}
 
 	private void showMenu(int x, int y) {
-		TreePath path = getSelectionPath();
-		JPopupMenu menu = null;
-
-		if (path != null) {
-			menu = menuFromUserObject(userObjectFromPathComponent(path.getLastPathComponent()));
-		} else {
-			menu = menuFromUserObject(null);
-		}
-		menu.show(this, x, y);
+		menuFromUserObject(getSelected()).show(this, x, y);
 	}
 
 	protected abstract void insertFromUserObject(T item);
@@ -136,19 +128,14 @@ public abstract class AbstractTree<R extends TreeNode, T> extends JTree {
 	protected abstract void deleteFromUserObject(T item);
 
 	private boolean doInsert() {
-		TreePath path = getSelectionPath();
-		if (path != null) {
-			insertFromUserObject(userObjectFromPathComponent(path.getLastPathComponent()));
-		} else {
-			insertFromUserObject(null);
-		}
+		insertFromUserObject(getSelected());
 		return true;
 	}
 
 	private boolean doDelete() {
 		TreePath path = getSelectionPath();
 		if (path != null) {
-			deleteFromUserObject(userObjectFromPathComponent(path.getLastPathComponent()));
+			deleteFromUserObject(getSelectionFromPath(path));
 			return true;
 		} else {
 			return false;
@@ -156,8 +143,10 @@ public abstract class AbstractTree<R extends TreeNode, T> extends JTree {
 	}
 
 	public T getSelected() {
-		TreePath path = getSelectionPath();
+		return getSelectionFromPath(getSelectionPath());
+	}
 
+	public T getSelectionFromPath(TreePath path) {
 		if (path != null) {
 			return userObjectFromPathComponent(path.getLastPathComponent());
 		} else {
