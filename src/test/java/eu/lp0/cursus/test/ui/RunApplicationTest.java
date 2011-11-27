@@ -27,7 +27,7 @@ import eu.lp0.cursus.db.data.Cursus;
 
 public class RunApplicationTest extends AbstractUITest {
 	@Test(timeout = CALL_TIMEOUT)
-	public void testDatabase() {
+	public void testDatabase() throws Exception {
 		Database db = main.getDatabase();
 		Assert.assertNotNull(db);
 
@@ -42,5 +42,7 @@ public class RunApplicationTest extends AbstractUITest {
 		} finally {
 			db.endSession();
 		}
+
+		Assert.assertNull(getSelectedRaceEntity());
 	}
 }

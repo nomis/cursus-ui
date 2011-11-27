@@ -49,7 +49,7 @@ import eu.lp0.cursus.app.Main;
 import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.test.db.AbstractDataTest;
 import eu.lp0.cursus.test.util.Pollable;
-import eu.lp0.cursus.ui.MainWindow;
+import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.menu.MainMenu;
 import eu.lp0.cursus.ui.util.AccessibleComponents;
 import eu.lp0.cursus.util.Background;
@@ -59,7 +59,7 @@ public class AbstractUITest extends AbstractDataTest {
 	public static final int TEST_TIMEOUT = 30000;
 	public static final int CALL_TIMEOUT = 5000;
 	protected Main main;
-	protected MainWindow mainWindow;
+	protected Accessible mainWindow;
 	protected Accessible menuBar;
 	protected Accessible raceTree;
 	protected Accessible tabbedPane;
@@ -157,7 +157,7 @@ public class AbstractUITest extends AbstractDataTest {
 		return callFromEventThread(new Callable<RaceEntity>() {
 			@Override
 			public RaceEntity call() throws Exception {
-				return mainWindow.getSelected();
+				return ((DatabaseWindow)mainWindow).getSelected();
 			}
 		});
 	}

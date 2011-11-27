@@ -25,6 +25,8 @@ import javax.swing.UIManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.MemoryDatabase;
@@ -80,6 +82,7 @@ public class Main implements Runnable {
 		return db;
 	}
 
+	@VisibleForTesting
 	public MainWindow getWindow() {
 		return win;
 	}
