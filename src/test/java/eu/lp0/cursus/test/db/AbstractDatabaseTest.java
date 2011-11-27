@@ -19,30 +19,11 @@ package eu.lp0.cursus.test.db;
 
 import org.junit.After;
 import org.junit.Before;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.MemoryDatabase;
-import eu.lp0.cursus.db.dao.ClassDAO;
-import eu.lp0.cursus.db.dao.CursusDAO;
-import eu.lp0.cursus.db.dao.EventDAO;
-import eu.lp0.cursus.db.dao.PilotDAO;
-import eu.lp0.cursus.db.dao.RaceDAO;
-import eu.lp0.cursus.db.dao.RaceNumberDAO;
-import eu.lp0.cursus.db.dao.SeriesDAO;
 
-public abstract class AbstractDatabaseTest {
-	protected final Logger log = LoggerFactory.getLogger(getClass());
-
-	protected ClassDAO classDAO = new ClassDAO();
-	protected CursusDAO cursusDAO = new CursusDAO();
-	protected EventDAO eventDAO = new EventDAO();
-	protected PilotDAO pilotDAO = new PilotDAO();
-	protected RaceDAO raceDAO = new RaceDAO();
-	protected RaceNumberDAO raceNumberDAO = new RaceNumberDAO();
-	protected SeriesDAO seriesDAO = new SeriesDAO();
-
+public abstract class AbstractDatabaseTest extends AbstractDataTest {
 	protected Database db;
 
 	@Before
