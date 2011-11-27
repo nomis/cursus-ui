@@ -24,13 +24,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JPopupMenu;
-import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-public abstract class AbstractTree<R extends TreeNode, T> extends JTree {
+import eu.lp0.cursus.ui.util.AccessibleJTreeFix;
+
+public abstract class AbstractTree<R extends TreeNode, T> extends AccessibleJTreeFix {
 	protected final DatabaseWindow win;
 	protected final R root;
 
