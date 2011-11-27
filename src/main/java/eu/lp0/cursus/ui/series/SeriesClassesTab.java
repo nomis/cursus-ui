@@ -260,6 +260,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 			if (item != null) {
 				log.error(String.format("Unable to update row: row=%s#%d", Pilot.class.getSimpleName(), item.getId()), e); //$NON-NLS-1$
 			}
+			win.reloadCurrentTabs();
 			DatabaseError.errorSaving(win.getFrame(), Constants.APP_NAME, e);
 		} finally {
 			win.getDatabase().endSession();

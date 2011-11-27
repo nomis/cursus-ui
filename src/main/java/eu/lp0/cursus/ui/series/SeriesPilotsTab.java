@@ -219,6 +219,7 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 			} else {
 				log.error("Unable to delete row", e); //$NON-NLS-1$
 			}
+			win.reloadCurrentTabs();
 			DatabaseError.errorSaving(win.getFrame(), Constants.APP_NAME, e);
 		} finally {
 			win.getDatabase().endSession();
