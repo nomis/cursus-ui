@@ -54,7 +54,7 @@ public class DatabaseRowModel<T extends Entity> {
 		return columns.get(mCol).getValue(row, editing);
 	}
 
-	public void setupModel(JTable table, DatabaseTableModel<T> model, TableRowSorter<? extends TableModel> sorter) {
+	public void setupModel(JTable table, DatabaseTableModel<T> model, TableRowSorter<? super TableModel> sorter) {
 		Enumeration<TableColumn> cols = table.getColumnModel().getColumns();
 		while (cols.hasMoreElements()) {
 			TableColumn col = cols.nextElement();

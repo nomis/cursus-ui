@@ -66,7 +66,7 @@ public abstract class DatabaseColumnModel<T extends Entity, V> implements Databa
 		return editable;
 	}
 
-	public void setupModel(JTable table, DatabaseTableModel<T> model, TableRowSorter<? extends TableModel> sorter, TableColumn col) {
+	public void setupModel(JTable table, DatabaseTableModel<T> model, TableRowSorter<? super TableModel> sorter, TableColumn col) {
 		col.setCellRenderer(createCellRenderer());
 		if (isCellEditable()) {
 			col.setCellEditor(createCellEditor());

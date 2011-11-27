@@ -68,7 +68,7 @@ public abstract class DeleteDatabaseColumnModel<T extends Entity> extends Databa
 	}
 
 	@Override
-	public void setupModel(JTable table, DatabaseTableModel<T> model, TableRowSorter<? extends TableModel> sorter, TableColumn col) {
+	public void setupModel(JTable table, DatabaseTableModel<T> model, TableRowSorter<? super TableModel> sorter, TableColumn col) {
 		super.setupModel(table, model, sorter, col);
 
 		this.table = table;
