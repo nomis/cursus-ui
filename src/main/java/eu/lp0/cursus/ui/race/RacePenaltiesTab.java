@@ -36,6 +36,7 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
@@ -171,12 +172,15 @@ public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 	private void updateModel(Race race) {
 		assert (SwingUtilities.isEventDispatchThread());
 
-		table.setEnabled(false);
-		model.updateModel(generateRaceAttendeePenalties(null));
-		raceAttendeesColumn.setRace(null);
+		if (!Objects.equal(race, currentRace)) {
+			model.updateModel(generateRaceAttendeePenalties(null));
+			raceAttendeesColumn.setRace(null);
+		}
+
 		currentRace = race;
 		raceAttendeesColumn.setRace(race);
 		model.updateModel(generateRaceAttendeePenalties(race));
+
 		table.setEnabled(race != null && !race.getAttendees().isEmpty());
 	}
 
