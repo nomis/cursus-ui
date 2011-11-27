@@ -58,4 +58,9 @@ public class Background {
 	public static void shutdownNow() {
 		EXECUTOR_SERVICE.shutdownNow();
 	}
+
+	public static void shutdownAndWait(long timeout, TimeUnit unit) throws InterruptedException {
+		EXECUTOR_SERVICE.shutdown();
+		EXECUTOR_SERVICE.awaitTermination(timeout, unit);
+	}
 }

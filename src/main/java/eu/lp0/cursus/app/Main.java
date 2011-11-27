@@ -80,6 +80,10 @@ public class Main implements Runnable {
 		return db;
 	}
 
+	public MainWindow getWindow() {
+		return win;
+	}
+
 	public synchronized boolean open() throws SQLException, InvalidDatabaseException {
 		assert (Background.isExecutorThread());
 
