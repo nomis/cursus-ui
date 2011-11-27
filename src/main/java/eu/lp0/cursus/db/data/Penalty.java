@@ -25,18 +25,30 @@ import javax.persistence.Enumerated;
 import com.google.common.collect.ComparisonChain;
 
 import eu.lp0.cursus.util.Constants;
+import eu.lp0.cursus.util.Messages;
 
 /**
  * Penalty
  */
 @Embeddable
-public final class Penalty implements Comparable<Penalty> {
+public final class Penalty implements Comparable<Penalty>, Cloneable {
 	public enum Type {
 		/** Number of penalties where the points given for them are calculated automatically */
-		AUTOMATIC,
+		AUTOMATIC ("penalty.automatic"), //$NON-NLS-1$
 
 		/** Total fixed penalty points to be applied */
-		FIXED;
+		FIXED ("penalty.fixed"); //$NON-NLS-1$
+
+		private final String key;
+
+		private Type(String key) {
+			this.key = key;
+		}
+
+		@Override
+		public String toString() {
+			return Messages.getString(key);
+		}
 	}
 
 	Penalty() {
@@ -95,7 +107,25 @@ public final class Penalty implements Comparable<Penalty> {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Penalty) {
+			return compareTo((Penalty)o) == 0;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	public int compareTo(Penalty o) {
 		return ComparisonChain.start().compare(getType(), o.getType()).compare(o.getValue(), getValue()).compare(getReason(), o.getReason()).result();
+	}
+
+	@Override
+	public Penalty clone() {
+		try {
+			return (Penalty)super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
