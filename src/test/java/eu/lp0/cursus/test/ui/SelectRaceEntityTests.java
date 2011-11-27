@@ -31,7 +31,7 @@ import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.util.Messages;
 
 public class SelectRaceEntityTests extends AbstractUITest {
-	@Test(timeout = TEST_TIMEOUT)
+	@Test
 	public void selectSeries() throws Exception {
 		Accessible seriesNode = findAccessibleChildByName(raceTree, Messages.getString(Database.UNTITLED_SERIES));
 
@@ -46,7 +46,7 @@ public class SelectRaceEntityTests extends AbstractUITest {
 		Assert.assertEquals(Messages.getString(Database.UNTITLED_SERIES), series.getName());
 	}
 
-	@Test(timeout = TEST_TIMEOUT)
+	@Test
 	public void selectEvent() throws Exception {
 		Accessible seriesNode = findAccessibleChildByName(raceTree, Messages.getString(Database.UNTITLED_SERIES));
 		Accessible eventNode = findAccessibleChildByName(seriesNode, Messages.getString(Database.UNTITLED_EVENT));
@@ -62,7 +62,7 @@ public class SelectRaceEntityTests extends AbstractUITest {
 		Assert.assertEquals(Messages.getString(Database.UNTITLED_EVENT), event.getName());
 	}
 
-	@Test(timeout = TEST_TIMEOUT)
+	@Test
 	public void selectRace() throws Exception {
 		Accessible seriesNode = findAccessibleChildByName(raceTree, Messages.getString(Database.UNTITLED_SERIES));
 		Accessible eventNode = findAccessibleChildByName(seriesNode, Messages.getString(Database.UNTITLED_EVENT));

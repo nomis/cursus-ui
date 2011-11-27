@@ -20,6 +20,7 @@ package eu.lp0.cursus.test.ui;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -56,8 +57,7 @@ import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Messages;
 
 public class AbstractUITest extends AbstractDataTest {
-	public static final int TEST_TIMEOUT = 30000;
-	public static final int CALL_TIMEOUT = 5000;
+	private static final int CALL_TIMEOUT = 5000;
 	protected Main main;
 	protected Accessible mainWindow;
 	protected Accessible menuBar;
@@ -114,7 +114,7 @@ public class AbstractUITest extends AbstractDataTest {
 			@Override
 			public Void call() throws Exception {
 				while (!task.isDone()) {
-					Thread.sleep(500);
+					Thread.sleep(CALL_TIMEOUT / 50);
 				}
 				return null;
 			}
@@ -126,7 +126,7 @@ public class AbstractUITest extends AbstractDataTest {
 			@Override
 			public Void call() throws Exception {
 				while (!poll.call()) {
-					Thread.sleep(500);
+					Thread.sleep(CALL_TIMEOUT / 50);
 				}
 				return null;
 			}
@@ -134,18 +134,24 @@ public class AbstractUITest extends AbstractDataTest {
 	}
 
 	public <V> V callFromEventThread(final Callable<V> callable) throws Exception {
+		final CountDownLatch latch = new CountDownLatch(1);
 		final AtomicReference<V> value = new AtomicReference<V>();
 		final AtomicReference<Throwable> error = new AtomicReference<Throwable>();
-		SwingUtilities.invokeAndWait(new Runnable() {
+
+		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					value.set(callable.call());
 				} catch (Throwable t) {
 					error.set(t);
+				} finally {
+					latch.countDown();
 				}
 			}
 		});
+
+		latch.await(CALL_TIMEOUT, TimeUnit.MILLISECONDS);
 		Throwable t = error.get();
 		if (t != null) {
 			throw new Exception(t);
