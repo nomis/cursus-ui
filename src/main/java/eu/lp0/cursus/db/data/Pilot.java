@@ -120,6 +120,9 @@ public final class Pilot extends AbstractEntity {
 	}
 
 	public void setRaceNumber(RaceNumber number) {
+		if (number != null) {
+			getRaceNumbers().add(number);
+		}
 		this.number = number;
 	}
 

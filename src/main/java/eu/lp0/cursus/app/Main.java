@@ -41,16 +41,6 @@ public class Main implements Runnable {
 	private Database db = null;
 
 	public static void main(String[] args) {
-		log.info(Constants.APP_DESC);
-
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
-			log.debug("Unable to select system look and feel", e); //$NON-NLS-1$
-		}
-
-		UIManager.getDefaults().put("SplitPane.continuousLayout", true); //$NON-NLS-1$
-
 		Background.execute(new Main(args));
 	}
 
@@ -64,6 +54,16 @@ public class Main implements Runnable {
 
 	@Override
 	public void run() {
+		log.info(Constants.APP_DESC);
+
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+			log.debug("Unable to select system look and feel", e); //$NON-NLS-1$
+		}
+
+		UIManager.getDefaults().put("SplitPane.continuousLayout", true); //$NON-NLS-1$
+
 		win = new MainWindow(this);
 
 		SwingUtilities.invokeLater(new Runnable() {
@@ -87,16 +87,20 @@ public class Main implements Runnable {
 		return win;
 	}
 
-	public synchronized boolean open() throws SQLException, InvalidDatabaseException {
+	public synchronized boolean open() throws InvalidDatabaseException, SQLException {
 		assert (Background.isExecutorThread());
 
 		close();
 		if (!isOpen()) {
-			db = new MemoryDatabase();
+			db = createEmptyDatabase();
 			win.databaseOpened();
 			return true;
 		}
 		return false;
+	}
+
+	protected Database createEmptyDatabase() throws InvalidDatabaseException, SQLException {
+		return new MemoryDatabase();
 	}
 
 	public boolean close() {
