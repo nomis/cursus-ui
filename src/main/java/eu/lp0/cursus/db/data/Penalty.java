@@ -116,6 +116,11 @@ public final class Penalty implements Comparable<Penalty>, Cloneable {
 	}
 
 	@Override
+	public int hashCode() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public int compareTo(Penalty o) {
 		return ComparisonChain.start().compare(getType(), o.getType()).compare(o.getValue(), getValue()).compare(getReason(), o.getReason()).result();
 	}

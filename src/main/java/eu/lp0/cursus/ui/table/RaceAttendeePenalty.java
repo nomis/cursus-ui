@@ -19,14 +19,16 @@ package eu.lp0.cursus.ui.table;
 
 import java.util.Locale;
 
-import eu.lp0.cursus.db.data.AbstractEntity;
+import com.google.common.base.Objects;
+
+import eu.lp0.cursus.db.data.Entity;
 import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.util.Messages;
 
-public class RaceAttendeePenalty extends AbstractEntity {
+public final class RaceAttendeePenalty implements Entity {
 	private RaceAttendee dbAttendee;
 	private Pilot pilot;
 	private final Race race;
@@ -54,6 +56,7 @@ public class RaceAttendeePenalty extends AbstractEntity {
 	}
 
 	public void setDatabaseAttendee(RaceAttendee attendee) {
+		assert (attendee == null || attendee.getRace().equals(race));
 		this.dbAttendee = attendee;
 	}
 
@@ -79,6 +82,27 @@ public class RaceAttendeePenalty extends AbstractEntity {
 
 	public Penalty getPenalty() {
 		return penalty;
+	}
+
+	@Override
+	public Long getId() {
+		return (long)super.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof RaceAttendeePenalty) {
+			RaceAttendeePenalty p = (RaceAttendeePenalty)o;
+			return Objects.equal(getDatabaseAttendee(), p.getDatabaseAttendee()) && Objects.equal(getPilot(), p.getPilot())
+					&& Objects.equal(getDatabasePenalty(), p.getDatabasePenalty()) && Objects.equal(getPenalty(), p.getPenalty())
+					&& Objects.equal(getRace(), p.getRace());
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

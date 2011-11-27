@@ -18,10 +18,11 @@
 package eu.lp0.cursus.ui.table;
 
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
 
 import eu.lp0.cursus.db.data.Pilot;
 
-class PilotWrapper {
+final class PilotWrapper {
 	private static final Function<Pilot, PilotWrapper> FUNCTION = new Function<Pilot, PilotWrapper>() {
 		@Override
 		public PilotWrapper apply(Pilot input) {
@@ -40,6 +41,22 @@ class PilotWrapper {
 
 	public static Function<Pilot, PilotWrapper> getFunction() {
 		return FUNCTION;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof PilotWrapper) {
+			return Objects.equal(getPilot(), ((PilotWrapper)o).getPilot());
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		if (getPilot() == null) {
+			return 0;
+		}
+		return getPilot().hashCode();
 	}
 
 	@Override
