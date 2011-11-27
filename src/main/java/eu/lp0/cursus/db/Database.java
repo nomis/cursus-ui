@@ -43,6 +43,7 @@ public abstract class Database {
 	public static final String UNTITLED_SERIES = "series.untitled"; //$NON-NLS-1$
 	public static final String UNTITLED_EVENT = "event.untitled"; //$NON-NLS-1$
 	public static final String UNTITLED_RACE = "race.untitled"; //$NON-NLS-1$
+
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final String name;
 	private final EntityManagerFactory emf;

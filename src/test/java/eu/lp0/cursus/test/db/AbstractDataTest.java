@@ -40,5 +40,4 @@ public class AbstractDataTest {
 	protected RaceAttendeeDAO raceAttendeeDAO = new RaceAttendeeDAO();
 	protected RaceNumberDAO raceNumberDAO = new RaceNumberDAO();
 	protected SeriesDAO seriesDAO = new SeriesDAO();
-
 }
