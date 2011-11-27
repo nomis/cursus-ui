@@ -229,226 +229,226 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 			Series series = new Series(SERIES_NAME);
 
 			// Add all the pilots
-			F01 = new Pilot(series, "F01", Gender.M); //$NON-NLS-1$
+			F01 = new Pilot(series, "F01", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(F01);
 
-			F02 = new Pilot(series, "F02", Gender.M); //$NON-NLS-1$
+			F02 = new Pilot(series, "F02", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(F02);
 
-			F03 = new Pilot(series, "F03", Gender.M); //$NON-NLS-1$
+			F03 = new Pilot(series, "F03", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(F03);
 
-			F04 = new Pilot(series, "F04", Gender.M); //$NON-NLS-1$
+			F04 = new Pilot(series, "F04", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(F04);
 
-			F05 = new Pilot(series, "F05", Gender.M); //$NON-NLS-1$
+			F05 = new Pilot(series, "F05", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(F05);
 
-			F06 = new Pilot(series, "F06", Gender.M); //$NON-NLS-1$
+			F06 = new Pilot(series, "F06", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(F06);
 
-			F07 = new Pilot(series, "F07", Gender.M); //$NON-NLS-1$
+			F07 = new Pilot(series, "F07", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(F07);
 
-			F08 = new Pilot(series, "F08", Gender.M); //$NON-NLS-1$
+			F08 = new Pilot(series, "F08", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(F08);
 
-			F09 = new Pilot(series, "F09", Gender.M); //$NON-NLS-1$
+			F09 = new Pilot(series, "F09", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(F09);
 
-			F10 = new Pilot(series, "F10", Gender.M); //$NON-NLS-1$
+			F10 = new Pilot(series, "F10", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(F10);
 
-			F11 = new Pilot(series, "F11", Gender.F); //$NON-NLS-1$
+			F11 = new Pilot(series, "F11", Gender.FEMALE); //$NON-NLS-1$
 			series.getPilots().add(F11);
 
-			F12 = new Pilot(series, "F12", Gender.F); //$NON-NLS-1$
+			F12 = new Pilot(series, "F12", Gender.FEMALE); //$NON-NLS-1$
 			series.getPilots().add(F12);
 
-			F13 = new Pilot(series, "F13", Gender.F); //$NON-NLS-1$
+			F13 = new Pilot(series, "F13", Gender.FEMALE); //$NON-NLS-1$
 			series.getPilots().add(F13);
 
-			G21 = new Pilot(series, "G21", Gender.M); //$NON-NLS-1$
+			G21 = new Pilot(series, "G21", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(G21);
 
-			G22 = new Pilot(series, "G22", Gender.M); //$NON-NLS-1$
+			G22 = new Pilot(series, "G22", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(G22);
 
-			G23 = new Pilot(series, "G23", Gender.M); //$NON-NLS-1$
+			G23 = new Pilot(series, "G23", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(G23);
 
-			G24 = new Pilot(series, "G24", Gender.M); //$NON-NLS-1$
+			G24 = new Pilot(series, "G24", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(G24);
 
-			G25 = new Pilot(series, "G25", Gender.M); //$NON-NLS-1$
+			G25 = new Pilot(series, "G25", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(G25);
 
-			G26 = new Pilot(series, "G26", Gender.M); //$NON-NLS-1$
+			G26 = new Pilot(series, "G26", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(G26);
 
-			G27 = new Pilot(series, "G27", Gender.M); //$NON-NLS-1$
+			G27 = new Pilot(series, "G27", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(G27);
 
-			G28 = new Pilot(series, "G28", Gender.M); //$NON-NLS-1$
+			G28 = new Pilot(series, "G28", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(G28);
 
-			G29 = new Pilot(series, "G29", Gender.M); //$NON-NLS-1$
+			G29 = new Pilot(series, "G29", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(G29);
 
-			G30 = new Pilot(series, "G30", Gender.M); //$NON-NLS-1$
+			G30 = new Pilot(series, "G30", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(G30);
 
-			G31 = new Pilot(series, "G31", Gender.F); //$NON-NLS-1$
+			G31 = new Pilot(series, "G31", Gender.FEMALE); //$NON-NLS-1$
 			series.getPilots().add(G31);
 
-			G32 = new Pilot(series, "G32", Gender.F); //$NON-NLS-1$
+			G32 = new Pilot(series, "G32", Gender.FEMALE); //$NON-NLS-1$
 			series.getPilots().add(G32);
 
-			G33 = new Pilot(series, "G33", Gender.F); //$NON-NLS-1$
+			G33 = new Pilot(series, "G33", Gender.FEMALE); //$NON-NLS-1$
 			series.getPilots().add(G33);
 
-			G34 = new Pilot(series, "G34", Gender.F); //$NON-NLS-1$
+			G34 = new Pilot(series, "G34", Gender.FEMALE); //$NON-NLS-1$
 			series.getPilots().add(G34);
 
-			G35 = new Pilot(series, "G35", Gender.F); //$NON-NLS-1$
+			G35 = new Pilot(series, "G35", Gender.FEMALE); //$NON-NLS-1$
 			series.getPilots().add(G35);
 
-			G36 = new Pilot(series, "G36", Gender.F); //$NON-NLS-1$
+			G36 = new Pilot(series, "G36", Gender.FEMALE); //$NON-NLS-1$
 			series.getPilots().add(G36);
 
-			K41 = new Pilot(series, "K41", Gender.M); //$NON-NLS-1$
+			K41 = new Pilot(series, "K41", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(K41);
 
-			K42 = new Pilot(series, "K42", Gender.M); //$NON-NLS-1$
+			K42 = new Pilot(series, "K42", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(K42);
 
-			K43 = new Pilot(series, "K43", Gender.M); //$NON-NLS-1$
+			K43 = new Pilot(series, "K43", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(K43);
 
-			K44 = new Pilot(series, "K44", Gender.M); //$NON-NLS-1$
+			K44 = new Pilot(series, "K44", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(K44);
 
-			K46 = new Pilot(series, "K46", Gender.M); //$NON-NLS-1$
+			K46 = new Pilot(series, "K46", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(K46);
 
-			K45 = new Pilot(series, "K45", Gender.M); //$NON-NLS-1$
+			K45 = new Pilot(series, "K45", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(K45);
 
-			K47 = new Pilot(series, "K47", Gender.M); //$NON-NLS-1$
+			K47 = new Pilot(series, "K47", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(K47);
 
-			K48 = new Pilot(series, "K48", Gender.M); //$NON-NLS-1$
+			K48 = new Pilot(series, "K48", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(K48);
 
-			K49 = new Pilot(series, "K49", Gender.M); //$NON-NLS-1$
+			K49 = new Pilot(series, "K49", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(K49);
 
-			K50 = new Pilot(series, "K50", Gender.M); //$NON-NLS-1$
+			K50 = new Pilot(series, "K50", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(K50);
 
-			K51 = new Pilot(series, "K51", Gender.F); //$NON-NLS-1$
+			K51 = new Pilot(series, "K51", Gender.FEMALE); //$NON-NLS-1$
 			series.getPilots().add(K51);
 
-			K52 = new Pilot(series, "K52", Gender.F); //$NON-NLS-1$
+			K52 = new Pilot(series, "K52", Gender.FEMALE); //$NON-NLS-1$
 			series.getPilots().add(K52);
 
-			K53 = new Pilot(series, "K53", Gender.F); //$NON-NLS-1$
+			K53 = new Pilot(series, "K53", Gender.FEMALE); //$NON-NLS-1$
 			series.getPilots().add(K53);
 
-			H61 = new Pilot(series, "H61", Gender.M); //$NON-NLS-1$
+			H61 = new Pilot(series, "H61", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(H61);
 
-			H62 = new Pilot(series, "H62", Gender.M); //$NON-NLS-1$
+			H62 = new Pilot(series, "H62", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(H62);
 
-			H63 = new Pilot(series, "H63", Gender.M); //$NON-NLS-1$
+			H63 = new Pilot(series, "H63", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(H63);
 
-			H64 = new Pilot(series, "H64", Gender.M); //$NON-NLS-1$
+			H64 = new Pilot(series, "H64", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(H64);
 
-			H65 = new Pilot(series, "H65", Gender.M); //$NON-NLS-1$
+			H65 = new Pilot(series, "H65", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(H65);
 
-			H66 = new Pilot(series, "H66", Gender.M); //$NON-NLS-1$
+			H66 = new Pilot(series, "H66", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(H66);
 
-			H67 = new Pilot(series, "H67", Gender.M); //$NON-NLS-1$
+			H67 = new Pilot(series, "H67", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(H67);
 
-			H69 = new Pilot(series, "K69", Gender.M); //$NON-NLS-1$
+			H69 = new Pilot(series, "K69", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(H69);
 
-			H70 = new Pilot(series, "H70", Gender.M); //$NON-NLS-1$
+			H70 = new Pilot(series, "H70", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(H70);
 
-			B81 = new Pilot(series, "B81", Gender.M); //$NON-NLS-1$
+			B81 = new Pilot(series, "B81", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(B81);
 
-			B82 = new Pilot(series, "B82", Gender.M); //$NON-NLS-1$
+			B82 = new Pilot(series, "B82", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(B82);
 
-			IR91 = new Pilot(series, "IR91", Gender.M); //$NON-NLS-1$
+			IR91 = new Pilot(series, "IR91", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(IR91);
 
-			IR92 = new Pilot(series, "IR92", Gender.M); //$NON-NLS-1$
+			IR92 = new Pilot(series, "IR92", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(IR92);
 
-			IR93 = new Pilot(series, "IR93", Gender.M); //$NON-NLS-1$
+			IR93 = new Pilot(series, "IR93", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(IR93);
 
-			SCO101 = new Pilot(series, "SCO101", Gender.M); //$NON-NLS-1$
+			SCO101 = new Pilot(series, "SCO101", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(SCO101);
 
-			SCO102 = new Pilot(series, "SCO102", Gender.M); //$NON-NLS-1$
+			SCO102 = new Pilot(series, "SCO102", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(SCO102);
 
-			SCO103 = new Pilot(series, "SCO103", Gender.M); //$NON-NLS-1$
+			SCO103 = new Pilot(series, "SCO103", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(SCO103);
 
-			SCO104 = new Pilot(series, "SCO104", Gender.M); //$NON-NLS-1$
+			SCO104 = new Pilot(series, "SCO104", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(SCO104);
 
-			SCO105 = new Pilot(series, "SCO105", Gender.M); //$NON-NLS-1$
+			SCO105 = new Pilot(series, "SCO105", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(SCO105);
 
-			SCO106 = new Pilot(series, "SCO106", Gender.M); //$NON-NLS-1$
+			SCO106 = new Pilot(series, "SCO106", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(SCO106);
 
-			SCO107 = new Pilot(series, "SCO107", Gender.M); //$NON-NLS-1$
+			SCO107 = new Pilot(series, "SCO107", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(SCO107);
 
-			SCO108 = new Pilot(series, "SCO108", Gender.M); //$NON-NLS-1$
+			SCO108 = new Pilot(series, "SCO108", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(SCO108);
 
-			SCO109 = new Pilot(series, "SCO109", Gender.M); //$NON-NLS-1$
+			SCO109 = new Pilot(series, "SCO109", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(SCO109);
 
-			SCO110 = new Pilot(series, "SCO110", Gender.M); //$NON-NLS-1$
+			SCO110 = new Pilot(series, "SCO110", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(SCO110);
 
-			SCO113 = new Pilot(series, "SCO113", Gender.F); //$NON-NLS-1$
+			SCO113 = new Pilot(series, "SCO113", Gender.FEMALE); //$NON-NLS-1$
 			series.getPilots().add(SCO113);
 
-			E111 = new Pilot(series, "E111", Gender.M); //$NON-NLS-1$
+			E111 = new Pilot(series, "E111", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(E111);
 
-			CZ131 = new Pilot(series, "CZ131", Gender.M); //$NON-NLS-1$
+			CZ131 = new Pilot(series, "CZ131", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(CZ131);
 
-			CZ132 = new Pilot(series, "CZ132", Gender.M); //$NON-NLS-1$
+			CZ132 = new Pilot(series, "CZ132", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(CZ132);
 
-			CZ133 = new Pilot(series, "CZ133", Gender.M); //$NON-NLS-1$
+			CZ133 = new Pilot(series, "CZ133", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(CZ133);
 
-			CZ134 = new Pilot(series, "CZ134", Gender.M); //$NON-NLS-1$
+			CZ134 = new Pilot(series, "CZ134", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(CZ134);
 
-			CZ135 = new Pilot(series, "CZ135", Gender.M); //$NON-NLS-1$
+			CZ135 = new Pilot(series, "CZ135", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(CZ135);
 
-			SUI152 = new Pilot(series, "SUI152", Gender.M); //$NON-NLS-1$
+			SUI152 = new Pilot(series, "SUI152", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(SUI152);
 
 			// Save

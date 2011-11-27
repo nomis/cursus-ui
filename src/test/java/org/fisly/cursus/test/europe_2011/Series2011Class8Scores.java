@@ -54,8 +54,8 @@ public class Series2011Class8Scores extends AbstractSeries2011 {
 			Race race5 = raceDAO.find(event1, RACE5_NAME);
 			Race race6 = raceDAO.find(event1, RACE6_NAME);
 			Assert.assertEquals(SERIES_PILOTS, series.getPilots().size());
-			Scores mScores = scorer.scoreSeries(series, FleetFilter.from(Gender.M));
-			Scores fScores = scorer.scoreSeries(series, FleetFilter.from(Gender.F));
+			Scores mScores = scorer.scoreSeries(series, FleetFilter.from(Gender.MALE));
+			Scores fScores = scorer.scoreSeries(series, FleetFilter.from(Gender.FEMALE));
 
 			Assert.assertEquals(SERIES_M_FLEET, mScores.getPilots().size());
 			Assert.assertEquals(SERIES_M_FLEET, mScores.getFleet().size());
