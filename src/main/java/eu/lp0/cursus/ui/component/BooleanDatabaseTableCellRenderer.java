@@ -41,6 +41,9 @@ public class BooleanDatabaseTableCellRenderer<T extends Entity> extends Database
 
 	@Override
 	protected Component getTableCellRendererComponent_(JTable table, Boolean value, boolean isSelected, boolean hasFocus, int vRow, int vCol) {
+		if (value == null) {
+			value = false;
+		}
 		checkBox.setSelected(value);
 		checkBox.setEnabled(table.isEnabled());
 		if (isSelected) {

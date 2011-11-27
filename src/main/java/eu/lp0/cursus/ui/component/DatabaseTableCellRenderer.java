@@ -42,7 +42,7 @@ public abstract class DatabaseTableCellRenderer<T extends Entity, V> implements 
 			value = column.loadValue((T)value, false);
 		} else {
 			// DefaultCellEditor may try to be smart and obtain the renderer by passing us a converted Boolean value
-			value = false;
+			value = null;
 		}
 		return getTableCellRendererComponent_(table, (V)value, isSelected, hasFocus, vRow, vCol);
 	}

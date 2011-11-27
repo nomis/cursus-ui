@@ -86,6 +86,10 @@ public abstract class DatabaseColumnModel<T extends Entity, V> implements Databa
 	public boolean saveEditedValue(T row, V newValue) {
 		assert (SwingUtilities.isEventDispatchThread());
 
+		if (row == null) {
+			return false;
+		}
+
 		V oldValue = getValue(row, true);
 		if (Objects.equal(oldValue, newValue)) {
 			return true;
