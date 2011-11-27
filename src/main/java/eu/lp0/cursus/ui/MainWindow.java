@@ -118,6 +118,8 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 	}
 
 	public RaceEntity getSelected() {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		return isOpen() ? raceList.getSelected() : null;
 	}
 
