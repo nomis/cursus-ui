@@ -32,7 +32,7 @@ public class RaceAttendeePenaltyDAO implements EntityDAO<RaceAttendeePenalty> {
 
 	@Override
 	public void persist(RaceAttendeePenalty entity) {
-		// Simple case where the pilot has been unset
+		// Simple case where the pilot has not yet been set
 		if (entity.getPilot() == null) {
 			remove(entity);
 			return;
@@ -51,7 +51,7 @@ public class RaceAttendeePenaltyDAO implements EntityDAO<RaceAttendeePenalty> {
 		if (srcAttendee != null && srcAttendee.getPilot().equals(entity.getPilot())) {
 			dstAttendee = srcAttendee;
 		} else {
-			dstAttendee = raceDAO.get(entity.getRace()).getAttendees().get(entity.getPilot());
+			dstAttendee = raceAttendeeDAO.get(entity.getRace().getAttendees().get(entity.getPilot()));
 		}
 
 		// Remove the old penalty if it was persisted
