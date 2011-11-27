@@ -20,6 +20,7 @@ package eu.lp0.cursus.db.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -120,7 +121,7 @@ public final class RaceAttendee extends AbstractEntity {
 
 	private Race race;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(cascade = { CascadeType.DETACH }, optional = false)
 	@JoinColumn(name = "race_id", nullable = false)
 	public Race getRace() {
 		return race;
@@ -132,7 +133,7 @@ public final class RaceAttendee extends AbstractEntity {
 
 	private Pilot pilot;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(cascade = { CascadeType.DETACH }, optional = false)
 	@JoinColumn(name = "pilot_id", nullable = false)
 	public Pilot getPilot() {
 		return pilot;

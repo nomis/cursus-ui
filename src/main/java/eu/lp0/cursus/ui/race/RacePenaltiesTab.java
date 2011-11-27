@@ -18,29 +18,297 @@
 package eu.lp0.cursus.ui.race;
 
 import java.awt.BorderLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
+import javax.persistence.PersistenceException;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.SwingUtilities;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Ordering;
+import com.google.common.primitives.Ints;
+
+import eu.lp0.cursus.db.DatabaseSession;
+import eu.lp0.cursus.db.dao.RaceDAO;
+import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.db.data.RaceAttendee;
+import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
+import eu.lp0.cursus.ui.component.DatabaseColumnModel;
+import eu.lp0.cursus.ui.component.DatabaseRowModel;
+import eu.lp0.cursus.ui.component.DatabaseTableModel;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
+import eu.lp0.cursus.ui.component.DeleteDatabaseColumnModel;
+import eu.lp0.cursus.ui.component.EnumDatabaseColumnModel;
+import eu.lp0.cursus.ui.component.StringDatabaseColumnModel;
+import eu.lp0.cursus.ui.table.RaceAttendeePenalty;
+import eu.lp0.cursus.ui.table.RaceAttendeePenaltyDAO;
+import eu.lp0.cursus.ui.table.RaceAttendeesDatabaseColumnModel;
+import eu.lp0.cursus.util.Background;
+import eu.lp0.cursus.util.Constants;
+import eu.lp0.cursus.util.DatabaseError;
+import eu.lp0.cursus.util.Messages;
 
 public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
+	private final Logger log = LoggerFactory.getLogger(getClass());
+	private JScrollPane scrollPane;
+	private JTable table;
+	private DatabaseTableModel<RaceAttendeePenalty> model;
+	private RaceAttendeesDatabaseColumnModel raceAttendeesColumn;
+
+	private Race currentRace;
+
+	private static final RaceDAO raceDAO = new RaceDAO();
+	private static final RaceAttendeePenaltyDAO raceAttendeePenaltyDAO = new RaceAttendeePenaltyDAO();
+
 	public RacePenaltiesTab(DatabaseWindow win) {
 		super(Race.class, win, "tab.penalties"); //$NON-NLS-1$
 		initialise();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void initialise() {
 		setLayout(new BorderLayout(0, 0));
 
+		scrollPane = new JScrollPane();
+		add(scrollPane, BorderLayout.CENTER);
+
+		table = new JTable();
+		scrollPane.setViewportView(table);
+
+		final DeleteDatabaseColumnModel<RaceAttendeePenalty> delColumn;
+		model = new DatabaseTableModel<RaceAttendeePenalty>(new DatabaseRowModel<RaceAttendeePenalty>(
+				Arrays.<DatabaseColumnModel<RaceAttendeePenalty, ?>>asList(
+						//
+						raceAttendeesColumn = new RaceAttendeesDatabaseColumnModel(Messages.getString("penalty.pilot"), win, raceAttendeePenaltyDAO), //$NON-NLS-1$
+						new EnumDatabaseColumnModel<RaceAttendeePenalty, Penalty.Type>(
+								Messages.getString("penalty.type"), win, raceAttendeePenaltyDAO, Penalty.Type.class, false) { //$NON-NLS-1$
+							@Override
+							protected Penalty.Type getEnumValue(RaceAttendeePenalty row) {
+								return row.getPenalty().getType();
+							}
+
+							@Override
+							protected boolean setEnumValue(RaceAttendeePenalty row, Penalty.Type value) {
+								row.getPenalty().setType(value);
+								return true;
+							}
+						}, new StringDatabaseColumnModel<RaceAttendeePenalty>(
+								Messages.getString("penalty.value"), win, raceAttendeePenaltyDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
+							@Override
+							protected String getValue(RaceAttendeePenalty row, boolean editing) {
+								return String.valueOf(row.getPenalty().getValue()); // FIXME
+							}
+
+							@Override
+							protected boolean setValue(RaceAttendeePenalty row, String value) {
+								row.getPenalty().setValue(Integer.valueOf(value)); // FIXME
+								return true;
+							}
+						}, new StringDatabaseColumnModel<RaceAttendeePenalty>(
+								Messages.getString("penalty.reason"), win, raceAttendeePenaltyDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
+							@Override
+							protected String getValue(RaceAttendeePenalty row, boolean editing) {
+								return row.getPenalty().getReason();
+							}
+
+							@Override
+							protected boolean setValue(RaceAttendeePenalty row, String value) {
+								row.getPenalty().setReason(value);
+								return true;
+							}
+						}, delColumn = new DeleteDatabaseColumnModel<RaceAttendeePenalty>(win, raceAttendeePenaltyDAO, "menu.penalty.delete") { //$NON-NLS-1$
+							@Override
+							protected String getValue(RaceAttendeePenalty row, boolean editing) {
+								return row.toString();
+							}
+
+							@Override
+							protected RaceAttendeePenalty newRow() {
+								return new RaceAttendeePenalty(currentRace);
+							}
+						})));
+		model.setupModel(table);
+
+		table.getRowSorter().setSortKeys(
+				Arrays.asList(new RowSorter.SortKey(0, SortOrder.ASCENDING), new RowSorter.SortKey(1, SortOrder.ASCENDING), new RowSorter.SortKey(2,
+						SortOrder.ASCENDING), new RowSorter.SortKey(3, SortOrder.ASCENDING), new RowSorter.SortKey(4, SortOrder.ASCENDING)));
+
+		table.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent ke) {
+				if (ke.isConsumed()) {
+					return;
+				}
+				if (ke.getKeyCode() == KeyEvent.VK_INSERT) {
+					if (delColumn != null) {
+						delColumn.addRow();
+					}
+					ke.consume();
+				} else if (ke.getKeyCode() == KeyEvent.VK_DELETE) {
+					doDelete();
+					ke.consume();
+				}
+			}
+		});
+
+		table.setEnabled(false);
+	}
+
+	private void updateModel(Race race) {
+		assert (SwingUtilities.isEventDispatchThread());
+
+		table.setEnabled(false);
+		model.updateModel(generateRaceAttendeePenalties(null));
+		raceAttendeesColumn.setRace(null);
+		currentRace = race;
+		raceAttendeesColumn.setRace(race);
+		model.updateModel(generateRaceAttendeePenalties(race));
+		table.setEnabled(race != null && !race.getAttendees().isEmpty());
+	}
+
+	private List<RaceAttendeePenalty> generateRaceAttendeePenalties(Race race) {
+		if (race == null) {
+			return Collections.<RaceAttendeePenalty>emptyList();
+		} else {
+			List<RaceAttendeePenalty> penalties = new ArrayList<RaceAttendeePenalty>(race.getAttendees().size());
+			for (RaceAttendee attendee : race.getAttendees().values()) {
+				for (Penalty penalty : attendee.getPenalties()) {
+					penalties.add(new RaceAttendeePenalty(attendee, penalty));
+				}
+			}
+			return penalties;
+		}
+	}
+
+	private void doDelete() {
+		int[] selected = table.getSelectedRows();
+		for (int i = 0; i < selected.length; i++) {
+			selected[i] = table.convertRowIndexToModel(selected[i]);
+		}
+
+		List<RaceAttendeePenalty> rows = new ArrayList<RaceAttendeePenalty>(selected.length);
+		for (int mRow : selected) {
+			rows.add(model.getValueAt(mRow));
+		}
+
+		if (!rows.isEmpty() && confirmDelete(rows)) {
+			deleteRows(rows);
+
+			// Delete in reverse order as each row removed affects the indexes of the rows after it
+			for (int mRow : Ordering.natural().reverse().sortedCopy(Ints.asList(selected))) {
+				model.deleteRow(mRow);
+			}
+		}
+	}
+
+	private boolean confirmDelete(List<RaceAttendeePenalty> rows) {
+		Preconditions.checkArgument(!rows.isEmpty());
+		String action;
+		String title;
+		if (rows.size() == 1) {
+			String value = rows.get(0).toString();
+			action = String.format(Messages.getString("menu.penalty.delete.confirm"), value); //$NON-NLS-1$
+			title = Messages.getString("menu.penalty.delete") + Constants.EN_DASH + value; //$NON-NLS-1$
+		} else {
+			action = String.format(Messages.getString("menu.penalty.delete-multiple.confirm"), rows.size()); //$NON-NLS-1$
+			title = Messages.getString("menu.penalty.delete-multiple"); //$NON-NLS-1$
+		}
+		switch (JOptionPane.showConfirmDialog(win.getFrame(), action, title, JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
+		case JOptionPane.YES_OPTION:
+			return true;
+		case JOptionPane.NO_OPTION:
+		case JOptionPane.CLOSED_OPTION:
+		default:
+			return false;
+		}
+	}
+
+	private void deleteRows(List<RaceAttendeePenalty> rows) {
+		assert (SwingUtilities.isEventDispatchThread());
+
+		RaceAttendeePenalty item = null;
+		win.getDatabase().startSession();
+		try {
+			DatabaseSession.begin();
+
+			for (RaceAttendeePenalty row : rows) {
+				item = row;
+				// no get() as this is a fake DAO
+				raceAttendeePenaltyDAO.remove(row);
+			}
+
+			DatabaseSession.commit();
+		} catch (PersistenceException e) {
+			if (item != null) {
+				log.error(String.format("Unable to delete row: row=%s#%d", RaceAttendeePenalty.class.getSimpleName(), item.getId()), e); //$NON-NLS-1$
+			} else {
+				log.error("Unable to delete row", e); //$NON-NLS-1$
+			}
+			win.reloadCurrentTabs();
+			DatabaseError.errorSaving(win.getFrame(), Constants.APP_NAME, e);
+		} finally {
+			win.getDatabase().endSession();
+		}
 	}
 
 	@Override
+	@SuppressWarnings("unused")
 	public void tabRefresh(Race race) {
+		assert (Background.isExecutorThread());
 
+		final Race newRace;
+
+		win.getDatabase().startSession();
+		try {
+			DatabaseSession.begin();
+
+			newRace = raceDAO.get(race);
+			for (RaceAttendee attendee : newRace.getAttendees().values()) {
+				for (RaceNumber raceNumber : attendee.getPilot().getRaceNumbers()) {
+					;
+				}
+				for (Penalty penalty : attendee.getPenalties()) {
+					;
+				}
+			}
+			DatabaseSession.commit();
+
+			raceDAO.detach(race);
+		} finally {
+			win.getDatabase().endSession();
+		}
+
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				updateModel(newRace);
+			}
+		});
 	}
 
 	@Override
 	public void tabClear() {
+		assert (Background.isExecutorThread());
 
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				updateModel(null);
+			}
+		});
 	}
 }
