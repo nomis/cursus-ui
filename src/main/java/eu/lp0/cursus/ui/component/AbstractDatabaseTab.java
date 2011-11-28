@@ -18,8 +18,6 @@
 package eu.lp0.cursus.ui.component;
 
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import eu.lp0.cursus.db.data.RaceEntity;
@@ -38,27 +36,15 @@ public abstract class AbstractDatabaseTab<T extends RaceEntity> extends JPanel i
 		setBorder(new EmptyBorder(2, 2, 2, 2));
 	}
 
-	private String getTitle() {
+	public String getTitle() {
 		return Messages.getString(messagesKey);
 	}
 
-	private int getMnemonic() {
+	public int getMnemonic() {
 		return Messages.getKeyEvent(messagesKey);
 	}
 
 	public Class<T> getType() {
 		return clazz;
-	}
-
-	public void addToTabbedPane(JTabbedPane tabbedPane, int index) {
-		assert (SwingUtilities.isEventDispatchThread());
-
-		tabbedPane.insertTab(getTitle(), null, this, null, index);
-		tabbedPane.setMnemonicAt(index, getMnemonic());
-	}
-
-	public final void updateLanguage(JTabbedPane tabbedPane, int index) {
-		tabbedPane.setTitleAt(index, getTitle());
-		tabbedPane.setMnemonicAt(index, getMnemonic());
 	}
 }

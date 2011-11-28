@@ -77,9 +77,12 @@ public class TabbedPaneManager implements TreeSelectionListener {
 
 	@Subscribe
 	public final void updateLanguage(LocaleChangeEvent lce) {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		for (int i = 0; i < tabbedPane.getTabCount(); i++) {
 			AbstractDatabaseTab<?> tab = (AbstractDatabaseTab<?>)tabbedPane.getComponentAt(i);
-			tab.updateLanguage(tabbedPane, i);
+			tabbedPane.setTitleAt(i, tab.getTitle());
+			tabbedPane.setMnemonicAt(i, tab.getMnemonic());
 		}
 	}
 
@@ -170,7 +173,7 @@ public class TabbedPaneManager implements TreeSelectionListener {
 				log.trace("Restoring previous tab: " + previousTab.getClass().getSimpleName()); //$NON-NLS-1$
 			}
 
-			previousTab.addToTabbedPane(tabbedPane, 0);
+			insertTab(previousTab, 0);
 			// This tab will now be selected
 		}
 
@@ -179,8 +182,13 @@ public class TabbedPaneManager implements TreeSelectionListener {
 		for (int i = 0; iter.hasNext(); i++) {
 			AbstractDatabaseTab<? extends RaceEntity> tab = iter.next();
 			if (tab != previousTab) {
-				tab.addToTabbedPane(tabbedPane, i);
+				insertTab(tab, i);
 			}
 		}
+	}
+
+	private void insertTab(AbstractDatabaseTab<?> tab, int index) {
+		tabbedPane.insertTab(tab.getTitle(), null, tab, null, index);
+		tabbedPane.setMnemonicAt(index, tab.getMnemonic());
 	}
 }
