@@ -50,7 +50,6 @@ import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseColumn;
-import eu.lp0.cursus.ui.component.DatabaseRowModel;
 import eu.lp0.cursus.ui.component.DatabaseTableModel;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.DeleteDatabaseColumn;
@@ -87,7 +86,7 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 		scrollPane.setViewportView(table);
 
 		final DeleteDatabaseColumn<Pilot> delColumn;
-		model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot>(Arrays.<DatabaseColumn<Pilot, ?>>asList( //
+		model = new DatabaseTableModel<Pilot>(Arrays.<DatabaseColumn<Pilot, ?>>asList( //
 				new RaceNumbersDatabaseColumnModel("pilot.race-number", win), //$NON-NLS-1$
 				new StringDatabaseColumn<Pilot>("pilot.name", win, pilotDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
 					@Override
@@ -132,7 +131,7 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 					protected Pilot newRow() {
 						return new Pilot(currentSeries, ""); //$NON-NLS-1$
 					}
-				})));
+				}));
 		model.setupModel(table);
 		table.getRowSorter().setSortKeys(
 				Arrays.asList(new RowSorter.SortKey(0, SortOrder.ASCENDING), new RowSorter.SortKey(1, SortOrder.ASCENDING), new RowSorter.SortKey(2,

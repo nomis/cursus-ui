@@ -25,6 +25,7 @@ import javax.swing.JTable;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -38,16 +39,15 @@ import eu.lp0.cursus.i18n.LanguageManager;
 import eu.lp0.cursus.i18n.LocaleChangeEvent;
 
 public class DatabaseTableModel<T extends Entity> extends AbstractTableModel implements Iterable<T> {
-	private final DatabaseRowModel<T> rowModel;
+	private final List<DatabaseColumn<T, ?>> columns;
 	private final ArrayList<T> rows = new ArrayList<T>();
 	private final TableRowSorter<? super TableModel> sorter = new TableRowSorter<TableModel>(getRealModel());;
 	private final EventBus eventBus = new EventBus(getClass().getSimpleName());
 
-	public DatabaseTableModel(DatabaseRowModel<T> rowModel) {
-		this.rowModel = rowModel;
+	public DatabaseTableModel(List<DatabaseColumn<T, ?>> columns) {
+		this.columns = columns;
 		sorter.setSortsOnUpdates(true);
-		eventBus.register(rowModel);
-		for (DatabaseColumn<T, ?> col : rowModel.getColumns()) {
+		for (DatabaseColumn<T, ?> col : columns) {
 			eventBus.register(col);
 		}
 		LanguageManager.register(this, false);
@@ -63,7 +63,7 @@ public class DatabaseTableModel<T extends Entity> extends AbstractTableModel imp
 
 	@Override
 	public String getColumnName(int mCol) {
-		return rowModel.getColumnName(mCol);
+		return columns.get(mCol).getName();
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class DatabaseTableModel<T extends Entity> extends AbstractTableModel imp
 
 	@Override
 	public int getColumnCount() {
-		return rowModel.getColumnCount();
+		return columns.size();
 	}
 
 	public T getValueAt(int mRow) {
@@ -97,7 +97,7 @@ public class DatabaseTableModel<T extends Entity> extends AbstractTableModel imp
 
 	@Override
 	public boolean isCellEditable(int mRow, int mCol) {
-		return rowModel.isCellEditable(mCol);
+		return columns.get(mCol).isCellEditable(rows.get(mRow));
 	}
 
 	public void setupModel(JTable table) {
@@ -106,7 +106,15 @@ public class DatabaseTableModel<T extends Entity> extends AbstractTableModel imp
 		table.setColumnModel(new DefaultTableColumnModel());
 		table.setRowSorter(sorter);
 		table.setSurrendersFocusOnKeystroke(true);
-		rowModel.setupModel(table, this, sorter);
+
+		TableColumnModel cols = table.getColumnModel();
+		int i = 0;
+		for (DatabaseColumn<T, ?> col : columns) {
+			col.setModelIndex(i++);
+			cols.addColumn(col);
+			col.setupModel(table, this, sorter);
+		}
+
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		table.doLayout();
 	}
@@ -117,7 +125,7 @@ public class DatabaseTableModel<T extends Entity> extends AbstractTableModel imp
 		return new AbstractTableModel() {
 			@Override
 			public Object getValueAt(int mRow, int mCol) {
-				return rowModel.getValueAt(rows.get(mRow), mCol, false);
+				return columns.get(mCol).getValue(rows.get(mRow), false);
 			}
 
 			@Override

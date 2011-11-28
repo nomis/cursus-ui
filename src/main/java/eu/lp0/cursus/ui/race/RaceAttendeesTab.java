@@ -47,7 +47,6 @@ import eu.lp0.cursus.db.data.RaceAttendee.Type;
 import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseColumn;
-import eu.lp0.cursus.ui.component.DatabaseRowModel;
 import eu.lp0.cursus.ui.component.DatabaseTableModel;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.EnumDatabaseColumn;
@@ -83,7 +82,7 @@ public class RaceAttendeesTab extends AbstractDatabaseTab<Race> {
 		table = new JTable();
 		scrollPane.setViewportView(table);
 
-		model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot>(Arrays.<DatabaseColumn<Pilot, ?>>asList( //
+		model = new DatabaseTableModel<Pilot>(Arrays.<DatabaseColumn<Pilot, ?>>asList( //
 				new EnumDatabaseColumn<Pilot, RaceAttendee.Type>("pilot.race-attendee", win, pilotDAO, RaceAttendee.Type.class, true) { //$NON-NLS-1$
 					@Override
 					protected Type getEnumValue(Pilot row) {
@@ -142,7 +141,7 @@ public class RaceAttendeesTab extends AbstractDatabaseTab<Race> {
 						row.setCountry(value);
 						return true;
 					}
-				})));
+				}));
 		model.setupModel(table);
 		table.getRowSorter().setSortKeys(
 				Arrays.asList(new RowSorter.SortKey(0, SortOrder.DESCENDING), new RowSorter.SortKey(1, SortOrder.ASCENDING), new RowSorter.SortKey(2,

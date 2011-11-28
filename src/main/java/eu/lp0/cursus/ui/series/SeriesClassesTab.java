@@ -54,7 +54,6 @@ import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.BooleanDatabaseColumn;
 import eu.lp0.cursus.ui.component.DatabaseColumn;
-import eu.lp0.cursus.ui.component.DatabaseRowModel;
 import eu.lp0.cursus.ui.component.DatabaseTableModel;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.EnumDatabaseColumn;
@@ -107,7 +106,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 		table = new JTable();
 		rightScrollPane.setViewportView(table);
 
-		model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot>(Arrays.<DatabaseColumn<Pilot, ?>>asList( //
+		model = new DatabaseTableModel<Pilot>(Arrays.<DatabaseColumn<Pilot, ?>>asList( //
 				new BooleanDatabaseColumn<Pilot>(null, win, pilotDAO) {
 					@Override
 					protected Boolean getValue(Pilot row, boolean editing) {
@@ -158,7 +157,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 						row.setCountry(value);
 						return true;
 					}
-				})));
+				}));
 		model.setupModel(table);
 		table.getRowSorter().setSortKeys(
 				Arrays.asList(new RowSorter.SortKey(0, SortOrder.DESCENDING), new RowSorter.SortKey(1, SortOrder.ASCENDING), new RowSorter.SortKey(2,

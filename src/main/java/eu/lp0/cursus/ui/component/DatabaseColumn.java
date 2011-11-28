@@ -78,7 +78,7 @@ public abstract class DatabaseColumn<T extends Entity, V> extends TableColumn im
 		return Messages.getString(messagesKey);
 	}
 
-	public boolean isCellEditable() {
+	public boolean isCellEditable(T row) {
 		return editable;
 	}
 

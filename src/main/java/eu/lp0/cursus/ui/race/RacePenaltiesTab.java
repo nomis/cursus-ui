@@ -50,7 +50,6 @@ import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseColumn;
-import eu.lp0.cursus.ui.component.DatabaseRowModel;
 import eu.lp0.cursus.ui.component.DatabaseTableModel;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.DeleteDatabaseColumn;
@@ -91,53 +90,52 @@ public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 		scrollPane.setViewportView(table);
 
 		final DeleteDatabaseColumn<RaceAttendeePenalty> delColumn;
-		model = new DatabaseTableModel<RaceAttendeePenalty>(new DatabaseRowModel<RaceAttendeePenalty>(
-				Arrays.<DatabaseColumn<RaceAttendeePenalty, ?>>asList( //
-						raceAttendeesColumn = new RaceAttendeesDatabaseColumn("penalty.pilot", win, raceAttendeePenaltyDAO), //$NON-NLS-1$
-						new EnumDatabaseColumn<RaceAttendeePenalty, Penalty.Type>("penalty.type", win, raceAttendeePenaltyDAO, Penalty.Type.class, false) { //$NON-NLS-1$
-							@Override
-							protected Penalty.Type getEnumValue(RaceAttendeePenalty row) {
-								return row.getPenalty().getType();
-							}
+		model = new DatabaseTableModel<RaceAttendeePenalty>(Arrays.<DatabaseColumn<RaceAttendeePenalty, ?>>asList( //
+				raceAttendeesColumn = new RaceAttendeesDatabaseColumn("penalty.pilot", win, raceAttendeePenaltyDAO), //$NON-NLS-1$
+				new EnumDatabaseColumn<RaceAttendeePenalty, Penalty.Type>("penalty.type", win, raceAttendeePenaltyDAO, Penalty.Type.class, false) { //$NON-NLS-1$
+					@Override
+					protected Penalty.Type getEnumValue(RaceAttendeePenalty row) {
+						return row.getPenalty().getType();
+					}
 
-							@Override
-							protected boolean setEnumValue(RaceAttendeePenalty row, Penalty.Type value) {
-								row.getPenalty().setType(value);
-								return true;
-							}
-						}, new StringDatabaseColumn<RaceAttendeePenalty>("penalty.value", win, raceAttendeePenaltyDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
-							@Override
-							protected String getValue(RaceAttendeePenalty row, boolean editing) {
-								return String.valueOf(row.getPenalty().getValue()); // FIXME
-							}
+					@Override
+					protected boolean setEnumValue(RaceAttendeePenalty row, Penalty.Type value) {
+						row.getPenalty().setType(value);
+						return true;
+					}
+				}, new StringDatabaseColumn<RaceAttendeePenalty>("penalty.value", win, raceAttendeePenaltyDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
+					@Override
+					protected String getValue(RaceAttendeePenalty row, boolean editing) {
+						return String.valueOf(row.getPenalty().getValue()); // FIXME
+					}
 
-							@Override
-							protected boolean setValue(RaceAttendeePenalty row, String value) {
-								row.getPenalty().setValue(Integer.valueOf(value)); // FIXME
-								return true;
-							}
-						}, new StringDatabaseColumn<RaceAttendeePenalty>("penalty.reason", win, raceAttendeePenaltyDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
-							@Override
-							protected String getValue(RaceAttendeePenalty row, boolean editing) {
-								return row.getPenalty().getReason();
-							}
+					@Override
+					protected boolean setValue(RaceAttendeePenalty row, String value) {
+						row.getPenalty().setValue(Integer.valueOf(value)); // FIXME
+						return true;
+					}
+				}, new StringDatabaseColumn<RaceAttendeePenalty>("penalty.reason", win, raceAttendeePenaltyDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
+					@Override
+					protected String getValue(RaceAttendeePenalty row, boolean editing) {
+						return row.getPenalty().getReason();
+					}
 
-							@Override
-							protected boolean setValue(RaceAttendeePenalty row, String value) {
-								row.getPenalty().setReason(value);
-								return true;
-							}
-						}, delColumn = new DeleteDatabaseColumn<RaceAttendeePenalty>(win, raceAttendeePenaltyDAO, "menu.penalty.delete") { //$NON-NLS-1$
-							@Override
-							protected String getValue(RaceAttendeePenalty row, boolean editing) {
-								return row.toString();
-							}
+					@Override
+					protected boolean setValue(RaceAttendeePenalty row, String value) {
+						row.getPenalty().setReason(value);
+						return true;
+					}
+				}, delColumn = new DeleteDatabaseColumn<RaceAttendeePenalty>(win, raceAttendeePenaltyDAO, "menu.penalty.delete") { //$NON-NLS-1$
+					@Override
+					protected String getValue(RaceAttendeePenalty row, boolean editing) {
+						return row.toString();
+					}
 
-							@Override
-							protected RaceAttendeePenalty newRow() {
-								return new RaceAttendeePenalty(currentRace);
-							}
-						})));
+					@Override
+					protected RaceAttendeePenalty newRow() {
+						return new RaceAttendeePenalty(currentRace);
+					}
+				}));
 		model.setupModel(table);
 
 		table.getRowSorter().setSortKeys(
