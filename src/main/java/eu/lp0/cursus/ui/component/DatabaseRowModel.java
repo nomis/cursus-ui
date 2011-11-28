@@ -17,24 +17,23 @@
  */
 package eu.lp0.cursus.ui.component;
 
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.JTable;
-import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import eu.lp0.cursus.db.data.Entity;
 
 public class DatabaseRowModel<T extends Entity> {
-	private final List<DatabaseColumnModel<T, ?>> columns;
+	private final List<DatabaseColumn<T, ?>> columns;
 
-	public DatabaseRowModel(List<DatabaseColumnModel<T, ?>> columns) {
+	public DatabaseRowModel(List<DatabaseColumn<T, ?>> columns) {
 		this.columns = columns;
 	}
 
-	protected List<DatabaseColumnModel<T, ?>> getColumns() {
+	protected List<DatabaseColumn<T, ?>> getColumns() {
 		return columns;
 	}
 
@@ -55,10 +54,12 @@ public class DatabaseRowModel<T extends Entity> {
 	}
 
 	public void setupModel(JTable table, DatabaseTableModel<T> model, TableRowSorter<? super TableModel> sorter) {
-		Enumeration<TableColumn> cols = table.getColumnModel().getColumns();
-		while (cols.hasMoreElements()) {
-			TableColumn col = cols.nextElement();
-			columns.get(col.getModelIndex()).setupModel(table, model, sorter, col);
+		TableColumnModel cols = table.getColumnModel();
+		int i = 0;
+		for (DatabaseColumn<T, ?> col : columns) {
+			col.setModelIndex(i++);
+			cols.addColumn(col);
+			col.setupModel(table, model, sorter);
 		}
 	}
 }

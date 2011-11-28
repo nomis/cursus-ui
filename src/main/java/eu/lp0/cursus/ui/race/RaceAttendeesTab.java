@@ -46,12 +46,12 @@ import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.db.data.RaceAttendee.Type;
 import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
-import eu.lp0.cursus.ui.component.DatabaseColumnModel;
+import eu.lp0.cursus.ui.component.DatabaseColumn;
 import eu.lp0.cursus.ui.component.DatabaseRowModel;
 import eu.lp0.cursus.ui.component.DatabaseTableModel;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
-import eu.lp0.cursus.ui.component.EnumDatabaseColumnModel;
-import eu.lp0.cursus.ui.component.StringDatabaseColumnModel;
+import eu.lp0.cursus.ui.component.EnumDatabaseColumn;
+import eu.lp0.cursus.ui.component.StringDatabaseColumn;
 import eu.lp0.cursus.ui.table.RaceNumbersDatabaseColumnModel;
 import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
@@ -83,8 +83,8 @@ public class RaceAttendeesTab extends AbstractDatabaseTab<Race> {
 		table = new JTable();
 		scrollPane.setViewportView(table);
 
-		model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot>(Arrays.<DatabaseColumnModel<Pilot, ?>>asList( //
-				new EnumDatabaseColumnModel<Pilot, RaceAttendee.Type>("pilot.race-attendee", win, pilotDAO, RaceAttendee.Type.class, true) { //$NON-NLS-1$
+		model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot>(Arrays.<DatabaseColumn<Pilot, ?>>asList( //
+				new EnumDatabaseColumn<Pilot, RaceAttendee.Type>("pilot.race-attendee", win, pilotDAO, RaceAttendee.Type.class, true) { //$NON-NLS-1$
 					@Override
 					protected Type getEnumValue(Pilot row) {
 						RaceAttendee attendee = row.getRaces().get(currentRace);
@@ -109,7 +109,7 @@ public class RaceAttendeesTab extends AbstractDatabaseTab<Race> {
 						return true;
 					}
 				}, new RaceNumbersDatabaseColumnModel("pilot.race-number"), //$NON-NLS-1$
-				new StringDatabaseColumnModel<Pilot>("pilot.name") { //$NON-NLS-1$
+				new StringDatabaseColumn<Pilot>("pilot.name") { //$NON-NLS-1$
 					@Override
 					protected String getValue(Pilot row, boolean editing) {
 						return row.getName();
@@ -120,7 +120,7 @@ public class RaceAttendeesTab extends AbstractDatabaseTab<Race> {
 						row.setName(value);
 						return true;
 					}
-				}, new EnumDatabaseColumnModel<Pilot, Gender>("pilot.gender", Gender.class, true) { //$NON-NLS-1$
+				}, new EnumDatabaseColumn<Pilot, Gender>("pilot.gender", Gender.class, true) { //$NON-NLS-1$
 					@Override
 					protected Gender getEnumValue(Pilot row) {
 						return row.getGender();
@@ -131,7 +131,7 @@ public class RaceAttendeesTab extends AbstractDatabaseTab<Race> {
 						row.setGender(value);
 						return true;
 					}
-				}, new StringDatabaseColumnModel<Pilot>("pilot.country") { //$NON-NLS-1$
+				}, new StringDatabaseColumn<Pilot>("pilot.country") { //$NON-NLS-1$
 					@Override
 					protected String getValue(Pilot row, boolean editing) {
 						return row.getCountry();

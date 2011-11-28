@@ -24,6 +24,7 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -46,14 +47,14 @@ public class DatabaseTableModel<T extends Entity> extends AbstractTableModel imp
 		this.rowModel = rowModel;
 		sorter.setSortsOnUpdates(true);
 		eventBus.register(rowModel);
-		for (DatabaseColumnModel<T, ?> col : rowModel.getColumns()) {
+		for (DatabaseColumn<T, ?> col : rowModel.getColumns()) {
 			eventBus.register(col);
 		}
-		LanguageManager.register(this);
+		LanguageManager.register(this, false);
 	}
 
 	@Subscribe
-	public void updateLocale(LocaleChangeEvent lce) {
+	public final void updateLocale(LocaleChangeEvent lce) {
 		List<? extends SortKey> sortKeys = ImmutableList.copyOf(sorter.getSortKeys());
 		eventBus.post(lce);
 		fireTableStructureChanged();
@@ -100,16 +101,14 @@ public class DatabaseTableModel<T extends Entity> extends AbstractTableModel imp
 	}
 
 	public void setupModel(JTable table) {
-		table.setAutoCreateColumnsFromModel(true);
+		table.setAutoCreateColumnsFromModel(false);
 		table.setModel(this);
+		table.setColumnModel(new DefaultTableColumnModel());
 		table.setRowSorter(sorter);
 		table.setSurrendersFocusOnKeystroke(true);
-
 		rowModel.setupModel(table, this, sorter);
-
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		table.doLayout();
-		table.setAutoCreateColumnsFromModel(false);
 	}
 
 	private TableModel getRealModel() {

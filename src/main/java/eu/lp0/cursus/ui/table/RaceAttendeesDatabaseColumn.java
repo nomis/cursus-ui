@@ -20,7 +20,6 @@ package eu.lp0.cursus.ui.table;
 import java.util.Collections;
 
 import javax.swing.JComboBox;
-import javax.swing.table.TableCellEditor;
 
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Ordering;
@@ -28,25 +27,24 @@ import com.google.common.collect.Ordering;
 import eu.lp0.cursus.db.dao.EntityDAO;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.PilotRaceNumberComparator;
-import eu.lp0.cursus.ui.component.DatabaseColumnModel;
+import eu.lp0.cursus.ui.component.DatabaseColumn;
 import eu.lp0.cursus.ui.component.DatabaseTableCellEditor;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.MutableListComboBoxModel;
+import eu.lp0.cursus.ui.component.StringDatabaseTableCellRenderer;
 
-public class RaceAttendeesDatabaseColumnModel extends DatabaseColumnModel<RaceAttendeePenalty, PilotWrapper> {
+public class RaceAttendeesDatabaseColumn extends DatabaseColumn<RaceAttendeePenalty, PilotWrapper> {
 	private final MutableListComboBoxModel<PilotWrapper> pilots = new MutableListComboBoxModel<PilotWrapper>();
 
-	public RaceAttendeesDatabaseColumnModel(String name) {
+	public RaceAttendeesDatabaseColumn(String name) {
 		super(name);
+		cellRenderer = new StringDatabaseTableCellRenderer<RaceAttendeePenalty, PilotWrapper>(this);
 	}
 
-	public RaceAttendeesDatabaseColumnModel(String name, DatabaseWindow win, EntityDAO<RaceAttendeePenalty> dao) {
+	public RaceAttendeesDatabaseColumn(String name, DatabaseWindow win, EntityDAO<RaceAttendeePenalty> dao) {
 		super(name, win, dao);
-	}
-
-	@Override
-	protected TableCellEditor createCellEditor() {
-		return new DatabaseTableCellEditor<RaceAttendeePenalty, PilotWrapper>(this, new JComboBox(pilots));
+		cellRenderer = new StringDatabaseTableCellRenderer<RaceAttendeePenalty, PilotWrapper>(this);
+		cellEditor = new DatabaseTableCellEditor<RaceAttendeePenalty, PilotWrapper>(this, new JComboBox(pilots));
 	}
 
 	@Override

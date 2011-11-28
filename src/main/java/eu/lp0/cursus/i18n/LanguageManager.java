@@ -34,19 +34,25 @@ public class LanguageManager {
 	private static Locale currentLocale = null;
 	private static Locale selectedLocale = Locale.ROOT;
 
-	public static void register(Object o) {
+	public static void register(final Object o, boolean fireCurrentLocale) {
 		// Force static initialisation to run
 		Messages.getPreferredLocale();
 
-		TEMP_BUS.register(o);
-		try {
-			synchronized (EVENT_BUS) {
-				Preconditions.checkState(currentLocale != null);
-				TEMP_BUS.post(new LocaleChangeEvent(null, currentLocale, selectedLocale));
-				EVENT_BUS.register(o);
+		if (fireCurrentLocale) {
+			synchronized (TEMP_BUS) {
+				TEMP_BUS.register(o);
+				try {
+					synchronized (EVENT_BUS) {
+						Preconditions.checkState(currentLocale != null);
+						TEMP_BUS.post(new LocaleChangeEvent(null, currentLocale, selectedLocale));
+						EVENT_BUS.register(o);
+					}
+				} finally {
+					TEMP_BUS.unregister(o);
+				}
 			}
-		} finally {
-			TEMP_BUS.unregister(o);
+		} else {
+			EVENT_BUS.register(o);
 		}
 	}
 
@@ -60,7 +66,7 @@ public class LanguageManager {
 			}
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					log.trace("Notify locale change from " + oldToString + " to \"" + newLocale + "\"..."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					log.trace("Notify locale change from " + oldToString + " to \"" + newLocale + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					EVENT_BUS.post(new LocaleChangeEvent(oldLocale, newLocale, newSelected));
 					log.trace("Notified locale change from " + oldToString + " to \"" + newLocale + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				}

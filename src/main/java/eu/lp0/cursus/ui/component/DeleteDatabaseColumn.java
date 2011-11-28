@@ -38,7 +38,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -52,41 +51,42 @@ import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 
-public abstract class DeleteDatabaseColumnModel<T extends Entity> extends DatabaseColumnModel<T, String> {
+public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseColumn<T, String> {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final EntityDAO<T> dao;
 	private final String action;
+	private final HeaderRenderer headerRenderer_;
 	private JTable table;
 	private JTableHeader header;
 	private DatabaseTableModel<T> model;
-	private int mCol;
 
-	public DeleteDatabaseColumnModel(DatabaseWindow win, EntityDAO<T> dao, String action) {
+	public DeleteDatabaseColumn(DatabaseWindow win, EntityDAO<T> dao, String action) {
 		super(null, win, dao);
 		this.dao = dao;
 		this.action = action;
+
+		setMinWidth(25);
+		setPreferredWidth(25);
+		setMaxWidth(25);
+
+		headerRenderer = headerRenderer_ = new HeaderRenderer();
+		cellRenderer = new CellRenderer();
+		cellEditor = new CellEditor();
 	}
 
 	@Override
-	public void setupModel(JTable table, DatabaseTableModel<T> model, TableRowSorter<? super TableModel> sorter, TableColumn col) {
-		super.setupModel(table, model, sorter, col);
+	public void setupModel(JTable table, DatabaseTableModel<T> model, TableRowSorter<? super TableModel> sorter) {
+		super.setupModel(table, model, sorter);
 
 		this.table = table;
 		this.header = table.getTableHeader();
 		this.model = model;
-		this.mCol = col.getModelIndex();
 
-		col.setMinWidth(25);
-		col.setPreferredWidth(25);
-		col.setMaxWidth(25);
+		header.addMouseListener(headerRenderer_);
+		header.addMouseMotionListener(headerRenderer_);
+		header.addKeyListener(headerRenderer_);
 
-		HeaderRenderer headerRenderer = new HeaderRenderer();
-		header.addMouseListener(headerRenderer);
-		header.addMouseMotionListener(headerRenderer);
-		header.addKeyListener(headerRenderer);
-		col.setHeaderRenderer(headerRenderer);
-
-		sorter.setSortable(col.getModelIndex(), false);
+		sorter.setSortable(getModelIndex(), false);
 	}
 
 	protected abstract T newRow();
@@ -116,7 +116,7 @@ public abstract class DeleteDatabaseColumnModel<T extends Entity> extends Databa
 		model.addRow(row);
 		int vRow = table.convertRowIndexToView(mRow);
 		table.getSelectionModel().setSelectionInterval(vRow, vRow);
-		table.scrollRectToVisible(table.getCellRect(mRow, table.convertColumnIndexToView(mCol), true));
+		table.scrollRectToVisible(table.getCellRect(mRow, table.convertColumnIndexToView(getModelIndex()), true));
 	}
 
 	protected boolean confirmDelete(T row) {
@@ -174,7 +174,7 @@ public abstract class DeleteDatabaseColumnModel<T extends Entity> extends Databa
 		}
 
 		private boolean ourColumn(MouseEvent me) {
-			return table.isEnabled() && mCol == table.convertColumnIndexToModel(header.columnAtPoint(me.getPoint()));
+			return table.isEnabled() && getModelIndex() == table.convertColumnIndexToModel(header.columnAtPoint(me.getPoint()));
 		}
 
 		@Override
@@ -276,7 +276,7 @@ public abstract class DeleteDatabaseColumnModel<T extends Entity> extends Databa
 	}
 
 	@Override
-	protected TableCellRenderer createCellRenderer() {
+	public TableCellRenderer getCellRenderer() {
 		return new CellRenderer();
 	}
 
@@ -349,11 +349,6 @@ public abstract class DeleteDatabaseColumnModel<T extends Entity> extends Databa
 	@Override
 	protected boolean setValue(T row, String value) {
 		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	protected TableCellEditor createCellEditor() {
-		return new CellEditor();
 	}
 
 	private class CellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {

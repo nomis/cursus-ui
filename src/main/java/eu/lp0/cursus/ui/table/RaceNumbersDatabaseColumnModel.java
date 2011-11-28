@@ -32,10 +32,10 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
-import eu.lp0.cursus.ui.component.StringDatabaseColumnModel;
+import eu.lp0.cursus.ui.component.StringDatabaseColumn;
 import eu.lp0.cursus.util.DatabaseError;
 
-public class RaceNumbersDatabaseColumnModel extends StringDatabaseColumnModel<Pilot> {
+public class RaceNumbersDatabaseColumnModel extends StringDatabaseColumn<Pilot> {
 	private static final PilotDAO pilotDAO = new PilotDAO();
 	private static final RaceNumberDAO raceNumberDAO = new RaceNumberDAO();
 

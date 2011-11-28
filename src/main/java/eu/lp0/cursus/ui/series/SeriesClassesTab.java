@@ -52,13 +52,13 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
-import eu.lp0.cursus.ui.component.BooleanDatabaseColumnModel;
-import eu.lp0.cursus.ui.component.DatabaseColumnModel;
+import eu.lp0.cursus.ui.component.BooleanDatabaseColumn;
+import eu.lp0.cursus.ui.component.DatabaseColumn;
 import eu.lp0.cursus.ui.component.DatabaseRowModel;
 import eu.lp0.cursus.ui.component.DatabaseTableModel;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
-import eu.lp0.cursus.ui.component.EnumDatabaseColumnModel;
-import eu.lp0.cursus.ui.component.StringDatabaseColumnModel;
+import eu.lp0.cursus.ui.component.EnumDatabaseColumn;
+import eu.lp0.cursus.ui.component.StringDatabaseColumn;
 import eu.lp0.cursus.ui.table.RaceNumbersDatabaseColumnModel;
 import eu.lp0.cursus.ui.tree.ClassTree;
 import eu.lp0.cursus.util.Background;
@@ -107,8 +107,8 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 		table = new JTable();
 		rightScrollPane.setViewportView(table);
 
-		model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot>(Arrays.<DatabaseColumnModel<Pilot, ?>>asList( //
-				new BooleanDatabaseColumnModel<Pilot>(null, win, pilotDAO) {
+		model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot>(Arrays.<DatabaseColumn<Pilot, ?>>asList( //
+				new BooleanDatabaseColumn<Pilot>(null, win, pilotDAO) {
 					@Override
 					protected Boolean getValue(Pilot row, boolean editing) {
 						return row.getClasses().contains(list.getSelected());
@@ -125,7 +125,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 						return true;
 					}
 				}, new RaceNumbersDatabaseColumnModel("pilot.race-number"), //$NON-NLS-1$
-				new StringDatabaseColumnModel<Pilot>("pilot.name") { //$NON-NLS-1$
+				new StringDatabaseColumn<Pilot>("pilot.name") { //$NON-NLS-1$
 					@Override
 					protected String getValue(Pilot row, boolean editing) {
 						return row.getName();
@@ -136,7 +136,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 						row.setName(value);
 						return true;
 					}
-				}, new EnumDatabaseColumnModel<Pilot, Gender>("pilot.gender", Gender.class, true) { //$NON-NLS-1$
+				}, new EnumDatabaseColumn<Pilot, Gender>("pilot.gender", Gender.class, true) { //$NON-NLS-1$
 					@Override
 					protected Gender getEnumValue(Pilot row) {
 						return row.getGender();
@@ -147,7 +147,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 						row.setGender(value);
 						return true;
 					}
-				}, new StringDatabaseColumnModel<Pilot>("pilot.country") { //$NON-NLS-1$
+				}, new StringDatabaseColumn<Pilot>("pilot.country") { //$NON-NLS-1$
 					@Override
 					protected String getValue(Pilot row, boolean editing) {
 						return row.getCountry();

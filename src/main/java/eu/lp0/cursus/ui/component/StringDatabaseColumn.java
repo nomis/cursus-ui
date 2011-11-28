@@ -17,29 +17,18 @@
  */
 package eu.lp0.cursus.ui.component;
 
-import javax.swing.JCheckBox;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-
 import eu.lp0.cursus.db.dao.EntityDAO;
 import eu.lp0.cursus.db.data.Entity;
 
-public abstract class BooleanDatabaseColumnModel<T extends Entity> extends DatabaseColumnModel<T, Boolean> {
-	public BooleanDatabaseColumnModel(String name) {
+public abstract class StringDatabaseColumn<T extends Entity> extends DatabaseColumn<T, String> {
+	public StringDatabaseColumn(String name) {
 		super(name);
+		cellRenderer = new StringDatabaseTableCellRenderer<T, String>(this);
 	}
 
-	public BooleanDatabaseColumnModel(String name, DatabaseWindow win, EntityDAO<T> dao) {
+	public StringDatabaseColumn(String name, DatabaseWindow win, EntityDAO<T> dao, int maxLength) {
 		super(name, win, dao);
-	}
-
-	@Override
-	protected TableCellRenderer createCellRenderer() {
-		return new BooleanDatabaseTableCellRenderer<T>(this);
-	}
-
-	@Override
-	protected TableCellEditor createCellEditor() {
-		return new DatabaseTableCellEditor<T, Boolean>(this, new JCheckBox());
+		cellRenderer = new StringDatabaseTableCellRenderer<T, String>(this);
+		cellEditor = new DatabaseTableCellEditor<T, String>(this, new DatabaseTextField(maxLength));
 	}
 }

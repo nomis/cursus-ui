@@ -20,8 +20,6 @@ package eu.lp0.cursus.ui.component;
 import javax.persistence.PersistenceException;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -30,35 +28,47 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
+import com.google.common.eventbus.Subscribe;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.EntityDAO;
 import eu.lp0.cursus.db.data.Entity;
+import eu.lp0.cursus.i18n.LocaleChangeEvent;
 import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 
-public abstract class DatabaseColumnModel<T extends Entity, V> implements DatabaseTableCellEditor.Column<T, V> {
+public abstract class DatabaseColumn<T extends Entity, V> extends TableColumn implements DatabaseTableCellEditor.Column<T, V> {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	protected final DatabaseWindow win;
 	private final EntityDAO<T> dao;
 	private final String messagesKey;
 	private final boolean editable;
 
-	public DatabaseColumnModel(String messagesKey) {
+	public DatabaseColumn(String messagesKey) {
 		assert (!Objects.equal(messagesKey, "")); //$NON-NLS-1$
 		this.win = null;
 		this.dao = null;
 		this.messagesKey = messagesKey;
 		this.editable = false;
+
+		headerValue = getName();
 	}
 
-	public DatabaseColumnModel(String messagesKey, DatabaseWindow win, EntityDAO<T> dao) {
+	public DatabaseColumn(String messagesKey, DatabaseWindow win, EntityDAO<T> dao) {
 		assert (!Objects.equal(messagesKey, "")); //$NON-NLS-1$
 		this.win = win;
 		this.dao = dao;
 		this.messagesKey = messagesKey;
 		this.editable = true;
+
+		headerValue = getName();
+	}
+
+	// Uses DatabaseTableModel's EventBus
+	@Subscribe
+	public final void updateHeaderValue(LocaleChangeEvent lce) {
+		setHeaderValue(getName());
 	}
 
 	public final String getName() {
@@ -72,15 +82,8 @@ public abstract class DatabaseColumnModel<T extends Entity, V> implements Databa
 		return editable;
 	}
 
-	public void setupModel(JTable table, DatabaseTableModel<T> model, TableRowSorter<? super TableModel> sorter, TableColumn col) {
-		col.setCellRenderer(createCellRenderer());
-		if (isCellEditable()) {
-			col.setCellEditor(createCellEditor());
-		}
-	}
+	public void setupModel(JTable table, DatabaseTableModel<T> model, TableRowSorter<? super TableModel> sorter) {
 
-	protected TableCellRenderer createCellRenderer() {
-		return new StringDatabaseTableCellRenderer<T, V>(this);
 	}
 
 	@Override
@@ -140,6 +143,4 @@ public abstract class DatabaseColumnModel<T extends Entity, V> implements Databa
 	protected abstract V getValue(T row, boolean editing);
 
 	protected abstract boolean setValue(T row, V value);
-
-	protected abstract TableCellEditor createCellEditor();
 }

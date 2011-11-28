@@ -37,8 +37,8 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.i18n.LocaleChangeEvent;
 import eu.lp0.cursus.i18n.LanguageManager;
+import eu.lp0.cursus.i18n.LocaleChangeEvent;
 import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseTabSync;
@@ -93,10 +93,10 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 		initialise();
 		bind();
 		databaseClosed();
-		LanguageManager.register(this);
+		LanguageManager.register(this, true);
 	}
 
-	public void updateLocale(LocaleChangeEvent lce) {
+	public final void updateLocale(LocaleChangeEvent lce) {
 		Messages.setAccessible(raceList, AccessibleComponents.RACE_TREE);
 	}
 

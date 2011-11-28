@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JComboBox;
-import javax.swing.table.TableCellEditor;
 
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
@@ -31,36 +30,34 @@ import eu.lp0.cursus.db.data.Entity;
 import eu.lp0.cursus.i18n.LocaleChangeEvent;
 import eu.lp0.cursus.i18n.TranslatedEnum;
 
-public abstract class EnumDatabaseColumnModel<T extends Entity, V extends Enum<?>> extends DatabaseColumnModel<T, Object> {
+public abstract class EnumDatabaseColumn<T extends Entity, V extends Enum<?>> extends DatabaseColumn<T, Object> {
 	private final MutableListComboBoxModel<Object> values;
 	private final Class<V> type;
 	private final boolean nullable;
 
-	public EnumDatabaseColumnModel(String name, Class<V> type, boolean nullable) {
+	public EnumDatabaseColumn(String name, Class<V> type, boolean nullable) {
 		super(name);
 		this.type = type;
 		this.nullable = nullable;
-		this.values = new MutableListComboBoxModel<Object>(generateValues());
+		values = new MutableListComboBoxModel<Object>(generateValues());
+		cellRenderer = new StringDatabaseTableCellRenderer<T, Object>(this);
 	}
 
-	public EnumDatabaseColumnModel(String name, DatabaseWindow win, EntityDAO<T> dao, Class<V> type, boolean nullable) {
+	public EnumDatabaseColumn(String name, DatabaseWindow win, EntityDAO<T> dao, Class<V> type, boolean nullable) {
 		super(name, win, dao);
 		this.type = type;
 		this.nullable = nullable;
-		this.values = new MutableListComboBoxModel<Object>(generateValues());
+		values = new MutableListComboBoxModel<Object>(generateValues());
+		cellRenderer = new StringDatabaseTableCellRenderer<T, Object>(this);
+		cellEditor = new DatabaseTableCellEditor<T, Object>(this, new JComboBox(values));
 	}
 
 	// Uses DatabaseTableModel's EventBus
 	@Subscribe
-	public void updateLocale(LocaleChangeEvent lce) {
+	public final void updateEnumValues(LocaleChangeEvent lce) {
 		if (TranslatedEnum.class.isAssignableFrom(type)) {
 			values.replaceAll(generateValues());
 		}
-	}
-
-	@Override
-	protected TableCellEditor createCellEditor() {
-		return new DatabaseTableCellEditor<T, Object>(this, new JComboBox(values));
 	}
 
 	private List<Object> generateValues() {
