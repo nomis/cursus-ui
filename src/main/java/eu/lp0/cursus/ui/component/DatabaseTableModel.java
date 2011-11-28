@@ -55,10 +55,11 @@ public class DatabaseTableModel<T extends Entity> extends AbstractTableModel imp
 
 	@Subscribe
 	public final void updateLocale(LocaleChangeEvent lce) {
-		List<? extends SortKey> sortKeys = ImmutableList.copyOf(sorter.getSortKeys());
-		eventBus.post(lce);
-		fireTableStructureChanged();
-		sorter.setSortKeys(sortKeys);
+		List<? extends SortKey> sortKeys = ImmutableList.copyOf(sorter.getSortKeys()); // Copy current sort keys
+		eventBus.post(lce); // Update enum lists
+		fireTableDataChanged(); // Force cancel editing
+		fireTableStructureChanged(); // Reload column names
+		sorter.setSortKeys(sortKeys); // The sort keys will be reset when the structure changes
 	}
 
 	@Override
