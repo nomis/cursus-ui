@@ -76,10 +76,10 @@ public class TabbedPaneManager implements TreeSelectionListener {
 	}
 
 	@Subscribe
-	public final void updateLocale(LocaleChangeEvent lce) {
+	public final void updateLanguage(LocaleChangeEvent lce) {
 		for (int i = 0; i < tabbedPane.getTabCount(); i++) {
 			AbstractDatabaseTab<?> tab = (AbstractDatabaseTab<?>)tabbedPane.getComponentAt(i);
-			tab.updateLocale(tabbedPane, i);
+			tab.updateLanguage(tabbedPane, i);
 		}
 	}
 

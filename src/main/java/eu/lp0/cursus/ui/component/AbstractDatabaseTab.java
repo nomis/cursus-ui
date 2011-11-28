@@ -57,7 +57,7 @@ public abstract class AbstractDatabaseTab<T extends RaceEntity> extends JPanel i
 		tabbedPane.setMnemonicAt(index, getMnemonic());
 	}
 
-	public final void updateLocale(JTabbedPane tabbedPane, int index) {
+	public final void updateLanguage(JTabbedPane tabbedPane, int index) {
 		tabbedPane.setTitleAt(index, getTitle());
 		tabbedPane.setMnemonicAt(index, getMnemonic());
 	}

@@ -31,6 +31,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.google.common.eventbus.Subscribe;
+
 import eu.lp0.cursus.app.Main;
 import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.data.Event;
@@ -96,7 +98,8 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 		LanguageManager.register(this, true);
 	}
 
-	public final void updateLocale(LocaleChangeEvent lce) {
+	@Subscribe
+	public final void updateLanguage(LocaleChangeEvent lce) {
 		Messages.setAccessible(raceList, AccessibleComponents.RACE_TREE);
 	}
 

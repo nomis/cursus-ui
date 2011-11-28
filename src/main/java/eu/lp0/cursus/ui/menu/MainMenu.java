@@ -75,7 +75,7 @@ public class MainMenu extends JMenuBar {
 	}
 
 	@Subscribe
-	public final void updateLocale(LocaleChangeEvent lce) {
+	public final void updateLanguage(LocaleChangeEvent lce) {
 		mnuFile.setText(Messages.getString("menu.file")); //$NON-NLS-1$
 		mnuFile.setMnemonic(Messages.getKeyEvent("menu.file")); //$NON-NLS-1$
 
