@@ -19,6 +19,7 @@ package eu.lp0.cursus.ui.component;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
@@ -28,6 +29,13 @@ import com.google.common.base.Objects;
 public class MutableListComboBoxModel<T> extends AbstractListModel implements ComboBoxModel {
 	private final ArrayList<T> list = new ArrayList<T>();
 	private T selected;
+
+	public MutableListComboBoxModel() {
+	}
+
+	public MutableListComboBoxModel(List<T> list) {
+		this.list.addAll(list);
+	}
 
 	@Override
 	public int getSize() {

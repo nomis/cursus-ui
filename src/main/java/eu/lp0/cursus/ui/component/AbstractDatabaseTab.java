@@ -23,23 +23,27 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import eu.lp0.cursus.db.data.RaceEntity;
-import eu.lp0.cursus.util.Messages;
+import eu.lp0.cursus.i18n.Messages;
 
 public abstract class AbstractDatabaseTab<T extends RaceEntity> extends JPanel implements DatabaseTabSync<T> {
 	private final Class<T> clazz;
 	protected final DatabaseWindow win;
-
-	private final String title;
-	private final int mnemonic;
+	private final String messagesKey;
 
 	public AbstractDatabaseTab(Class<T> clazz, DatabaseWindow win, String messagesKey) {
 		this.clazz = clazz;
 		this.win = win;
-
-		this.title = Messages.getString(messagesKey);
-		this.mnemonic = Messages.getKeyEvent(messagesKey);
+		this.messagesKey = messagesKey;
 
 		setBorder(new EmptyBorder(2, 2, 2, 2));
+	}
+
+	private String getTitle() {
+		return Messages.getString(messagesKey);
+	}
+
+	private int getMnemonic() {
+		return Messages.getKeyEvent(messagesKey);
 	}
 
 	public Class<T> getType() {
@@ -49,7 +53,12 @@ public abstract class AbstractDatabaseTab<T extends RaceEntity> extends JPanel i
 	public void addToTabbedPane(JTabbedPane tabbedPane, int index) {
 		assert (SwingUtilities.isEventDispatchThread());
 
-		tabbedPane.insertTab(title, null, this, null, index);
-		tabbedPane.setMnemonicAt(index, mnemonic);
+		tabbedPane.insertTab(getTitle(), null, this, null, index);
+		tabbedPane.setMnemonicAt(index, getMnemonic());
+	}
+
+	public void updateLocale(JTabbedPane tabbedPane, int index) {
+		tabbedPane.setTitleAt(index, getTitle());
+		tabbedPane.setMnemonicAt(index, getMnemonic());
 	}
 }

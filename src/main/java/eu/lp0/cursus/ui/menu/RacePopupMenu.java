@@ -25,11 +25,11 @@ import javax.swing.JSeparator;
 
 import eu.lp0.cursus.db.dao.RaceDAO;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.race.RaceDetailDialog;
 import eu.lp0.cursus.util.Constants;
-import eu.lp0.cursus.util.Messages;
 
 public class RacePopupMenu extends AbstractNamedEntityPopupMenu<Race> implements ActionListener {
 	private JMenuItem mnuEditRace;

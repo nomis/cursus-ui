@@ -44,13 +44,13 @@ import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.NamedEntityDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
 import eu.lp0.cursus.db.data.NamedEntity;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.component.DatabaseTextField;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.preferences.WindowAutoPrefs;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
-import eu.lp0.cursus.util.Messages;
 import eu.lp0.cursus.util.SwingHacks;
 
 public abstract class CommonDetailDialog<T extends AbstractEntity & NamedEntity> extends JDialog implements Displayable, ActionListener {

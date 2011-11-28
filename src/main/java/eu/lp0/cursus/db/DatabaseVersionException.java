@@ -18,7 +18,7 @@
 package eu.lp0.cursus.db;
 
 import eu.lp0.cursus.db.data.Cursus;
-import eu.lp0.cursus.util.Messages;
+import eu.lp0.cursus.i18n.Messages;
 
 public class DatabaseVersionException extends InvalidDatabaseException {
 	private final Cursus cursus;

@@ -33,7 +33,8 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import eu.lp0.cursus.util.Messages;
+import eu.lp0.cursus.i18n.Messages;
+import eu.lp0.cursus.i18n.TranslatedEnum;
 
 /**
  * Race attendees who are pilots
@@ -46,7 +47,7 @@ public final class RaceAttendee extends AbstractEntity {
 	 * 
 	 * Mandatory/voluntary participation in other activities may affect the scores of pilots who didn't compete
 	 */
-	public enum Type {
+	public enum Type implements TranslatedEnum {
 		/** Pilot racing */
 		PILOT ("attendee.pilot"), //$NON-NLS-1$
 

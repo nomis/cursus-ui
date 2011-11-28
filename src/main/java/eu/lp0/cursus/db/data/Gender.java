@@ -17,9 +17,10 @@
  */
 package eu.lp0.cursus.db.data;
 
-import eu.lp0.cursus.util.Messages;
+import eu.lp0.cursus.i18n.Messages;
+import eu.lp0.cursus.i18n.TranslatedEnum;
 
-public enum Gender {
+public enum Gender implements TranslatedEnum {
 	/** Male */
 	MALE ("gender.male"), //$NON-NLS-1$
 

@@ -18,15 +18,21 @@
 package eu.lp0.cursus.ui.component;
 
 import java.util.Arrays;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.table.TableCellEditor;
 
+import com.google.common.collect.Lists;
+import com.google.common.eventbus.Subscribe;
+
 import eu.lp0.cursus.db.dao.EntityDAO;
 import eu.lp0.cursus.db.data.Entity;
+import eu.lp0.cursus.i18n.LocaleChangeEvent;
+import eu.lp0.cursus.i18n.TranslatedEnum;
 
 public abstract class EnumDatabaseColumnModel<T extends Entity, V extends Enum<?>> extends DatabaseColumnModel<T, Object> {
+	private final MutableListComboBoxModel<Object> values;
 	private final Class<V> type;
 	private final boolean nullable;
 
@@ -34,22 +40,35 @@ public abstract class EnumDatabaseColumnModel<T extends Entity, V extends Enum<?
 		super(name);
 		this.type = type;
 		this.nullable = nullable;
+		this.values = new MutableListComboBoxModel<Object>(generateValues());
 	}
 
 	public EnumDatabaseColumnModel(String name, DatabaseWindow win, EntityDAO<T> dao, Class<V> type, boolean nullable) {
 		super(name, win, dao);
 		this.type = type;
 		this.nullable = nullable;
+		this.values = new MutableListComboBoxModel<Object>(generateValues());
+	}
+
+	// Uses DatabaseTableModel's EventBus
+	@Subscribe
+	public void updateLocale(LocaleChangeEvent lce) {
+		if (TranslatedEnum.class.isAssignableFrom(type)) {
+			values.replaceAll(generateValues());
+		}
 	}
 
 	@Override
 	protected TableCellEditor createCellEditor() {
-		Vector<Object> values = new Vector<Object>();
-		if (nullable) {
-			values.add(""); //$NON-NLS-1$
-		}
-		values.addAll(Arrays.asList(type.getEnumConstants()));
 		return new DatabaseTableCellEditor<T, Object>(this, new JComboBox(values));
+	}
+
+	private List<Object> generateValues() {
+		if (nullable) {
+			return Lists.<Object>asList("", type.getEnumConstants()); //$NON-NLS-1$
+		} else {
+			return Arrays.asList((Object[])type.getEnumConstants());
+		}
 	}
 
 	@Override

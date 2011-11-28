@@ -15,27 +15,10 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.db;
+package eu.lp0.cursus.i18n;
 
-import java.sql.SQLException;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
-
-import eu.lp0.cursus.i18n.Messages;
-
-public class MemoryDatabase extends Database {
-	private static final AtomicLong UNTITLED = new AtomicLong();
-
-	public MemoryDatabase() throws SQLException, InvalidDatabaseException {
-		super(String.format(Messages.getString("db.untitled"), UNTITLED.incrementAndGet()), "jdbc:hsqldb:mem:" + UUID.randomUUID(), "SA", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-	}
-
-	@Override
-	public boolean isSaved() {
-		return false;
-	}
-
-	public synchronized void save() {
-
-	}
+/**
+ * Marker for enums whose toString() method is locale-sensitive
+ */
+public interface TranslatedEnum {
 }

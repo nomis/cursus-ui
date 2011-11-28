@@ -24,15 +24,16 @@ import javax.persistence.Enumerated;
 
 import com.google.common.collect.ComparisonChain;
 
+import eu.lp0.cursus.i18n.Messages;
+import eu.lp0.cursus.i18n.TranslatedEnum;
 import eu.lp0.cursus.util.Constants;
-import eu.lp0.cursus.util.Messages;
 
 /**
  * Penalty
  */
 @Embeddable
 public final class Penalty implements Comparable<Penalty>, Cloneable {
-	public enum Type {
+	public enum Type implements TranslatedEnum {
 		/** Number of penalties where the points given for them are calculated automatically */
 		AUTOMATIC ("penalty.automatic"), //$NON-NLS-1$
 

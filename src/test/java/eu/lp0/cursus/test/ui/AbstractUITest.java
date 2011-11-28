@@ -48,13 +48,13 @@ import com.google.common.util.concurrent.SimpleTimeLimiter;
 
 import eu.lp0.cursus.app.Main;
 import eu.lp0.cursus.db.data.RaceEntity;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.test.db.AbstractDataTest;
 import eu.lp0.cursus.test.util.Pollable;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.menu.MainMenu;
 import eu.lp0.cursus.ui.util.AccessibleComponents;
 import eu.lp0.cursus.util.Background;
-import eu.lp0.cursus.util.Messages;
 
 public class AbstractUITest extends AbstractDataTest {
 	private static final int CALL_TIMEOUT = 5000;

@@ -28,7 +28,7 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.util.Messages;
+import eu.lp0.cursus.i18n.Messages;
 
 public class SelectRaceEntityTests extends AbstractUITest {
 	@Test

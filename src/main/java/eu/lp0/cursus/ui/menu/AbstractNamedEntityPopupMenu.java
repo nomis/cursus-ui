@@ -27,11 +27,11 @@ import org.slf4j.LoggerFactory;
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.data.AbstractEntity;
 import eu.lp0.cursus.db.data.NamedEntity;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
-import eu.lp0.cursus.util.Messages;
 
 public abstract class AbstractNamedEntityPopupMenu<T extends AbstractEntity & NamedEntity> extends JPopupMenu {
 	protected final Logger log = LoggerFactory.getLogger(getClass());

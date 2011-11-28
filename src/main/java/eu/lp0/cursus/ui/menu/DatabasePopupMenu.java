@@ -24,10 +24,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.series.SeriesDetailDialog;
-import eu.lp0.cursus.util.Messages;
 
 public class DatabasePopupMenu extends JPopupMenu implements ActionListener {
 	private final DatabaseWindow win;

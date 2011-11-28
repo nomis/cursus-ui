@@ -64,7 +64,6 @@ import eu.lp0.cursus.ui.tree.ClassTree;
 import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
-import eu.lp0.cursus.util.Messages;
 
 public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements TreeSelectionListener {
 	private final Logger log = LoggerFactory.getLogger(getClass());
@@ -109,7 +108,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 		rightScrollPane.setViewportView(table);
 
 		model = new DatabaseTableModel<Pilot>(new DatabaseRowModel<Pilot>(Arrays.<DatabaseColumnModel<Pilot, ?>>asList( //
-				new BooleanDatabaseColumnModel<Pilot>("", win, pilotDAO) { //$NON-NLS-1$
+				new BooleanDatabaseColumnModel<Pilot>(null, win, pilotDAO) {
 					@Override
 					protected Boolean getValue(Pilot row, boolean editing) {
 						return row.getClasses().contains(list.getSelected());
@@ -125,8 +124,8 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 						}
 						return true;
 					}
-				}, new RaceNumbersDatabaseColumnModel(Messages.getString("pilot.race-number")), //$NON-NLS-1$
-				new StringDatabaseColumnModel<Pilot>(Messages.getString("pilot.name")) { //$NON-NLS-1$
+				}, new RaceNumbersDatabaseColumnModel("pilot.race-number"), //$NON-NLS-1$
+				new StringDatabaseColumnModel<Pilot>("pilot.name") { //$NON-NLS-1$
 					@Override
 					protected String getValue(Pilot row, boolean editing) {
 						return row.getName();
@@ -137,7 +136,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 						row.setName(value);
 						return true;
 					}
-				}, new EnumDatabaseColumnModel<Pilot, Gender>(Messages.getString("pilot.gender"), Gender.class, true) { //$NON-NLS-1$
+				}, new EnumDatabaseColumnModel<Pilot, Gender>("pilot.gender", Gender.class, true) { //$NON-NLS-1$
 					@Override
 					protected Gender getEnumValue(Pilot row) {
 						return row.getGender();
@@ -148,7 +147,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 						row.setGender(value);
 						return true;
 					}
-				}, new StringDatabaseColumnModel<Pilot>(Messages.getString("pilot.country")) { //$NON-NLS-1$
+				}, new StringDatabaseColumnModel<Pilot>("pilot.country") { //$NON-NLS-1$
 					@Override
 					protected String getValue(Pilot row, boolean editing) {
 						return row.getCountry();

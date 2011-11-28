@@ -36,10 +36,14 @@ import javax.swing.event.TreeSelectionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.eventbus.Subscribe;
+
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.i18n.LanguageManager;
+import eu.lp0.cursus.i18n.LocaleChangeEvent;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.tree.RaceTree;
 
@@ -68,6 +72,15 @@ public class TabbedPaneManager implements TreeSelectionListener {
 		ordering.addAll(raceTabs);
 
 		tree.addTreeSelectionListener(this);
+		LanguageManager.register(this);
+	}
+
+	@Subscribe
+	public void updateLocale(LocaleChangeEvent lce) {
+		for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+			AbstractDatabaseTab<?> tab = (AbstractDatabaseTab<?>)tabbedPane.getComponentAt(i);
+			tab.updateLocale(tabbedPane, i);
+		}
 	}
 
 	@Override

@@ -37,6 +37,9 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.i18n.LocaleChangeEvent;
+import eu.lp0.cursus.i18n.LanguageManager;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseTabSync;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
@@ -55,7 +58,6 @@ import eu.lp0.cursus.ui.tree.RaceTree;
 import eu.lp0.cursus.ui.util.AccessibleComponents;
 import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
-import eu.lp0.cursus.util.Messages;
 
 public final class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 	private final Main main;
@@ -91,6 +93,11 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 		initialise();
 		bind();
 		databaseClosed();
+		LanguageManager.register(this);
+	}
+
+	public void updateLocale(LocaleChangeEvent lce) {
+		Messages.setAccessible(raceList, AccessibleComponents.RACE_TREE);
 	}
 
 	public void display() {
@@ -147,7 +154,6 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 
 			raceList = new RaceTree(this);
 			raceList.setBorder(new EmptyBorder(2, 2, 2, 2));
-			Messages.setAccessible(raceList, AccessibleComponents.RACE_TREE);
 			scrollPane.setViewportView(raceList);
 
 			tabbedPane = new JTabbedPane();

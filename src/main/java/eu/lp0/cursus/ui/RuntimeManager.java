@@ -23,8 +23,8 @@ import java.awt.event.WindowEvent;
 import javax.swing.SwingUtilities;
 
 import eu.lp0.cursus.db.InvalidDatabaseException;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.util.Background;
-import eu.lp0.cursus.util.Messages;
 
 public class RuntimeManager {
 	private final MainWindow win;

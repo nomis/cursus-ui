@@ -25,12 +25,12 @@ import javax.swing.JSeparator;
 
 import eu.lp0.cursus.db.dao.ClassDAO;
 import eu.lp0.cursus.db.data.Class;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.series.ClassDetailDialog;
 import eu.lp0.cursus.ui.series.SeriesClassesTab;
 import eu.lp0.cursus.util.Constants;
-import eu.lp0.cursus.util.Messages;
 
 public class ClassPopupMenu extends AbstractNamedEntityPopupMenu<Class> implements ActionListener {
 	private final SeriesClassesTab tab;

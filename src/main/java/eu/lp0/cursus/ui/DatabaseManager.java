@@ -26,9 +26,9 @@ import javax.swing.SwingUtilities;
 
 import eu.lp0.cursus.db.DatabaseVersionException;
 import eu.lp0.cursus.db.InvalidDatabaseException;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
-import eu.lp0.cursus.util.Messages;
 
 public class DatabaseManager implements ActionListener {
 	private final MainWindow win;

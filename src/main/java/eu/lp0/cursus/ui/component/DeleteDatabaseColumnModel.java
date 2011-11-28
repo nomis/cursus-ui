@@ -48,9 +48,9 @@ import org.slf4j.LoggerFactory;
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.EntityDAO;
 import eu.lp0.cursus.db.data.Entity;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
-import eu.lp0.cursus.util.Messages;
 
 public abstract class DeleteDatabaseColumnModel<T extends Entity> extends DatabaseColumnModel<T, String> {
 	private final Logger log = LoggerFactory.getLogger(getClass());
@@ -62,7 +62,7 @@ public abstract class DeleteDatabaseColumnModel<T extends Entity> extends Databa
 	private int mCol;
 
 	public DeleteDatabaseColumnModel(DatabaseWindow win, EntityDAO<T> dao, String action) {
-		super("", win, dao); //$NON-NLS-1$
+		super(null, win, dao);
 		this.dao = dao;
 		this.action = action;
 	}

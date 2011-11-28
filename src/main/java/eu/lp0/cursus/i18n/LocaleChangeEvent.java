@@ -15,27 +15,30 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.db;
+package eu.lp0.cursus.i18n;
 
-import java.sql.SQLException;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.Locale;
 
-import eu.lp0.cursus.i18n.Messages;
+public class LocaleChangeEvent {
+	private final Locale oldLocale;
+	private final Locale newLocale;
+	private final Locale selLocale;
 
-public class MemoryDatabase extends Database {
-	private static final AtomicLong UNTITLED = new AtomicLong();
-
-	public MemoryDatabase() throws SQLException, InvalidDatabaseException {
-		super(String.format(Messages.getString("db.untitled"), UNTITLED.incrementAndGet()), "jdbc:hsqldb:mem:" + UUID.randomUUID(), "SA", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+	public LocaleChangeEvent(Locale oldLocale, Locale newLocale, Locale selLocale) {
+		this.oldLocale = oldLocale;
+		this.newLocale = newLocale;
+		this.selLocale = selLocale;
 	}
 
-	@Override
-	public boolean isSaved() {
-		return false;
+	public Locale getOldLocale() {
+		return oldLocale;
 	}
 
-	public synchronized void save() {
+	public Locale getNewLocale() {
+		return newLocale;
+	}
 
+	public Locale getSelectedLocale() {
+		return selLocale;
 	}
 }

@@ -22,20 +22,42 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JTable;
+import javax.swing.RowSorter.SortKey;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 
 import eu.lp0.cursus.db.data.Entity;
+import eu.lp0.cursus.i18n.LanguageManager;
+import eu.lp0.cursus.i18n.LocaleChangeEvent;
 
 public class DatabaseTableModel<T extends Entity> extends AbstractTableModel implements Iterable<T> {
 	private final DatabaseRowModel<T> rowModel;
 	private final ArrayList<T> rows = new ArrayList<T>();
+	private final TableRowSorter<? super TableModel> sorter = new TableRowSorter<TableModel>(getRealModel());;
+	private final EventBus eventBus = new EventBus(getClass().getSimpleName());
 
 	public DatabaseTableModel(DatabaseRowModel<T> rowModel) {
 		this.rowModel = rowModel;
+		sorter.setSortsOnUpdates(true);
+		eventBus.register(rowModel);
+		for (DatabaseColumnModel<T, ?> col : rowModel.getColumns()) {
+			eventBus.register(col);
+		}
+		LanguageManager.register(this);
+	}
+
+	@Subscribe
+	public void updateLocale(LocaleChangeEvent lce) {
+		List<? extends SortKey> sortKeys = ImmutableList.copyOf(sorter.getSortKeys());
+		eventBus.post(lce);
+		fireTableStructureChanged();
+		sorter.setSortKeys(sortKeys);
 	}
 
 	@Override
@@ -78,10 +100,8 @@ public class DatabaseTableModel<T extends Entity> extends AbstractTableModel imp
 	}
 
 	public void setupModel(JTable table) {
+		table.setAutoCreateColumnsFromModel(true);
 		table.setModel(this);
-
-		TableRowSorter<? super TableModel> sorter = new TableRowSorter<TableModel>(getRealModel());
-		sorter.setSortsOnUpdates(true);
 		table.setRowSorter(sorter);
 		table.setSurrendersFocusOnKeystroke(true);
 
@@ -89,6 +109,7 @@ public class DatabaseTableModel<T extends Entity> extends AbstractTableModel imp
 
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		table.doLayout();
+		table.setAutoCreateColumnsFromModel(false);
 	}
 
 	private TableModel getRealModel() {

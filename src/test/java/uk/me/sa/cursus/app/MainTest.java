@@ -49,8 +49,8 @@ import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.util.Background;
-import eu.lp0.cursus.util.Messages;
 
 public class MainTest extends Main {
 	private static final ClassDAO classDAO = new ClassDAO();

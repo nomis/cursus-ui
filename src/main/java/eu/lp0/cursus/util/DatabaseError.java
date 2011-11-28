@@ -22,6 +22,8 @@ import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
+import eu.lp0.cursus.i18n.Messages;
+
 public class DatabaseError {
 	public static void unableToSave(Component c, String context, String message) {
 		JOptionPane.showMessageDialog(c, message, Constants.APP_NAME + Constants.EN_DASH + context, JOptionPane.ERROR_MESSAGE);

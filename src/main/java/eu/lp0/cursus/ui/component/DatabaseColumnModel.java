@@ -34,6 +34,7 @@ import com.google.common.base.Objects;
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.EntityDAO;
 import eu.lp0.cursus.db.data.Entity;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 
@@ -41,25 +42,30 @@ public abstract class DatabaseColumnModel<T extends Entity, V> implements Databa
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	protected final DatabaseWindow win;
 	private final EntityDAO<T> dao;
-	private final String name;
+	private final String messagesKey;
 	private final boolean editable;
 
-	public DatabaseColumnModel(String name) {
+	public DatabaseColumnModel(String messagesKey) {
+		assert (!Objects.equal(messagesKey, "")); //$NON-NLS-1$
 		this.win = null;
 		this.dao = null;
-		this.name = name;
+		this.messagesKey = messagesKey;
 		this.editable = false;
 	}
 
-	public DatabaseColumnModel(String name, DatabaseWindow win, EntityDAO<T> dao) {
+	public DatabaseColumnModel(String messagesKey, DatabaseWindow win, EntityDAO<T> dao) {
+		assert (!Objects.equal(messagesKey, "")); //$NON-NLS-1$
 		this.win = win;
 		this.dao = dao;
-		this.name = name;
+		this.messagesKey = messagesKey;
 		this.editable = true;
 	}
 
-	public String getName() {
-		return name;
+	public final String getName() {
+		if (messagesKey == null) {
+			return ""; //$NON-NLS-1$
+		}
+		return Messages.getString(messagesKey);
 	}
 
 	public boolean isCellEditable() {

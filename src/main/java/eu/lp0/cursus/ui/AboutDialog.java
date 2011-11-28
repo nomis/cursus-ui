@@ -51,10 +51,10 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.util.DefaultUnitConverter;
 
 import eu.lp0.cursus.app.Main;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.preferences.WindowAutoPrefs;
 import eu.lp0.cursus.util.Constants;
-import eu.lp0.cursus.util.Messages;
 
 public class AboutDialog extends JDialog implements Displayable, ActionListener {
 	private static final String TEXT_SPLIT = "\n------------------------------------------------------------------------\n\n"; //$NON-NLS-1$

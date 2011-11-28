@@ -47,6 +47,7 @@ import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.db.data.RaceNumber;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseColumnModel;
 import eu.lp0.cursus.ui.component.DatabaseRowModel;
@@ -61,7 +62,6 @@ import eu.lp0.cursus.ui.table.RaceAttendeesDatabaseColumnModel;
 import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
-import eu.lp0.cursus.util.Messages;
 
 public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 	private final Logger log = LoggerFactory.getLogger(getClass());
@@ -92,11 +92,9 @@ public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 
 		final DeleteDatabaseColumnModel<RaceAttendeePenalty> delColumn;
 		model = new DatabaseTableModel<RaceAttendeePenalty>(new DatabaseRowModel<RaceAttendeePenalty>(
-				Arrays.<DatabaseColumnModel<RaceAttendeePenalty, ?>>asList(
-						//
-						raceAttendeesColumn = new RaceAttendeesDatabaseColumnModel(Messages.getString("penalty.pilot"), win, raceAttendeePenaltyDAO), //$NON-NLS-1$
-						new EnumDatabaseColumnModel<RaceAttendeePenalty, Penalty.Type>(
-								Messages.getString("penalty.type"), win, raceAttendeePenaltyDAO, Penalty.Type.class, false) { //$NON-NLS-1$
+				Arrays.<DatabaseColumnModel<RaceAttendeePenalty, ?>>asList( //
+						raceAttendeesColumn = new RaceAttendeesDatabaseColumnModel("penalty.pilot", win, raceAttendeePenaltyDAO), //$NON-NLS-1$
+						new EnumDatabaseColumnModel<RaceAttendeePenalty, Penalty.Type>("penalty.type", win, raceAttendeePenaltyDAO, Penalty.Type.class, false) { //$NON-NLS-1$
 							@Override
 							protected Penalty.Type getEnumValue(RaceAttendeePenalty row) {
 								return row.getPenalty().getType();
@@ -107,8 +105,7 @@ public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 								row.getPenalty().setType(value);
 								return true;
 							}
-						}, new StringDatabaseColumnModel<RaceAttendeePenalty>(
-								Messages.getString("penalty.value"), win, raceAttendeePenaltyDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
+						}, new StringDatabaseColumnModel<RaceAttendeePenalty>("penalty.value", win, raceAttendeePenaltyDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
 							@Override
 							protected String getValue(RaceAttendeePenalty row, boolean editing) {
 								return String.valueOf(row.getPenalty().getValue()); // FIXME
@@ -119,8 +116,7 @@ public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 								row.getPenalty().setValue(Integer.valueOf(value)); // FIXME
 								return true;
 							}
-						}, new StringDatabaseColumnModel<RaceAttendeePenalty>(
-								Messages.getString("penalty.reason"), win, raceAttendeePenaltyDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
+						}, new StringDatabaseColumnModel<RaceAttendeePenalty>("penalty.reason", win, raceAttendeePenaltyDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$
 							@Override
 							protected String getValue(RaceAttendeePenalty row, boolean editing) {
 								return row.getPenalty().getReason();

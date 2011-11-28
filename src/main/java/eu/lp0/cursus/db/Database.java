@@ -36,8 +36,8 @@ import eu.lp0.cursus.db.data.Cursus;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.util.Constants;
-import eu.lp0.cursus.util.Messages;
 
 public abstract class Database {
 	public static final String UNTITLED_SERIES = "series.untitled"; //$NON-NLS-1$
