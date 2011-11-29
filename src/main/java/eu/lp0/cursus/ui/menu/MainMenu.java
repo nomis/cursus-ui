@@ -185,7 +185,7 @@ public class MainMenu extends JMenuBar {
 		mnuLang.add(mnuLangDefault);
 		mnuLangDefault.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				Messages.changeLocale(Locale.ROOT);
+				LanguageManager.setPreferredLocale(Locale.ROOT);
 			}
 		});
 
@@ -196,7 +196,7 @@ public class MainMenu extends JMenuBar {
 			JRadioButtonMenuItem item = new JRadioButtonMenuItem();
 			item.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ae) {
-					Messages.changeLocale(locale.getLocale());
+					LanguageManager.setPreferredLocale(locale.getLocale());
 				}
 			});
 			mnuLangItems.put(locale, item);

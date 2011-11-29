@@ -19,73 +19,19 @@ package eu.lp0.cursus.i18n;
 
 import java.awt.Component;
 import java.awt.event.KeyEvent;
-import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.prefs.Preferences;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Messages {
-	private static final String BUNDLE_NAME = "eu.lp0.cursus.messages"; //$NON-NLS-1$
-	private static final Logger log = LoggerFactory.getLogger(Messages.class);
-
-	private static final String PREF_LOCALE_LANGUAGE = "Messages/locale/language"; //$NON-NLS-1$
-	private static final String PREF_LOCALE_COUNTRY = "Messages/locale/country"; //$NON-NLS-1$
-	private static final String PREF_LOCALE_VARIANT = "Messages/locale/variant"; //$NON-NLS-1$
-	private static final Preferences pref = Preferences.userNodeForPackage(Messages.class);
-
+	static final String BUNDLE_NAME = "eu.lp0.cursus.messages"; //$NON-NLS-1$
 	private static volatile ResourceBundle RESOURCE_BUNDLE;
-	private static final ConcurrentHashMap<String, Boolean> MISSING_KEYS = new ConcurrentHashMap<String, Boolean>();
 
-	static {
-		Locale preferredLocale = getPreferredLocale();
-
-		if (log.isTraceEnabled()) {
-			log.trace("Default locale is \"" + Locale.getDefault() + "\""); //$NON-NLS-1$ //$NON-NLS-2$
-			log.trace("Preferred locale is \"" + preferredLocale + "\""); //$NON-NLS-1$ //$NON-NLS-2$
-
-			if (preferredLocale.equals(Locale.ROOT)) {
-				log.trace("Using default locale"); //$NON-NLS-1$
-			} else {
-				log.trace("Using preferred locale"); //$NON-NLS-1$
-			}
-		}
-
-		changeLocale(preferredLocale);
-	}
-
-	public static synchronized void changeLocale(Locale newLocale) {
-		Locale loadLocale = newLocale.equals(Locale.ROOT) ? Locale.getDefault() : newLocale;
-		try {
-			ResourceBundle resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME, newLocale);
-
-			if (log.isDebugEnabled()) {
-				log.debug("Loaded resource bundle \"" + resourceBundle.getLocale() + "\" for locale \"" + loadLocale + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			}
-
-			RESOURCE_BUNDLE = resourceBundle;
-			MISSING_KEYS.clear();
-			LanguageManager.changedLocale(resourceBundle.getLocale(), newLocale);
-			setPreferredLocale(newLocale);
-		} catch (MissingResourceException e) {
-			log.error("Missing resource bundle for locale \"" + loadLocale + "\"", e); //$NON-NLS-1$ //$NON-NLS-2$
-			throw e;
-		}
+	static void setBundle(ResourceBundle bundle) {
+		RESOURCE_BUNDLE = bundle;
 	}
 
 	public static String getString(String key) {
-		ResourceBundle resourceBundle = RESOURCE_BUNDLE;
-		try {
-			return resourceBundle.getString(key);
-		} catch (MissingResourceException e) {
-			if (resourceBundle == RESOURCE_BUNDLE && MISSING_KEYS.putIfAbsent(key, true) == null) {
-				log.warn("Missing resource bundle key \"" + key + "\" in locale \"" + RESOURCE_BUNDLE.getLocale() + "\"", e); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			}
-			return '!' + key + '!';
-		}
+		return RESOURCE_BUNDLE.getString(key);
 	}
 
 	public static String getString(String key, Object... args) {
@@ -106,17 +52,6 @@ public class Messages {
 		} catch (NoSuchFieldException e) {
 			return 0;
 		}
-	}
-
-	public static synchronized Locale getPreferredLocale() {
-		return new Locale(pref.get(PREF_LOCALE_LANGUAGE, ""), pref.get(PREF_LOCALE_COUNTRY, ""), pref.get(PREF_LOCALE_VARIANT, "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	}
-
-	private static synchronized void setPreferredLocale(Locale locale) {
-		pref.put(PREF_LOCALE_LANGUAGE, locale.getLanguage());
-		pref.put(PREF_LOCALE_COUNTRY, locale.getCountry());
-		pref.put(PREF_LOCALE_VARIANT, locale.getVariant());
-		log.trace("Set preferred locale to \"" + locale + "\""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public static String getAccessibleName(String key) {
