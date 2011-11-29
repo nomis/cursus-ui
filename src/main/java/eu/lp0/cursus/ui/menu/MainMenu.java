@@ -102,14 +102,14 @@ public class MainMenu extends JMenuBar {
 
 		mnuLangDefault.setText(Messages.getString("menu.lang.default")); //$NON-NLS-1$
 		mnuLangDefault.setMnemonic(Messages.getKeyEvent("menu.lang.default")); //$NON-NLS-1$
-		if (lce.getNewLocale().equals(Locale.ROOT)) {
+		if (lce.getSelectedLocale().equals(Locale.ROOT)) {
 			mnuLangGroup.setSelected(mnuLangDefault.getModel(), true);
 		}
 
 		for (SupportedLanguages locale : SupportedLanguages.values()) {
 			JRadioButtonMenuItem item = mnuLangItems.get(locale);
 			item.setText(locale.getLocale().getDisplayName(lce.getNewLocale()));
-			if (lce.getNewLocale().equals(locale.getLocale())) {
+			if (lce.getSelectedLocale().equals(locale.getLocale())) {
 				mnuLangGroup.setSelected(item.getModel(), true);
 			}
 		}
