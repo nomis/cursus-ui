@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.RowSorter.SortKey;
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumnModel;
@@ -55,6 +56,8 @@ public class DatabaseTableModel<T extends Entity> extends AbstractTableModel imp
 
 	@Subscribe
 	public final void updateLanguage(LocaleChangeEvent lce) {
+		assert (SwingUtilities.isEventDispatchThread());
+
 		List<? extends SortKey> sortKeys = ImmutableList.copyOf(sorter.getSortKeys()); // Copy current sort keys
 		eventBus.post(lce); // Update enum lists
 		fireTableDataChanged(); // Force cancel editing
