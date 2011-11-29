@@ -69,6 +69,9 @@ public class LanguageManager {
 	}
 
 	public static void register(final Object o, boolean fireCurrentLocale) {
+		if (log.isTraceEnabled()) {
+			log.trace("Register " + o); //$NON-NLS-1$
+		}
 		if (fireCurrentLocale) {
 			synchronized (TEMP_BUS) {
 				TEMP_BUS.register(o);
@@ -85,6 +88,13 @@ public class LanguageManager {
 		} else {
 			EVENT_BUS.register(o);
 		}
+	}
+
+	public static void unregister(Object o) {
+		if (log.isTraceEnabled()) {
+			log.trace("Unregister " + o); //$NON-NLS-1$
+		}
+		EVENT_BUS.unregister(o);
 	}
 
 	private static void changedLocale(final Locale newLocale, final Locale newSelected) {
