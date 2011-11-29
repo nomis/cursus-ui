@@ -81,12 +81,12 @@ public class RaceNumbersDatabaseColumnModel extends StringDatabaseColumn<Pilot> 
 				try {
 					raceNo = RaceNumber.valueOfFor(value, row);
 				} catch (IllegalArgumentException e) {
-					DatabaseError.unableToSave(win.getFrame(), getName(), String.format(Messages.getString("pilot.race-number.invalid"), value)); //$NON-NLS-1$
+					DatabaseError.unableToSave(win.getFrame(), getName(), Messages.getString("pilot.race-number.invalid", value)); //$NON-NLS-1$
 					return false;
 				}
 
 				if (!raceNumberDAO.isRaceNumberOk(raceNo)) {
-					DatabaseError.unableToSave(win.getFrame(), getName(), String.format(Messages.getString("pilot.race-number.in-use"), raceNo)); //$NON-NLS-1$
+					DatabaseError.unableToSave(win.getFrame(), getName(), Messages.getString("pilot.race-number.in-use", raceNo)); //$NON-NLS-1$
 					return false;
 				}
 

@@ -181,10 +181,10 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 		String title;
 		if (rows.size() == 1) {
 			String value = rows.get(0).getName();
-			action = String.format(Messages.getString("menu.pilot.delete.confirm"), value); //$NON-NLS-1$
+			action = Messages.getString("menu.pilot.delete.confirm", value); //$NON-NLS-1$
 			title = Messages.getString("menu.pilot.delete") + Constants.EN_DASH + value; //$NON-NLS-1$
 		} else {
-			action = String.format(Messages.getString("menu.pilot.delete-multiple.confirm"), rows.size()); //$NON-NLS-1$
+			action = Messages.getString("menu.pilot.delete-multiple.confirm", rows.size()); //$NON-NLS-1$
 			title = Messages.getString("menu.pilot.delete-multiple"); //$NON-NLS-1$
 		}
 		switch (JOptionPane.showConfirmDialog(win.getFrame(), action, title, JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {

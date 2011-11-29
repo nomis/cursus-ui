@@ -79,7 +79,7 @@ public class AboutDialog extends JDialog implements Displayable, ActionListener 
 
 	private void initialise() {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle(String.format(Messages.getString("about.title"), Constants.APP_DESC)); //$NON-NLS-1$
+		setTitle(Messages.getString("about.title", Constants.APP_DESC)); //$NON-NLS-1$
 		DefaultUnitConverter duc = DefaultUnitConverter.getInstance();
 
 		FormLayout layout = new FormLayout("2dlu, pref, fill:pref:grow, max(30dlu;pref), 2dlu", //$NON-NLS-1$

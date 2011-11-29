@@ -46,7 +46,7 @@ public class CursusDAO extends AbstractEntityDAO<Cursus> {
 		List<Cursus> rs = tq.getResultList();
 
 		if (rs.size() > 1) {
-			throw new InvalidDatabaseException(String.format(Messages.getString("db.too-many-database-identifier-rows"), rs.size())); //$NON-NLS-1$
+			throw new InvalidDatabaseException(Messages.getString("db.too-many-database-identifier-rows", rs.size())); //$NON-NLS-1$
 		}
 
 		return rs.isEmpty() ? null : rs.get(0);

@@ -152,7 +152,7 @@ public abstract class CommonDetailDialog<T extends AbstractEntity & NamedEntity>
 
 			if (!dao.isNameOk(origItem, isUpdate, name)) {
 				log.warn("Name already in use: " + name); //$NON-NLS-1$
-				DatabaseError.unableToSave(this, getTitle(), String.format(Messages.getString("db.name-in-use"), name)); //$NON-NLS-1$
+				DatabaseError.unableToSave(this, getTitle(), Messages.getString("db.name-in-use", name)); //$NON-NLS-1$
 				DatabaseSession.rollback();
 				return;
 			}

@@ -234,10 +234,10 @@ public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 		String title;
 		if (rows.size() == 1) {
 			String value = rows.get(0).toString();
-			action = String.format(Messages.getString("menu.penalty.delete.confirm"), value); //$NON-NLS-1$
+			action = Messages.getString("menu.penalty.delete.confirm", value); //$NON-NLS-1$
 			title = Messages.getString("menu.penalty.delete") + Constants.EN_DASH + value; //$NON-NLS-1$
 		} else {
-			action = String.format(Messages.getString("menu.penalty.delete-multiple.confirm"), rows.size()); //$NON-NLS-1$
+			action = Messages.getString("menu.penalty.delete-multiple.confirm", rows.size()); //$NON-NLS-1$
 			title = Messages.getString("menu.penalty.delete-multiple"); //$NON-NLS-1$
 		}
 		switch (JOptionPane.showConfirmDialog(win.getFrame(), action, title, JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {

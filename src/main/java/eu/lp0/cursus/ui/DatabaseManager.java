@@ -83,7 +83,7 @@ public class DatabaseManager implements ActionListener {
 		assert (Background.isExecutorThread());
 
 		if (win.isOpen() && !win.getDatabase().isSaved()) {
-			switch (JOptionPane.showConfirmDialog(win, String.format(Messages.getString("warn.current-db-not-saved"), win.getDatabase().getName()), //$NON-NLS-1$
+			switch (JOptionPane.showConfirmDialog(win, Messages.getString("warn.current-db-not-saved", win.getDatabase().getName()), //$NON-NLS-1$
 					Constants.APP_NAME + Constants.EN_DASH + action, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE)) {
 			case JOptionPane.YES_OPTION:
 				if (saveDatabase()) {

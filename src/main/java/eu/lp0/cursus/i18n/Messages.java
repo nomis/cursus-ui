@@ -88,6 +88,10 @@ public class Messages {
 		}
 	}
 
+	public static String getString(String key, Object... args) {
+		return String.format(getString(key), args);
+	}
+
 	public static int getKeyEvent(String key) {
 		try {
 			return KeyEvent.class.getDeclaredField("VK_" + RESOURCE_BUNDLE.getString(key + '&')).getInt(KeyEvent.class); //$NON-NLS-1$

@@ -24,7 +24,7 @@ public class DatabaseVersionException extends InvalidDatabaseException {
 	private final Cursus cursus;
 
 	public DatabaseVersionException(Cursus cursus) {
-		super(String.format(Messages.getString("err.db-version-not-supported"), cursus.getVersion())); //$NON-NLS-1$
+		super(Messages.getString("err.db-version-not-supported", cursus.getVersion())); //$NON-NLS-1$
 		this.cursus = cursus;
 	}
 

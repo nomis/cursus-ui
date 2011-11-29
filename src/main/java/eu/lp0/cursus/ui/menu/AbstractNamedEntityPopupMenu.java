@@ -44,7 +44,7 @@ public abstract class AbstractNamedEntityPopupMenu<T extends AbstractEntity & Na
 	}
 
 	protected void confirmDelete(String action) {
-		switch (JOptionPane.showConfirmDialog(win.getFrame(), String.format(Messages.getString(action + ".confirm"), item.getName()), //$NON-NLS-1$
+		switch (JOptionPane.showConfirmDialog(win.getFrame(), Messages.getString(action + ".confirm", item.getName()), //$NON-NLS-1$
 				Messages.getString(action) + Constants.EN_DASH + item.getName(), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
 		case JOptionPane.YES_OPTION:
 			doDelete(action);
