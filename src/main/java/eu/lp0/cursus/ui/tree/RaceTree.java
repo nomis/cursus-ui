@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.ui.tree;
 
+import java.awt.event.ActionEvent;
 import java.util.List;
 
 import javax.swing.JPopupMenu;
@@ -33,6 +34,12 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.ui.actions.DeleteEventAction;
+import eu.lp0.cursus.ui.actions.DeleteRaceAction;
+import eu.lp0.cursus.ui.actions.DeleteSeriesAction;
+import eu.lp0.cursus.ui.actions.NewEventAction;
+import eu.lp0.cursus.ui.actions.NewRaceAction;
+import eu.lp0.cursus.ui.actions.NewSeriesAction;
 import eu.lp0.cursus.ui.component.AbstractTree;
 import eu.lp0.cursus.ui.component.DatabaseSync;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
@@ -80,26 +87,26 @@ public class RaceTree extends AbstractTree<DatabaseTreeNode, RaceEntity> impleme
 	}
 
 	@Override
-	protected void insertFromUserObject(RaceEntity item) {
+	protected void insertFromUserObject(RaceEntity item, ActionEvent ae) {
 		if (item instanceof Series) {
-			new SeriesPopupMenu(win, (Series)item).doCommand(SeriesPopupMenu.Command.NEW_EVENT);
+			new NewEventAction(win, (Series)item).actionPerformed(ae);
 		} else if (item instanceof Event) {
-			new EventPopupMenu(win, (Event)item).doCommand(EventPopupMenu.Command.NEW_RACE);
+			new NewRaceAction(win, (Event)item).actionPerformed(ae);
 		} else if (item instanceof Race) {
-			new RacePopupMenu(win, (Race)item).doCommand(RacePopupMenu.Command.NEW_RACE);
+			new NewRaceAction(win, ((Race)item).getEvent()).actionPerformed(ae);
 		} else if (item == null) {
-			new DatabasePopupMenu(win).doCommand(DatabasePopupMenu.Command.NEW_SERIES);
+			new NewSeriesAction(win).actionPerformed(ae);
 		}
 	}
 
 	@Override
-	protected void deleteFromUserObject(RaceEntity item) {
+	protected void deleteFromUserObject(RaceEntity item, ActionEvent ae) {
 		if (item instanceof Series) {
-			new SeriesPopupMenu(win, (Series)item).doCommand(SeriesPopupMenu.Command.DELETE_SERIES);
+			new DeleteSeriesAction(win, (Series)item).actionPerformed(ae);
 		} else if (item instanceof Event) {
-			new EventPopupMenu(win, (Event)item).doCommand(EventPopupMenu.Command.DELETE_EVENT);
+			new DeleteEventAction(win, (Event)item).actionPerformed(ae);
 		} else if (item instanceof Race) {
-			new RacePopupMenu(win, (Race)item).doCommand(RacePopupMenu.Command.DELETE_RACE);
+			new DeleteRaceAction(win, (Race)item).actionPerformed(ae);
 		}
 	}
 

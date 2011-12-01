@@ -15,17 +15,17 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.menu;
+package eu.lp0.cursus.ui.actions;
+
+import java.awt.event.ActionEvent;
 
 import javax.persistence.PersistenceException;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.lp0.cursus.db.DatabaseSession;
-import eu.lp0.cursus.db.data.AbstractEntity;
 import eu.lp0.cursus.db.data.NamedEntity;
 import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
@@ -33,21 +33,23 @@ import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 
-public abstract class AbstractNamedEntityPopupMenu<T extends AbstractEntity & NamedEntity> extends JPopupMenu {
+public abstract class AbstractDeleteAction<T extends NamedEntity> extends AbstractTranslatedAction {
 	protected final Logger log = LoggerFactory.getLogger(getClass());
-	protected final DatabaseWindow win;
-	protected final T item;
+	private final DatabaseWindow win;
+	private final T item;
 
-	public AbstractNamedEntityPopupMenu(DatabaseWindow win, T item) {
+	public AbstractDeleteAction(String messagesKey, boolean hasMnemonic, DatabaseWindow win, T item) {
+		super(messagesKey, hasMnemonic);
 		this.win = win;
 		this.item = item;
 	}
 
-	protected void confirmDelete(String action) {
-		switch (JOptionPane.showConfirmDialog(win.getFrame(), Messages.getString(action + ".confirm", item.getName()), //$NON-NLS-1$
-				Messages.getString(action) + Constants.EN_DASH + item.getName(), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		switch (JOptionPane.showConfirmDialog(win.getFrame(), Messages.getString(messagesKey + ".confirm", item.getName()), //$NON-NLS-1$
+				getValue(NAME) + Constants.EN_DASH + item.getName(), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
 		case JOptionPane.YES_OPTION:
-			doDelete(action);
+			doDelete();
 			break;
 		case JOptionPane.NO_OPTION:
 		case JOptionPane.CLOSED_OPTION:
@@ -56,29 +58,31 @@ public abstract class AbstractNamedEntityPopupMenu<T extends AbstractEntity & Na
 		}
 	}
 
-	private void doDelete(final String action) {
+	private void doDelete() {
 		Background.execute(new Runnable() {
 			@Override
 			public void run() {
 				win.getDatabase().startSession();
 				try {
 					DatabaseSession.begin();
-					doDelete();
+					doDelete(item);
 					DatabaseSession.commit();
 				} catch (PersistenceException e) {
 					log.error("Unable to delete", e); //$NON-NLS-1$
-					DatabaseError.errorSaving(win.getFrame(), Messages.getString(action) + Constants.EN_DASH + item.getName(), e);
+					DatabaseError.errorSaving(win.getFrame(), getValue(NAME) + Constants.EN_DASH + item.getName(), e);
 					return;
 				} finally {
 					win.getDatabase().endSession();
 				}
 
-				doRefresh();
+				doRefresh(win);
 			}
 		});
 	}
 
-	protected abstract void doDelete();
+	@SuppressWarnings("hiding")
+	protected abstract void doDelete(T item);
 
-	protected abstract void doRefresh();
+	@SuppressWarnings("hiding")
+	protected abstract void doRefresh(DatabaseWindow win);
 }

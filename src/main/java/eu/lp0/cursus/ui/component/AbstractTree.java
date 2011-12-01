@@ -18,6 +18,7 @@
 package eu.lp0.cursus.ui.component;
 
 import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -32,6 +33,9 @@ import javax.swing.tree.TreeSelectionModel;
 import eu.lp0.cursus.ui.util.AccessibleJTreeFix;
 
 public abstract class AbstractTree<R extends TreeNode, T> extends AccessibleJTreeFix {
+	public static final String COMMAND_INSERT = "tree insert"; //$NON-NLS-1$
+	public static final String COMMAND_DELETE = "tree delete"; //$NON-NLS-1$
+
 	protected final DatabaseWindow win;
 	protected final R root;
 
@@ -124,19 +128,19 @@ public abstract class AbstractTree<R extends TreeNode, T> extends AccessibleJTre
 		menuFromUserObject(getSelected()).show(this, x, y);
 	}
 
-	protected abstract void insertFromUserObject(T item);
+	protected abstract void insertFromUserObject(T item, ActionEvent ae);
 
-	protected abstract void deleteFromUserObject(T item);
+	protected abstract void deleteFromUserObject(T item, ActionEvent ae);
 
 	private boolean doInsert() {
-		insertFromUserObject(getSelected());
+		insertFromUserObject(getSelected(), new ActionEvent(this, ActionEvent.ACTION_PERFORMED, COMMAND_INSERT));
 		return true;
 	}
 
 	private boolean doDelete() {
 		TreePath path = getSelectionPath();
 		if (path != null) {
-			deleteFromUserObject(getSelectionFromPath(path));
+			deleteFromUserObject(getSelectionFromPath(path), new ActionEvent(this, ActionEvent.ACTION_PERFORMED, COMMAND_DELETE));
 			return true;
 		} else {
 			return false;

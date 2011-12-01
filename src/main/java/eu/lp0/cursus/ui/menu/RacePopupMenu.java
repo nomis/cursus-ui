@@ -17,87 +17,20 @@
  */
 package eu.lp0.cursus.ui.menu;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 
-import eu.lp0.cursus.db.dao.RaceDAO;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.i18n.Messages;
+import eu.lp0.cursus.ui.actions.DeleteRaceAction;
+import eu.lp0.cursus.ui.actions.EditRaceAction;
+import eu.lp0.cursus.ui.actions.NewRaceAction;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
-import eu.lp0.cursus.ui.component.Displayable;
-import eu.lp0.cursus.ui.race.RaceDetailDialog;
-import eu.lp0.cursus.util.Constants;
 
-public class RacePopupMenu extends AbstractNamedEntityPopupMenu<Race> implements ActionListener {
-	private JMenuItem mnuEditRace;
-	private JMenuItem mnuDeleteRace;
-	private JSeparator mnuSeparator1;
-	private JMenuItem mnuNewRace;
-
-	private static final RaceDAO raceDAO = new RaceDAO();
-
-	public enum Command {
-		EDIT_RACE, DELETE_RACE, NEW_RACE;
-	}
-
+public class RacePopupMenu extends JPopupMenu {
 	public RacePopupMenu(DatabaseWindow win, Race race) {
-		super(win, race);
-
-		mnuEditRace = new JMenuItem(Messages.getString("menu.race.edit")); //$NON-NLS-1$
-		mnuEditRace.setActionCommand(Command.EDIT_RACE.toString());
-		mnuEditRace.addActionListener(this);
-		add(mnuEditRace);
-
-		mnuDeleteRace = new JMenuItem(Messages.getString("menu.race.delete")); //$NON-NLS-1$
-		mnuDeleteRace.setActionCommand(Command.DELETE_RACE.toString());
-		mnuDeleteRace.addActionListener(this);
-		add(mnuDeleteRace);
-
-		mnuSeparator1 = new JSeparator();
-		add(mnuSeparator1);
-
-		mnuNewRace = new JMenuItem(Messages.getString("menu.race.new")); //$NON-NLS-1$
-		mnuNewRace.setActionCommand(Command.NEW_RACE.toString());
-		mnuNewRace.addActionListener(this);
-		add(mnuNewRace);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent ae) {
-		doCommand(Command.valueOf(ae.getActionCommand()));
-	}
-
-	public void doCommand(Command cmd) {
-		Displayable dialog = null;
-
-		switch (cmd) {
-		case EDIT_RACE:
-			dialog = new RaceDetailDialog(win, Messages.getString("menu.race.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
-			break;
-		case DELETE_RACE:
-			confirmDelete("menu.race.delete"); //$NON-NLS-1$
-			break;
-		case NEW_RACE:
-			dialog = new RaceDetailDialog(win, item.getName() + Constants.EN_DASH + Messages.getString("menu.race.new"), new Race(item.getEvent()), false); //$NON-NLS-1$
-			break;
-		}
-
-		if (dialog != null) {
-			dialog.display();
-		}
-	}
-
-	@Override
-	protected void doDelete() {
-		Race race = raceDAO.get(item);
-		race.getEvent().getRaces().remove(race);
-	}
-
-	@Override
-	protected void doRefresh() {
-		win.refreshRaceList();
+		add(new EditRaceAction(win, race));
+		add(new DeleteRaceAction(win, race));
+		add(new JSeparator());
+		add(new NewRaceAction(win, race.getEvent()));
 	}
 }

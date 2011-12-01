@@ -17,21 +17,16 @@
  */
 package eu.lp0.cursus.ui;
 
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -52,17 +47,16 @@ import com.jgoodies.forms.util.DefaultUnitConverter;
 
 import eu.lp0.cursus.app.Main;
 import eu.lp0.cursus.i18n.Messages;
+import eu.lp0.cursus.ui.actions.CloseDialogAction;
 import eu.lp0.cursus.ui.component.Displayable;
+import eu.lp0.cursus.ui.component.LinkJButton;
 import eu.lp0.cursus.ui.preferences.WindowAutoPrefs;
 import eu.lp0.cursus.util.Constants;
 
-public class AboutDialog extends JDialog implements Displayable, ActionListener {
+public class AboutDialog extends JDialog implements Displayable {
 	private static final String TEXT_SPLIT = "\n------------------------------------------------------------------------\n\n"; //$NON-NLS-1$
 
-	protected final Logger log = LoggerFactory.getLogger(getClass());
-
-	private JButton btnClose;
-
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	private WindowAutoPrefs prefs = new WindowAutoPrefs(this);
 
 	public AboutDialog(Frame owner) {
@@ -89,27 +83,7 @@ public class AboutDialog extends JDialog implements Displayable, ActionListener 
 		JLabel lblName = new JLabel(Constants.APP_NAME + ": " + Messages.getString("about.description")); //$NON-NLS-1$ //$NON-NLS-2$
 		getContentPane().add(lblName, "2, 2, 3, 1"); //$NON-NLS-1$
 
-		JButton btnLink = new JButton();
-		btnLink.setText("<html><body><a href=\"" + Constants.APP_URL + "\">" + Constants.APP_URL + "</a></body></html>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		btnLink.setBorderPainted(false);
-		btnLink.setRolloverEnabled(false);
-		btnLink.setFocusPainted(true);
-		btnLink.setOpaque(true);
-		btnLink.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				if (Desktop.isDesktopSupported()) {
-					try {
-						Desktop.getDesktop().browse(new URI(Constants.APP_URL));
-					} catch (IOException e) {
-						log.error("Unable to open browser", e); //$NON-NLS-1$
-					} catch (URISyntaxException e) {
-						log.error("Unable to open browser", e); //$NON-NLS-1$
-					}
-				}
-			}
-		});
-		getContentPane().add(btnLink, "2, 4"); //$NON-NLS-1$
+		getContentPane().add(new LinkJButton(Constants.APP_URL), "2, 4"); //$NON-NLS-1$
 
 		JScrollPane scrCopying = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		getContentPane().add(scrCopying, "2, 6, 3, 1"); //$NON-NLS-1$
@@ -120,18 +94,13 @@ public class AboutDialog extends JDialog implements Displayable, ActionListener 
 		scrCopying.setViewportView(txtCopying);
 		scrCopying.setPreferredSize(new Dimension(scrCopying.getPreferredSize().width, duc.dialogUnitYAsPixel(100, scrCopying)));
 
-		btnClose = new JButton(Messages.getString("dialog.ok")); //$NON-NLS-1$
-		btnClose.addActionListener(this);
+		Action actClose = new CloseDialogAction(this);
+		JButton btnClose = new JButton(actClose);
 		getContentPane().add(btnClose, "4, 8"); //$NON-NLS-1$
 
 		getRootPane().setDefaultButton(btnClose);
-		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), btnClose.getText());
-		getRootPane().getActionMap().put(btnClose.getText(), new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				btnClose.doClick();
-			}
-		});
+		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), CloseDialogAction.class.getName());
+		getRootPane().getActionMap().put(CloseDialogAction.class.getName(), actClose);
 
 		pack();
 		setMinimumSize(getSize());
@@ -163,16 +132,5 @@ public class AboutDialog extends JDialog implements Displayable, ActionListener 
 			}
 		}
 		return sb.toString();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent ae) {
-		if (ae.getSource() == btnClose) {
-			doClose();
-		}
-	}
-
-	private void doClose() {
-		dispose();
 	}
 }

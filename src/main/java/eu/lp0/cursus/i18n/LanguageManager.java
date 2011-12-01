@@ -28,13 +28,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.google.common.eventbus.EventBus;
+
+import eu.lp0.cursus.util.MainEventBus;
 
 public class LanguageManager {
 	private static final Logger log = LoggerFactory.getLogger(LanguageManager.class);
-	private static final EventBus TEMP_BUS = new EventBus(LanguageManager.class.getSimpleName());
-	private static final EventBus EVENT_BUS = new EventBus(Locale.class.getSimpleName());
-
 	private static final String PREF_LOCALE_LANGUAGE = "Messages/locale/language"; //$NON-NLS-1$
 	private static final String PREF_LOCALE_COUNTRY = "Messages/locale/country"; //$NON-NLS-1$
 	private static final String PREF_LOCALE_VARIANT = "Messages/locale/variant"; //$NON-NLS-1$
@@ -69,36 +67,22 @@ public class LanguageManager {
 	}
 
 	public static void register(final Object o, boolean fireCurrentLocale) {
-		if (log.isTraceEnabled()) {
-			log.trace("Register " + o); //$NON-NLS-1$
-		}
 		if (fireCurrentLocale) {
-			synchronized (TEMP_BUS) {
-				TEMP_BUS.register(o);
-				try {
-					synchronized (EVENT_BUS) {
-						Preconditions.checkState(currentLocale != null);
-						TEMP_BUS.post(new LocaleChangeEvent(null, currentLocale, selectedLocale));
-						EVENT_BUS.register(o);
-					}
-				} finally {
-					TEMP_BUS.unregister(o);
-				}
+			synchronized (LanguageManager.class) {
+				Preconditions.checkState(currentLocale != null);
+				MainEventBus.register(o, new LocaleChangeEvent(null, currentLocale, selectedLocale));
 			}
 		} else {
-			EVENT_BUS.register(o);
+			MainEventBus.register(o);
 		}
 	}
 
 	public static void unregister(Object o) {
-		if (log.isTraceEnabled()) {
-			log.trace("Unregister " + o); //$NON-NLS-1$
-		}
-		EVENT_BUS.unregister(o);
+		MainEventBus.unregister(o);
 	}
 
 	private static void changedLocale(final Locale newLocale, final Locale newSelected) {
-		synchronized (EVENT_BUS) {
+		synchronized (LanguageManager.class) {
 			final Locale oldLocale = currentLocale;
 			final String oldToString = oldLocale == null ? "null" : "\"" + oldLocale + "\""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
@@ -107,13 +91,7 @@ public class LanguageManager {
 			}
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					if (log.isTraceEnabled()) {
-						log.trace("Notify locale change from " + oldToString + " to \"" + newLocale + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					}
-					EVENT_BUS.post(new LocaleChangeEvent(oldLocale, newLocale, newSelected));
-					if (log.isTraceEnabled()) {
-						log.trace("Notified locale change from " + oldToString + " to \"" + newLocale + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					}
+					MainEventBus.post(new LocaleChangeEvent(oldLocale, newLocale, newSelected));
 				}
 			});
 
@@ -122,10 +100,10 @@ public class LanguageManager {
 		}
 	}
 
-	private static synchronized void changeLocale(Locale newLocale) {
+	private static void changeLocale(final Locale newLocale) {
 		Locale loadLocale = newLocale.equals(Locale.ROOT) ? Locale.getDefault() : newLocale;
 		try {
-			ResourceBundle resourceBundle = ResourceBundle.getBundle(Messages.BUNDLE_NAME, newLocale);
+			final ResourceBundle resourceBundle = ResourceBundle.getBundle(Messages.BUNDLE_NAME, newLocale);
 
 			if (log.isDebugEnabled()) {
 				log.debug("Loaded resource bundle \"" + resourceBundle.getLocale() + "\" for locale \"" + loadLocale + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -147,7 +125,7 @@ public class LanguageManager {
 		}
 	}
 
-	public static synchronized void setPreferredLocale(Locale locale) {
+	public static void setPreferredLocale(Locale locale) {
 		synchronized (pref) {
 			pref.put(PREF_LOCALE_LANGUAGE, locale.getLanguage());
 			pref.put(PREF_LOCALE_COUNTRY, locale.getCountry());
@@ -155,7 +133,7 @@ public class LanguageManager {
 			if (log.isTraceEnabled()) {
 				log.trace("Set preferred locale to \"" + locale + "\""); //$NON-NLS-1$ //$NON-NLS-2$
 			}
+			changeLocale(locale);
 		}
-		changeLocale(locale);
 	}
 }

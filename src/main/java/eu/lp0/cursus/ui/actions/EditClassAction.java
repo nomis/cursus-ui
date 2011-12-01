@@ -15,34 +15,31 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.series;
+package eu.lp0.cursus.ui.actions;
 
-import eu.lp0.cursus.db.dao.ClassDAO;
-import eu.lp0.cursus.db.dao.SeriesDAO;
+import java.awt.event.ActionEvent;
+
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.ui.common.CommonDetailDialog;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
+import eu.lp0.cursus.ui.series.ClassDetailDialog;
+import eu.lp0.cursus.util.Constants;
 
-public class ClassDetailDialog extends CommonDetailDialog<Class> {
+public class EditClassAction extends AbstractTranslatedAction {
+	private final DatabaseWindow win;
 	private final AbstractDatabaseTab<Series> tab;
+	private final Class clazz;
 
-	private static final SeriesDAO seriesDAO = new SeriesDAO();
-	private static final ClassDAO classDAO = new ClassDAO();
-
-	public ClassDetailDialog(DatabaseWindow win, AbstractDatabaseTab<Series> tab, String title, Class clazz, boolean isUpdate) {
-		super(win, title, classDAO, clazz, isUpdate);
+	public EditClassAction(DatabaseWindow win, AbstractDatabaseTab<Series> tab, Class clazz) {
+		super("menu.class.edit", false); //$NON-NLS-1$
+		this.win = win;
 		this.tab = tab;
+		this.clazz = clazz;
 	}
 
 	@Override
-	protected void prePersist(Class clazz) {
-		clazz.setSeries(seriesDAO.get(clazz.getSeries()));
-	}
-
-	@Override
-	protected void postSave() {
-		win.refreshTab(tab);
+	public void actionPerformed(ActionEvent ae) {
+		new ClassDetailDialog(win, tab, getValue(NAME) + Constants.EN_DASH + clazz.getName(), clazz, true).display();
 	}
 }

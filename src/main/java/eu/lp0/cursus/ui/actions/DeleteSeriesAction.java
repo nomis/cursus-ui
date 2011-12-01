@@ -15,23 +15,27 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.menu;
+package eu.lp0.cursus.ui.actions;
 
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-
-import eu.lp0.cursus.db.data.Class;
-import eu.lp0.cursus.ui.actions.DeleteClassAction;
-import eu.lp0.cursus.ui.actions.EditClassAction;
-import eu.lp0.cursus.ui.actions.NewClassAction;
+import eu.lp0.cursus.db.dao.SeriesDAO;
+import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
-import eu.lp0.cursus.ui.series.SeriesClassesTab;
 
-public class ClassPopupMenu extends JPopupMenu {
-	public ClassPopupMenu(DatabaseWindow win, SeriesClassesTab tab, Class clazz) {
-		add(new EditClassAction(win, tab, clazz));
-		add(new DeleteClassAction(win, tab, clazz));
-		add(new JSeparator());
-		add(new NewClassAction(win, tab, clazz.getSeries()));
+public class DeleteSeriesAction extends AbstractDeleteAction<Series> {
+	private static final SeriesDAO seriesDAO = new SeriesDAO();
+
+	public DeleteSeriesAction(DatabaseWindow win, Series series) {
+		super("menu.series.delete", false, win, series); //$NON-NLS-1$
+	}
+
+	@Override
+	protected void doDelete(Series item) {
+		Series series = seriesDAO.get(item);
+		seriesDAO.remove(series);
+	}
+
+	@Override
+	protected void doRefresh(DatabaseWindow win) {
+		win.refreshRaceList();
 	}
 }

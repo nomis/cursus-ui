@@ -15,30 +15,30 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.menu;
+package eu.lp0.cursus.ui.actions;
 
-import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
-import javax.swing.JMenuBar;
+import javax.swing.Action;
+import javax.swing.KeyStroke;
 
-import eu.lp0.cursus.i18n.LanguageManager;
 import eu.lp0.cursus.ui.DatabaseManager;
 
-public class MainMenu extends JMenuBar {
-	private final FileMenu mnuFile;
+public class FileSaveAsAction extends AbstractTranslatedAction {
+	private final DatabaseManager dbMgr;
 
-	public MainMenu(Frame win, DatabaseManager dbMgr) {
-		add(mnuFile = new FileMenu(win, dbMgr));
-		add(new LangMenu());
-		add(new HelpMenu(win));
-		LanguageManager.register(this, true);
+	public FileSaveAsAction(DatabaseManager dbMgr) {
+		super("menu.file.save-as", true); //$NON-NLS-1$
+		this.dbMgr = dbMgr;
+
+		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
+		putValue(Action.ACTION_COMMAND_KEY, DatabaseManager.Commands.SAVE_AS.toString());
 	}
 
-	public void enableOpen(boolean enabled) {
-		mnuFile.enableOpen(enabled);
-	}
-
-	public void sync(boolean open) {
-		mnuFile.sync(open);
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		dbMgr.actionPerformed(ae);
 	}
 }

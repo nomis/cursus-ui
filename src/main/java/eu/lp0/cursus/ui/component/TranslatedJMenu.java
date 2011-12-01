@@ -15,30 +15,31 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.menu;
+package eu.lp0.cursus.ui.component;
 
-import java.awt.Frame;
+import javax.swing.JMenu;
 
-import javax.swing.JMenuBar;
+import com.google.common.eventbus.Subscribe;
 
 import eu.lp0.cursus.i18n.LanguageManager;
-import eu.lp0.cursus.ui.DatabaseManager;
+import eu.lp0.cursus.i18n.LocaleChangeEvent;
+import eu.lp0.cursus.i18n.Messages;
 
-public class MainMenu extends JMenuBar {
-	private final FileMenu mnuFile;
+public class TranslatedJMenu extends JMenu {
+	protected final String messagesKey;
+	protected final boolean hasMnemonic;
 
-	public MainMenu(Frame win, DatabaseManager dbMgr) {
-		add(mnuFile = new FileMenu(win, dbMgr));
-		add(new LangMenu());
-		add(new HelpMenu(win));
+	public TranslatedJMenu(String messagesKey, boolean hasMnemonic) {
+		this.messagesKey = messagesKey;
+		this.hasMnemonic = hasMnemonic;
 		LanguageManager.register(this, true);
 	}
 
-	public void enableOpen(boolean enabled) {
-		mnuFile.enableOpen(enabled);
-	}
-
-	public void sync(boolean open) {
-		mnuFile.sync(open);
+	@Subscribe
+	public final void updateLanguage(LocaleChangeEvent lce) {
+		setText(Messages.getString(messagesKey));
+		if (hasMnemonic) {
+			setMnemonic(Messages.getKeyEvent(messagesKey));
+		}
 	}
 }

@@ -15,30 +15,31 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.menu;
+package eu.lp0.cursus.ui.actions;
 
 import java.awt.Frame;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 
-import javax.swing.JMenuBar;
+import javax.swing.Action;
+import javax.swing.KeyStroke;
 
-import eu.lp0.cursus.i18n.LanguageManager;
-import eu.lp0.cursus.ui.DatabaseManager;
+public class ExitAction extends AbstractTranslatedAction {
+	private final Frame win;
 
-public class MainMenu extends JMenuBar {
-	private final FileMenu mnuFile;
+	public ExitAction(Frame win) {
+		super("menu.file.exit", true); //$NON-NLS-1$
+		this.win = win;
 
-	public MainMenu(Frame win, DatabaseManager dbMgr) {
-		add(mnuFile = new FileMenu(win, dbMgr));
-		add(new LangMenu());
-		add(new HelpMenu(win));
-		LanguageManager.register(this, true);
+		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
 	}
 
-	public void enableOpen(boolean enabled) {
-		mnuFile.enableOpen(enabled);
-	}
-
-	public void sync(boolean open) {
-		mnuFile.sync(open);
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		WindowEvent wev = new WindowEvent(win, WindowEvent.WINDOW_CLOSING);
+		Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
 	}
 }

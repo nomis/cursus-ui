@@ -15,24 +15,34 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.i18n;
+package eu.lp0.cursus.ui.actions;
 
+import java.awt.event.ActionEvent;
 import java.util.Locale;
 
-/**
- * Supported languages
- */
-public enum SupportedLanguages {
-	en (Locale.ENGLISH), fr (Locale.FRENCH);
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 
+import com.google.common.eventbus.Subscribe;
+
+import eu.lp0.cursus.i18n.LanguageManager;
+import eu.lp0.cursus.i18n.LocaleChangeEvent;
+
+public class SetLanguageAction extends AbstractAction {
 	private final Locale locale;
 
-	private SupportedLanguages(Locale locale) {
-		assert (!locale.equals(Locale.ROOT));
+	public SetLanguageAction(Locale locale) {
 		this.locale = locale;
+		LanguageManager.register(this, true);
 	}
 
-	public Locale getLocale() {
-		return locale;
+	@Subscribe
+	public final void updateLanguage(LocaleChangeEvent lce) {
+		putValue(Action.NAME, locale.getDisplayName(lce.getNewLocale()));
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		LanguageManager.setPreferredLocale(locale);
 	}
 }

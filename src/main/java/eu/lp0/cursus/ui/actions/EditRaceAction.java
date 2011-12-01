@@ -15,23 +15,27 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.menu;
+package eu.lp0.cursus.ui.actions;
 
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
+import java.awt.event.ActionEvent;
 
-import eu.lp0.cursus.db.data.Class;
-import eu.lp0.cursus.ui.actions.DeleteClassAction;
-import eu.lp0.cursus.ui.actions.EditClassAction;
-import eu.lp0.cursus.ui.actions.NewClassAction;
+import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
-import eu.lp0.cursus.ui.series.SeriesClassesTab;
+import eu.lp0.cursus.ui.race.RaceDetailDialog;
+import eu.lp0.cursus.util.Constants;
 
-public class ClassPopupMenu extends JPopupMenu {
-	public ClassPopupMenu(DatabaseWindow win, SeriesClassesTab tab, Class clazz) {
-		add(new EditClassAction(win, tab, clazz));
-		add(new DeleteClassAction(win, tab, clazz));
-		add(new JSeparator());
-		add(new NewClassAction(win, tab, clazz.getSeries()));
+public class EditRaceAction extends AbstractTranslatedAction {
+	private final DatabaseWindow win;
+	private final Race race;
+
+	public EditRaceAction(DatabaseWindow win, Race race) {
+		super("menu.race.edit", false); //$NON-NLS-1$
+		this.win = win;
+		this.race = race;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		new RaceDetailDialog(win, getValue(NAME) + Constants.EN_DASH + race.getName(), race, true).display();
 	}
 }

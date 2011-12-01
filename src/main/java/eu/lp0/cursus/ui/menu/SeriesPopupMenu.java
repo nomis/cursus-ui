@@ -17,98 +17,22 @@
  */
 package eu.lp0.cursus.ui.menu;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 
-import eu.lp0.cursus.db.dao.SeriesDAO;
-import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.i18n.Messages;
+import eu.lp0.cursus.ui.actions.DeleteSeriesAction;
+import eu.lp0.cursus.ui.actions.EditSeriesAction;
+import eu.lp0.cursus.ui.actions.NewEventAction;
+import eu.lp0.cursus.ui.actions.NewSeriesAction;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
-import eu.lp0.cursus.ui.component.Displayable;
-import eu.lp0.cursus.ui.event.EventDetailDialog;
-import eu.lp0.cursus.ui.series.SeriesDetailDialog;
-import eu.lp0.cursus.util.Constants;
 
-public class SeriesPopupMenu extends AbstractNamedEntityPopupMenu<Series> implements ActionListener {
-	private JMenuItem mnuNewEvent;
-	private JMenuItem mnuEditSeries;
-	private JMenuItem mnuDeleteSeries;
-	private JSeparator mnuSeparator1;
-	private JMenuItem mnuNewSeries;
-
-	private static final SeriesDAO seriesDAO = new SeriesDAO();
-
-	public enum Command {
-		NEW_SERIES, NEW_EVENT, EDIT_SERIES, DELETE_SERIES;
-	}
-
+public class SeriesPopupMenu extends JPopupMenu {
 	public SeriesPopupMenu(DatabaseWindow win, Series series) {
-		super(win, series);
-
-		mnuNewEvent = new JMenuItem(Messages.getString("menu.event.new")); //$NON-NLS-1$
-		mnuNewEvent.setActionCommand(Command.NEW_EVENT.toString());
-		mnuNewEvent.addActionListener(this);
-		add(mnuNewEvent);
-
-		mnuEditSeries = new JMenuItem(Messages.getString("menu.series.edit")); //$NON-NLS-1$
-		mnuEditSeries.setActionCommand(Command.EDIT_SERIES.toString());
-		mnuEditSeries.addActionListener(this);
-		add(mnuEditSeries);
-
-		mnuDeleteSeries = new JMenuItem(Messages.getString("menu.series.delete")); //$NON-NLS-1$
-		mnuDeleteSeries.setActionCommand(Command.DELETE_SERIES.toString());
-		mnuDeleteSeries.addActionListener(this);
-		add(mnuDeleteSeries);
-
-		mnuSeparator1 = new JSeparator();
-		add(mnuSeparator1);
-
-		mnuNewSeries = new JMenuItem(Messages.getString("menu.series.new")); //$NON-NLS-1$
-		mnuNewSeries.setActionCommand(Command.NEW_SERIES.toString());
-		mnuNewSeries.addActionListener(this);
-		add(mnuNewSeries);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent ae) {
-		doCommand(Command.valueOf(ae.getActionCommand()));
-	}
-
-	public void doCommand(Command cmd) {
-		Displayable dialog = null;
-
-		switch (cmd) {
-		case NEW_EVENT:
-			dialog = new EventDetailDialog(win, item.getName() + Constants.EN_DASH + Messages.getString("menu.event.new"), new Event(item), false); //$NON-NLS-1$
-			break;
-		case EDIT_SERIES:
-			dialog = new SeriesDetailDialog(win, Messages.getString("menu.series.edit") + Constants.EN_DASH + item.getName(), item, true); //$NON-NLS-1$
-			break;
-		case DELETE_SERIES:
-			confirmDelete("menu.series.delete"); //$NON-NLS-1$
-			break;
-		case NEW_SERIES:
-			dialog = new SeriesDetailDialog(win, Messages.getString("menu.series.new"), new Series(), false); //$NON-NLS-1$
-			break;
-		}
-
-		if (dialog != null) {
-			dialog.display();
-		}
-	}
-
-	@Override
-	protected void doDelete() {
-		Series series = seriesDAO.get(item);
-		seriesDAO.remove(series);
-	}
-
-	@Override
-	protected void doRefresh() {
-		win.refreshRaceList();
+		add(new NewEventAction(win, series));
+		add(new EditSeriesAction(win, series));
+		add(new DeleteSeriesAction(win, series));
+		add(new JSeparator());
+		add(new NewSeriesAction(win));
 	}
 }

@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.ui.tree;
 
+import java.awt.event.ActionEvent;
 import java.util.List;
 
 import javax.swing.JPopupMenu;
@@ -26,6 +27,8 @@ import javax.swing.tree.TreePath;
 
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.ui.actions.DeleteClassAction;
+import eu.lp0.cursus.ui.actions.NewClassAction;
 import eu.lp0.cursus.ui.component.AbstractTree;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.menu.ClassPopupMenu;
@@ -66,18 +69,18 @@ public class ClassTree extends AbstractTree<ClassListTreeNode, Class> {
 	}
 
 	@Override
-	protected void insertFromUserObject(Class item) {
+	protected void insertFromUserObject(Class item, ActionEvent ae) {
 		if (item instanceof Class) {
-			new ClassPopupMenu(win, tab, item).doCommand(ClassPopupMenu.Command.NEW_CLASS);
+			new NewClassAction(win, tab, item.getSeries()).actionPerformed(ae);
 		} else if (item == null) {
-			new ClassesPopupMenu(win, tab, currentSeries).doCommand(ClassesPopupMenu.Command.NEW_CLASS);
+			new NewClassAction(win, tab, currentSeries).actionPerformed(ae);
 		}
 	}
 
 	@Override
-	protected void deleteFromUserObject(Class item) {
+	protected void deleteFromUserObject(Class item, ActionEvent ae) {
 		if (item instanceof Class) {
-			new ClassPopupMenu(win, tab, item).doCommand(ClassPopupMenu.Command.DELETE_CLASS);
+			new DeleteClassAction(win, tab, item).actionPerformed(ae);
 		}
 	}
 

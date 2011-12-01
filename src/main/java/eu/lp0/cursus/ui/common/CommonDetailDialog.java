@@ -19,12 +19,11 @@ package eu.lp0.cursus.ui.common;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
 
 import javax.persistence.PersistenceException;
-import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -45,6 +44,8 @@ import eu.lp0.cursus.db.dao.NamedEntityDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
 import eu.lp0.cursus.db.data.NamedEntity;
 import eu.lp0.cursus.i18n.Messages;
+import eu.lp0.cursus.ui.actions.CancelDialogAction;
+import eu.lp0.cursus.ui.actions.SaveDialogAction;
 import eu.lp0.cursus.ui.component.DatabaseTextField;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
@@ -53,7 +54,7 @@ import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 import eu.lp0.cursus.util.SwingHacks;
 
-public abstract class CommonDetailDialog<T extends AbstractEntity & NamedEntity> extends JDialog implements Displayable, ActionListener {
+public abstract class CommonDetailDialog<T extends AbstractEntity & NamedEntity> extends JDialog implements Displayable {
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 	protected final DatabaseWindow win;
 	private final String title;
@@ -63,8 +64,6 @@ public abstract class CommonDetailDialog<T extends AbstractEntity & NamedEntity>
 
 	private JTextField txtName;
 	private JTextField txtDesc;
-	private JButton btnCancel;
-	private JButton btnSave;
 
 	private WindowAutoPrefs prefs = new WindowAutoPrefs(this);
 
@@ -109,35 +108,25 @@ public abstract class CommonDetailDialog<T extends AbstractEntity & NamedEntity>
 		txtDesc = new DatabaseTextField(origItem.getDescription(), Constants.MAX_STRING_LEN);
 		getContentPane().add(txtDesc, "4, 4, 4, 1"); //$NON-NLS-1$
 
-		btnCancel = new JButton(Messages.getString("dialog.cancel"), SwingHacks.getCancelIcon()); //$NON-NLS-1$
-		btnCancel.addActionListener(this);
+		Action actCancel = new CancelDialogAction(this);
+		JButton btnCancel = new JButton(actCancel);
 
-		btnSave = new JButton(Messages.getString("dialog.save"), SwingHacks.getYesIcon()); //$NON-NLS-1$
-		btnSave.addActionListener(this);
+		JButton btnSave = new JButton(new SaveDialogAction() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				doSave();
+			}
+		});
 
 		SwingHacks.addButtonsInUIOrder(getContentPane(), Arrays.asList(btnSave, btnCancel), Arrays.asList("5, 6", "7, 6")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		getRootPane().setDefaultButton(btnSave);
-		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), btnCancel.getText());
-		getRootPane().getActionMap().put(btnCancel.getText(), new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				btnCancel.doClick();
-			}
-		});
+		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), CancelDialogAction.class.getName());
+		getRootPane().getActionMap().put(CancelDialogAction.class.getName(), actCancel);
 
 		pack();
 		setMinimumSize(getSize());
 		setSize(getSize().width * 3 / 2, getSize().height);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent ae) {
-		if (ae.getSource() == btnSave) {
-			doSave();
-		} else if (ae.getSource() == btnCancel) {
-			doCancel();
-		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -181,10 +170,6 @@ public abstract class CommonDetailDialog<T extends AbstractEntity & NamedEntity>
 		origItem = item;
 
 		postSave();
-		dispose();
-	}
-
-	private void doCancel() {
 		dispose();
 	}
 
