@@ -42,7 +42,7 @@ public class LanguageManager {
 	private static Locale selectedLocale = Locale.ROOT;
 
 	static {
-		Locale preferredLocale = LanguageManager.getPreferredLocale();
+		Locale preferredLocale = getPreferredLocale();
 
 		if (log.isTraceEnabled()) {
 			log.trace("Default locale is \"" + Locale.getDefault() + "\""); //$NON-NLS-1$ //$NON-NLS-2$

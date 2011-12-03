@@ -23,8 +23,12 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class Messages {
-	static final String BUNDLE_NAME = "eu.lp0.cursus.messages"; //$NON-NLS-1$
+	public static final String BUNDLE_NAME = "eu.lp0.cursus.messages"; //$NON-NLS-1$
 	private static volatile ResourceBundle RESOURCE_BUNDLE;
+
+	static {
+		LanguageManager.getPreferredLocale();
+	}
 
 	static void setBundle(ResourceBundle bundle) {
 		RESOURCE_BUNDLE = bundle;
