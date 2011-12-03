@@ -75,14 +75,10 @@ public final class Series extends AbstractEntity implements Comparable<Series>, 
 	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "series", orphanRemoval = true)
 	@OrderColumn(name = "series_order", nullable = false)
 	public List<Event> getEvents() {
-		while (events.remove(null)) {
-		}
 		return events;
 	}
 
 	public void setEvents(List<Event> events) {
-		while (events.remove(null)) {
-		}
 		this.events = events;
 	}
 

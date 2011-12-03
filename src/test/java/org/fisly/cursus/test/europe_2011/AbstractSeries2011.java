@@ -476,6 +476,7 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 			Series series = seriesDAO.find(SERIES_NAME);
 
 			Event event1 = new Event(series, EVENT1_NAME);
+			series.getEvents().add(event1);
 			eventDAO.persist(event1);
 
 			DatabaseSession.commit();
@@ -510,6 +511,7 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 
 			Race race1 = new Race(event1, RACE1_NAME);
+			event1.getRaces().add(race1);
 			registerPilots(race1);
 			race1.getEvents().add(new RaceEvent(RaceEvent.Type.START));
 			race1.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "", H66)); //$NON-NLS-1$
@@ -1082,6 +1084,7 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 
 			Race race2 = new Race(event1, RACE2_NAME);
+			event1.getRaces().add(race2);
 			registerPilots(race2);
 			race2.getEvents().add(new RaceEvent(RaceEvent.Type.START));
 			race2.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "", H66)); //$NON-NLS-1$
@@ -1828,6 +1831,7 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 
 			Race race3 = new Race(event1, RACE3_NAME);
+			event1.getRaces().add(race3);
 			registerPilots(race3);
 			race3.getEvents().add(new RaceEvent(RaceEvent.Type.START));
 			race3.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "", H66)); //$NON-NLS-1$
@@ -2446,6 +2450,7 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 
 			Race race4 = new Race(event1, RACE4_NAME);
+			event1.getRaces().add(race4);
 			registerPilots(race4);
 			race4.getEvents().add(new RaceEvent(RaceEvent.Type.START));
 			race4.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "", G22)); //$NON-NLS-1$
@@ -3054,6 +3059,7 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 
 			Race race5 = new Race(event1, RACE5_NAME);
+			event1.getRaces().add(race5);
 			registerPilots(race5);
 			race5.getEvents().add(new RaceEvent(RaceEvent.Type.START));
 			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "", H66)); //$NON-NLS-1$
@@ -3368,6 +3374,7 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 
 			Race race6 = new Race(event1, RACE6_NAME);
+			event1.getRaces().add(race6);
 			registerPilots(race6);
 			race6.getEvents().add(new RaceEvent(RaceEvent.Type.START));
 			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "", G25)); //$NON-NLS-1$

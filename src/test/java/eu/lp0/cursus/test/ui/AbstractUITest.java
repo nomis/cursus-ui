@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.test.ui;
 
+import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -56,7 +57,7 @@ import eu.lp0.cursus.ui.util.AccessibleComponents;
 import eu.lp0.cursus.util.Background;
 
 public class AbstractUITest extends AbstractDataTest {
-	private static final int CALL_TIMEOUT = 5000;
+	private static final int CALL_TIMEOUT = 15000;
 	protected Main main;
 	protected Accessible mainWindow;
 	protected Accessible menuBar;
@@ -97,6 +98,7 @@ public class AbstractUITest extends AbstractDataTest {
 			@Override
 			public void run() {
 				main.close(true);
+				((Window)mainWindow).dispose();
 			}
 		});
 	}

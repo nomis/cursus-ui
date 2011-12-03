@@ -35,6 +35,7 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ComparisonChain;
 
 import eu.lp0.cursus.util.Constants;
@@ -74,16 +75,16 @@ public final class Race extends AbstractEntity implements Comparable<Race>, Race
 		this.event = event;
 	}
 
-	private Integer eventOrder;
-
 	@Column(name = "event_order", nullable = false)
 	public Integer getEventOrder() {
-		return eventOrder != null ? eventOrder : getEvent().getRaces().size();
+		int index = getEvent().getRaces().indexOf(this);
+		Preconditions.checkState(index != -1, "Race does not exist in event"); //$NON-NLS-1$
+		return index;
 	}
 
 	@SuppressWarnings("unused")
 	private void setEventOrder(int eventOrder) {
-		this.eventOrder = eventOrder;
+		// Preconditions.checkArgument(getEventOrder() == eventOrder);
 	}
 
 	private String name;
@@ -144,6 +145,6 @@ public final class Race extends AbstractEntity implements Comparable<Race>, Race
 
 	@Override
 	public int compareTo(Race o) {
-		return ComparisonChain.start().compare(getEvent(), o.getEvent()).compare(getEventOrder(), o.getEventOrder()).result();
+		return ComparisonChain.start().compare(getEvent(), o.getEvent()).compare(getName(), o.getName()).result();
 	}
 }

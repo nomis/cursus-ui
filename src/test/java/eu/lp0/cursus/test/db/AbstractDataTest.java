@@ -40,4 +40,12 @@ public class AbstractDataTest {
 	protected RaceAttendeeDAO raceAttendeeDAO = new RaceAttendeeDAO();
 	protected RaceNumberDAO raceNumberDAO = new RaceNumberDAO();
 	protected SeriesDAO seriesDAO = new SeriesDAO();
+
+	static {
+		try {
+			assert (false);
+			throw new Error("Assertions disabled"); //$NON-NLS-1$
+		} catch (AssertionError e) {
+		}
+	}
 }

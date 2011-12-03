@@ -29,8 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.lp0.cursus.db.dao.CursusDAO;
-import eu.lp0.cursus.db.dao.EventDAO;
-import eu.lp0.cursus.db.dao.RaceDAO;
 import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Cursus;
 import eu.lp0.cursus.db.data.Event;
@@ -51,8 +49,6 @@ public abstract class Database {
 
 	private static final CursusDAO cursusDAO = new CursusDAO();
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
-	private static final EventDAO eventDAO = new EventDAO();
-	private static final RaceDAO raceDAO = new RaceDAO();
 
 	protected Database(String name, String url, String user, String password) throws SQLException, DatabaseVersionException, InvalidDatabaseException {
 		this.name = name;
@@ -110,13 +106,11 @@ public abstract class Database {
 				log.info("Database \"" + name + "\" has no series, creating untitled series"); //$NON-NLS-1$ //$NON-NLS-2$
 
 				Series series = new Series(Messages.getString(UNTITLED_SERIES));
-				seriesDAO.persist(series);
-
 				Event event = new Event(series, Messages.getString(UNTITLED_EVENT));
-				eventDAO.persist(event);
-
+				series.getEvents().add(event);
 				Race race = new Race(event, Messages.getString(UNTITLED_RACE));
-				raceDAO.persist(race);
+				event.getRaces().add(race);
+				seriesDAO.persist(series);
 			}
 
 			DatabaseSession.commit();

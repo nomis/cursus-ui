@@ -177,6 +177,7 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 			Series series = seriesDAO.find(SERIES_NAME);
 
 			Event event1 = new Event(series, EVENT1_NAME);
+			series.getEvents().add(event1);
 			eventDAO.persist(event1);
 
 			DatabaseSession.commit();
@@ -206,6 +207,7 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 
 			Race race1 = new Race(event1, RACE1_NAME);
+			event1.getRaces().add(race1);
 			race1.getAttendees().put(sco018, new RaceAttendee(race1, sco018, RaceAttendee.Type.PILOT));
 			race1.getAttendees().put(sco019, new RaceAttendee(race1, sco019, RaceAttendee.Type.PILOT));
 			race1.getAttendees().put(sco060, new RaceAttendee(race1, sco060, RaceAttendee.Type.V_SCORER));

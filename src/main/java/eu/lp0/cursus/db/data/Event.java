@@ -30,6 +30,7 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ComparisonChain;
 
 import eu.lp0.cursus.util.Constants;
@@ -69,16 +70,16 @@ public final class Event extends AbstractEntity implements Comparable<Event>, Ra
 		this.series = series;
 	}
 
-	private Integer seriesOrder;
-
 	@Column(name = "series_order", nullable = false)
 	public Integer getSeriesOrder() {
-		return seriesOrder != null ? seriesOrder : getSeries().getEvents().size();
+		int index = getSeries().getEvents().indexOf(this);
+		Preconditions.checkState(index != -1, "Event does not exist in series"); //$NON-NLS-1$
+		return index;
 	}
 
 	@SuppressWarnings("unused")
 	private void setSeriesOrder(int seriesOrder) {
-		this.seriesOrder = seriesOrder;
+		// Preconditions.checkArgument(getSeriesOrder() == seriesOrder);
 	}
 
 	private String name;
@@ -108,14 +109,10 @@ public final class Event extends AbstractEntity implements Comparable<Event>, Ra
 	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "event", orphanRemoval = true)
 	@OrderColumn(name = "event_order", nullable = false)
 	public List<Race> getRaces() {
-		while (races.remove(null)) {
-		}
 		return races;
 	}
 
 	public void setRaces(List<Race> races) {
-		while (races.remove(null)) {
-		}
 		this.races = races;
 	}
 
@@ -126,6 +123,6 @@ public final class Event extends AbstractEntity implements Comparable<Event>, Ra
 
 	@Override
 	public int compareTo(Event o) {
-		return ComparisonChain.start().compare(getSeries(), o.getSeries()).compare(getSeriesOrder(), o.getSeriesOrder()).result();
+		return ComparisonChain.start().compare(getSeries(), o.getSeries()).compare(getName(), o.getName()).result();
 	}
 }

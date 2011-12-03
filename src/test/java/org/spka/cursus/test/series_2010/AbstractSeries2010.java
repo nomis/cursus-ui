@@ -191,6 +191,7 @@ public abstract class AbstractSeries2010 extends AbstractDatabaseTest {
 			Series series = seriesDAO.find(SERIES_NAME);
 
 			Event event1 = new Event(series, EVENT1_NAME);
+			series.getEvents().add(event1);
 			eventDAO.persist(event1);
 
 			DatabaseSession.commit();
@@ -222,6 +223,7 @@ public abstract class AbstractSeries2010 extends AbstractDatabaseTest {
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 
 			Race race1 = new Race(event1, RACE1_NAME);
+			event1.getRaces().add(race1);
 			race1.getAttendees().put(sco018, new RaceAttendee(race1, sco018, RaceAttendee.Type.PILOT));
 			race1.getAttendees().put(sco019, new RaceAttendee(race1, sco019, RaceAttendee.Type.PILOT));
 			race1.getAttendees().put(sco042, new RaceAttendee(race1, sco042, RaceAttendee.Type.PILOT));
@@ -307,6 +309,7 @@ public abstract class AbstractSeries2010 extends AbstractDatabaseTest {
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 
 			Race race2 = new Race(event1, RACE2_NAME);
+			event1.getRaces().add(race2);
 			race2.getAttendees().put(sco018, new RaceAttendee(race2, sco018, RaceAttendee.Type.PILOT));
 			race2.getAttendees().put(sco019, new RaceAttendee(race2, sco019, RaceAttendee.Type.PILOT));
 			race2.getAttendees().put(sco042, new RaceAttendee(race2, sco042, RaceAttendee.Type.PILOT));
@@ -397,6 +400,7 @@ public abstract class AbstractSeries2010 extends AbstractDatabaseTest {
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 
 			Race race3 = new Race(event1, RACE3_NAME);
+			event1.getRaces().add(race3);
 			race3.getAttendees().put(sco018, new RaceAttendee(race3, sco018, RaceAttendee.Type.PILOT));
 			race3.getAttendees().put(sco019, new RaceAttendee(race3, sco019, RaceAttendee.Type.PILOT));
 			race3.getAttendees().put(sco042, new RaceAttendee(race3, sco042, RaceAttendee.Type.PILOT));
@@ -501,6 +505,7 @@ public abstract class AbstractSeries2010 extends AbstractDatabaseTest {
 			Series series = seriesDAO.find(SERIES_NAME);
 
 			Event event2 = new Event(series, EVENT2_NAME);
+			series.getEvents().add(event2);
 			eventDAO.persist(event2);
 
 			DatabaseSession.commit();
@@ -530,6 +535,7 @@ public abstract class AbstractSeries2010 extends AbstractDatabaseTest {
 			Event event2 = eventDAO.find(series, EVENT2_NAME);
 
 			Race race4 = new Race(event2, RACE4_NAME);
+			event2.getRaces().add(race4);
 			race4.getAttendees().put(sco019, new RaceAttendee(race4, sco019, RaceAttendee.Type.M_RACE_MASTER));
 			race4.getAttendees().put(sco060, new RaceAttendee(race4, sco060, RaceAttendee.Type.M_SCORER));
 			race4.getAttendees().put(sco068, new RaceAttendee(race4, sco068, RaceAttendee.Type.PILOT));
@@ -612,6 +618,7 @@ public abstract class AbstractSeries2010 extends AbstractDatabaseTest {
 			Series series = seriesDAO.find(SERIES_NAME);
 
 			Event event3 = new Event(series, EVENT3_NAME);
+			series.getEvents().add(event3);
 			eventDAO.persist(event3);
 
 			DatabaseSession.commit();
@@ -641,6 +648,7 @@ public abstract class AbstractSeries2010 extends AbstractDatabaseTest {
 			Event event3 = eventDAO.find(series, EVENT3_NAME);
 
 			Race race5 = new Race(event3, RACE5_NAME);
+			event3.getRaces().add(race5);
 			race5.getAttendees().put(sco018, new RaceAttendee(race5, sco018, RaceAttendee.Type.PILOT));
 			race5.getAttendees().put(sco019, new RaceAttendee(race5, sco019, RaceAttendee.Type.PILOT));
 			race5.getAttendees().put(sco060, new RaceAttendee(race5, sco060, RaceAttendee.Type.PILOT));
@@ -733,6 +741,7 @@ public abstract class AbstractSeries2010 extends AbstractDatabaseTest {
 			Series series = seriesDAO.find(SERIES_NAME);
 
 			Event event4 = new Event(series, EVENT4_NAME);
+			series.getEvents().add(event4);
 			eventDAO.persist(event4);
 
 			DatabaseSession.commit();
@@ -764,6 +773,7 @@ public abstract class AbstractSeries2010 extends AbstractDatabaseTest {
 			Event event4 = eventDAO.find(series, EVENT4_NAME);
 
 			Race race6 = new Race(event4, RACE6_NAME);
+			event4.getRaces().add(race6);
 			race6.getAttendees().put(sco018, new RaceAttendee(race6, sco018, RaceAttendee.Type.PILOT));
 			race6.getAttendees().put(sco019, new RaceAttendee(race6, sco019, RaceAttendee.Type.PILOT));
 			race6.getAttendees().put(sco068, new RaceAttendee(race6, sco068, RaceAttendee.Type.PILOT));
@@ -882,6 +892,7 @@ public abstract class AbstractSeries2010 extends AbstractDatabaseTest {
 			Event event4 = eventDAO.find(series, EVENT4_NAME);
 
 			Race race7 = new Race(event4, RACE7_NAME);
+			event4.getRaces().add(race7);
 			race7.getAttendees().put(sco018, new RaceAttendee(race7, sco018, RaceAttendee.Type.PILOT));
 			race7.getAttendees().put(sco019, new RaceAttendee(race7, sco019, RaceAttendee.Type.PILOT));
 			race7.getAttendees().put(sco068, new RaceAttendee(race7, sco068, RaceAttendee.Type.PILOT));
@@ -980,6 +991,7 @@ public abstract class AbstractSeries2010 extends AbstractDatabaseTest {
 			Event event4 = eventDAO.find(series, EVENT4_NAME);
 
 			Race race8 = new Race(event4, RACE8_NAME);
+			event4.getRaces().add(race8);
 			race8.getAttendees().put(sco018, new RaceAttendee(race8, sco018, RaceAttendee.Type.PILOT));
 			race8.getAttendees().put(sco019, new RaceAttendee(race8, sco019, RaceAttendee.Type.PILOT));
 			race8.getAttendees().put(sco068, new RaceAttendee(race8, sco068, RaceAttendee.Type.PILOT));
