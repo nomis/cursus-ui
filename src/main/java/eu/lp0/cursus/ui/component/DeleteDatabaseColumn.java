@@ -20,6 +20,7 @@ package eu.lp0.cursus.ui.component;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -56,6 +57,7 @@ public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseCol
 	private final EntityDAO<T> dao;
 	private final String action;
 	private final HeaderRenderer headerRenderer_;
+	private final JButton stdButton = new JButton("M"); //$NON-NLS-1$
 	private JTable table;
 	private JTableHeader header;
 	private DatabaseTableModel<T> model;
@@ -65,13 +67,24 @@ public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseCol
 		this.dao = dao;
 		this.action = action;
 
-		setMinWidth(25);
-		setPreferredWidth(25);
-		setMaxWidth(25);
-
 		headerRenderer = headerRenderer_ = new HeaderRenderer();
 		cellRenderer = new CellRenderer();
 		cellEditor = new CellEditor();
+	}
+
+	@Override
+	public int getMinWidth() {
+		return getPreferredWidth();
+	}
+
+	@Override
+	public int getMaxWidth() {
+		return getPreferredWidth();
+	}
+
+	@Override
+	public int getPreferredWidth() {
+		return stdButton.getPreferredSize().height;
 	}
 
 	@Override
@@ -288,6 +301,7 @@ public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseCol
 
 		public CellJButton(String text) {
 			super(text);
+			setMargin(new Insets(0, 0, 0, 0));
 		}
 
 		public void setFocus(boolean focus) {
