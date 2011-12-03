@@ -22,10 +22,19 @@ public enum DatabaseVersion {
 
 	public long asLong() {
 		String[] ver = name().split("_"); //$NON-NLS-1$
-		return Long.valueOf(ver[1]) << 32 + Long.valueOf(ver[2]) << 16 + Long.valueOf(ver[3]);
+		return (Long.valueOf(ver[1]) << 32) | (Long.valueOf(ver[2]) << 16) | Long.valueOf(ver[3]);
 	}
 
 	public static DatabaseVersion getLatest() {
 		return values()[values().length - 1];
+	}
+
+	public static String parseLong(long ver) {
+		return String.format("%d.%d.%d", (ver >> 32), (ver >> 16) & 0xFFFF, ver & 0xFFFF); //$NON-NLS-1$
+	}
+
+	@Override
+	public String toString() {
+		return parseLong(asLong());
 	}
 }

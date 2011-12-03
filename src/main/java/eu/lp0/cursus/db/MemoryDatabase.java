@@ -27,7 +27,7 @@ public class MemoryDatabase extends Database {
 	private static final AtomicLong UNTITLED = new AtomicLong();
 
 	public MemoryDatabase() throws SQLException, InvalidDatabaseException {
-		super(Messages.getString("db.untitled", UNTITLED.incrementAndGet()), "jdbc:hsqldb:mem:" + UUID.randomUUID(), "SA", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		super(Messages.getString("db.untitled", UNTITLED.incrementAndGet()), "jdbc:hsqldb:mem:" + UUID.randomUUID(), "SA", "", false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	@Override

@@ -18,21 +18,22 @@
 package eu.lp0.cursus.db;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
 import com.google.common.base.Preconditions;
 
 public class DatabaseSession {
 	private static final ThreadLocal<EntityManager> THREADS = new ThreadLocal<EntityManager>();
-	private final Database database;
+	private final EntityManagerFactory emf;
 
-	DatabaseSession(Database database) {
-		this.database = database;
+	DatabaseSession(EntityManagerFactory emf) {
+		this.emf = emf;
 	}
 
 	void startSession() {
 		Preconditions.checkState(THREADS.get() == null, "Session already open"); //$NON-NLS-1$
-		THREADS.set(database.createEntityManager());
+		THREADS.set(emf.createEntityManager());
 	}
 
 	public static EntityManager getEntityManager() {
