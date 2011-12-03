@@ -39,7 +39,6 @@ import javax.swing.SwingUtilities;
 import junit.framework.Assert;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 
 import com.google.common.base.Objects;
@@ -102,10 +101,10 @@ public class AbstractUITest extends AbstractDataTest {
 		});
 	}
 
-	@AfterClass
-	public static void shutdownExecutor() throws InterruptedException {
-		Background.shutdownAndWait(CALL_TIMEOUT, TimeUnit.MILLISECONDS);
-	}
+	// @AfterClass
+	// public static void shutdownExecutor() throws InterruptedException {
+	// Background.shutdownAndWait(CALL_TIMEOUT, TimeUnit.MILLISECONDS);
+	// }
 
 	public void executeWithTimeout(Runnable run) throws Exception {
 		final FutureTask<Void> task = new FutureTask<Void>(run, null);
