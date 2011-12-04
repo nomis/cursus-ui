@@ -17,22 +17,33 @@
  */
 package eu.lp0.cursus.ui.actions;
 
+import java.util.List;
+
 import eu.lp0.cursus.db.dao.EventDAO;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class DeleteEventAction extends AbstractDeleteAction<Event> {
+public class MoveEventUpAction extends AbstractMoveAction<Event> {
 	private static final EventDAO eventDAO = new EventDAO();
 
-	public DeleteEventAction(DatabaseWindow win, Event event) {
-		super("menu.event.delete", false, win, event); //$NON-NLS-1$
+	public MoveEventUpAction(DatabaseWindow win, Event race) {
+		super("menu.event.move-up", false, win, race); //$NON-NLS-1$
 	}
 
 	@Override
-	protected void doDelete(Event item) {
+	protected boolean doMove(Event item) {
 		Event event = eventDAO.get(item);
-		event.getSeries().getEvents().remove(event);
-		eventDAO.remove(event);
+		int pos = event.getSeriesOrder();
+		if (pos > 0) {
+			// Can move event earlier in the series
+			List<Event> events = event.getSeries().getEvents();
+			events.set(pos, events.get(pos - 1));
+			events.set(pos - 1, event);
+			return true;
+		} else {
+			// Can't move this event earlier in the series
+			return false;
+		}
 	}
 
 	@Override

@@ -17,22 +17,46 @@
  */
 package eu.lp0.cursus.ui.actions;
 
+import java.util.List;
+
 import eu.lp0.cursus.db.dao.RaceDAO;
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
-public class DeleteRaceAction extends AbstractDeleteAction<Race> {
+public class MoveRaceUpAction extends AbstractMoveAction<Race> {
 	private static final RaceDAO raceDAO = new RaceDAO();
 
-	public DeleteRaceAction(DatabaseWindow win, Race race) {
-		super("menu.race.delete", false, win, race); //$NON-NLS-1$
+	public MoveRaceUpAction(DatabaseWindow win, Race race) {
+		super("menu.race.move-up", false, win, race); //$NON-NLS-1$
 	}
 
 	@Override
-	protected void doDelete(Race item) {
+	protected boolean doMove(Race item) {
 		Race race = raceDAO.get(item);
-		race.getEvent().getRaces().remove(race);
-		raceDAO.remove(race);
+		Event event = race.getEvent();
+		int posRace = race.getEventOrder();
+		if (posRace > 0) {
+			// Can move race earlier in the event
+			List<Race> races = event.getRaces();
+			races.set(posRace, races.get(posRace - 1));
+			races.set(posRace - 1, race);
+			return true;
+		} else {
+			// Can't move this race earlier in the event
+			int posEvent = event.getSeriesOrder();
+			if (posEvent > 0) {
+				// Can move the race to an earlier event
+				Event newEvent = event.getSeries().getEvents().get(posEvent - 1);
+				event.getRaces().remove(race);
+				race.setEvent(newEvent);
+				newEvent.getRaces().add(race);
+				return true;
+			} else {
+				// Can't move the race to an earlier event
+				return false;
+			}
+		}
 	}
 
 	@Override

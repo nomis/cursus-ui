@@ -37,6 +37,7 @@ public class DeleteClassAction extends AbstractDeleteAction<Class> {
 	protected void doDelete(Class item) {
 		Class clazz = classDAO.get(item);
 		clazz.getSeries().getClasses().remove(clazz);
+		classDAO.remove(clazz);
 	}
 
 	@Override

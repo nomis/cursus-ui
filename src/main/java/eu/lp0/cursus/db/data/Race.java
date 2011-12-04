@@ -33,6 +33,7 @@ import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import com.google.common.base.Preconditions;
@@ -65,8 +66,9 @@ public final class Race extends AbstractEntity implements Comparable<Race>, Race
 
 	private Event event;
 
+	// Should be bidirectional, but Hibernate refuse to fix HHH-5390
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "event_id", nullable = false)
+	@JoinColumn(name = "event_id", insertable = false, updatable = false, nullable = false)
 	public Event getEvent() {
 		return event;
 	}
@@ -75,16 +77,11 @@ public final class Race extends AbstractEntity implements Comparable<Race>, Race
 		this.event = event;
 	}
 
-	@Column(name = "event_order", nullable = false)
+	@Transient
 	public Integer getEventOrder() {
 		int index = getEvent().getRaces().indexOf(this);
 		Preconditions.checkState(index != -1, "Race does not exist in event"); //$NON-NLS-1$
 		return index;
-	}
-
-	@SuppressWarnings("unused")
-	private void setEventOrder(int eventOrder) {
-		// Preconditions.checkArgument(getEventOrder() == eventOrder);
 	}
 
 	private String name;
@@ -145,6 +142,6 @@ public final class Race extends AbstractEntity implements Comparable<Race>, Race
 
 	@Override
 	public int compareTo(Race o) {
-		return ComparisonChain.start().compare(getEvent(), o.getEvent()).compare(getName(), o.getName()).result();
+		return ComparisonChain.start().compare(getEvent(), o.getEvent()).compare(getEventOrder(), o.getEventOrder()).result();
 	}
 }

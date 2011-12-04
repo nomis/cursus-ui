@@ -28,6 +28,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import com.google.common.base.Preconditions;
@@ -60,8 +61,9 @@ public final class Event extends AbstractEntity implements Comparable<Event>, Ra
 
 	private Series series;
 
+	// Should be bidirectional, but Hibernate refuse to fix HHH-5390
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "series_id", nullable = false)
+	@JoinColumn(name = "series_id", insertable = false, updatable = false, nullable = false)
 	public Series getSeries() {
 		return series;
 	}
@@ -70,16 +72,11 @@ public final class Event extends AbstractEntity implements Comparable<Event>, Ra
 		this.series = series;
 	}
 
-	@Column(name = "series_order", nullable = false)
+	@Transient
 	public Integer getSeriesOrder() {
 		int index = getSeries().getEvents().indexOf(this);
 		Preconditions.checkState(index != -1, "Event does not exist in series"); //$NON-NLS-1$
 		return index;
-	}
-
-	@SuppressWarnings("unused")
-	private void setSeriesOrder(int seriesOrder) {
-		// Preconditions.checkArgument(getSeriesOrder() == seriesOrder);
 	}
 
 	private String name;
@@ -106,7 +103,9 @@ public final class Event extends AbstractEntity implements Comparable<Event>, Ra
 
 	private List<Race> races = new ArrayList<Race>();
 
-	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "event", orphanRemoval = true)
+	// Should be bidirectional, but Hibernate refuse to fix HHH-5390
+	@OneToMany(cascade = { CascadeType.ALL })
+	@JoinColumn(name = "event_id", nullable = false)
 	@OrderColumn(name = "event_order", nullable = false)
 	public List<Race> getRaces() {
 		return races;

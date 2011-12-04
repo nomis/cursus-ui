@@ -18,6 +18,8 @@
 package eu.lp0.cursus.ui.tree;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import javax.swing.JPopupMenu;
@@ -37,6 +39,10 @@ import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.ui.actions.DeleteEventAction;
 import eu.lp0.cursus.ui.actions.DeleteRaceAction;
 import eu.lp0.cursus.ui.actions.DeleteSeriesAction;
+import eu.lp0.cursus.ui.actions.MoveEventDownAction;
+import eu.lp0.cursus.ui.actions.MoveEventUpAction;
+import eu.lp0.cursus.ui.actions.MoveRaceDownAction;
+import eu.lp0.cursus.ui.actions.MoveRaceUpAction;
 import eu.lp0.cursus.ui.actions.NewEventAction;
 import eu.lp0.cursus.ui.actions.NewRaceAction;
 import eu.lp0.cursus.ui.actions.NewSeriesAction;
@@ -50,12 +56,31 @@ import eu.lp0.cursus.ui.menu.SeriesPopupMenu;
 import eu.lp0.cursus.util.Background;
 
 public class RaceTree extends AbstractTree<DatabaseTreeNode, RaceEntity> implements DatabaseSync {
+	public static final String COMMAND_MOVE_UP = "move entity up"; //$NON-NLS-1$
+	public static final String COMMAND_MOVE_DOWN = "move entity down"; //$NON-NLS-1$
+
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 	private static final EventDAO eventDAO = new EventDAO();
 	private static final RaceDAO raceDAO = new RaceDAO();
 
 	public RaceTree(DatabaseWindow win) {
 		super(win, new DatabaseTreeNode());
+
+		addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent ke) {
+				if (ke.isConsumed()) {
+					return;
+				}
+				if (ke.isAltDown() && ke.getKeyCode() == KeyEvent.VK_UP) {
+					doMoveUp(getSelected());
+					ke.consume();
+				} else if (ke.isAltDown() && ke.getKeyCode() == KeyEvent.VK_DOWN) {
+					doMoveDown(getSelected());
+					ke.consume();
+				}
+			}
+		});
 	}
 
 	@Override
@@ -107,6 +132,24 @@ public class RaceTree extends AbstractTree<DatabaseTreeNode, RaceEntity> impleme
 			new DeleteEventAction(win, (Event)item).actionPerformed(ae);
 		} else if (item instanceof Race) {
 			new DeleteRaceAction(win, (Race)item).actionPerformed(ae);
+		}
+	}
+
+	protected void doMoveUp(RaceEntity item) {
+		ActionEvent ae = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, COMMAND_MOVE_UP);
+		if (item instanceof Event) {
+			new MoveEventUpAction(win, (Event)item).actionPerformed(ae);
+		} else if (item instanceof Race) {
+			new MoveRaceUpAction(win, (Race)item).actionPerformed(ae);
+		}
+	}
+
+	protected void doMoveDown(RaceEntity item) {
+		ActionEvent ae = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, COMMAND_MOVE_DOWN);
+		if (item instanceof Event) {
+			new MoveEventDownAction(win, (Event)item).actionPerformed(ae);
+		} else if (item instanceof Race) {
+			new MoveRaceDownAction(win, (Race)item).actionPerformed(ae);
 		}
 	}
 

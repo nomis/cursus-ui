@@ -25,6 +25,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 
@@ -72,7 +73,9 @@ public final class Series extends AbstractEntity implements Comparable<Series>, 
 
 	private List<Event> events = new ArrayList<Event>();
 
-	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "series", orphanRemoval = true)
+	// Should be bidirectional, but Hibernate refuse to fix HHH-5390
+	@OneToMany(cascade = { CascadeType.ALL })
+	@JoinColumn(name = "series_id", nullable = false)
 	@OrderColumn(name = "series_order", nullable = false)
 	public List<Event> getEvents() {
 		return events;

@@ -98,4 +98,78 @@ public class RaceMoves extends AbstractDatabaseTest {
 			db.endSession();
 		}
 	}
+
+	@Test
+	public void eventMove() {
+		// Save data
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = new Series("Test 1"); //$NON-NLS-1$
+			Event event1 = new Event(series, "Test 1"); //$NON-NLS-1$
+			series.getEvents().add(event1);
+			Race race1 = new Race(event1, "Test 1"); //$NON-NLS-1$
+			event1.getRaces().add(race1);
+			Event event2 = new Event(series, "Test 2"); //$NON-NLS-1$
+			series.getEvents().add(event2);
+			seriesDAO.persist(series);
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+
+		// Check data
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find("Test 1"); //$NON-NLS-1$
+			Event event1 = eventDAO.find(series, "Test 1"); //$NON-NLS-1$
+			Event event2 = eventDAO.find(series, "Test 2"); //$NON-NLS-1$
+			Race race1 = raceDAO.find(event1, "Test 1"); //$NON-NLS-1$
+			Assert.assertArrayEquals(new Object[] { race1 }, event1.getRaces().toArray());
+			Assert.assertArrayEquals(new Object[] {}, event2.getRaces().toArray());
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+
+		// Modify data
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find("Test 1"); //$NON-NLS-1$
+			Event event1 = eventDAO.find(series, "Test 1"); //$NON-NLS-1$
+			Event event2 = eventDAO.find(series, "Test 2"); //$NON-NLS-1$
+			Race race1 = event1.getRaces().get(0);
+			event1.getRaces().remove(race1);
+			race1.setEvent(event2);
+			event2.getRaces().add(race1);
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+
+		// Check data
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find("Test 1"); //$NON-NLS-1$
+			Event event1 = eventDAO.find(series, "Test 1"); //$NON-NLS-1$
+			Event event2 = eventDAO.find(series, "Test 2"); //$NON-NLS-1$
+			Race race1 = raceDAO.find(event2, "Test 1"); //$NON-NLS-1$
+			Assert.assertArrayEquals(new Object[] {}, event1.getRaces().toArray());
+			Assert.assertArrayEquals(new Object[] { race1 }, event2.getRaces().toArray());
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+	}
 }
