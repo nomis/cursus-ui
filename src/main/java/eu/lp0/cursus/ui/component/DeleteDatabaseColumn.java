@@ -52,6 +52,8 @@ import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 
 public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseColumn<T, String> {
+	public static final String ADD_TEXT = "+"; //$NON-NLS-1$
+	public static final String DEL_TEXT = "-"; //$NON-NLS-1$
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final EntityDAO<T> dao;
 	private final String action;
@@ -166,7 +168,7 @@ public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseCol
 	}
 
 	private class HeaderRenderer extends DefaultTableCellRenderer implements ActionListener, MouseListener, MouseMotionListener, KeyListener {
-		private final CellJButton button = new CellJButton("+"); //$NON-NLS-1$
+		private final CellJButton button = new CellJButton(ADD_TEXT);
 
 		public HeaderRenderer() {
 			button.addActionListener(this);
@@ -331,7 +333,7 @@ public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseCol
 	}
 
 	private class CellRenderer extends DefaultTableCellRenderer {
-		private final CellJButton button = new CellJButton("-"); //$NON-NLS-1$
+		private final CellJButton button = new CellJButton(DEL_TEXT);
 
 		public CellRenderer() {
 			setOpaque(true);
@@ -352,7 +354,7 @@ public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseCol
 	}
 
 	private class CellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
-		private final CellJButton button = new CellJButton("-"); //$NON-NLS-1$
+		private final CellJButton button = new CellJButton(DEL_TEXT);
 		private Integer mRow;
 		private T mVal;
 
