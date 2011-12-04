@@ -45,8 +45,10 @@ import eu.lp0.cursus.db.dao.RaceDAO;
 import eu.lp0.cursus.db.dao.RaceNumberDAO;
 import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Class;
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.i18n.Messages;
@@ -108,6 +110,33 @@ public class MainTest extends Main {
 			DatabaseSession.begin();
 
 			Series series = seriesDAO.find(Messages.getString(Database.UNTITLED_SERIES));
+			series.setName("Series 1"); //$NON-NLS-1$
+			Event event1 = series.getEvents().get(0);
+			event1.setName("Event 1"); //$NON-NLS-1$
+			Race race1 = event1.getRaces().get(0);
+			race1.setName("Race 1"); //$NON-NLS-1$
+			event1.getRaces().add(new Race(event1, "Race 2")); //$NON-NLS-1$
+			event1.getRaces().add(new Race(event1, "Race 3")); //$NON-NLS-1$
+			event1.getRaces().add(new Race(event1, "Race 4")); //$NON-NLS-1$
+			Event event2 = new Event(series, "Event 2"); //$NON-NLS-1$
+			series.getEvents().add(event2);
+			event2.getRaces().add(new Race(event2, "Race 5")); //$NON-NLS-1$
+			event2.getRaces().add(new Race(event2, "Race 6")); //$NON-NLS-1$
+			event2.getRaces().add(new Race(event2, "Race 7")); //$NON-NLS-1$
+			event2.getRaces().add(new Race(event2, "Race 8")); //$NON-NLS-1$
+			Event event3 = new Event(series, "Event 3"); //$NON-NLS-1$
+			series.getEvents().add(event3);
+			event3.getRaces().add(new Race(event3, "Race 9")); //$NON-NLS-1$
+			event3.getRaces().add(new Race(event3, "Race 10")); //$NON-NLS-1$
+			event3.getRaces().add(new Race(event3, "Race 11")); //$NON-NLS-1$
+			event3.getRaces().add(new Race(event3, "Race 12")); //$NON-NLS-1$
+			Event event4 = new Event(series, "Event 4"); //$NON-NLS-1$
+			series.getEvents().add(event4);
+			event4.getRaces().add(new Race(event4, "Race 13")); //$NON-NLS-1$
+			event4.getRaces().add(new Race(event4, "Race 14")); //$NON-NLS-1$
+			event4.getRaces().add(new Race(event4, "Race 15")); //$NON-NLS-1$
+			event4.getRaces().add(new Race(event4, "Race 16")); //$NON-NLS-1$
+			seriesDAO.persist(series);
 
 			Class class1 = makeClass(series, "Class 1"); //$NON-NLS-1$
 			Class class2 = makeClass(series, "Class 2"); //$NON-NLS-1$
