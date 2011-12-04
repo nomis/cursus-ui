@@ -34,6 +34,7 @@ public class RaceDetailDialog extends CommonDetailDialog<Race> {
 	@Override
 	protected void prePersist(Race race) {
 		race.setEvent(eventDAO.get(race.getEvent()));
+		race.getEvent().getRaces().add(race);
 	}
 
 	@Override

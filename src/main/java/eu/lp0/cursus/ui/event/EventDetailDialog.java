@@ -34,6 +34,7 @@ public class EventDetailDialog extends CommonDetailDialog<Event> {
 	@Override
 	protected void prePersist(Event event) {
 		event.setSeries(seriesDAO.get(event.getSeries()));
+		event.getSeries().getEvents().add(event);
 	}
 
 	@Override
