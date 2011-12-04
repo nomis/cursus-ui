@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.ui.component;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
@@ -294,8 +293,6 @@ public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseCol
 	}
 
 	private class CellJButton extends JButton {
-		private final Color fg = getForeground();
-		private final Color bg = getBackground();
 		private boolean focus;
 		private boolean painting;
 
@@ -324,16 +321,6 @@ public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseCol
 			return painting && focus || (isFocusable() && super.isFocusOwner());
 		}
 
-		public void setSelected(JTable table, boolean selected) {
-			if (selected) {
-				setForeground(table.getSelectionForeground());
-				setBackground(table.getSelectionBackground());
-			} else {
-				setForeground(fg);
-				setBackground(bg);
-			}
-		}
-
 		@Override
 		public void revalidate() {
 		}
@@ -354,7 +341,6 @@ public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseCol
 		@Override
 		@SuppressWarnings("hiding")
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int vRow, int vCol) {
-			button.setSelected(table, isSelected);
 			button.setFocus(hasFocus);
 			return button;
 		}
