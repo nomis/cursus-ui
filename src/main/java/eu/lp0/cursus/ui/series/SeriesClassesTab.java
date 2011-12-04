@@ -89,6 +89,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 		add(splitPane, BorderLayout.CENTER);
 
 		leftScrollPane = new JScrollPane();
+		leftScrollPane.setMinimumSize(new Dimension(50, 0));
 		leftScrollPane.setPreferredSize(new Dimension(150, 0));
 		splitPane.setLeftComponent(leftScrollPane);
 
@@ -100,6 +101,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 		leftScrollPane.setBorder(null);
 
 		rightScrollPane = new JScrollPane();
+		rightScrollPane.setMinimumSize(new Dimension(50, 0));
 		rightScrollPane.setBorder(new EmptyBorder(0, 2, 0, 0));
 		splitPane.setRightComponent(rightScrollPane);
 

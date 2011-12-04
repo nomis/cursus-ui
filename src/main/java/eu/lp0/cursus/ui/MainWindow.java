@@ -152,6 +152,7 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 			getContentPane().add(splitPane, BorderLayout.CENTER);
 
 			scrollPane = new JScrollPane();
+			scrollPane.setMinimumSize(new Dimension(50, 0));
 			scrollPane.setPreferredSize(new Dimension(150, 0));
 			splitPane.setLeftComponent(scrollPane);
 
@@ -161,6 +162,7 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 
 			tabbedPane = new JTabbedPane();
 			tabbedPane.setBorder(new EmptyBorder(0, 2, 0, 0));
+			tabbedPane.setMinimumSize(new Dimension(50, 0));
 			splitPane.setRightComponent(tabbedPane);
 		}
 
