@@ -45,6 +45,7 @@ import org.junit.Before;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
+import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.SimpleTimeLimiter;
 
 import eu.lp0.cursus.app.Main;
@@ -126,6 +127,22 @@ public class AbstractUITest extends AbstractDataTest {
 	// Background.shutdownAndWait(CALL_TIMEOUT, TimeUnit.MILLISECONDS);
 	// }
 
+	public void syncOnEventThread() throws Exception {
+		runFromEventThread(new Runnable() {
+			@Override
+			public void run() {
+			}
+		});
+	}
+
+	public void syncOnBackgroundExecutor() throws Exception {
+		executeWithTimeout(new Runnable() {
+			@Override
+			public void run() {
+			}
+		});
+	}
+
 	public void executeWithTimeout(Runnable run) throws Exception {
 		final FutureTask<Void> task = new FutureTask<Void>(run, null);
 		Background.execute(task);
@@ -171,6 +188,8 @@ public class AbstractUITest extends AbstractDataTest {
 		final AtomicReference<V> value = new AtomicReference<V>();
 		final AtomicReference<Throwable> error = new AtomicReference<Throwable>();
 
+		Assert.assertFalse(SwingUtilities.isEventDispatchThread());
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -187,7 +206,7 @@ public class AbstractUITest extends AbstractDataTest {
 		latch.await(CALL_TIMEOUT, TimeUnit.MILLISECONDS);
 		Throwable t = error.get();
 		if (t != null) {
-			throw new Exception(t);
+			Throwables.propagate(t);
 		}
 		return value.get();
 	}
@@ -195,6 +214,8 @@ public class AbstractUITest extends AbstractDataTest {
 	public void runFromEventThread(final Runnable runnable) throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final AtomicReference<Throwable> error = new AtomicReference<Throwable>();
+
+		Assert.assertFalse(SwingUtilities.isEventDispatchThread());
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -249,7 +270,9 @@ public class AbstractUITest extends AbstractDataTest {
 		return sb.toString();
 	}
 
-	private Accessible findAccessibleChild(Accessible parent, String name, Predicate<Accessible> predicate) {
+	private Accessible findAccessibleChildFromEventThread(Accessible parent, String name, Predicate<Accessible> predicate) {
+		Assert.assertTrue(SwingUtilities.isEventDispatchThread());
+
 		AccessibleContext context = parent.getAccessibleContext();
 		List<Accessible> found = new ArrayList<Accessible>();
 		log.debug("Accessible " + accessibleToString(parent)); //$NON-NLS-1$ 
@@ -277,15 +300,28 @@ public class AbstractUITest extends AbstractDataTest {
 		return found.get(0);
 	}
 
-	public Accessible findAccessibleChild(Accessible parent, String key) {
+	private Accessible findAccessibleChild(final Accessible parent, final String name, final Predicate<Accessible> predicate) throws Exception {
+		if (SwingUtilities.isEventDispatchThread()) {
+			return findAccessibleChildFromEventThread(parent, name, predicate);
+		} else {
+			return callFromEventThread(new Callable<Accessible>() {
+				@Override
+				public Accessible call() throws Exception {
+					return findAccessibleChildFromEventThread(parent, name, predicate);
+				}
+			});
+		}
+	}
+
+	public Accessible findAccessibleChild(Accessible parent, String key) throws Exception {
 		return findAccessibleChildByName(parent, Messages.getAccessibleName(key));
 	}
 
-	public Accessible findAccessibleChild(Accessible parent, String key, Object... args) {
+	public Accessible findAccessibleChild(Accessible parent, String key, Object... args) throws Exception {
 		return findAccessibleChildByName(parent, Messages.getAccessibleName(key, args));
 	}
 
-	public Accessible findAccessibleChildByName(Accessible parent, final String name) {
+	public Accessible findAccessibleChildByName(Accessible parent, final String name) throws Exception {
 		return findAccessibleChild(parent, "\"" + name + "\"", new Predicate<Accessible>() { //$NON-NLS-1$ //$NON-NLS-2$
 					@Override
 					public boolean apply(Accessible input) {
@@ -294,7 +330,7 @@ public class AbstractUITest extends AbstractDataTest {
 				});
 	}
 
-	public Accessible findAccessibleChildByIndex(Accessible parent, final int index) {
+	public Accessible findAccessibleChildByIndex(Accessible parent, final int index) throws Exception {
 		return findAccessibleChild(parent, String.valueOf(index), new Predicate<Accessible>() {
 			@Override
 			public boolean apply(Accessible input) {
@@ -303,7 +339,7 @@ public class AbstractUITest extends AbstractDataTest {
 		});
 	}
 
-	public Accessible findAccessibleChildByType(Accessible parent, final Class<? extends Accessible> type) {
+	public Accessible findAccessibleChildByType(Accessible parent, final Class<? extends Accessible> type) throws Exception {
 		return findAccessibleChild(parent, type.getSimpleName(), new Predicate<Accessible>() {
 			@Override
 			public boolean apply(Accessible input) {

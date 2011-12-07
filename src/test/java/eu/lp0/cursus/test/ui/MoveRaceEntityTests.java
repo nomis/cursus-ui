@@ -18,7 +18,9 @@
 package eu.lp0.cursus.test.ui;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.accessibility.Accessible;
 
@@ -55,15 +57,17 @@ public class MoveRaceEntityTests extends AbstractUITest {
 
 			Series series1 = seriesDAO.find(Messages.getString(Database.UNTITLED_SERIES));
 			series1.setName("Series 1"); //$NON-NLS-1$
-			Event event0 = series1.getEvents().get(0);
-			event0.setName("Event 0"); //$NON-NLS-1$
-			Race race0 = event0.getRaces().get(0);
-			event0.getRaces().remove(race0);
+			Event invEvent1 = series1.getEvents().get(0);
+			invEvent1.setName("Invalid Event 1"); //$NON-NLS-1$
+			Race race0 = invEvent1.getRaces().get(0);
+			invEvent1.getRaces().remove(race0);
 			raceDAO.remove(race0);
 			seriesDAO.persist(series1);
 
 			Series series2 = new Series("Series 2"); //$NON-NLS-1$
 
+			Event event0 = new Event(series2, "Event 0"); //$NON-NLS-1$
+			series2.getEvents().add(event0);
 			Event event1 = new Event(series2, "Event 1"); //$NON-NLS-1$
 			series2.getEvents().add(event1);
 			event1.getRaces().add(new Race(event1, "Race 1")); //$NON-NLS-1$
@@ -93,6 +97,8 @@ public class MoveRaceEntityTests extends AbstractUITest {
 			seriesDAO.persist(series2);
 
 			Series series3 = new Series("Series 3"); //$NON-NLS-1$
+			Event invEvent2 = new Event(series3, "Invalid Event 2"); //$NON-NLS-1$
+			series3.getEvents().add(invEvent2);
 			seriesDAO.persist(series3);
 
 			DatabaseSession.commit();
@@ -101,26 +107,6 @@ public class MoveRaceEntityTests extends AbstractUITest {
 		}
 
 		return db;
-	}
-
-	private void doMoves(String message, Race selectedRace, final boolean up) throws Exception {
-		for (int i = 0; i < 20; i++) {
-			final Race tmp = (Race)getSelectedRaceEntity();
-			Assert.assertEquals(message + " " + (i + 1), selectedRace, tmp); //$NON-NLS-1$
-
-			runFromEventThread(new Runnable() {
-				@Override
-				public void run() {
-					if (up) {
-						new MoveRaceUpAction(((DatabaseWindow)mainWindow), tmp).actionPerformed(null);
-					} else {
-						new MoveRaceDownAction(((DatabaseWindow)mainWindow), tmp).actionPerformed(null);
-					}
-				}
-			});
-
-			assertInvariant(message + " " + (i + 1)); //$NON-NLS-1$
-		}
 	}
 
 	private void moveRace(String event, String race, boolean up) throws Exception {
@@ -150,39 +136,77 @@ public class MoveRaceEntityTests extends AbstractUITest {
 		assertInvariant("Post"); //$NON-NLS-1$
 	}
 
-	private void assertInvariant(String message) {
-		Database db = main.getDatabase();
+	private void doMoves(String message, Race selectedRace, final boolean up) throws Exception {
+		for (int i = 0; i < 20; i++) {
+			final Race tmp = (Race)getSelectedRaceEntity();
+			Assert.assertEquals(message + " " + (i + 1), selectedRace, tmp); //$NON-NLS-1$
 
-		db.startSession();
-		try {
-			DatabaseSession.begin();
-
-			List<Series> seriesList = Ordering.natural().sortedCopy(seriesDAO.findAll());
-			for (int s = 0; s < seriesList.size(); s++) {
-				Series series = seriesList.get(s);
-				Accessible seriesNode = findAccessibleChildByIndex(raceTree, s);
-				Assert.assertNotNull(message, seriesNode);
-				Assert.assertEquals(message, series.getName(), seriesNode.getAccessibleContext().getAccessibleName());
-
-				for (int e = 0; e < series.getEvents().size(); e++) {
-					Event event = series.getEvents().get(e);
-					Accessible eventNode = findAccessibleChildByIndex(seriesNode, e);
-					Assert.assertNotNull(message, eventNode);
-					Assert.assertEquals(message, event.getName(), eventNode.getAccessibleContext().getAccessibleName());
-
-					for (int r = 0; r < event.getRaces().size(); r++) {
-						Race race = event.getRaces().get(r);
-						Accessible raceNode = findAccessibleChildByIndex(eventNode, r);
-						Assert.assertNotNull(message, raceNode);
-						Assert.assertEquals(message, race.getName(), raceNode.getAccessibleContext().getAccessibleName());
+			runFromEventThread(new Runnable() {
+				@Override
+				public void run() {
+					if (up) {
+						new MoveRaceUpAction(((DatabaseWindow)mainWindow), tmp).actionPerformed(null);
+					} else {
+						new MoveRaceDownAction(((DatabaseWindow)mainWindow), tmp).actionPerformed(null);
 					}
 				}
-			}
+			});
 
-			DatabaseSession.commit();
-		} finally {
-			db.endSession();
+			assertInvariant(message + " " + (i + 1)); //$NON-NLS-1$
 		}
+	}
+
+	private void assertInvariant(final String message) throws Exception {
+		// Wait for the initiation of the database refresh to complete
+		syncOnEventThread();
+
+		// Wait for the database refresh to complete
+		syncOnBackgroundExecutor();
+
+		// Wait for the GUI update from the database refresh to complete
+		syncOnEventThread();
+
+		callFromEventThread(new Callable<Void>() {
+			public Void call() throws Exception {
+				Database db = main.getDatabase();
+
+				db.startSession();
+				try {
+					DatabaseSession.begin();
+
+					List<Series> seriesList = Ordering.natural().sortedCopy(seriesDAO.findAll());
+					log.info("Series: " + Arrays.toString(seriesList.toArray())); //$NON-NLS-1$
+					for (int s = 0; s < seriesList.size(); s++) {
+						Series series = seriesList.get(s);
+						Accessible seriesNode = findAccessibleChildByIndex(raceTree, s);
+						Assert.assertNotNull(message, seriesNode);
+						Assert.assertEquals(message + " (at " + s + ")", series.getName(), seriesNode.getAccessibleContext().getAccessibleName()); //$NON-NLS-1$ //$NON-NLS-2$
+
+						log.info("Event: " + series + " " + Arrays.toString(series.getEvents().toArray())); //$NON-NLS-1$ //$NON-NLS-2$
+						for (int e = 0; e < series.getEvents().size(); e++) {
+							Event event = series.getEvents().get(e);
+							Accessible eventNode = findAccessibleChildByIndex(seriesNode, e);
+							Assert.assertNotNull(message, eventNode);
+							Assert.assertEquals(message + " (at " + e + ")", event.getName(), eventNode.getAccessibleContext().getAccessibleName()); //$NON-NLS-1$ //$NON-NLS-2$
+
+							log.info("Race: " + event + " " + Arrays.toString(event.getRaces().toArray())); //$NON-NLS-1$ //$NON-NLS-2$
+							for (int r = 0; r < event.getRaces().size(); r++) {
+								Race race = event.getRaces().get(r);
+								Accessible raceNode = findAccessibleChildByIndex(eventNode, r);
+								Assert.assertNotNull(message, raceNode);
+								Assert.assertEquals(message + " (at " + r + ")", race.getName(), raceNode.getAccessibleContext().getAccessibleName()); //$NON-NLS-1$ //$NON-NLS-2$
+							}
+						}
+					}
+
+					DatabaseSession.commit();
+				} finally {
+					db.endSession();
+				}
+
+				return null;
+			}
+		});
 	}
 
 	@Test
