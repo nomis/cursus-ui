@@ -37,7 +37,7 @@ import eu.lp0.cursus.util.Constants;
 public class Main implements Runnable {
 	private static final Logger log = LoggerFactory.getLogger(Main.class);
 	private final String[] args;
-	private MainWindow win = null;
+	private MainWindow win = null; // TODO use EventBus
 	private Database db = null;
 
 	public static void main(String[] args) {
@@ -85,6 +85,11 @@ public class Main implements Runnable {
 	@VisibleForTesting
 	public MainWindow getWindow() {
 		return win;
+	}
+
+	@VisibleForTesting
+	public void setWindow(MainWindow win) {
+		this.win = win;
 	}
 
 	public synchronized boolean open() throws InvalidDatabaseException, SQLException {

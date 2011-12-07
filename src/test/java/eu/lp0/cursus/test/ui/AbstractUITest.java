@@ -51,6 +51,7 @@ import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.test.db.AbstractDataTest;
 import eu.lp0.cursus.test.util.Pollable;
+import eu.lp0.cursus.ui.MainWindow;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.menu.MainMenu;
 import eu.lp0.cursus.ui.util.AccessibleComponents;
@@ -69,15 +70,20 @@ public class AbstractUITest extends AbstractDataTest {
 	public void startApplication() throws Exception {
 		// Start the application
 		main = new Main(new String[] {});
-		executeWithTimeout(main);
-
-		// Wait for the default database to become open
-		pollWithTimeout(new Pollable() {
+		executeWithTimeout(new Runnable() {
 			@Override
-			public Boolean call() throws Exception {
-				return main.isOpen();
+			public void run() {
+				main.setWindow(new MainWindow(main));
 			}
 		});
+
+		// Open the default database
+		Assert.assertTrue(executeWithTimeout(new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				return main.open();
+			}
+		}));
 
 		// Obtain the main window, menu bar, race tree and tabbed pane... this is considered accessible?
 		mainWindow = main.getWindow();
@@ -118,6 +124,20 @@ public class AbstractUITest extends AbstractDataTest {
 					Thread.sleep(CALL_TIMEOUT / 50);
 				}
 				return null;
+			}
+		}, CALL_TIMEOUT, TimeUnit.MILLISECONDS, true);
+	}
+
+	public <V> V executeWithTimeout(Callable<V> call) throws Exception {
+		final FutureTask<V> task = new FutureTask<V>(call);
+		Background.execute(task);
+		return limit.callWithTimeout(new Callable<V>() {
+			@Override
+			public V call() throws Exception {
+				while (!task.isDone()) {
+					Thread.sleep(CALL_TIMEOUT / 50);
+				}
+				return task.get();
 			}
 		}, CALL_TIMEOUT, TimeUnit.MILLISECONDS, true);
 	}
