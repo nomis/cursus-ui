@@ -18,6 +18,7 @@
 package eu.lp0.cursus.test.ui;
 
 import java.awt.Window;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -47,6 +48,8 @@ import com.google.common.base.Predicate;
 import com.google.common.util.concurrent.SimpleTimeLimiter;
 
 import eu.lp0.cursus.app.Main;
+import eu.lp0.cursus.db.Database;
+import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.test.db.AbstractDataTest;
@@ -69,7 +72,12 @@ public class AbstractUITest extends AbstractDataTest {
 	@Before
 	public void startApplication() throws Exception {
 		// Start the application
-		main = new Main(new String[] {});
+		main = new Main(new String[] {}) {
+			@Override
+			protected Database createEmptyDatabase() throws InvalidDatabaseException, SQLException {
+				return AbstractUITest.this.createEmptyDatabase(super.createEmptyDatabase());
+			}
+		};
 		executeWithTimeout(new Runnable() {
 			@Override
 			public void run() {
@@ -96,6 +104,10 @@ public class AbstractUITest extends AbstractDataTest {
 		Accessible leftViewport = findAccessibleChildByType(leftPane, JViewport.class);
 		raceTree = findAccessibleChild(leftViewport, AccessibleComponents.RACE_TREE);
 		tabbedPane = findAccessibleChildByIndex(splitPane, 1);
+	}
+
+	protected Database createEmptyDatabase(Database database) throws InvalidDatabaseException, SQLException {
+		return database;
 	}
 
 	@After
@@ -178,6 +190,30 @@ public class AbstractUITest extends AbstractDataTest {
 			throw new Exception(t);
 		}
 		return value.get();
+	}
+
+	public void runFromEventThread(final Runnable runnable) throws Exception {
+		final CountDownLatch latch = new CountDownLatch(1);
+		final AtomicReference<Throwable> error = new AtomicReference<Throwable>();
+
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					runnable.run();
+				} catch (Throwable t) {
+					error.set(t);
+				} finally {
+					latch.countDown();
+				}
+			}
+		});
+
+		latch.await(CALL_TIMEOUT, TimeUnit.MILLISECONDS);
+		Throwable t = error.get();
+		if (t != null) {
+			throw new Exception(t);
+		}
 	}
 
 	public RaceEntity getSelectedRaceEntity() throws Exception {
