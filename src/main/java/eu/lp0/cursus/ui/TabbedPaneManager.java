@@ -124,9 +124,7 @@ public class TabbedPaneManager implements TreeSelectionListener {
 		assert (SwingUtilities.isEventDispatchThread());
 
 		Class<? extends RaceEntity> clazz = (item != null ? item.getClass() : null);
-		@SuppressWarnings("unchecked")
-		AbstractDatabaseTab<? extends RaceEntity> selectedTab = (AbstractDatabaseTab<? extends RaceEntity>)tabbedPane.getSelectedComponent();
-		AbstractDatabaseTab<? extends RaceEntity> previousTab = previousTabs.get(clazz);
+
 		@SuppressWarnings("unchecked")
 		Collection<AbstractDatabaseTab<? extends RaceEntity>> targetTabs = (Collection<AbstractDatabaseTab<? extends RaceEntity>>)getVisibleTabsFor(item);
 		Set<Component> currentTabs = new LinkedHashSet<Component>();
@@ -143,6 +141,8 @@ public class TabbedPaneManager implements TreeSelectionListener {
 		}
 
 		// Save current tab
+		@SuppressWarnings("unchecked")
+		AbstractDatabaseTab<? extends RaceEntity> selectedTab = (AbstractDatabaseTab<? extends RaceEntity>)tabbedPane.getSelectedComponent();
 		if (selectedTab != null) {
 			if (log.isTraceEnabled()) {
 				log.trace("Saving current tab: " + selectedTab.getClass().getSimpleName()); //$NON-NLS-1$
@@ -168,6 +168,7 @@ public class TabbedPaneManager implements TreeSelectionListener {
 		assert (tabbedPane.getTabCount() == 0);
 
 		// Add the previously selected tab
+		AbstractDatabaseTab<? extends RaceEntity> previousTab = previousTabs.get(clazz);
 		if (previousTab != null && targetTabs.contains(previousTab)) {
 			if (log.isTraceEnabled()) {
 				log.trace("Restoring previous tab: " + previousTab.getClass().getSimpleName()); //$NON-NLS-1$
