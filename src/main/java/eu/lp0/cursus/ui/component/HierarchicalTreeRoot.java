@@ -37,6 +37,8 @@ import javax.swing.tree.TreePath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ObjectArrays;
+
 /**
  * Node that has HierarchicalTreeNodes as its children
  * 
@@ -279,9 +281,7 @@ public abstract class HierarchicalTreeRoot<P, C extends Comparable<C>, N extends
 	 * @return Combined path
 	 */
 	protected static TreePath appendedTreePath(TreePath parent, Object child) {
-		Object[] path = Arrays.copyOf(parent.getPath(), parent.getPathCount() + 1);
-		path[path.length - 1] = child;
-		return new TreePath(path);
+		return new TreePath(ObjectArrays.concat(parent.getPath(), child));
 	}
 
 	/**

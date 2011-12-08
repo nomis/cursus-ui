@@ -17,14 +17,14 @@
  */
 package eu.lp0.cursus.db.dao;
 
-import java.util.Arrays;
-
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
+import com.google.common.collect.ObjectArrays;
 
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Series;
@@ -50,8 +50,6 @@ public class EventDAO extends NamedEntityDAO<Event> {
 
 	@Override
 	protected Predicate[] withParentRestriction(CriteriaBuilder cb, Root<Event> e, Event event, Predicate... predicates) {
-		predicates = Arrays.copyOf(predicates, predicates.length + 1);
-		predicates[predicates.length - 1] = cb.equal(e.get("series"), event.getSeries()); //$NON-NLS-1$
-		return predicates;
+		return ObjectArrays.concat(predicates, cb.equal(e.get("series"), event.getSeries())); //$NON-NLS-1$
 	}
 }
