@@ -20,12 +20,18 @@ package eu.lp0.cursus.ui.tree;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ObjectArrays;
 import com.google.common.collect.Ordering;
 
 import eu.lp0.cursus.db.DatabaseSession;
@@ -49,6 +55,7 @@ import eu.lp0.cursus.ui.actions.NewSeriesAction;
 import eu.lp0.cursus.ui.component.AbstractTree;
 import eu.lp0.cursus.ui.component.DatabaseSync;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
+import eu.lp0.cursus.ui.component.HierarchicalTreeNode;
 import eu.lp0.cursus.ui.menu.DatabasePopupMenu;
 import eu.lp0.cursus.ui.menu.EventPopupMenu;
 import eu.lp0.cursus.ui.menu.RacePopupMenu;
@@ -58,6 +65,8 @@ import eu.lp0.cursus.util.Background;
 public class RaceTree extends AbstractTree<DatabaseTreeNode, RaceEntity> implements DatabaseSync {
 	public static final String COMMAND_MOVE_UP = "move entity up"; //$NON-NLS-1$
 	public static final String COMMAND_MOVE_DOWN = "move entity down"; //$NON-NLS-1$
+
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 	private static final EventDAO eventDAO = new EventDAO();
@@ -208,6 +217,86 @@ public class RaceTree extends AbstractTree<DatabaseTreeNode, RaceEntity> impleme
 	private void updateModel(List<Series> list) {
 		assert (SwingUtilities.isEventDispatchThread());
 
+		RaceEntity selected = getSelected();
+
 		root.updateTree(this, new TreePath(root), list);
+
+		if (selected != null && !selected.equals(getSelected())) {
+			// Restore lost selection
+			log.trace("Restoring selection to " + selected); //$NON-NLS-1$
+			TreePath path = findPathTo(selected);
+			if (path != null) {
+				expandPath(path);
+				addSelectionPath(path);
+			} else {
+				setSelectionPaths(new TreePath[0]);
+			}
+		}
+	}
+
+	private TreePath findPathTo(RaceEntity selected) {
+		Series series = null;
+
+		if (selected instanceof Series) {
+			series = (Series)selected;
+		} else if (selected instanceof Event) {
+			series = ((Event)selected).getSeries();
+		} else if (selected instanceof Race) {
+			series = ((Race)selected).getEvent().getSeries();
+		}
+		assert (series != null);
+
+		@SuppressWarnings("unchecked")
+		Enumeration<HierarchicalTreeNode<Series>> en = root.children();
+		while (en.hasMoreElements()) {
+			HierarchicalTreeNode<Series> node = en.nextElement();
+			if (node.getUserObject().equals(series)) {
+				if (selected instanceof Series) {
+					return new TreePath(new Object[] { root, node });
+				} else {
+					TreePath found = findPathFromSeriesTo(node, selected);
+					if (found != null) {
+						return new TreePath(ObjectArrays.concat(new Object[] { root, node }, found.getPath(), Object.class));
+					}
+				}
+				break;
+			}
+		}
+
+		return null;
+	}
+
+	private TreePath findPathFromSeriesTo(HierarchicalTreeNode<Series> series, RaceEntity selected) {
+		@SuppressWarnings("unchecked")
+		Enumeration<HierarchicalTreeNode<Event>> en = series.children();
+		while (en.hasMoreElements()) {
+			HierarchicalTreeNode<Event> node = en.nextElement();
+			if (selected instanceof Event) {
+				if (node.getUserObject().equals(selected)) {
+					return new TreePath(node);
+				}
+			} else {
+				// Race may have moved to another event so we need to check all of them
+				TreeNode found = findNodeFromEventTo(node, selected);
+				if (found != null) {
+					return new TreePath(new Object[] { node, found });
+				}
+			}
+		}
+
+		return null;
+	}
+
+	private TreeNode findNodeFromEventTo(HierarchicalTreeNode<Event> event, RaceEntity selected) {
+		@SuppressWarnings("unchecked")
+		Enumeration<HierarchicalTreeNode<Race>> en = event.children();
+		while (en.hasMoreElements()) {
+			HierarchicalTreeNode<Race> node = en.nextElement();
+			if (node.getUserObject().equals(selected)) {
+				return node;
+			}
+		}
+
+		return null;
 	}
 }
