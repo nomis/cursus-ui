@@ -115,9 +115,7 @@ public class WindowAutoPrefs {
 			}
 
 			window.setSize(width, height);
-			if (log.isTraceEnabled()) {
-				log.trace("Loaded size preference " + width + "x" + height); //$NON-NLS-1$ //$NON-NLS-2$
-			}
+			log.trace("Loaded size preference {}x{}", width, height); //$NON-NLS-1$
 		}
 	}
 

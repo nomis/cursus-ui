@@ -96,7 +96,7 @@ public class TabbedPaneManager implements TreeSelectionListener {
 
 		if (log.isTraceEnabled()) {
 			if (item != null) {
-				log.trace("Selecting " + item.getClass().getSimpleName() + ": " + item.getName()); //$NON-NLS-1$ //$NON-NLS-2$
+				log.trace("Selecting {}: {}", item.getClass().getSimpleName(), item.getName()); //$NON-NLS-1$ 
 			} else {
 				log.trace("Deselected current item"); //$NON-NLS-1$
 			}
@@ -145,7 +145,7 @@ public class TabbedPaneManager implements TreeSelectionListener {
 		AbstractDatabaseTab<? extends RaceEntity> selectedTab = (AbstractDatabaseTab<? extends RaceEntity>)tabbedPane.getSelectedComponent();
 		if (selectedTab != null) {
 			if (log.isTraceEnabled()) {
-				log.trace("Saving current tab: " + selectedTab.getClass().getSimpleName()); //$NON-NLS-1$
+				log.trace("Saving current tab: {}", selectedTab.getClass().getSimpleName()); //$NON-NLS-1$
 			}
 
 			previousTabs.put(selectedTab.getType(), selectedTab);
@@ -171,7 +171,7 @@ public class TabbedPaneManager implements TreeSelectionListener {
 		AbstractDatabaseTab<? extends RaceEntity> previousTab = previousTabs.get(clazz);
 		if (previousTab != null && targetTabs.contains(previousTab)) {
 			if (log.isTraceEnabled()) {
-				log.trace("Restoring previous tab: " + previousTab.getClass().getSimpleName()); //$NON-NLS-1$
+				log.trace("Restoring previous tab: {}", previousTab.getClass().getSimpleName()); //$NON-NLS-1$
 			}
 
 			insertTab(previousTab, 0);

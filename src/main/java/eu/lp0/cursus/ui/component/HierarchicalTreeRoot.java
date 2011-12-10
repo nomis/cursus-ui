@@ -68,10 +68,9 @@ public abstract class HierarchicalTreeRoot<P, C extends Comparable<C>, N extends
 		assert (SwingUtilities.isEventDispatchThread());
 
 		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
-		final boolean trace = log.isTraceEnabled();
 
 		if (items == null || items.isEmpty()) {
-			if (trace && getChildCount() > 0) {
+			if (log.isTraceEnabled() && getChildCount() > 0) {
 				log.trace("Removing all nodes"); //$NON-NLS-1$
 			}
 			removeAllChildren();
@@ -93,9 +92,7 @@ public abstract class HierarchicalTreeRoot<P, C extends Comparable<C>, N extends
 
 			if (index != -1) {
 				C item = items.get(index);
-				if (trace) {
-					log.trace("Updating node " + user); //$NON-NLS-1$
-				}
+				log.trace("Updating node {}", user); //$NON-NLS-1$
 				// Update all nodes first otherwise the sorting
 				// comparisons will be using both old and new data
 				updateNode(tree, path, node, item);
@@ -108,9 +105,7 @@ public abstract class HierarchicalTreeRoot<P, C extends Comparable<C>, N extends
 					expanded.put(user, getPathStates(tree, appendedTreePath(path, node), node));
 				}
 			} else {
-				if (trace) {
-					log.trace("Removing node " + user); //$NON-NLS-1$
-				}
+				log.trace("Removing node {}", user); //$NON-NLS-1$
 				// Remove nodes that no longer exist
 				model.removeNodeFromParent(node);
 				i--;
@@ -143,9 +138,7 @@ public abstract class HierarchicalTreeRoot<P, C extends Comparable<C>, N extends
 				}
 
 				if (remove) {
-					if (trace) {
-						log.trace("Removing node " + user); //$NON-NLS-1$
-					}
+					log.trace("Removing node {}", user); //$NON-NLS-1$
 					removed.add(user);
 					model.removeNodeFromParent(node);
 					continue;
@@ -159,27 +152,19 @@ public abstract class HierarchicalTreeRoot<P, C extends Comparable<C>, N extends
 				N node = existing.get(next);
 				if (node != null) {
 					if (!removed.contains(next)) {
-						if (trace) {
-							log.trace("Removing node " + next); //$NON-NLS-1$
-						}
+						log.trace("Removing node {}", next); //$NON-NLS-1$
 						removed.add(next);
 						model.removeNodeFromParent(node);
 					}
 
-					if (trace) {
-						log.trace("Restoring node " + next); //$NON-NLS-1$
-					}
+					log.trace("Restoring node {}", next); //$NON-NLS-1$
 					model.insertNodeInto(node, this, i);
 					restorePaths(tree, expanded.get(next));
 
-					if (trace) {
-						log.trace("Updating node " + next); //$NON-NLS-1$
-					}
+					log.trace("Updating node {}", next); //$NON-NLS-1$
 					updateNode(tree, path, node, next);
 				} else {
-					if (trace) {
-						log.trace("Adding node " + next); //$NON-NLS-1$
-					}
+					log.trace("Adding node {}", next); //$NON-NLS-1$
 					node = constructChildNode(next);
 					model.insertNodeInto(node, this, i);
 					expandAll(tree, appendedTreePath(path, node), node);

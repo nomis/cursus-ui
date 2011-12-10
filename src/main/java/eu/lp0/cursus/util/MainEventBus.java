@@ -27,23 +27,17 @@ public class MainEventBus {
 	private static final WeakEventBus MAIN = new WeakEventBus();
 
 	public static void register(Object o) {
-		if (log.isTraceEnabled()) {
-			log.trace("Register " + o); //$NON-NLS-1$
-		}
+		log.trace("Register {}", o); //$NON-NLS-1$
 		MAIN.register(o);
 	}
 
 	public static void register(Object o, Object... events) {
-		if (log.isTraceEnabled()) {
-			log.trace("Register " + o); //$NON-NLS-1$
-		}
+		log.trace("Register {}", o); //$NON-NLS-1$
 		MAIN.register(o, events);
 	}
 
 	public static void unregister(Object o) {
-		if (log.isTraceEnabled()) {
-			log.trace("Unregister " + o); //$NON-NLS-1$
-		}
+		log.trace("Unregister {}", o); //$NON-NLS-1$
 		MAIN.unregister(o);
 	}
 

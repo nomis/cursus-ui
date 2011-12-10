@@ -52,9 +52,7 @@ public class JFrameAutoPrefs extends WindowAutoPrefs {
 		if (state != -1) {
 			state &= Frame.MAXIMIZED_BOTH;
 			frame.setExtendedState((frame.getExtendedState() & ~Frame.MAXIMIZED_BOTH) | state);
-			if (log.isTraceEnabled()) {
-				log.trace("Loaded state preference " + state); //$NON-NLS-1$
-			}
+			log.trace("Loaded state preference {}", state); //$NON-NLS-1$
 		}
 	}
 

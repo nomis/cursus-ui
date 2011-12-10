@@ -45,8 +45,8 @@ public class LanguageManager {
 		Locale preferredLocale = getPreferredLocale();
 
 		if (log.isTraceEnabled()) {
-			log.trace("Default locale is \"" + Locale.getDefault() + "\""); //$NON-NLS-1$ //$NON-NLS-2$
-			log.trace("Preferred locale is \"" + preferredLocale + "\""); //$NON-NLS-1$ //$NON-NLS-2$
+			log.trace("Default locale is \"{}\"", Locale.getDefault()); //$NON-NLS-1$
+			log.trace("Preferred locale is \"{}\"", preferredLocale); //$NON-NLS-1$ 
 
 			if (preferredLocale.equals(Locale.ROOT)) {
 				log.trace("Using default locale"); //$NON-NLS-1$
@@ -105,9 +105,7 @@ public class LanguageManager {
 		try {
 			final ResourceBundle resourceBundle = ResourceBundle.getBundle(Messages.BUNDLE_NAME, newLocale);
 
-			if (log.isDebugEnabled()) {
-				log.debug("Loaded resource bundle \"" + resourceBundle.getLocale() + "\" for locale \"" + loadLocale + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			}
+			log.debug("Loaded resource bundle \"{}\" for locale \"{}\"", resourceBundle.getLocale(), loadLocale); //$NON-NLS-1$ 
 
 			Messages.setBundle(new CheckedResourceBundle(resourceBundle));
 			LanguageManager.changedLocale(resourceBundle.getLocale(), newLocale);
