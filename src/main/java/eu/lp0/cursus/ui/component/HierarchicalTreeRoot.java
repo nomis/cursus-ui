@@ -80,33 +80,45 @@ public abstract class HierarchicalTreeRoot<P, C extends Comparable<C>, N extends
 		}
 
 		// Store a map of each node so that they can be moved around and re-expanded
-		// Try to update currently selected node first so that it can be left alone
 		Map<C, N> existing = new HashMap<C, N>();
-		Set<C> removed = new HashSet<C>();
 		Map<C, Map<TreePath, Boolean>> expanded = new HashMap<C, Map<TreePath, Boolean>>();
-		C preUpdated = null;
+		C fixed = null;
 
-		if (isPathSelected(tree, path) && !path.equals(tree.getSelectionPath())) {
-			for (int i = 0; i < getChildCount(); i++) {
-				@SuppressWarnings("unchecked")
-				N node = (N)getChildAt(i);
-				C user = node.getUserObject();
-				int index = items.indexOf(user);
+		boolean selected = isPathSelected(tree, path) && !path.equals(tree.getSelectionPath());
+		for (int i = 0; i < getChildCount(); i++) {
+			@SuppressWarnings("unchecked")
+			N node = (N)getChildAt(i);
+			C user = node.getUserObject();
+			int index = items.indexOf(user);
 
-				if (isPathSelected(tree, appendedTreePath(path, node)) && index != -1) {
-					C item = items.get(index);
-					if (trace) {
-						log.trace("Updating node " + user); //$NON-NLS-1$
-					}
-					updateNode(tree, path, node, item);
-					preUpdated = item;
+			if (index != -1) {
+				C item = items.get(index);
+				if (trace) {
+					log.trace("Updating node " + user); //$NON-NLS-1$
+				}
+				// Update all nodes first otherwise the sorting
+				// comparisons will be using both old and new data
+				updateNode(tree, path, node, item);
+
+				if (selected && isPathSelected(tree, appendedTreePath(path, node))) {
+					// Identify currently selected node first so that it can be left alone
+					fixed = item;
 				} else {
 					existing.put(user, node);
 					expanded.put(user, getPathStates(tree, appendedTreePath(path, node), node));
 				}
+			} else {
+				if (trace) {
+					log.trace("Removing node " + user); //$NON-NLS-1$
+				}
+				// Remove nodes that no longer exist
+				model.removeNodeFromParent(node);
+				i--;
 			}
 		}
 
+		// Re-order nodes to match new sorted order, insert new nodes
+		Set<C> removed = new HashSet<C>();
 		Iterator<C> iter = items.iterator();
 		C next = iter.hasNext() ? iter.next() : null;
 		int i = 0;
@@ -123,13 +135,8 @@ public abstract class HierarchicalTreeRoot<P, C extends Comparable<C>, N extends
 				if (next == null || user.compareTo(next) < 0) {
 					remove = true;
 				} else if (user.compareTo(next) == 0) {
-					if (next != preUpdated) {
-						if (trace) {
-							log.trace("Updating node " + user); //$NON-NLS-1$
-						}
-						updateNode(tree, path, node, next);
-					}
-				} else if (next == preUpdated) {
+					// Do nothing
+				} else if (next == fixed) {
 					remove = true;
 				} else {
 					add = true;
