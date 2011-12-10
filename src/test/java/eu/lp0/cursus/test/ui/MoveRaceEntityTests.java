@@ -157,6 +157,9 @@ public class MoveRaceEntityTests extends AbstractUITest {
 	}
 
 	private void assertInvariant(final String message) throws Exception {
+		// Wait for the race move to complete
+		syncOnBackgroundExecutor();
+
 		// Wait for the initiation of the database refresh to complete
 		syncOnEventThread();
 
