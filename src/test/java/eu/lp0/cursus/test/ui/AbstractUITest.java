@@ -54,7 +54,6 @@ import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.test.db.AbstractDataTest;
-import eu.lp0.cursus.test.util.Pollable;
 import eu.lp0.cursus.ui.MainWindow;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.menu.MainMenu;
@@ -146,41 +145,13 @@ public class AbstractUITest extends AbstractDataTest {
 	public void executeWithTimeout(Runnable run) throws Exception {
 		final FutureTask<Void> task = new FutureTask<Void>(run, null);
 		Background.execute(task);
-		limit.callWithTimeout(new Callable<Void>() {
-			@Override
-			public Void call() throws Exception {
-				while (!task.isDone()) {
-					Thread.sleep(CALL_TIMEOUT / 50);
-				}
-				return null;
-			}
-		}, CALL_TIMEOUT, TimeUnit.MILLISECONDS, true);
+		task.get(CALL_TIMEOUT, TimeUnit.MILLISECONDS);
 	}
 
 	public <V> V executeWithTimeout(Callable<V> call) throws Exception {
 		final FutureTask<V> task = new FutureTask<V>(call);
 		Background.execute(task);
-		return limit.callWithTimeout(new Callable<V>() {
-			@Override
-			public V call() throws Exception {
-				while (!task.isDone()) {
-					Thread.sleep(CALL_TIMEOUT / 50);
-				}
-				return task.get();
-			}
-		}, CALL_TIMEOUT, TimeUnit.MILLISECONDS, true);
-	}
-
-	public void pollWithTimeout(final Pollable poll) throws Exception {
-		limit.callWithTimeout(new Callable<Void>() {
-			@Override
-			public Void call() throws Exception {
-				while (!poll.call()) {
-					Thread.sleep(CALL_TIMEOUT / 50);
-				}
-				return null;
-			}
-		}, CALL_TIMEOUT, TimeUnit.MILLISECONDS, true);
+		return task.get(CALL_TIMEOUT, TimeUnit.MILLISECONDS);
 	}
 
 	public <V> V callFromEventThread(final Callable<V> callable) throws Exception {
