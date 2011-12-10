@@ -18,7 +18,6 @@
 package eu.lp0.cursus.test.ui;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -178,21 +177,21 @@ public class MoveRaceEntityTests extends AbstractUITest {
 					DatabaseSession.begin();
 
 					List<Series> seriesList = Ordering.natural().sortedCopy(seriesDAO.findAll());
-					log.info("Series: " + Arrays.toString(seriesList.toArray())); //$NON-NLS-1$
+					// log.debug("Series: " + Arrays.toString(seriesList.toArray())); //$NON-NLS-1$
 					for (int s = 0; s < seriesList.size(); s++) {
 						Series series = seriesList.get(s);
 						Accessible seriesNode = findAccessibleChildByIndex(raceTree, s);
 						Assert.assertNotNull(message, seriesNode);
 						Assert.assertEquals(message + " (at " + s + ")", series.getName(), seriesNode.getAccessibleContext().getAccessibleName()); //$NON-NLS-1$ //$NON-NLS-2$
 
-						log.info("Event: " + series + " " + Arrays.toString(series.getEvents().toArray())); //$NON-NLS-1$ //$NON-NLS-2$
+						// log.debug("Event: " + series + " " + Arrays.toString(series.getEvents().toArray())); //$NON-NLS-1$ //$NON-NLS-2$
 						for (int e = 0; e < series.getEvents().size(); e++) {
 							Event event = series.getEvents().get(e);
 							Accessible eventNode = findAccessibleChildByIndex(seriesNode, e);
 							Assert.assertNotNull(message, eventNode);
 							Assert.assertEquals(message + " (at " + e + ")", event.getName(), eventNode.getAccessibleContext().getAccessibleName()); //$NON-NLS-1$ //$NON-NLS-2$
 
-							log.info("Race: " + event + " " + Arrays.toString(event.getRaces().toArray())); //$NON-NLS-1$ //$NON-NLS-2$
+							// log.debug("Race: " + event + " " + Arrays.toString(event.getRaces().toArray())); //$NON-NLS-1$ //$NON-NLS-2$
 							for (int r = 0; r < event.getRaces().size(); r++) {
 								Race race = event.getRaces().get(r);
 								Accessible raceNode = findAccessibleChildByIndex(eventNode, r);
