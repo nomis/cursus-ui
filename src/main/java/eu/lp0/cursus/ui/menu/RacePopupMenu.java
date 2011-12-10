@@ -23,6 +23,8 @@ import javax.swing.JSeparator;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.ui.actions.DeleteRaceAction;
 import eu.lp0.cursus.ui.actions.EditRaceAction;
+import eu.lp0.cursus.ui.actions.MoveRaceDownAction;
+import eu.lp0.cursus.ui.actions.MoveRaceUpAction;
 import eu.lp0.cursus.ui.actions.NewRaceAction;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 
@@ -30,6 +32,9 @@ public class RacePopupMenu extends JPopupMenu {
 	public RacePopupMenu(DatabaseWindow win, Race race) {
 		add(new EditRaceAction(win, race));
 		add(new DeleteRaceAction(win, race));
+		add(new JSeparator());
+		add(new MoveRaceUpAction(win, race));
+		add(new MoveRaceDownAction(win, race));
 		add(new JSeparator());
 		add(new NewRaceAction(win, race.getEvent()));
 	}

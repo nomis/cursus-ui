@@ -23,6 +23,8 @@ import javax.swing.JSeparator;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.ui.actions.DeleteEventAction;
 import eu.lp0.cursus.ui.actions.EditEventAction;
+import eu.lp0.cursus.ui.actions.MoveEventDownAction;
+import eu.lp0.cursus.ui.actions.MoveEventUpAction;
 import eu.lp0.cursus.ui.actions.NewEventAction;
 import eu.lp0.cursus.ui.actions.NewRaceAction;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
@@ -32,6 +34,9 @@ public class EventPopupMenu extends JPopupMenu {
 		add(new NewRaceAction(win, event));
 		add(new EditEventAction(win, event));
 		add(new DeleteEventAction(win, event));
+		add(new JSeparator());
+		add(new MoveEventUpAction(win, event));
+		add(new MoveEventDownAction(win, event));
 		add(new JSeparator());
 		add(new NewEventAction(win, event.getSeries()));
 	}

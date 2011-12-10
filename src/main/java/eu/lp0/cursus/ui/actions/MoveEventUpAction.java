@@ -26,8 +26,8 @@ import eu.lp0.cursus.ui.component.DatabaseWindow;
 public class MoveEventUpAction extends AbstractMoveAction<Event> {
 	private static final EventDAO eventDAO = new EventDAO();
 
-	public MoveEventUpAction(DatabaseWindow win, Event race) {
-		super("menu.event.move-up", false, win, race); //$NON-NLS-1$
+	public MoveEventUpAction(DatabaseWindow win, Event event) {
+		super("menu.event.move-up", false, win, event); //$NON-NLS-1$
 	}
 
 	@Override
