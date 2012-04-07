@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2012  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ public class Series2011DataTests extends AbstractSeries2011 {
 
 			Series series = seriesDAO.find(SERIES_NAME);
 
-			Assert.assertEquals(SERIES_FLEET, series.getPilots().size());
+			Assert.assertEquals(SERIES_FLEET, getResultsPilots(series).size());
 
 			DatabaseSession.commit();
 		} finally {
@@ -79,6 +79,94 @@ public class Series2011DataTests extends AbstractSeries2011 {
 			Assert.assertEquals(EVENT1_FLEET, race1.getAttendees().size());
 			Assert.assertEquals(RaceAttendee.Type.V_SCORER, race1.getAttendees().get(sco060).getType());
 			Assert.assertEquals(RaceAttendee.Type.PILOT, race1.getAttendees().get(sco179).getType());
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+	}
+
+	@Test
+	public void checkEvent2() throws Exception {
+		createEvent2Races();
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+			Event event2 = eventDAO.find(series, EVENT2_NAME);
+
+			Assert.assertEquals(3, event2.getRaces().size());
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+	}
+
+	@Test
+	public void checkRace2() throws Exception {
+		createRace2Data();
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+			Event event2 = eventDAO.find(series, EVENT2_NAME);
+			Race race2 = raceDAO.find(event2, RACE2_NAME);
+
+			Assert.assertEquals(EVENT2_PILOTS, race2.getAttendees().size());
+			Assert.assertEquals(RaceAttendee.Type.M_RACE_MASTER, race2.getAttendees().get(sco197).getType());
+			Assert.assertEquals(RaceAttendee.Type.M_SCORER, race2.getAttendees().get(sco198).getType());
+			Assert.assertEquals(RaceAttendee.Type.PILOT, race2.getAttendees().get(sco808).getType());
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+	}
+
+	@Test
+	public void checkRace3() throws Exception {
+		createRace3Data();
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+			Event event2 = eventDAO.find(series, EVENT2_NAME);
+			Race race3 = raceDAO.find(event2, RACE3_NAME);
+
+			Assert.assertEquals(EVENT2_PILOTS, race3.getAttendees().size());
+			Assert.assertEquals(RaceAttendee.Type.M_RACE_MASTER, race3.getAttendees().get(sco808).getType());
+			Assert.assertEquals(RaceAttendee.Type.M_SCORER, race3.getAttendees().get(sco179).getType());
+			Assert.assertEquals(RaceAttendee.Type.PILOT, race3.getAttendees().get(sco156).getType());
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+	}
+
+	@Test
+	public void checkRace4() throws Exception {
+		createRace4Data();
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+			Event event2 = eventDAO.find(series, EVENT2_NAME);
+			Race race4 = raceDAO.find(event2, RACE4_NAME);
+
+			Assert.assertEquals(EVENT2_PILOTS, race4.getAttendees().size());
+			Assert.assertEquals(RaceAttendee.Type.M_RACE_MASTER, race4.getAttendees().get(sco136).getType());
+			Assert.assertEquals(RaceAttendee.Type.M_SCORER, race4.getAttendees().get(sco060).getType());
+			Assert.assertEquals(RaceAttendee.Type.PILOT, race4.getAttendees().get(sco808).getType());
 
 			DatabaseSession.commit();
 		} finally {

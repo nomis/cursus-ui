@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2012  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.google.common.base.Predicates;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.data.Event;
@@ -48,7 +50,7 @@ public class Series2010Event1Scores extends AbstractSeries2010 {
 			DatabaseSession.begin();
 
 			Series series = seriesDAO.find(SERIES_NAME);
-			Scores scores = scorer.scoreSeries(series);
+			Scores scores = scorer.scoreSeries(series, Predicates.in(getResultsPilots(series)));
 			checkSeriesAtEvent1(scores);
 
 			DatabaseSession.commit();
@@ -69,7 +71,7 @@ public class Series2010Event1Scores extends AbstractSeries2010 {
 			List<Race> races = new ArrayList<Race>();
 			races.addAll(event1.getRaces());
 
-			Scores scores = scorer.scoreRaces(races, series.getPilots());
+			Scores scores = scorer.scoreRaces(races, getResultsPilots(series), Predicates.in(getResultsPilots(series)));
 			checkSeriesAtEvent1(scores);
 
 			DatabaseSession.commit();
@@ -191,9 +193,11 @@ public class Series2010Event1Scores extends AbstractSeries2010 {
 			Race race2 = raceDAO.find(event1, RACE2_NAME);
 			Race race3 = raceDAO.find(event1, RACE3_NAME);
 
-			Scores scores = scorer.scoreEvent(event1);
+			Scores scores = scorer.scoreEvent(event1, Predicates.in(getResultsPilots(series, event1)));
 			Assert.assertEquals(EVENT1_FLEET, scores.getPilots().size());
 			Assert.assertEquals(EVENT1_FLEET, scores.getFleetSize(race1));
+			Assert.assertEquals(EVENT1_FLEET, scores.getFleetSize(race2));
+			Assert.assertEquals(EVENT1_FLEET, scores.getFleetSize(race3));
 
 			RaceAssertUtil race1AssertUtil = new RaceAssertUtil(scores, race1);
 			race1AssertUtil.assertPilot(sco200, 5, 0, false, 0, 1);
@@ -291,7 +295,7 @@ public class Series2010Event1Scores extends AbstractSeries2010 {
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 			Race race1 = raceDAO.find(event1, RACE1_NAME);
 
-			Scores scores = scorer.scoreRace(race1);
+			Scores scores = scorer.scoreRace(race1, Predicates.in(getResultsPilots(series, event1)));
 			Assert.assertEquals(EVENT1_FLEET, scores.getPilots().size());
 			Assert.assertEquals(EVENT1_FLEET, scores.getFleetSize(race1));
 
@@ -351,7 +355,7 @@ public class Series2010Event1Scores extends AbstractSeries2010 {
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 			Race race2 = raceDAO.find(event1, RACE2_NAME);
 
-			Scores scores = scorer.scoreRace(race2);
+			Scores scores = scorer.scoreRace(race2, Predicates.in(getResultsPilots(series, event1)));
 			Assert.assertEquals(EVENT1_FLEET, scores.getPilots().size());
 			Assert.assertEquals(EVENT1_FLEET, scores.getFleetSize(race2));
 
@@ -411,7 +415,7 @@ public class Series2010Event1Scores extends AbstractSeries2010 {
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 			Race race3 = raceDAO.find(event1, RACE3_NAME);
 
-			Scores scores = scorer.scoreRace(race3);
+			Scores scores = scorer.scoreRace(race3, Predicates.in(getResultsPilots(series, event1)));
 			Assert.assertEquals(EVENT1_FLEET, scores.getPilots().size());
 			Assert.assertEquals(EVENT1_FLEET, scores.getFleetSize(race3));
 

@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2012  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.google.common.base.Predicates;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.data.Event;
@@ -51,7 +53,7 @@ public class Series2010Event3Scores extends Series2010Event2Scores {
 			DatabaseSession.begin();
 
 			Series series = seriesDAO.find(SERIES_NAME);
-			Scores scores = scorer.scoreSeries(series);
+			Scores scores = scorer.scoreSeries(series, Predicates.in(getResultsPilots(series)));
 			checkSeriesAtEvent3(scores);
 
 			DatabaseSession.commit();
@@ -76,7 +78,7 @@ public class Series2010Event3Scores extends Series2010Event2Scores {
 			races.addAll(event2.getRaces());
 			races.addAll(event3.getRaces());
 
-			Scores scores = scorer.scoreRaces(races, series.getPilots());
+			Scores scores = scorer.scoreRaces(races, getResultsPilots(series), Predicates.in(getResultsPilots(series)));
 			checkSeriesAtEvent3(scores);
 
 			DatabaseSession.commit();
@@ -246,7 +248,7 @@ public class Series2010Event3Scores extends Series2010Event2Scores {
 			Event event3 = eventDAO.find(series, EVENT3_NAME);
 			Race race5 = raceDAO.find(event3, RACE5_NAME);
 
-			Scores scores = scorer.scoreEvent(event3);
+			Scores scores = scorer.scoreEvent(event3, Predicates.in(getResultsPilots(series, event3)));
 			Assert.assertEquals(EVENT3_FLEET, scores.getPilots().size());
 			Assert.assertEquals(EVENT3_FLEET, scores.getFleetSize(race5));
 
@@ -302,7 +304,7 @@ public class Series2010Event3Scores extends Series2010Event2Scores {
 			Event event3 = eventDAO.find(series, EVENT3_NAME);
 			Race race5 = raceDAO.find(event3, RACE5_NAME);
 
-			Scores scores = scorer.scoreRace(race5);
+			Scores scores = scorer.scoreRace(race5, Predicates.in(getResultsPilots(series, event3)));
 			Assert.assertEquals(EVENT3_FLEET, scores.getPilots().size());
 			Assert.assertEquals(EVENT3_FLEET, scores.getFleetSize(race5));
 
