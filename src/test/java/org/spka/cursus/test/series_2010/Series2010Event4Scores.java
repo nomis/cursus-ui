@@ -53,7 +53,7 @@ public class Series2010Event4Scores extends Series2010Event3Scores {
 			DatabaseSession.begin();
 
 			Series series = seriesDAO.find(SERIES_NAME);
-			Scores scores = scorer.scoreSeries(series, Predicates.in(getResultsPilots(series)));
+			Scores scores = scorer.scoreSeries(series, Predicates.in(getSeriesResultsPilots(series)));
 			checkSeriesAtEvent4(scores);
 
 			DatabaseSession.commit();
@@ -80,7 +80,7 @@ public class Series2010Event4Scores extends Series2010Event3Scores {
 			races.addAll(event3.getRaces());
 			races.addAll(event4.getRaces());
 
-			Scores scores = scorer.scoreRaces(races, getResultsPilots(series), Predicates.in(getResultsPilots(series)));
+			Scores scores = scorer.scoreRaces(races, getSeriesResultsPilots(series), Predicates.in(getSeriesResultsPilots(series)));
 			checkSeriesAtEvent4(scores);
 
 			DatabaseSession.commit();
@@ -325,7 +325,7 @@ public class Series2010Event4Scores extends Series2010Event3Scores {
 			Race race7 = raceDAO.find(event4, RACE7_NAME);
 			Race race8 = raceDAO.find(event4, RACE8_NAME);
 
-			Scores scores = scorer.scoreEvent(event4, Predicates.in(getResultsPilots(series, event4)));
+			Scores scores = scorer.scoreEvent(event4, Predicates.in(getEventResultsPilots(series, event4)));
 			Assert.assertEquals(EVENT4_FLEET, scores.getPilots().size());
 			Assert.assertEquals(EVENT4_FLEET, scores.getFleetSize(race6));
 			Assert.assertEquals(EVENT4_FLEET, scores.getFleetSize(race7));
@@ -419,7 +419,7 @@ public class Series2010Event4Scores extends Series2010Event3Scores {
 			Event event4 = eventDAO.find(series, EVENT4_NAME);
 			Race race6 = raceDAO.find(event4, RACE6_NAME);
 
-			Scores scores = scorer.scoreRace(race6, Predicates.in(getResultsPilots(series, event4)));
+			Scores scores = scorer.scoreRace(race6, Predicates.in(getEventResultsPilots(series, event4)));
 			Assert.assertEquals(EVENT4_FLEET, scores.getPilots().size());
 			Assert.assertEquals(EVENT4_FLEET, scores.getFleetSize(race6));
 
@@ -475,7 +475,7 @@ public class Series2010Event4Scores extends Series2010Event3Scores {
 			Event event4 = eventDAO.find(series, EVENT4_NAME);
 			Race race7 = raceDAO.find(event4, RACE7_NAME);
 
-			Scores scores = scorer.scoreRace(race7, Predicates.in(getResultsPilots(series, event4)));
+			Scores scores = scorer.scoreRace(race7, Predicates.in(getEventResultsPilots(series, event4)));
 			Assert.assertEquals(EVENT4_FLEET, scores.getPilots().size());
 			Assert.assertEquals(EVENT4_FLEET, scores.getFleetSize(race7));
 
@@ -531,7 +531,7 @@ public class Series2010Event4Scores extends Series2010Event3Scores {
 			Event event4 = eventDAO.find(series, EVENT4_NAME);
 			Race race8 = raceDAO.find(event4, RACE8_NAME);
 
-			Scores scores = scorer.scoreRace(race8, Predicates.in(getResultsPilots(series, event4)));
+			Scores scores = scorer.scoreRace(race8, Predicates.in(getEventResultsPilots(series, event4)));
 			Assert.assertEquals(EVENT4_FLEET, scores.getPilots().size());
 			Assert.assertEquals(EVENT4_FLEET, scores.getFleetSize(race8));
 

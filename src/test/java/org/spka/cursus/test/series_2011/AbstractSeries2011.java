@@ -34,9 +34,10 @@ import eu.lp0.cursus.scoring.ScorerFactory;
 
 public abstract class AbstractSeries2011 extends AbstractSeries {
 	protected final String SERIES_NAME = "SPKA Race Series 2011/12"; //$NON-NLS-1$
-	protected final int SERIES_FLEET = 22;
+	protected final int SERIES_FLEET = 23;
 	protected final int SERIES_FLEET_AT_EVENT1 = 22;
 	protected final int SERIES_FLEET_AT_EVENT2 = 22;
+	protected final int SERIES_FLEET_AT_EVENT3 = 23;
 
 	protected final String EVENT1_NAME = "Race Event 1"; //$NON-NLS-1$
 	protected final int EVENT1_PILOTS = 22;
@@ -50,10 +51,20 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 	protected final String RACE3_NAME = "Race 3"; //$NON-NLS-1$
 	protected final String RACE4_NAME = "Race 4"; //$NON-NLS-1$
 
+	protected final String EVENT3_NAME = "Race Event 3"; //$NON-NLS-1$
+	protected final int EVENT3_PILOTS = 19;
+	protected final int EVENT3_FLEET = 23;
+	protected final String RACE5_NAME = "Race 5"; //$NON-NLS-1$
+	protected final String RACE6_NAME = "Race 6"; //$NON-NLS-1$
+	protected final String RACE7_NAME = "Race 7"; //$NON-NLS-1$
+	protected final String RACE8_NAME = "Race 8"; //$NON-NLS-1$
+	protected final String RACE9_NAME = "Race 9"; //$NON-NLS-1$
+
 	protected Scorer scorer = ScorerFactory.newScorer(SPKAConstants.UUID_2011);
 
 	protected Pilot sco018;
 	protected Pilot sco019;
+	protected Pilot sco040;
 	protected Pilot sco060;
 	protected Pilot sco068;
 	protected Pilot sco081;
@@ -83,6 +94,12 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 	private Race _race2;
 	private Race _race3;
 	private Race _race4;
+	private Event _event3;
+	private Race _race5;
+	private Race _race6;
+	private Race _race7;
+	private Race _race8;
+	private Race _race9;
 
 	protected void createSeriesData() throws Exception {
 		if (_series != null) {
@@ -107,6 +124,9 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 
 			sco019 = new Pilot(series, "SCO019", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
 			series.getPilots().add(sco019);
+
+			sco040 = new Pilot(series, "SCO040", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
+			series.getPilots().add(sco040);
 
 			sco060 = new Pilot(series, "SCO060", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
 			series.getPilots().add(sco060);
@@ -728,6 +748,601 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			DatabaseSession.commit();
 
 			_race4 = race4;
+		} finally {
+			db.endSession();
+		}
+	}
+
+	protected void createEvent3Data() throws Exception {
+		createSeriesData();
+
+		if (_event3 != null) {
+			return;
+		}
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+
+			Event event3 = new Event(series, EVENT3_NAME);
+			series.getEvents().add(event3);
+			eventDAO.persist(event3);
+
+			DatabaseSession.commit();
+
+			_event3 = event3;
+		} finally {
+			db.endSession();
+		}
+	}
+
+	protected void createEvent3Races() throws Exception {
+		createRace5Data();
+		createRace6Data();
+		createRace7Data();
+		createRace8Data();
+		createRace9Data();
+	}
+
+	protected void createRace5Data() throws Exception {
+		createEvent3Data();
+
+		if (_race5 != null) {
+			return;
+		}
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+			Event event3 = eventDAO.find(series, EVENT3_NAME);
+
+			Race race5 = new Race(event3, RACE5_NAME);
+			event3.getRaces().add(race5);
+			race5.getAttendees().put(sco018, new RaceAttendee(race5, sco018, RaceAttendee.Type.M_SCORER));
+			race5.getAttendees().put(sco019, new RaceAttendee(race5, sco019, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco060, new RaceAttendee(race5, sco060, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco068, new RaceAttendee(race5, sco068, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco081, new RaceAttendee(race5, sco081, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco087, new RaceAttendee(race5, sco087, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco116, new RaceAttendee(race5, sco116, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco153, new RaceAttendee(race5, sco153, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco156, new RaceAttendee(race5, sco156, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco159, new RaceAttendee(race5, sco159, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco179, new RaceAttendee(race5, sco179, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco200, new RaceAttendee(race5, sco200, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco248, new RaceAttendee(race5, sco248, RaceAttendee.Type.M_RACE_MASTER));
+			race5.getAttendees().put(sco249, new RaceAttendee(race5, sco249, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco320, new RaceAttendee(race5, sco320, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco467, new RaceAttendee(race5, sco467, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco528, new RaceAttendee(race5, sco528, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco808, new RaceAttendee(race5, sco808, RaceAttendee.Type.PILOT));
+			race5.getAttendees().put(sco040, new RaceAttendee(race5, sco040, RaceAttendee.Type.PILOT));
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.START));
+			// 1
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "81", sco081)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "116", sco116)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "19", sco019)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "87", sco087)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "153", sco153)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "60", sco060)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "40", sco040)); //$NON-NLS-1$
+			// 2
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "81", sco081)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "116", sco116)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "19", sco019)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "87", sco087)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "153", sco153)); //$NON-NLS-1$
+			// 3
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "81", sco081)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "116", sco116)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "19", sco019)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "87", sco087)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "153", sco153)); //$NON-NLS-1$
+			// 4
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "19", sco019)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "116", sco116)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "87", sco087)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			// 5
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "116", sco116)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "19", sco019)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			// 6
+			race5.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			raceDAO.persist(race5);
+
+			DatabaseSession.commit();
+
+			_race5 = race5;
+		} finally {
+			db.endSession();
+		}
+	}
+
+	protected void createRace6Data() throws Exception {
+		createEvent3Data();
+
+		if (_race6 != null) {
+			return;
+		}
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+			Event event3 = eventDAO.find(series, EVENT3_NAME);
+
+			Race race6 = new Race(event3, RACE6_NAME);
+			event3.getRaces().add(race6);
+			race6.getAttendees().put(sco018, new RaceAttendee(race6, sco018, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco019, new RaceAttendee(race6, sco019, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco060, new RaceAttendee(race6, sco060, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco068, new RaceAttendee(race6, sco068, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco081, new RaceAttendee(race6, sco081, RaceAttendee.Type.M_RACE_MASTER));
+			race6.getAttendees().put(sco087, new RaceAttendee(race6, sco087, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco116, new RaceAttendee(race6, sco116, RaceAttendee.Type.M_SCORER));
+			race6.getAttendees().put(sco153, new RaceAttendee(race6, sco153, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco156, new RaceAttendee(race6, sco156, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco159, new RaceAttendee(race6, sco159, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco179, new RaceAttendee(race6, sco179, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco200, new RaceAttendee(race6, sco200, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco248, new RaceAttendee(race6, sco248, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco249, new RaceAttendee(race6, sco249, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco320, new RaceAttendee(race6, sco320, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco467, new RaceAttendee(race6, sco467, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco528, new RaceAttendee(race6, sco528, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco808, new RaceAttendee(race6, sco808, RaceAttendee.Type.PILOT));
+			race6.getAttendees().put(sco040, new RaceAttendee(race6, sco040, RaceAttendee.Type.PILOT));
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.START));
+			// 1
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "19", sco019)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "60", sco060)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "87", sco087)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "18", sco018)); //$NON-NLS-1$
+			// 2
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "19", sco019)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "40", sco040)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "60", sco060)); //$NON-NLS-1$
+			// 3
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "87", sco087)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "320", sco320)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "19", sco019)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			// 4
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "87", sco087)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "18", sco018)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "60", sco060)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "40", sco040)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "19", sco019)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			// 5
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "320", sco320)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "87", sco087)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "60", sco060)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "19", sco019)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			// 6
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "153", sco153)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "18", sco018)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "87", sco087)); //$NON-NLS-1$
+			// 7
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "19", sco019)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "320", sco320)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "60", sco060)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			// 8
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "87", sco087)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "19", sco019)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "18", sco018)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "60", sco060)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "320", sco320)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			// 9
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "19", sco019)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "87", sco087)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "18", sco018)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "153", sco153)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			// 10
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "60", sco060)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "320", sco320)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "19", sco019)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "87", sco087)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "18", sco018)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race6.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "153", sco153)); //$NON-NLS-1$
+			raceDAO.persist(race6);
+
+			DatabaseSession.commit();
+
+			_race6 = race6;
+		} finally {
+			db.endSession();
+		}
+	}
+
+	protected void createRace7Data() throws Exception {
+		createEvent3Data();
+
+		if (_race7 != null) {
+			return;
+		}
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+			Event event3 = eventDAO.find(series, EVENT3_NAME);
+
+			Race race7 = new Race(event3, RACE7_NAME);
+			event3.getRaces().add(race7);
+			race7.getAttendees().put(sco018, new RaceAttendee(race7, sco018, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco019, new RaceAttendee(race7, sco019, RaceAttendee.Type.M_SCORER));
+			race7.getAttendees().put(sco060, new RaceAttendee(race7, sco060, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco068, new RaceAttendee(race7, sco068, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco081, new RaceAttendee(race7, sco081, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco087, new RaceAttendee(race7, sco087, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco116, new RaceAttendee(race7, sco116, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco153, new RaceAttendee(race7, sco153, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco156, new RaceAttendee(race7, sco156, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco159, new RaceAttendee(race7, sco159, RaceAttendee.Type.M_RACE_MASTER));
+			race7.getAttendees().put(sco179, new RaceAttendee(race7, sco179, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco200, new RaceAttendee(race7, sco200, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco248, new RaceAttendee(race7, sco248, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco249, new RaceAttendee(race7, sco249, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco320, new RaceAttendee(race7, sco320, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco467, new RaceAttendee(race7, sco467, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco528, new RaceAttendee(race7, sco528, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco808, new RaceAttendee(race7, sco808, RaceAttendee.Type.PILOT));
+			race7.getAttendees().put(sco040, new RaceAttendee(race7, sco040, RaceAttendee.Type.PILOT));
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.START));
+			// 1
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "81", sco081)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "87", sco087)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "320", sco320)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "60", sco060)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "116", sco116)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "153", sco153)); //$NON-NLS-1$
+			// 2
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "87", sco087)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "81", sco081)); //$NON-NLS-1$
+			// 3
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			// 4
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race7.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			raceDAO.persist(race7);
+
+			DatabaseSession.commit();
+
+			_race7 = race7;
+		} finally {
+			db.endSession();
+		}
+	}
+
+	protected void createRace8Data() throws Exception {
+		createEvent3Data();
+
+		if (_race8 != null) {
+			return;
+		}
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+			Event event3 = eventDAO.find(series, EVENT3_NAME);
+
+			Race race8 = new Race(event3, RACE8_NAME);
+			event3.getRaces().add(race8);
+			race8.getAttendees().put(sco018, new RaceAttendee(race8, sco018, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco019, new RaceAttendee(race8, sco019, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco060, new RaceAttendee(race8, sco060, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco068, new RaceAttendee(race8, sco068, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco081, new RaceAttendee(race8, sco081, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco087, new RaceAttendee(race8, sco087, RaceAttendee.Type.M_RACE_MASTER));
+			race8.getAttendees().put(sco116, new RaceAttendee(race8, sco116, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco153, new RaceAttendee(race8, sco153, RaceAttendee.Type.M_SCORER));
+			race8.getAttendees().put(sco156, new RaceAttendee(race8, sco156, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco159, new RaceAttendee(race8, sco159, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco179, new RaceAttendee(race8, sco179, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco200, new RaceAttendee(race8, sco200, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco248, new RaceAttendee(race8, sco248, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco249, new RaceAttendee(race8, sco249, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco320, new RaceAttendee(race8, sco320, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco467, new RaceAttendee(race8, sco467, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco528, new RaceAttendee(race8, sco528, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco808, new RaceAttendee(race8, sco808, RaceAttendee.Type.PILOT));
+			race8.getAttendees().put(sco040, new RaceAttendee(race8, sco040, RaceAttendee.Type.PILOT));
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.START));
+			// 1
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "320", sco320)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "200", sco200)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "40", sco040)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "116", sco116)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "156", sco156)); //$NON-NLS-1$
+			// 2
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "200", sco200)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "320", sco320)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "116", sco116)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "40", sco040)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "156", sco156)); //$NON-NLS-1$
+			// 3
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "200", sco200)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "116", sco116)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "320", sco320)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "40", sco040)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "156", sco156)); //$NON-NLS-1$
+			// 4
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "200", sco200)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "116", sco116)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "320", sco320)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "40", sco040)); //$NON-NLS-1$
+			// 5
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "200", sco200)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "116", sco116)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			// 6
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "200", sco200)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "249", sco249)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			// 7
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
+			race8.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "200", sco200)); //$NON-NLS-1$
+			raceDAO.persist(race8);
+
+			DatabaseSession.commit();
+
+			_race8 = race8;
+		} finally {
+			db.endSession();
+		}
+	}
+
+	protected void createRace9Data() throws Exception {
+		createEvent3Data();
+
+		if (_race9 != null) {
+			return;
+		}
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+			Event event3 = eventDAO.find(series, EVENT3_NAME);
+
+			Race race9 = new Race(event3, RACE9_NAME);
+			event3.getRaces().add(race9);
+			race9.getAttendees().put(sco018, new RaceAttendee(race9, sco018, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco019, new RaceAttendee(race9, sco019, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco060, new RaceAttendee(race9, sco060, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco068, new RaceAttendee(race9, sco068, RaceAttendee.Type.M_SCORER));
+			race9.getAttendees().put(sco081, new RaceAttendee(race9, sco081, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco087, new RaceAttendee(race9, sco087, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco116, new RaceAttendee(race9, sco116, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco153, new RaceAttendee(race9, sco153, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco156, new RaceAttendee(race9, sco156, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco159, new RaceAttendee(race9, sco159, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco179, new RaceAttendee(race9, sco179, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco200, new RaceAttendee(race9, sco200, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco248, new RaceAttendee(race9, sco248, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco249, new RaceAttendee(race9, sco249, RaceAttendee.Type.M_RACE_MASTER));
+			race9.getAttendees().put(sco320, new RaceAttendee(race9, sco320, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco467, new RaceAttendee(race9, sco467, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco528, new RaceAttendee(race9, sco528, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco808, new RaceAttendee(race9, sco808, RaceAttendee.Type.PILOT));
+			race9.getAttendees().put(sco040, new RaceAttendee(race9, sco040, RaceAttendee.Type.PILOT));
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.START));
+			// 1
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "200", sco200)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "116", sco116)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "320", sco320)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "87", sco087)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "153", sco153)); //$NON-NLS-1$
+			// 2
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "200", sco200)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "116", sco116)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "320", sco320)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "153", sco153)); //$NON-NLS-1$
+			// 3
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "200", sco200)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "116", sco116)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "159", sco159)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "320", sco320)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "467", sco467)); //$NON-NLS-1$
+			// 4
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "200", sco200)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "116", sco116)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			// 5
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "200", sco200)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "528", sco528)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
+			race9.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "248", sco248)); //$NON-NLS-1$
+			raceDAO.persist(race9);
+
+			DatabaseSession.commit();
+
+			_race9 = race9;
 		} finally {
 			db.endSession();
 		}
