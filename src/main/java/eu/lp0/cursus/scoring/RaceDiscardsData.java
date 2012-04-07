@@ -34,4 +34,6 @@ public interface RaceDiscardsData {
 	public Map<Pilot, ? extends Set<Race>> getDiscardedRaces();
 
 	public Set<Race> getDiscardedRaces(Pilot pilot);
+
+	public int getDiscardCount();
 }

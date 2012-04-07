@@ -80,7 +80,7 @@ public abstract class AbstractRaceDiscardsData<T extends ScoredData & RacePoints
 	@Override
 	public final int getRaceDiscard(Pilot pilot, int discard) {
 		Preconditions.checkArgument(discard > 0);
-		Preconditions.checkElementIndex(discard, discards);
+		Preconditions.checkElementIndex(discard - 1, discards);
 		return lazyRaceDiscards.get().get(pilot).get(discard - 1);
 	}
 
@@ -92,6 +92,11 @@ public abstract class AbstractRaceDiscardsData<T extends ScoredData & RacePoints
 	@Override
 	public final Set<Race> getDiscardedRaces(Pilot pilot) {
 		return lazyDiscardedRaces.get().get(pilot);
+	}
+
+	@Override
+	public final int getDiscardCount() {
+		return discards;
 	}
 
 	protected abstract List<Race> calculateDiscardedRaces(Pilot pilot);

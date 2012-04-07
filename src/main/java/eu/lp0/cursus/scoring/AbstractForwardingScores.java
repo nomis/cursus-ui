@@ -267,6 +267,11 @@ public abstract class AbstractForwardingScores implements Scores {
 		return Collections.unmodifiableSet(delegateRaceDiscardsData().getDiscardedRaces(pilot));
 	}
 
+	@Override
+	public int getDiscardCount() {
+		return delegateRaceDiscardsData().getDiscardCount();
+	}
+
 	// OverallPenaltiesData
 	@Override
 	public Map<Pilot, Integer> getOverallPenalties() {
