@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml;
+package eu.lp0.cursus.xml.scores;
 
 import java.io.File;
 import java.io.InputStream;
@@ -27,7 +27,9 @@ import java.util.List;
 import org.simpleframework.xml.core.Persister;
 
 import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.xml.scores.ScoresXMLFile;
+import eu.lp0.cursus.xml.ExportException;
+import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.ImportException;
 
 public class ScoresXML {
 	private ScoresXMLFile data;
