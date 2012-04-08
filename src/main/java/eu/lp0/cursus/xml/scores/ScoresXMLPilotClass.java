@@ -21,26 +21,24 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Class;
-import eu.lp0.cursus.db.data.Pilot;
-import eu.lp0.cursus.scoring.Scores;
 
-@Root(name = "class")
+@Root(name = "pilotClass")
 public class ScoresXMLPilotClass {
 	public ScoresXMLPilotClass() {
 	}
 
-	public ScoresXMLPilotClass(Scores scores, Pilot pilot, Class class__) {
-		class_ = Class.class.getSimpleName() + class__.getId();
+	public ScoresXMLPilotClass(Class class_) {
+		ref = Class.class.getSimpleName() + class_.getId();
 	}
 
-	@Attribute(name = "class")
-	private String class_;
+	@Attribute
+	private String ref;
 
-	public String getClass_() {
-		return class_;
+	public String getRef() {
+		return ref;
 	}
 
-	public void setClass_(String cls) {
-		this.class_ = cls;
+	public void setRef(String ref) {
+		this.ref = ref;
 	}
 }

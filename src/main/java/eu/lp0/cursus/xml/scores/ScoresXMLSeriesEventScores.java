@@ -17,18 +17,30 @@
  */
 package eu.lp0.cursus.xml.scores;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.scoring.Scores;
 
-@Root(name = "race")
-public class ScoresXMLDiscard {
-	public ScoresXMLDiscard() {
+@Root(name = "event")
+public class ScoresXMLSeriesEventScores {
+	public ScoresXMLSeriesEventScores() {
 	}
 
-	public ScoresXMLDiscard(Race race_) {
-		ref = Race.class.getSimpleName() + race_.getId();
+	public ScoresXMLSeriesEventScores(Scores scores, Event event, Collection<Race> races) {
+		ref = Event.class.getSimpleName() + event.getId();
+
+		this.races = new ArrayList<ScoresXMLEventRaceScores>(races.size());
+		for (Race race : races) {
+			this.races.add(new ScoresXMLEventRaceScores(scores, race));
+		}
 	}
 
 	@Attribute
@@ -40,5 +52,16 @@ public class ScoresXMLDiscard {
 
 	public void setRef(String ref) {
 		this.ref = ref;
+	}
+
+	@ElementList
+	private List<ScoresXMLEventRaceScores> races;
+
+	public List<ScoresXMLEventRaceScores> getRaces() {
+		return races;
+	}
+
+	public void setRaces(List<ScoresXMLEventRaceScores> race) {
+		this.races = race;
 	}
 }

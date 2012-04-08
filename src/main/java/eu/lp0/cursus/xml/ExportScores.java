@@ -17,28 +17,45 @@
  */
 package eu.lp0.cursus.xml;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.OutputStream;
+import java.io.Writer;
+import java.util.List;
 
 import org.simpleframework.xml.core.Persister;
 
 import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.xml.scores.ScoresXMLSeries;
+import eu.lp0.cursus.xml.scores.ScoresXMLFile;
 
 public class ExportScores {
-	private Scores scores;
+	private Persister persister = new Persister();
+	private ScoresXMLFile data;
 
-	public ExportScores(Scores scores) {
-		this.scores = scores;
+	public ExportScores(Scores seriesScores, List<Scores> eventScores, List<Scores> raceScores) {
+		data = new ScoresXMLFile(seriesScores, eventScores, raceScores);
 	}
 
-	@Override
-	public String toString() {
+	public void to(OutputStream stream) throws ExportException {
 		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			new Persister().write(new ScoresXMLSeries(scores), baos);
-			return baos.toString("UTF-8"); //$NON-NLS-1$
+			persister.write(data, stream);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new ExportException(e);
+		}
+	}
+
+	public void to(File file) throws ExportException {
+		try {
+			persister.write(data, file);
+		} catch (Exception e) {
+			throw new ExportException(e);
+		}
+	}
+
+	public void to(Writer writer) throws ExportException {
+		try {
+			persister.write(data, writer);
+		} catch (Exception e) {
+			throw new ExportException(e);
 		}
 	}
 }

@@ -18,8 +18,8 @@
 package eu.lp0.cursus.xml.scores;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -27,22 +27,22 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Event;
+import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.scoring.Scores;
 
 @Root(name = "event")
 public class ScoresXMLEvent {
 	public ScoresXMLEvent() {
 	}
 
-	public ScoresXMLEvent(Scores scores, Event event, Collection<Race> races_) {
+	public ScoresXMLEvent(Event event, Set<Race> races, Set<Pilot> pilots) {
 		id = Event.class.getSimpleName() + event.getId();
 		name = event.getName();
 		description = event.getDescription();
 
-		races = new ArrayList<ScoresXMLRace>(races_.size());
-		for (Race race : races_) {
-			races.add(new ScoresXMLRace(scores, race));
+		this.races = new ArrayList<ScoresXMLRace>(races.size());
+		for (Race race : races) {
+			this.races.add(new ScoresXMLRace(race, pilots));
 		}
 	}
 

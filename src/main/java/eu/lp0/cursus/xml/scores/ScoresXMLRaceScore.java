@@ -22,48 +22,34 @@ import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.scoring.Scores;
 
 @Root(name = "pilot")
-public class ScoresXMLRacePilot {
-	public ScoresXMLRacePilot() {
+public class ScoresXMLRaceScore {
+	public ScoresXMLRaceScore() {
 	}
 
-	public ScoresXMLRacePilot(Scores scores, Race race_, Pilot pilot_) {
-		pilot = Pilot.class.getSimpleName() + pilot_.getId();
-		RaceAttendee attendee = race_.getAttendees().get(pilot_);
-		if (attendee != null) {
-			role = attendee.getType();
-		}
+	public ScoresXMLRaceScore(Scores scores, Race race_, Pilot pilot_) {
+		ref = Pilot.class.getSimpleName() + pilot_.getId();
+
 		laps = scores.getLaps(pilot_, race_);
 		setSimulated(scores.hasSimulatedRacePoints(pilot_, race_));
 		setDiscarded(scores.getDiscardedRaces(pilot_).contains(race_));
+
 		penalties = scores.getRacePenalties(pilot_, race_);
 		points = scores.getRacePoints(pilot_, race_);
 		position = scores.getRacePosition(pilot_, race_);
 	}
 
 	@Attribute
-	private String pilot;
+	private String ref;
 
-	public String getPilot() {
-		return pilot;
+	public String getRef() {
+		return ref;
 	}
 
-	public void setPilot(String pilot) {
-		this.pilot = pilot;
-	}
-
-	@Attribute(required = false)
-	private RaceAttendee.Type role;
-
-	public RaceAttendee.Type getRole() {
-		return role;
-	}
-
-	public void setRole(RaceAttendee.Type role) {
-		this.role = role;
+	public void setRef(String ref) {
+		this.ref = ref;
 	}
 
 	@Attribute

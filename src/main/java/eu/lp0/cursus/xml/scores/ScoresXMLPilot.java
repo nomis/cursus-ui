@@ -28,34 +28,23 @@ import org.simpleframework.xml.Root;
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Pilot;
-import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.scoring.Scores;
 
 @Root(name = "pilot")
 public class ScoresXMLPilot {
 	public ScoresXMLPilot() {
 	}
 
-	public ScoresXMLPilot(Scores scores, Pilot pilot) {
+	public ScoresXMLPilot(Pilot pilot) {
 		id = Pilot.class.getSimpleName() + pilot.getId();
 		name = pilot.getName();
 		gender = pilot.getGender();
 		if (pilot.getRaceNumber() != null) {
-			raceNumber = new ScoresXMLRaceNumber(scores, pilot.getRaceNumber());
+			raceNumber = new ScoresXMLRaceNumber(pilot.getRaceNumber());
 		}
 
 		classes = new ArrayList<ScoresXMLPilotClass>(pilot.getClasses().size());
 		for (Class class_ : pilot.getClasses()) {
-			classes.add(new ScoresXMLPilotClass(scores, pilot, class_));
-		}
-
-		penalties = scores.getOverallPenalties(pilot);
-		points = scores.getOverallPoints(pilot);
-		position = scores.getOverallPosition(pilot);
-
-		discards = new ArrayList<ScoresXMLDiscard>(scores.getDiscardCount());
-		for (Race race : scores.getDiscardedRaces(pilot)) {
-			discards.add(new ScoresXMLDiscard(scores, pilot, race));
+			classes.add(new ScoresXMLPilotClass(class_));
 		}
 	}
 
@@ -112,49 +101,5 @@ public class ScoresXMLPilot {
 
 	public void setClasses(List<ScoresXMLPilotClass> classes) {
 		this.classes = classes;
-	}
-
-	@Attribute
-	private int penalties;
-
-	public int getPenalties() {
-		return penalties;
-	}
-
-	public void setPenalties(int penalties) {
-		this.penalties = penalties;
-	}
-
-	@Attribute
-	private int points;
-
-	public int getPoints() {
-		return points;
-	}
-
-	public void setPoints(int points) {
-		this.points = points;
-	}
-
-	@Attribute
-	private int position;
-
-	public int getPosition() {
-		return position;
-	}
-
-	public void setPosition(int position) {
-		this.position = position;
-	}
-
-	@ElementList
-	private List<ScoresXMLDiscard> discards;
-
-	public List<ScoresXMLDiscard> getDiscards() {
-		return discards;
-	}
-
-	public void setDiscards(List<ScoresXMLDiscard> discards) {
-		this.discards = discards;
 	}
 }

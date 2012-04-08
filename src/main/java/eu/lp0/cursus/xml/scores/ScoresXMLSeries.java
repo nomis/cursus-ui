@@ -18,18 +18,17 @@
 package eu.lp0.cursus.xml.scores;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
 import eu.lp0.cursus.db.data.Class;
@@ -37,41 +36,32 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.util.Constants;
 
-@Namespace(reference = Constants.SCORES_XML_DTD)
 @Root(name = "series")
 public class ScoresXMLSeries {
 	public ScoresXMLSeries() {
 	}
 
-	public ScoresXMLSeries(Scores scores) {
-		id = Series.class.getSimpleName() + scores.getSeries().getId();
-		name = scores.getSeries().getName();
-		description = scores.getSeries().getDescription();
-		discards = scores.getDiscardCount();
+	public ScoresXMLSeries(Series series, SortedSet<Event> events, SortedSet<Race> races, Set<Pilot> pilots) {
+		id = Series.class.getSimpleName() + series.getId();
+		name = series.getName();
+		description = series.getDescription();
 
-		classes = new ArrayList<ScoresXMLClass>(scores.getSeries().getClasses().size());
-		for (Class class_ : scores.getSeries().getClasses()) {
-			if (!Sets.intersection(scores.getPilots(), class_.getPilots()).isEmpty()) {
-				classes.add(new ScoresXMLClass(scores, class_));
-			}
+		Set<Class> classes_ = new HashSet<Class>();
+		this.pilots = new ArrayList<ScoresXMLPilot>(pilots.size());
+		for (Pilot pilot : pilots) {
+			this.pilots.add(new ScoresXMLPilot(pilot));
+			classes_.addAll(pilot.getClasses());
 		}
 
-		pilots = new ArrayList<ScoresXMLPilot>(scores.getPilots().size());
-		for (Pilot pilot : scores.getOverallOrder()) {
-			pilots.add(new ScoresXMLPilot(scores, pilot));
+		classes = new ArrayList<ScoresXMLClass>(classes_.size());
+		for (Class class_ : classes_) {
+			classes.add(new ScoresXMLClass(class_));
 		}
 
-		Multimap<Event, Race> events_ = LinkedHashMultimap.create(scores.getRaces().size(), scores.getRaces().size());
-		for (Race race : scores.getRaces()) {
-			events_.put(race.getEvent(), race);
-		}
-
-		events = new ArrayList<ScoresXMLEvent>(events_.keySet().size());
-		for (Entry<Event, Collection<Race>> event : events_.asMap().entrySet()) {
-			events.add(new ScoresXMLEvent(scores, event.getKey(), event.getValue()));
+		this.events = new ArrayList<ScoresXMLEvent>(events.size());
+		for (Event event : events) {
+			this.events.add(new ScoresXMLEvent(event, Sets.intersection(new TreeSet<Race>(event.getRaces()), races), pilots));
 		}
 	}
 
@@ -106,17 +96,6 @@ public class ScoresXMLSeries {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	@Attribute
-	private int discards;
-
-	public int getDiscards() {
-		return discards;
-	}
-
-	public void setDiscards(int discards) {
-		this.discards = discards;
 	}
 
 	@ElementList

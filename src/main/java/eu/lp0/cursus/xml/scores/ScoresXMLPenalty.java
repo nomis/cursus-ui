@@ -17,40 +17,54 @@
  */
 package eu.lp0.cursus.xml.scores;
 
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
-import eu.lp0.cursus.db.data.RaceNumber;
+import eu.lp0.cursus.db.data.Penalty;
+import eu.lp0.cursus.db.data.Penalty.Type;
 
-@Root(name = "raceNumber")
-public class ScoresXMLRaceNumber {
-	public ScoresXMLRaceNumber() {
+@Root(name = "penalty")
+public class ScoresXMLPenalty {
+	public ScoresXMLPenalty() {
 	}
 
-	public ScoresXMLRaceNumber(RaceNumber raceNumber) {
-		organisation = raceNumber.getOrganisation();
-		number = raceNumber.getNumber();
+	public ScoresXMLPenalty(Penalty penalty) {
+		type = penalty.getType();
+		value = penalty.getValue();
+		reason = penalty.getReason();
+	}
+
+	@Attribute
+	private Type type;
+
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
+	}
+
+	@Attribute
+	private int value;
+
+	public int getValue() {
+		return value;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
 	}
 
 	@Element
-	private String organisation;
+	private String reason;
 
-	public String getOrganisation() {
-		return organisation;
+	public String getReason() {
+		return reason;
 	}
 
-	public void setOrganisation(String organisation) {
-		this.organisation = organisation;
-	}
-
-	@Element
-	private int number;
-
-	public int getNumber() {
-		return number;
-	}
-
-	public void setNumber(int number) {
-		this.number = number;
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 }

@@ -19,6 +19,7 @@ package eu.lp0.cursus.xml.scores;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -27,21 +28,23 @@ import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.scoring.Scores;
+import eu.lp0.cursus.db.data.RaceAttendee;
 
 @Root(name = "race")
 public class ScoresXMLRace {
 	public ScoresXMLRace() {
 	}
 
-	public ScoresXMLRace(Scores scores, Race race) {
+	public ScoresXMLRace(Race race, Set<Pilot> pilots) {
 		id = Race.class.getSimpleName() + race.getId();
 		name = race.getName();
 		description = race.getDescription();
 
-		pilots = new ArrayList<ScoresXMLRacePilot>(scores.getPilots().size());
-		for (Pilot pilot : scores.getRaceOrder(race)) {
-			pilots.add(new ScoresXMLRacePilot(scores, race, pilot));
+		this.pilots = new ArrayList<ScoresXMLRaceAttendee>(race.getAttendees().size());
+		for (RaceAttendee attendee : race.getAttendees().values()) {
+			if (pilots.contains(attendee.getPilot())) {
+				this.pilots.add(new ScoresXMLRaceAttendee(attendee));
+			}
 		}
 	}
 
@@ -79,13 +82,13 @@ public class ScoresXMLRace {
 	}
 
 	@ElementList
-	private List<ScoresXMLRacePilot> pilots;
+	private List<ScoresXMLRaceAttendee> pilots;
 
-	public List<ScoresXMLRacePilot> getPilots() {
+	public List<ScoresXMLRaceAttendee> getPilots() {
 		return pilots;
 	}
 
-	public void setPilots(List<ScoresXMLRacePilot> pilots) {
+	public void setPilots(List<ScoresXMLRaceAttendee> pilots) {
 		this.pilots = pilots;
 	}
 }

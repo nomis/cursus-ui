@@ -22,14 +22,13 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Class;
-import eu.lp0.cursus.scoring.Scores;
 
 @Root(name = "class")
 public class ScoresXMLClass {
 	public ScoresXMLClass() {
 	}
 
-	public ScoresXMLClass(Scores scores, Class class_) {
+	public ScoresXMLClass(Class class_) {
 		id = Class.class.getSimpleName() + class_.getId();
 		name = class_.getName();
 		description = class_.getDescription();
