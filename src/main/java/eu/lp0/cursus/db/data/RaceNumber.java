@@ -38,9 +38,6 @@ import eu.lp0.cursus.util.Constants;
 public final class RaceNumber extends AbstractEntity implements Comparable<RaceNumber> {
 	public static final Pattern RACE_NUMBER_PATTERN = Pattern.compile("^([^0-9]+)([0-9]+)$"); //$NON-NLS-1$
 
-	private String organisation;
-	private Integer number;
-
 	RaceNumber() {
 	}
 
@@ -63,6 +60,8 @@ public final class RaceNumber extends AbstractEntity implements Comparable<RaceN
 		this.series = series;
 	}
 
+	private String organisation;
+
 	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getOrganisation() {
 		return organisation.replaceAll("[0-9]", "").toUpperCase(Locale.ENGLISH); //$NON-NLS-1$ //$NON-NLS-2$;
@@ -71,6 +70,8 @@ public final class RaceNumber extends AbstractEntity implements Comparable<RaceN
 	public void setOrganisation(String organisation) {
 		this.organisation = organisation.replaceAll("[0-9]", "").toUpperCase(Locale.ENGLISH); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+
+	private Integer number;
 
 	@Column(nullable = false)
 	public int getNumber() {

@@ -30,6 +30,7 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.test.db.AbstractDatabaseTest;
+import eu.lp0.cursus.xml.ExportScores;
 
 public class AbstractSeries extends AbstractDatabaseTest {
 	protected final String SERIES_COUNTRY = "Scotland"; //$NON-NLS-1$
@@ -129,5 +130,8 @@ public class AbstractSeries extends AbstractDatabaseTest {
 			}
 			System.out.println("\t" + scores.getOverallPoints(pilot)); //$NON-NLS-1$ 
 		}
+
+		System.out.println();
+		System.out.println(new ExportScores(scores).toString());
 	}
 }

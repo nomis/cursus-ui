@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.scoring;
 
+
 /**
  * Scores needs to extend {@code ScoresFactorySubset} so that we can get a new instance of {@code RaceDiscardsData} from within {@code AveragingRacePointsData}
  * and run the race discards calculation on the pre-averaged data (avoiding infinite recursion)
