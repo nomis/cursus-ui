@@ -15,12 +15,11 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores;
+package eu.lp0.cursus.xml.scores.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -28,35 +27,28 @@ import org.simpleframework.xml.Root;
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.xml.AbstractXMLEntity;
+import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceNumber;
 
 @Root(name = "pilot")
-public class ScoresXMLPilot {
+public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {
 	public ScoresXMLPilot() {
 	}
 
-	public ScoresXMLPilot(Pilot pilot) {
-		id = Pilot.class.getSimpleName() + pilot.getId();
+	public ScoresXMLPilot(ExportReferenceManager refMgr, Pilot pilot) {
+		super(pilot);
+
 		name = pilot.getName();
 		gender = pilot.getGender();
 		if (pilot.getRaceNumber() != null) {
 			raceNumber = new ScoresXMLRaceNumber(pilot.getRaceNumber());
 		}
 
-		classes = new ArrayList<ScoresXMLPilotClass>(pilot.getClasses().size());
+		classes = new ArrayList<ScoresXMLClassRef>(pilot.getClasses().size());
 		for (Class class_ : pilot.getClasses()) {
-			classes.add(new ScoresXMLPilotClass(class_));
+			classes.add((ScoresXMLClassRef)refMgr.get(class_));
 		}
-	}
-
-	@Attribute
-	private String id;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	@Element
@@ -93,13 +85,18 @@ public class ScoresXMLPilot {
 	}
 
 	@ElementList
-	private List<ScoresXMLPilotClass> classes;
+	private List<ScoresXMLClassRef> classes;
 
-	public List<ScoresXMLPilotClass> getClasses() {
+	public List<ScoresXMLClassRef> getClasses() {
 		return classes;
 	}
 
-	public void setClasses(List<ScoresXMLPilotClass> classes) {
+	public void setClasses(List<ScoresXMLClassRef> classes) {
 		this.classes = classes;
+	}
+
+	@Override
+	public ScoresXMLPilotRef makeReference() {
+		return new ScoresXMLPilotRef(this);
 	}
 }

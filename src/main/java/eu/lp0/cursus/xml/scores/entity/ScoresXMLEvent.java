@@ -15,48 +15,37 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores;
+package eu.lp0.cursus.xml.scores.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.db.data.RaceAttendee;
+import eu.lp0.cursus.xml.AbstractXMLEntity;
+import eu.lp0.cursus.xml.ExportReferenceManager;
 
-@Root(name = "race")
-public class ScoresXMLRace {
-	public ScoresXMLRace() {
+@Root(name = "event")
+public class ScoresXMLEvent extends AbstractXMLEntity<Event> {
+	public ScoresXMLEvent() {
 	}
 
-	public ScoresXMLRace(Race race, Set<Pilot> pilots) {
-		id = Race.class.getSimpleName() + race.getId();
-		name = race.getName();
-		description = race.getDescription();
+	public ScoresXMLEvent(ExportReferenceManager refMgr, Event event, Set<Race> races, Set<Pilot> pilots) {
+		super(event);
 
-		this.pilots = new ArrayList<ScoresXMLRaceAttendee>(race.getAttendees().size());
-		for (RaceAttendee attendee : race.getAttendees().values()) {
-			if (pilots.contains(attendee.getPilot())) {
-				this.pilots.add(new ScoresXMLRaceAttendee(attendee));
-			}
+		name = event.getName();
+		description = event.getDescription();
+
+		this.races = new ArrayList<ScoresXMLRace>(races.size());
+		for (Race race : races) {
+			this.races.add(refMgr.put(new ScoresXMLRace(refMgr, race, pilots)));
 		}
-	}
-
-	@Attribute
-	private String id;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	@Element
@@ -82,13 +71,18 @@ public class ScoresXMLRace {
 	}
 
 	@ElementList
-	private List<ScoresXMLRaceAttendee> pilots;
+	private List<ScoresXMLRace> races;
 
-	public List<ScoresXMLRaceAttendee> getPilots() {
-		return pilots;
+	public List<ScoresXMLRace> getRaces() {
+		return races;
 	}
 
-	public void setPilots(List<ScoresXMLRaceAttendee> pilots) {
-		this.pilots = pilots;
+	public void setRaces(List<ScoresXMLRace> race) {
+		this.races = race;
+	}
+
+	@Override
+	public ScoresXMLEventRef makeReference() {
+		return new ScoresXMLEventRef(this);
 	}
 }

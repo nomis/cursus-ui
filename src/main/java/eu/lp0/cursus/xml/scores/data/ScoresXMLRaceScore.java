@@ -15,48 +15,77 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores;
-
-import java.util.ArrayList;
-import java.util.List;
+package eu.lp0.cursus.xml.scores.data;
 
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.Scores;
+import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.scores.entity.ScoresXMLPilotRef;
 
-@Root(name = "pilot")
-public class ScoresXMLOverallScore {
-	public ScoresXMLOverallScore() {
+@Root(name = "raceScore")
+public class ScoresXMLRaceScore {
+	public ScoresXMLRaceScore() {
 	}
 
-	public ScoresXMLOverallScore(Scores scores, Pilot pilot) {
-		ref = Pilot.class.getSimpleName() + pilot.getId();
+	public ScoresXMLRaceScore(ExportReferenceManager refMgr, Scores scores, Race race_, Pilot pilot_) {
+		pilot = refMgr.get(pilot_);
 
-		penalties = scores.getOverallPenalties(pilot);
-		points = scores.getOverallPoints(pilot);
-		position = scores.getOverallPosition(pilot);
+		laps = scores.getLaps(pilot_, race_);
+		setSimulated(scores.hasSimulatedRacePoints(pilot_, race_));
+		setDiscarded(scores.getDiscardedRaces(pilot_).contains(race_));
 
-		if (scores.getDiscardCount() > 0) {
-			discards = new ArrayList<ScoresXMLDiscard>(scores.getDiscardCount());
-			for (Race race : scores.getDiscardedRaces(pilot)) {
-				discards.add(new ScoresXMLDiscard(race));
-			}
-		}
+		penalties = scores.getRacePenalties(pilot_, race_);
+		points = scores.getRacePoints(pilot_, race_);
+		position = scores.getRacePosition(pilot_, race_);
+	}
+
+	@Element
+	private ScoresXMLPilotRef pilot;
+
+	public ScoresXMLPilotRef getPilot() {
+		return pilot;
+	}
+
+	public void setPilot(ScoresXMLPilotRef pilot) {
+		this.pilot = pilot;
 	}
 
 	@Attribute
-	private String ref;
+	private int laps;
 
-	public String getRef() {
-		return ref;
+	public int getLaps() {
+		return laps;
 	}
 
-	public void setRef(String ref) {
-		this.ref = ref;
+	public void setLaps(int laps) {
+		this.laps = laps;
+	}
+
+	@Attribute
+	private boolean simulated;
+
+	public boolean isSimulated() {
+		return simulated;
+	}
+
+	public void setSimulated(boolean simulated) {
+		this.simulated = simulated;
+	}
+
+	@Attribute
+	private boolean discarded;
+
+	public boolean isDiscarded() {
+		return discarded;
+	}
+
+	public void setDiscarded(boolean discarded) {
+		this.discarded = discarded;
 	}
 
 	@Attribute
@@ -90,16 +119,5 @@ public class ScoresXMLOverallScore {
 
 	public void setPosition(int position) {
 		this.position = position;
-	}
-
-	@ElementList(required = false)
-	private List<ScoresXMLDiscard> discards;
-
-	public List<ScoresXMLDiscard> getDiscards() {
-		return discards;
-	}
-
-	public void setDiscards(List<ScoresXMLDiscard> discards) {
-		this.discards = discards;
 	}
 }

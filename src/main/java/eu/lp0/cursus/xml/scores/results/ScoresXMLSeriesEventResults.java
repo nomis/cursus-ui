@@ -15,53 +15,55 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores;
+package eu.lp0.cursus.xml.scores.results;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.Scores;
+import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.scores.entity.ScoresXMLEventRef;
 
-@Root(name = "event")
-public class ScoresXMLSeriesEventScores {
-	public ScoresXMLSeriesEventScores() {
+@Root(name = "seriesEventResults")
+public class ScoresXMLSeriesEventResults {
+	public ScoresXMLSeriesEventResults() {
 	}
 
-	public ScoresXMLSeriesEventScores(Scores scores, Event event, Collection<Race> races) {
-		ref = Event.class.getSimpleName() + event.getId();
+	public ScoresXMLSeriesEventResults(ExportReferenceManager refMgr, Scores scores, Event event, Collection<Race> races) {
+		this.event = refMgr.get(event);
 
-		this.races = new ArrayList<ScoresXMLEventRaceScores>(races.size());
+		this.races = new ArrayList<ScoresXMLEventRaceResults>(races.size());
 		for (Race race : races) {
-			this.races.add(new ScoresXMLEventRaceScores(scores, race));
+			this.races.add(new ScoresXMLEventRaceResults(refMgr, scores, race));
 		}
 	}
 
-	@Attribute
-	private String ref;
+	@Element
+	private ScoresXMLEventRef event;
 
-	public String getRef() {
-		return ref;
+	public ScoresXMLEventRef getEvent() {
+		return event;
 	}
 
-	public void setRef(String ref) {
-		this.ref = ref;
+	public void setEvent(ScoresXMLEventRef event) {
+		this.event = event;
 	}
 
 	@ElementList
-	private List<ScoresXMLEventRaceScores> races;
+	private List<ScoresXMLEventRaceResults> races;
 
-	public List<ScoresXMLEventRaceScores> getRaces() {
+	public List<ScoresXMLEventRaceResults> getRaces() {
 		return races;
 	}
 
-	public void setRaces(List<ScoresXMLEventRaceScores> race) {
+	public void setRaces(List<ScoresXMLEventRaceResults> race) {
 		this.races = race;
 	}
 }

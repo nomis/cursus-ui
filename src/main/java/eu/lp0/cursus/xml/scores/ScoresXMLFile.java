@@ -37,6 +37,11 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.util.Constants;
+import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.scores.entity.ScoresXMLSeries;
+import eu.lp0.cursus.xml.scores.results.ScoresXMLEventResults;
+import eu.lp0.cursus.xml.scores.results.ScoresXMLRaceResults;
+import eu.lp0.cursus.xml.scores.results.ScoresXMLSeriesResults;
 
 @Namespace(reference = Constants.SCORES_XML_DTD)
 @Root(name = "cursus")
@@ -44,7 +49,7 @@ public class ScoresXMLFile {
 	public ScoresXMLFile() {
 	}
 
-	public ScoresXMLFile(Scores seriesScores, List<Scores> eventScores, List<Scores> raceScores) {
+	public ScoresXMLFile(ExportReferenceManager refMgr, Scores seriesScores, List<Scores> eventScores, List<Scores> raceScores) {
 		Set<Series> checkSeries = new HashSet<Series>();
 		SortedSet<Event> events = new TreeSet<Event>();
 		SortedSet<Race> races = new TreeSet<Race>();
@@ -54,26 +59,23 @@ public class ScoresXMLFile {
 			checkSeries.add(seriesScores.getSeries());
 			races.addAll(seriesScores.getRaces());
 			pilots.addAll(seriesScores.getPilots());
-			this.seriesScores = new ScoresXMLSeriesScores(seriesScores);
 		}
 
 		if (eventScores != null) {
-			this.eventScores = new ArrayList<ScoresXMLEventScores>(eventScores.size());
+			this.eventScores = new ArrayList<ScoresXMLEventResults>(eventScores.size());
 			for (Scores scores : eventScores) {
 				checkSeries.add(scores.getSeries());
 				races.addAll(scores.getRaces());
-				pilots.addAll(seriesScores.getPilots());
-				this.eventScores.add(new ScoresXMLEventScores(scores));
+				pilots.addAll(scores.getPilots());
 			}
 		}
 
 		if (raceScores != null) {
-			this.raceScores = new ArrayList<ScoresXMLRaceScores>(raceScores.size());
+			this.raceScores = new ArrayList<ScoresXMLRaceResults>(raceScores.size());
 			for (Scores scores : raceScores) {
 				checkSeries.add(scores.getSeries());
 				races.addAll(scores.getRaces());
-				pilots.addAll(seriesScores.getPilots());
-				this.raceScores.add(new ScoresXMLRaceScores(scores));
+				pilots.addAll(scores.getPilots());
 			}
 		}
 		Preconditions.checkArgument(!checkSeries.isEmpty(), "No series"); //$NON-NLS-1$
@@ -83,7 +85,24 @@ public class ScoresXMLFile {
 			events.add(race.getEvent());
 		}
 
-		series = new ScoresXMLSeries(checkSeries.iterator().next(), events, races, pilots);
+		series = new ScoresXMLSeries(refMgr, checkSeries.iterator().next(), events, races, pilots);
+		refMgr.put(series);
+
+		if (seriesScores != null) {
+			this.seriesScores = new ScoresXMLSeriesResults(refMgr, seriesScores);
+		}
+
+		if (eventScores != null) {
+			for (Scores scores : eventScores) {
+				this.eventScores.add(new ScoresXMLEventResults(refMgr, scores));
+			}
+		}
+
+		if (raceScores != null) {
+			for (Scores scores : raceScores) {
+				this.raceScores.add(new ScoresXMLRaceResults(refMgr, scores));
+			}
+		}
 	}
 
 	@Element
@@ -98,35 +117,35 @@ public class ScoresXMLFile {
 	}
 
 	@Element(required = false)
-	private ScoresXMLSeriesScores seriesScores;
+	private ScoresXMLSeriesResults seriesScores;
 
-	public ScoresXMLSeriesScores getSeriesScores() {
+	public ScoresXMLSeriesResults getSeriesScores() {
 		return seriesScores;
 	}
 
-	public void setSeriesScores(ScoresXMLSeriesScores seriesScores) {
+	public void setSeriesScores(ScoresXMLSeriesResults seriesScores) {
 		this.seriesScores = seriesScores;
 	}
 
-	@ElementList(required = false)
-	private List<ScoresXMLEventScores> eventScores;
+	@ElementList(required = false, inline = true)
+	private List<ScoresXMLEventResults> eventScores;
 
-	public List<ScoresXMLEventScores> getEventScores() {
+	public List<ScoresXMLEventResults> getEventScores() {
 		return eventScores;
 	}
 
-	public void setEventScores(List<ScoresXMLEventScores> eventScores) {
+	public void setEventScores(List<ScoresXMLEventResults> eventScores) {
 		this.eventScores = eventScores;
 	}
 
-	@ElementList(required = false)
-	private List<ScoresXMLRaceScores> raceScores;
+	@ElementList(required = false, inline = true)
+	private List<ScoresXMLRaceResults> raceScores;
 
-	public List<ScoresXMLRaceScores> getRaceScores() {
+	public List<ScoresXMLRaceResults> getRaceScores() {
 		return raceScores;
 	}
 
-	public void setRaceScores(List<ScoresXMLRaceScores> raceScores) {
+	public void setRaceScores(List<ScoresXMLRaceResults> raceScores) {
 		this.raceScores = raceScores;
 	}
 }

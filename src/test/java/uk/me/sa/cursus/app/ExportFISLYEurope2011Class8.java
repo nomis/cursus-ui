@@ -22,11 +22,11 @@ import org.fisly.cursus.test.europe_2011.Series2011Class8Scores;
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.xml.ExportScores;
+import eu.lp0.cursus.xml.ScoresXML;
 
 public class ExportFISLYEurope2011Class8 {
 	public static class AllScores extends Series2011Class8Scores {
-		public final ExportScores export;
+		public final ScoresXML export;
 
 		public AllScores() throws Exception {
 			Scores seriesScores;
@@ -41,7 +41,7 @@ public class ExportFISLYEurope2011Class8 {
 				Series series = seriesDAO.find(SERIES_NAME);
 				seriesScores = scorer.scoreSeries(series);
 
-				export = new ExportScores(seriesScores, null, null);
+				export = new ScoresXML(seriesScores, null, null);
 
 				DatabaseSession.commit();
 			} finally {

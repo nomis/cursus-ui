@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores;
+package eu.lp0.cursus.xml.scores.entity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,7 +24,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -36,44 +35,39 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.xml.AbstractXMLEntity;
+import eu.lp0.cursus.xml.ExportReferenceManager;
 
 @Root(name = "series")
-public class ScoresXMLSeries {
+public class ScoresXMLSeries extends AbstractXMLEntity<Series> {
 	public ScoresXMLSeries() {
 	}
 
-	public ScoresXMLSeries(Series series, SortedSet<Event> events, SortedSet<Race> races, Set<Pilot> pilots) {
-		id = Series.class.getSimpleName() + series.getId();
+	public ScoresXMLSeries(ExportReferenceManager refMgr, Series series, SortedSet<Event> events, SortedSet<Race> races, Set<Pilot> pilots) {
+		super(series);
+
 		name = series.getName();
 		description = series.getDescription();
 
 		Set<Class> classes_ = new HashSet<Class>();
-		this.pilots = new ArrayList<ScoresXMLPilot>(pilots.size());
 		for (Pilot pilot : pilots) {
-			this.pilots.add(new ScoresXMLPilot(pilot));
 			classes_.addAll(pilot.getClasses());
 		}
 
 		classes = new ArrayList<ScoresXMLClass>(classes_.size());
 		for (Class class_ : classes_) {
-			classes.add(new ScoresXMLClass(class_));
+			classes.add(refMgr.put(new ScoresXMLClass(class_)));
+		}
+
+		this.pilots = new ArrayList<ScoresXMLPilot>(pilots.size());
+		for (Pilot pilot : pilots) {
+			this.pilots.add(refMgr.put(new ScoresXMLPilot(refMgr, pilot)));
 		}
 
 		this.events = new ArrayList<ScoresXMLEvent>(events.size());
 		for (Event event : events) {
-			this.events.add(new ScoresXMLEvent(event, Sets.intersection(new TreeSet<Race>(event.getRaces()), races), pilots));
+			this.events.add(refMgr.put(new ScoresXMLEvent(refMgr, event, Sets.intersection(new TreeSet<Race>(event.getRaces()), races), pilots)));
 		}
-	}
-
-	@Attribute
-	private String id;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	@Element
@@ -129,5 +123,10 @@ public class ScoresXMLSeries {
 
 	public void setEvents(List<ScoresXMLEvent> events) {
 		this.events = events;
+	}
+
+	@Override
+	public ScoresXMLSeriesRef makeReference() {
+		return new ScoresXMLSeriesRef(this);
 	}
 }

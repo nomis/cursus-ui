@@ -18,7 +18,9 @@
 package eu.lp0.cursus.xml;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.io.Writer;
 import java.util.List;
 
@@ -27,33 +29,67 @@ import org.simpleframework.xml.core.Persister;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.xml.scores.ScoresXMLFile;
 
-public class ExportScores {
-	private Persister persister = new Persister();
+public class ScoresXML {
 	private ScoresXMLFile data;
 
-	public ExportScores(Scores seriesScores, List<Scores> eventScores, List<Scores> raceScores) {
-		data = new ScoresXMLFile(seriesScores, eventScores, raceScores);
+	public ScoresXML() {
+	}
+
+	public ScoresXML(Scores seriesScores, List<Scores> eventScores, List<Scores> raceScores) {
+		data = new ScoresXMLFile(new ExportReferenceManager(), seriesScores, eventScores, raceScores);
+	}
+
+	public ScoresXMLFile getData() {
+		return data;
+	}
+
+	public void setData(ScoresXMLFile data) {
+		this.data = data;
+	}
+
+	public void from(InputStream stream) throws ImportException {
+		try {
+			new Persister().read(ScoresXMLFile.class, stream);
+		} catch (Exception e) {
+			throw new ImportException(e);
+		}
 	}
 
 	public void to(OutputStream stream) throws ExportException {
 		try {
-			persister.write(data, stream);
+			new Persister().write(data, stream);
 		} catch (Exception e) {
 			throw new ExportException(e);
+		}
+	}
+
+	public void from(File file) throws ImportException {
+		try {
+			new Persister().read(ScoresXMLFile.class, file);
+		} catch (Exception e) {
+			throw new ImportException(e);
 		}
 	}
 
 	public void to(File file) throws ExportException {
 		try {
-			persister.write(data, file);
+			new Persister().write(data, file);
 		} catch (Exception e) {
 			throw new ExportException(e);
 		}
 	}
 
+	public void from(Reader reader) throws ImportException {
+		try {
+			new Persister().read(ScoresXMLFile.class, reader);
+		} catch (Exception e) {
+			throw new ImportException(e);
+		}
+	}
+
 	public void to(Writer writer) throws ExportException {
 		try {
-			persister.write(data, writer);
+			new Persister().write(data, writer);
 		} catch (Exception e) {
 			throw new ExportException(e);
 		}

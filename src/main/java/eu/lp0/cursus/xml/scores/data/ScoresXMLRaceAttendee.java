@@ -15,26 +15,28 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores;
+package eu.lp0.cursus.xml.scores.data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Penalty;
-import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.RaceAttendee;
+import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.scores.entity.ScoresXMLPilotRef;
 
-@Root(name = "pilot")
+@Root(name = "attendee")
 public class ScoresXMLRaceAttendee {
 	public ScoresXMLRaceAttendee() {
 	}
 
-	public ScoresXMLRaceAttendee(RaceAttendee attendee) {
-		ref = Pilot.class.getSimpleName() + attendee.getPilot().getId();
+	public ScoresXMLRaceAttendee(ExportReferenceManager refMgr, RaceAttendee attendee) {
+		pilot = refMgr.get(attendee.getPilot());
 		role = attendee.getType();
 
 		if (!attendee.getPenalties().isEmpty()) {
@@ -45,15 +47,15 @@ public class ScoresXMLRaceAttendee {
 		}
 	}
 
-	@Attribute
-	private String ref;
+	@Element
+	private ScoresXMLPilotRef pilot;
 
-	public String getRef() {
-		return ref;
+	public ScoresXMLPilotRef getPilot() {
+		return pilot;
 	}
 
-	public void setRef(String ref) {
-		this.ref = ref;
+	public void setPilot(ScoresXMLPilotRef pilot) {
+		this.pilot = pilot;
 	}
 
 	@Attribute

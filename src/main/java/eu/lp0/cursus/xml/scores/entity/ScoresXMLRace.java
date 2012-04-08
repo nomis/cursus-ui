@@ -15,46 +15,40 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores;
+package eu.lp0.cursus.xml.scores.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
-import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.db.data.RaceAttendee;
+import eu.lp0.cursus.xml.AbstractXMLEntity;
+import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceAttendee;
 
-@Root(name = "event")
-public class ScoresXMLEvent {
-	public ScoresXMLEvent() {
+@Root(name = "race")
+public class ScoresXMLRace extends AbstractXMLEntity<Race> {
+	public ScoresXMLRace() {
 	}
 
-	public ScoresXMLEvent(Event event, Set<Race> races, Set<Pilot> pilots) {
-		id = Event.class.getSimpleName() + event.getId();
-		name = event.getName();
-		description = event.getDescription();
+	public ScoresXMLRace(ExportReferenceManager refMgr, Race race, Set<Pilot> pilots) {
+		super(race);
 
-		this.races = new ArrayList<ScoresXMLRace>(races.size());
-		for (Race race : races) {
-			this.races.add(new ScoresXMLRace(race, pilots));
+		name = race.getName();
+		description = race.getDescription();
+
+		attendees = new ArrayList<ScoresXMLRaceAttendee>(race.getAttendees().size());
+		for (RaceAttendee attendee : race.getAttendees().values()) {
+			if (pilots.contains(attendee.getPilot())) {
+				attendees.add(new ScoresXMLRaceAttendee(refMgr, attendee));
+			}
 		}
-	}
-
-	@Attribute
-	private String id;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	@Element
@@ -80,13 +74,18 @@ public class ScoresXMLEvent {
 	}
 
 	@ElementList
-	private List<ScoresXMLRace> races;
+	private List<ScoresXMLRaceAttendee> attendees;
 
-	public List<ScoresXMLRace> getRaces() {
-		return races;
+	public List<ScoresXMLRaceAttendee> getAttendees() {
+		return attendees;
 	}
 
-	public void setRaces(List<ScoresXMLRace> race) {
-		this.races = race;
+	public void setAttendees(List<ScoresXMLRaceAttendee> attendees) {
+		this.attendees = attendees;
+	}
+
+	@Override
+	public ScoresXMLRaceRef makeReference() {
+		return new ScoresXMLRaceRef(this);
 	}
 }

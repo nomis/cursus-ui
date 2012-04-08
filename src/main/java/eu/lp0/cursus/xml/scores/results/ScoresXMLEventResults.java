@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores;
+package eu.lp0.cursus.xml.scores.results;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -32,45 +33,46 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.Scores;
+import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
+import eu.lp0.cursus.xml.scores.entity.ScoresXMLEventRef;
 
-@Root(name = "eventScore")
-public class ScoresXMLEventScores {
-	public ScoresXMLEventScores() {
+@Root(name = "eventResults")
+public class ScoresXMLEventResults {
+	public ScoresXMLEventResults() {
 	}
 
-	public ScoresXMLEventScores(Scores scores) {
+	public ScoresXMLEventResults(ExportReferenceManager refMgr, Scores scores) {
 		Set<Event> checkEvent = new HashSet<Event>();
 		for (Race race : scores.getRaces()) {
 			checkEvent.add(race.getEvent());
 		}
 		Preconditions.checkArgument(!checkEvent.isEmpty(), "No event"); //$NON-NLS-1$
 		Preconditions.checkArgument(checkEvent.size() == 1, "Multiple events not allowed"); //$NON-NLS-1$
-		Event event = checkEvent.iterator().next();
-
-		ref = Event.class.getSimpleName() + event.getId();
+		event = refMgr.get(checkEvent.iterator().next());
 
 		discards = scores.getDiscardCount();
 
-		pilots = new ArrayList<ScoresXMLOverallScore>(scores.getOverallOrder().size());
+		overallPilots = new ArrayList<ScoresXMLOverallScore>(scores.getOverallOrder().size());
 		for (Pilot pilot : scores.getOverallOrder()) {
-			pilots.add(new ScoresXMLOverallScore(scores, pilot));
+			overallPilots.add(new ScoresXMLOverallScore(refMgr, scores, pilot));
 		}
 
-		races = new ArrayList<ScoresXMLEventRaceScores>(scores.getRaces().size());
+		races = new ArrayList<ScoresXMLEventRaceResults>(scores.getRaces().size());
 		for (Race race : scores.getRaces()) {
-			races.add(new ScoresXMLEventRaceScores(scores, race));
+			races.add(new ScoresXMLEventRaceResults(refMgr, scores, race));
 		}
 	}
 
-	@Attribute
-	private String ref;
+	@Element
+	private ScoresXMLEventRef event;
 
-	public String getRef() {
-		return ref;
+	public ScoresXMLEventRef getEvent() {
+		return event;
 	}
 
-	public void setRef(String ref) {
-		this.ref = ref;
+	public void setEvent(ScoresXMLEventRef event) {
+		this.event = event;
 	}
 
 	@Attribute
@@ -84,25 +86,25 @@ public class ScoresXMLEventScores {
 		this.discards = discards;
 	}
 
-	@ElementList
-	private List<ScoresXMLOverallScore> pilots;
+	@ElementList(name = "overallOrder")
+	private List<ScoresXMLOverallScore> overallPilots;
 
-	public List<ScoresXMLOverallScore> getPilots() {
-		return pilots;
+	public List<ScoresXMLOverallScore> getOverallPilots() {
+		return overallPilots;
 	}
 
-	public void setPilots(List<ScoresXMLOverallScore> pilots) {
-		this.pilots = pilots;
+	public void setOverallPilots(List<ScoresXMLOverallScore> overallPilots) {
+		this.overallPilots = overallPilots;
 	}
 
 	@ElementList
-	private List<ScoresXMLEventRaceScores> races;
+	private List<ScoresXMLEventRaceResults> races;
 
-	public List<ScoresXMLEventRaceScores> getRaces() {
+	public List<ScoresXMLEventRaceResults> getRaces() {
 		return races;
 	}
 
-	public void setRaces(List<ScoresXMLEventRaceScores> race) {
+	public void setRaces(List<ScoresXMLEventRaceResults> race) {
 		this.races = race;
 	}
 }

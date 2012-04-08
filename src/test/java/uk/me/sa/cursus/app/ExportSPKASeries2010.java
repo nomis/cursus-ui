@@ -30,11 +30,11 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.xml.ExportScores;
+import eu.lp0.cursus.xml.ScoresXML;
 
 public class ExportSPKASeries2010 {
 	public static class AllScores extends Series2010Event4Scores {
-		public final ExportScores export;
+		public final ScoresXML export;
 
 		public AllScores() throws Exception {
 			Scores seriesScores;
@@ -59,7 +59,7 @@ public class ExportSPKASeries2010 {
 					}
 				}
 
-				export = new ExportScores(seriesScores, eventScores, raceScores);
+				export = new ScoresXML(seriesScores, eventScores, raceScores);
 
 				DatabaseSession.commit();
 			} finally {

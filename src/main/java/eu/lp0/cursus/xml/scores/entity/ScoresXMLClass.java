@@ -15,34 +15,24 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores;
+package eu.lp0.cursus.xml.scores.entity;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Class;
+import eu.lp0.cursus.xml.AbstractXMLEntity;
 
 @Root(name = "class")
-public class ScoresXMLClass {
+public class ScoresXMLClass extends AbstractXMLEntity<Class> {
 	public ScoresXMLClass() {
 	}
 
 	public ScoresXMLClass(Class class_) {
-		id = Class.class.getSimpleName() + class_.getId();
+		super(class_);
+
 		name = class_.getName();
 		description = class_.getDescription();
-	}
-
-	@Attribute
-	private String id;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	@Element
@@ -65,5 +55,10 @@ public class ScoresXMLClass {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Override
+	public ScoresXMLClassRef makeReference() {
+		return new ScoresXMLClassRef(this);
 	}
 }

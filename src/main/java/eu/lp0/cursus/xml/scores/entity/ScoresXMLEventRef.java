@@ -15,30 +15,19 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores;
+package eu.lp0.cursus.xml.scores.entity;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
-import eu.lp0.cursus.db.data.Class;
+import eu.lp0.cursus.db.data.Event;
+import eu.lp0.cursus.xml.AbstractXMLRef;
 
-@Root(name = "pilotClass")
-public class ScoresXMLPilotClass {
-	public ScoresXMLPilotClass() {
+@Root(name = "event")
+public class ScoresXMLEventRef extends AbstractXMLRef<Event> {
+	public ScoresXMLEventRef() {
 	}
 
-	public ScoresXMLPilotClass(Class class_) {
-		ref = Class.class.getSimpleName() + class_.getId();
-	}
-
-	@Attribute
-	private String ref;
-
-	public String getRef() {
-		return ref;
-	}
-
-	public void setRef(String ref) {
-		this.ref = ref;
+	public ScoresXMLEventRef(ScoresXMLEvent entity) {
+		super(entity);
 	}
 }

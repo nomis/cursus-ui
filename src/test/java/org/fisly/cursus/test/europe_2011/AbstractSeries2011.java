@@ -17,9 +17,12 @@
  */
 package org.fisly.cursus.test.europe_2011;
 
+import java.util.Collections;
+
 import org.fisly.cursus.scoring.FISLYConstants;
 
 import eu.lp0.cursus.db.DatabaseSession;
+import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Penalty;
@@ -452,9 +455,14 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 			SUI152 = new Pilot(series, "SUI152", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(SUI152);
 
-			// Create race numbers
+			// Create class
+			Class cls = new Class(series, "Class 8"); //$NON-NLS-1$
+			series.getClasses().add(cls);
+
+			// Create race numbers and set class
 			for (Pilot pilot : series.getPilots()) {
 				pilot.setRaceNumber(RaceNumber.valueOfFor(pilot.getName(), pilot));
+				pilot.setClasses(Collections.singleton(cls));
 			}
 
 			// Save
