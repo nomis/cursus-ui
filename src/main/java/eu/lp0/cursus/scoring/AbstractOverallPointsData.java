@@ -53,6 +53,4 @@ public abstract class AbstractOverallPointsData<T extends ScoredData> implements
 	}
 
 	protected abstract int calculateOverallPoints(Pilot pilot);
-
-	protected abstract int calculateOverallFleetSize();
 }
