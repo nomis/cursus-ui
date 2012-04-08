@@ -27,6 +27,7 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.db.data.RaceEvent;
+import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.Scorer;
 import eu.lp0.cursus.scoring.ScorerFactory;
@@ -450,6 +451,11 @@ public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
 
 			SUI152 = new Pilot(series, "SUI152", Gender.MALE); //$NON-NLS-1$
 			series.getPilots().add(SUI152);
+
+			// Create race numbers
+			for (Pilot pilot : series.getPilots()) {
+				pilot.setRaceNumber(RaceNumber.valueOfFor(pilot.getName(), pilot));
+			}
 
 			// Save
 			seriesDAO.persist(series);
