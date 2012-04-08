@@ -19,9 +19,11 @@ package eu.lp0.cursus.xml;
 
 import org.simpleframework.xml.Attribute;
 
+import com.google.common.collect.ComparisonChain;
+
 import eu.lp0.cursus.db.data.AbstractEntity;
 
-public abstract class AbstractXMLEntity<T extends AbstractEntity> {
+public abstract class AbstractXMLEntity<T extends AbstractEntity> implements Comparable<AbstractXMLEntity<T>> {
 	public AbstractXMLEntity() {
 	}
 
@@ -43,6 +45,11 @@ public abstract class AbstractXMLEntity<T extends AbstractEntity> {
 	public abstract AbstractXMLRef<T> makeReference();
 
 	public static String generateId(AbstractEntity entity) {
-		return entity.getClass().getSimpleName() + entity.getId();
+		return String.format("%s%x", entity.getClass().getSimpleName(), entity.getId()); //$NON-NLS-1$
+	}
+
+	@Override
+	public int compareTo(AbstractXMLEntity<T> o) {
+		return ComparisonChain.start().compare(getClass().getSimpleName(), o.getClass().getSimpleName()).compare(getId(), o.getId()).result();
 	}
 }

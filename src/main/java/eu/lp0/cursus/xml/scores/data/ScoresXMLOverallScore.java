@@ -18,7 +18,6 @@
 package eu.lp0.cursus.xml.scores.data;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -97,13 +96,13 @@ public class ScoresXMLOverallScore {
 	}
 
 	@ElementList(required = false)
-	private List<ScoresXMLRaceRef> discards;
+	private ArrayList<ScoresXMLRaceRef> discards;
 
-	public List<ScoresXMLRaceRef> getDiscards() {
+	public ArrayList<ScoresXMLRaceRef> getDiscards() {
 		return discards;
 	}
 
-	public void setDiscards(List<ScoresXMLRaceRef> discards) {
+	public void setDiscards(ArrayList<ScoresXMLRaceRef> discards) {
 		this.discards = discards;
 	}
 }

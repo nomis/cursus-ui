@@ -19,7 +19,6 @@ package eu.lp0.cursus.xml.scores.results;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map.Entry;
 
 import org.simpleframework.xml.Attribute;
@@ -87,24 +86,24 @@ public class ScoresXMLSeriesResults {
 	}
 
 	@ElementList(name = "overallOrder")
-	private List<ScoresXMLOverallScore> overallPilots;
+	private ArrayList<ScoresXMLOverallScore> overallPilots;
 
-	public List<ScoresXMLOverallScore> getOverallPilots() {
+	public ArrayList<ScoresXMLOverallScore> getOverallPilots() {
 		return overallPilots;
 	}
 
-	public void setOverallPilots(List<ScoresXMLOverallScore> overallPilots) {
+	public void setOverallPilots(ArrayList<ScoresXMLOverallScore> overallPilots) {
 		this.overallPilots = overallPilots;
 	}
 
 	@ElementList
-	private List<ScoresXMLSeriesEventResults> events;
+	private ArrayList<ScoresXMLSeriesEventResults> events;
 
-	public List<ScoresXMLSeriesEventResults> getEvents() {
+	public ArrayList<ScoresXMLSeriesEventResults> getEvents() {
 		return events;
 	}
 
-	public void setEvents(List<ScoresXMLSeriesEventResults> events) {
+	public void setEvents(ArrayList<ScoresXMLSeriesEventResults> events) {
 		this.events = events;
 	}
 }

@@ -17,10 +17,12 @@
  */
 package uk.me.sa.cursus.app;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.spka.cursus.test.series_2010.Series2010Event4Scores;
 
 import com.google.common.base.Predicates;
@@ -31,8 +33,16 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.xml.ScoresXML;
+import eu.lp0.cursus.xml.scores.ScoresXMLFile;
+import eu.lp0.cursus.xml.scores.XMLScores;
+import eu.lp0.cursus.xml.scores.results.ScoresXMLEventResults;
+import eu.lp0.cursus.xml.scores.results.ScoresXMLRaceResults;
 
 public class ExportSPKASeries2010 {
+	public static final File SERIES_FILE1 = new File("target/spka2010_1.xml"); //$NON-NLS-1$
+	public static final File SERIES_FILE2 = new File("target/spka2010_2.xml"); //$NON-NLS-1$
+
+	@Ignore
 	public static class AllScores extends Series2010Event4Scores {
 		public final ScoresXML export;
 
@@ -71,6 +81,26 @@ public class ExportSPKASeries2010 {
 	}
 
 	public static void main(String[] args) throws Exception {
-		new AllScores().export.to(System.out);
+		ScoresXML export1 = new AllScores().export;
+		export1.to(SERIES_FILE1);
+
+		ScoresXML import_ = new ScoresXML();
+		import_.from(SERIES_FILE1);
+
+		ScoresXMLFile file = import_.getData();
+		Scores seriesScores;
+		List<Scores> eventScores = new ArrayList<Scores>();
+		List<Scores> raceScores = new ArrayList<Scores>();
+		XMLScores xmlScores = new XMLScores(file);
+		seriesScores = xmlScores.newInstance(file.getSeriesScores());
+		for (ScoresXMLEventResults scores : file.getEventScores()) {
+			eventScores.add(xmlScores.newInstance(scores));
+		}
+		for (ScoresXMLRaceResults scores : file.getRaceScores()) {
+			raceScores.add(xmlScores.newInstance(scores));
+		}
+
+		ScoresXML export2 = new ScoresXML(seriesScores, eventScores, raceScores);
+		export2.to(SERIES_FILE2);
 	}
 }

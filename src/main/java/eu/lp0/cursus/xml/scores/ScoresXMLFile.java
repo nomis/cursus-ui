@@ -128,24 +128,24 @@ public class ScoresXMLFile {
 	}
 
 	@ElementList(required = false, inline = true)
-	private List<ScoresXMLEventResults> eventScores;
+	private ArrayList<ScoresXMLEventResults> eventScores;
 
-	public List<ScoresXMLEventResults> getEventScores() {
+	public ArrayList<ScoresXMLEventResults> getEventScores() {
 		return eventScores;
 	}
 
-	public void setEventScores(List<ScoresXMLEventResults> eventScores) {
+	public void setEventScores(ArrayList<ScoresXMLEventResults> eventScores) {
 		this.eventScores = eventScores;
 	}
 
 	@ElementList(required = false, inline = true)
-	private List<ScoresXMLRaceResults> raceScores;
+	private ArrayList<ScoresXMLRaceResults> raceScores;
 
-	public List<ScoresXMLRaceResults> getRaceScores() {
+	public ArrayList<ScoresXMLRaceResults> getRaceScores() {
 		return raceScores;
 	}
 
-	public void setRaceScores(List<ScoresXMLRaceResults> raceScores) {
+	public void setRaceScores(ArrayList<ScoresXMLRaceResults> raceScores) {
 		this.raceScores = raceScores;
 	}
 }

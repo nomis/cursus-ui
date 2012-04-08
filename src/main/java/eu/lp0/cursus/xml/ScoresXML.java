@@ -49,7 +49,7 @@ public class ScoresXML {
 
 	public void from(InputStream stream) throws ImportException {
 		try {
-			new Persister().read(ScoresXMLFile.class, stream);
+			data = new Persister().read(ScoresXMLFile.class, stream);
 		} catch (Exception e) {
 			throw new ImportException(e);
 		}
@@ -65,7 +65,7 @@ public class ScoresXML {
 
 	public void from(File file) throws ImportException {
 		try {
-			new Persister().read(ScoresXMLFile.class, file);
+			data = new Persister().read(ScoresXMLFile.class, file);
 		} catch (Exception e) {
 			throw new ImportException(e);
 		}
@@ -81,7 +81,7 @@ public class ScoresXML {
 
 	public void from(Reader reader) throws ImportException {
 		try {
-			new Persister().read(ScoresXMLFile.class, reader);
+			data = new Persister().read(ScoresXMLFile.class, reader);
 		} catch (Exception e) {
 			throw new ImportException(e);
 		}

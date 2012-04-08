@@ -18,7 +18,6 @@
 package eu.lp0.cursus.xml.scores.entity;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.simpleframework.xml.Element;
@@ -28,6 +27,7 @@ import org.simpleframework.xml.Root;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.xml.AbstractXMLEntity;
 import eu.lp0.cursus.xml.ExportReferenceManager;
 
@@ -48,7 +48,7 @@ public class ScoresXMLEvent extends AbstractXMLEntity<Event> {
 		}
 	}
 
-	@Element
+	@Element(required = Constants.SIMPLE_XML_EMPTY_STRING_REQUIRED_ELEMENT_BUG)
 	private String name;
 
 	public String getName() {
@@ -59,7 +59,7 @@ public class ScoresXMLEvent extends AbstractXMLEntity<Event> {
 		this.name = name;
 	}
 
-	@Element
+	@Element(required = Constants.SIMPLE_XML_EMPTY_STRING_REQUIRED_ELEMENT_BUG)
 	private String description;
 
 	public String getDescription() {
@@ -71,13 +71,13 @@ public class ScoresXMLEvent extends AbstractXMLEntity<Event> {
 	}
 
 	@ElementList
-	private List<ScoresXMLRace> races;
+	private ArrayList<ScoresXMLRace> races;
 
-	public List<ScoresXMLRace> getRaces() {
+	public ArrayList<ScoresXMLRace> getRaces() {
 		return races;
 	}
 
-	public void setRaces(List<ScoresXMLRace> race) {
+	public void setRaces(ArrayList<ScoresXMLRace> race) {
 		this.races = race;
 	}
 

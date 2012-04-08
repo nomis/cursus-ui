@@ -24,6 +24,8 @@ public class Constants {
 	public static final String APP_DESC = APP_NAME + " " + APP_VERSION; //$NON-NLS-1$
 
 	public static final String SCORES_XML_DTD = "http://dtd.s85.org/eu/lp0/cursus/Scores"; //$NON-NLS-1$
+	/** These elements should be required but Simple can't parse its own output when the string is empty */
+	public static final boolean SIMPLE_XML_EMPTY_STRING_REQUIRED_ELEMENT_BUG = false;
 
 	public static final String EN_DASH = " \u2013 "; //$NON-NLS-1$
 

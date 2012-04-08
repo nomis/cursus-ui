@@ -18,7 +18,6 @@
 package eu.lp0.cursus.xml.scores.entity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -27,6 +26,7 @@ import org.simpleframework.xml.Root;
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.xml.AbstractXMLEntity;
 import eu.lp0.cursus.xml.ExportReferenceManager;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceNumber;
@@ -41,6 +41,7 @@ public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {
 
 		name = pilot.getName();
 		gender = pilot.getGender();
+		country = pilot.getCountry();
 		if (pilot.getRaceNumber() != null) {
 			raceNumber = new ScoresXMLRaceNumber(pilot.getRaceNumber());
 		}
@@ -51,7 +52,7 @@ public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {
 		}
 	}
 
-	@Element
+	@Element(required = Constants.SIMPLE_XML_EMPTY_STRING_REQUIRED_ELEMENT_BUG)
 	private String name;
 
 	public String getName() {
@@ -73,6 +74,17 @@ public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {
 		this.gender = gender;
 	}
 
+	@Element(required = Constants.SIMPLE_XML_EMPTY_STRING_REQUIRED_ELEMENT_BUG)
+	private String country;
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
 	@Element(required = false)
 	private ScoresXMLRaceNumber raceNumber;
 
@@ -85,13 +97,13 @@ public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {
 	}
 
 	@ElementList
-	private List<ScoresXMLClassRef> classes;
+	private ArrayList<ScoresXMLClassRef> classes;
 
-	public List<ScoresXMLClassRef> getClasses() {
+	public ArrayList<ScoresXMLClassRef> getClasses() {
 		return classes;
 	}
 
-	public void setClasses(List<ScoresXMLClassRef> classes) {
+	public void setClasses(ArrayList<ScoresXMLClassRef> classes) {
 		this.classes = classes;
 	}
 

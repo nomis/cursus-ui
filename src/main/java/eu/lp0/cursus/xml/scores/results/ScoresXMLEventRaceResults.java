@@ -18,7 +18,6 @@
 package eu.lp0.cursus.xml.scores.results;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -71,13 +70,13 @@ public class ScoresXMLEventRaceResults {
 	}
 
 	@ElementList(name = "raceOrder")
-	private List<ScoresXMLRaceScore> racePilots;
+	private ArrayList<ScoresXMLRaceScore> racePilots;
 
-	public List<ScoresXMLRaceScore> getRacePilots() {
+	public ArrayList<ScoresXMLRaceScore> getRacePilots() {
 		return racePilots;
 	}
 
-	public void setRacePilots(List<ScoresXMLRaceScore> racePilots) {
+	public void setRacePilots(ArrayList<ScoresXMLRaceScore> racePilots) {
 		this.racePilots = racePilots;
 	}
 }

@@ -18,7 +18,6 @@
 package eu.lp0.cursus.xml.scores.data;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -31,13 +30,13 @@ import eu.lp0.cursus.xml.ExportReferenceManager;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLPilotRef;
 
 @Root(name = "attendee")
-public class ScoresXMLRaceAttendee {
+public class ScoresXMLRaceAttendee implements Comparable<ScoresXMLRaceAttendee> {
 	public ScoresXMLRaceAttendee() {
 	}
 
 	public ScoresXMLRaceAttendee(ExportReferenceManager refMgr, RaceAttendee attendee) {
 		pilot = refMgr.get(attendee.getPilot());
-		role = attendee.getType();
+		type = attendee.getType();
 
 		if (!attendee.getPenalties().isEmpty()) {
 			penalties = new ArrayList<ScoresXMLPenalty>();
@@ -59,24 +58,29 @@ public class ScoresXMLRaceAttendee {
 	}
 
 	@Attribute
-	private RaceAttendee.Type role;
+	private RaceAttendee.Type type;
 
-	public RaceAttendee.Type getRole() {
-		return role;
+	public RaceAttendee.Type getType() {
+		return type;
 	}
 
-	public void setRole(RaceAttendee.Type role) {
-		this.role = role;
+	public void setType(RaceAttendee.Type type) {
+		this.type = type;
 	}
 
 	@ElementList(required = false)
-	private List<ScoresXMLPenalty> penalties;
+	private ArrayList<ScoresXMLPenalty> penalties;
 
-	public List<ScoresXMLPenalty> getPenalties() {
+	public ArrayList<ScoresXMLPenalty> getPenalties() {
 		return penalties;
 	}
 
-	public void setPenalties(List<ScoresXMLPenalty> penalties) {
+	public void setPenalties(ArrayList<ScoresXMLPenalty> penalties) {
 		this.penalties = penalties;
+	}
+
+	@Override
+	public int compareTo(ScoresXMLRaceAttendee o) {
+		return getPilot().getRef().compareTo(o.getPilot().getRef());
 	}
 }

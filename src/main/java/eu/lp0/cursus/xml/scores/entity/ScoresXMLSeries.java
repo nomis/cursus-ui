@@ -18,8 +18,8 @@
 package eu.lp0.cursus.xml.scores.entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -35,6 +35,7 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.xml.AbstractXMLEntity;
 import eu.lp0.cursus.xml.ExportReferenceManager;
 
@@ -58,11 +59,13 @@ public class ScoresXMLSeries extends AbstractXMLEntity<Series> {
 		for (Class class_ : classes_) {
 			classes.add(refMgr.put(new ScoresXMLClass(class_)));
 		}
+		Collections.sort(classes);
 
 		this.pilots = new ArrayList<ScoresXMLPilot>(pilots.size());
 		for (Pilot pilot : pilots) {
 			this.pilots.add(refMgr.put(new ScoresXMLPilot(refMgr, pilot)));
 		}
+		Collections.sort(this.pilots);
 
 		this.events = new ArrayList<ScoresXMLEvent>(events.size());
 		for (Event event : events) {
@@ -70,7 +73,7 @@ public class ScoresXMLSeries extends AbstractXMLEntity<Series> {
 		}
 	}
 
-	@Element
+	@Element(required = Constants.SIMPLE_XML_EMPTY_STRING_REQUIRED_ELEMENT_BUG)
 	private String name;
 
 	public String getName() {
@@ -81,7 +84,7 @@ public class ScoresXMLSeries extends AbstractXMLEntity<Series> {
 		this.name = name;
 	}
 
-	@Element
+	@Element(required = Constants.SIMPLE_XML_EMPTY_STRING_REQUIRED_ELEMENT_BUG)
 	private String description;
 
 	public String getDescription() {
@@ -93,35 +96,35 @@ public class ScoresXMLSeries extends AbstractXMLEntity<Series> {
 	}
 
 	@ElementList
-	private List<ScoresXMLClass> classes;
+	private ArrayList<ScoresXMLClass> classes;
 
-	public List<ScoresXMLClass> getClasses() {
+	public ArrayList<ScoresXMLClass> getClasses() {
 		return classes;
 	}
 
-	public void setClasses(List<ScoresXMLClass> classes) {
+	public void setClasses(ArrayList<ScoresXMLClass> classes) {
 		this.classes = classes;
 	}
 
 	@ElementList
-	private List<ScoresXMLPilot> pilots;
+	private ArrayList<ScoresXMLPilot> pilots;
 
-	public List<ScoresXMLPilot> getPilots() {
+	public ArrayList<ScoresXMLPilot> getPilots() {
 		return pilots;
 	}
 
-	public void setPilots(List<ScoresXMLPilot> pilots) {
+	public void setPilots(ArrayList<ScoresXMLPilot> pilots) {
 		this.pilots = pilots;
 	}
 
 	@ElementList
-	private List<ScoresXMLEvent> events;
+	private ArrayList<ScoresXMLEvent> events;
 
-	public List<ScoresXMLEvent> getEvents() {
+	public ArrayList<ScoresXMLEvent> getEvents() {
 		return events;
 	}
 
-	public void setEvents(List<ScoresXMLEvent> events) {
+	public void setEvents(ArrayList<ScoresXMLEvent> events) {
 		this.events = events;
 	}
 
