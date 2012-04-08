@@ -118,4 +118,8 @@ public abstract class AbstractScorer implements Scorer {
 
 	@Override
 	public abstract Scores scoreRaces(List<Race> races, Set<Pilot> pilots, Predicate<Pilot> fleetFilter);
+
+	public final String getUUID() {
+		return getClass().getAnnotation(ScoringSystem.class).uuid();
+	}
 }

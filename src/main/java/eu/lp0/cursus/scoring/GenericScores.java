@@ -36,8 +36,8 @@ public class GenericScores extends AbstractScores {
 	protected final OverallPointsData overallPointsData;
 	protected final OverallPositionData overallPositionData;
 
-	public GenericScores(Set<Pilot> pilots, List<Race> races, Predicate<Pilot> fleetFilter, ScoresFactory scoresFactory) {
-		super(pilots, races, fleetFilter, scoresFactory);
+	public GenericScores(Set<Pilot> pilots, List<Race> races, Predicate<Pilot> fleetFilter, ScoresFactory scoresFactory, Scorer scorer) {
+		super(pilots, races, fleetFilter, scoresFactory, scorer);
 
 		raceLapsData = scoresFactory.newRaceLapsData(this);
 		racePointsData = scoresFactory.newRacePointsData(this);

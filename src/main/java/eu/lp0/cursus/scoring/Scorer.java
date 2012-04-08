@@ -59,4 +59,6 @@ public interface Scorer {
 	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots);
 
 	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots, Predicate<Pilot> fleetFilter);
+
+	public String getUUID();
 }

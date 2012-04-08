@@ -38,11 +38,13 @@ import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLSeriesRef;
 
 @Root(name = "seriesResults")
-public class ScoresXMLSeriesResults {
+public class ScoresXMLSeriesResults extends AbstractScoresXMLResults {
 	public ScoresXMLSeriesResults() {
 	}
 
 	public ScoresXMLSeriesResults(ExportReferenceManager refMgr, Scores scores) {
+		super(scores);
+
 		series = refMgr.get(scores.getSeries());
 
 		discards = scores.getDiscardCount();

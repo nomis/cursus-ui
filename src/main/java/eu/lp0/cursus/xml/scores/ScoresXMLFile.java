@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Namespace;
@@ -85,6 +86,7 @@ public class ScoresXMLFile {
 			events.add(race.getEvent());
 		}
 
+		generator = Constants.APP_DESC;
 		series = new ScoresXMLSeries(refMgr, checkSeries.iterator().next(), events, races, pilots);
 		refMgr.put(series);
 
@@ -103,6 +105,17 @@ public class ScoresXMLFile {
 				this.raceScores.add(new ScoresXMLRaceResults(refMgr, scores));
 			}
 		}
+	}
+
+	@Attribute
+	private String generator;
+
+	public String getGenerator() {
+		return generator;
+	}
+
+	public void setGenerator(String generator) {
+		this.generator = generator;
 	}
 
 	@Element

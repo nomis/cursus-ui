@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2012  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.fisly.cursus.scoring;
+package eu.lp0.cursus.xml.scores;
 
 import java.util.List;
 import java.util.Set;
@@ -25,14 +25,13 @@ import com.google.common.base.Predicate;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.AbstractScorer;
-import eu.lp0.cursus.scoring.Scorer;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.scoring.ScoringSystem;
 
-@ScoringSystem(uuid = FISLYConstants.UUID_2010, name = FISLYConstants.NAME_2010)
-public class Scorer2010 extends AbstractScorer implements Scorer {
+@ScoringSystem(uuid = "285a2a01-b07a-1598-0787-ca0ef476a78d", name = "XML Import", hide = true)
+public class XMLScorer extends AbstractScorer {
 	@Override
 	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots, Predicate<Pilot> fleetFilter) {
-		return new FISLYScoresFactory2010().newScores(pilots, races, fleetFilter, this);
+		throw new UnsupportedOperationException();
 	}
 }

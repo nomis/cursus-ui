@@ -32,4 +32,6 @@ public interface ScoredData {
 	public Series getSeries();
 
 	public Set<Pilot> getFleet();
+
+	public String getScorer();
 }

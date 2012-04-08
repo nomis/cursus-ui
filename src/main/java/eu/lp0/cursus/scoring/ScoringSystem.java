@@ -28,4 +28,6 @@ public @interface ScoringSystem {
 	public String uuid();
 
 	public String name();
+
+	public boolean hide() default false;
 }

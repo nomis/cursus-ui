@@ -37,11 +37,13 @@ import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLEventRef;
 
 @Root(name = "eventResults")
-public class ScoresXMLEventResults {
+public class ScoresXMLEventResults extends AbstractScoresXMLResults {
 	public ScoresXMLEventResults() {
 	}
 
 	public ScoresXMLEventResults(ExportReferenceManager refMgr, Scores scores) {
+		super(scores);
+
 		Set<Event> checkEvent = new HashSet<Event>();
 		for (Race race : scores.getRaces()) {
 			checkEvent.add(race.getEvent());

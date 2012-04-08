@@ -152,17 +152,17 @@ public class XMLScores {
 
 	public GenericScores newInstance(ScoresXMLSeriesResults results) {
 		return new GenericScores(extractPilots(results.getOverallPilots()), extractRaces(results), Predicates.<Pilot>alwaysTrue(), new XMLScoresFactory(this,
-				results));
+				results), new XMLScorer());
 	}
 
 	public GenericScores newInstance(ScoresXMLEventResults results) {
 		return new GenericScores(extractPilots(results.getOverallPilots()), extractRaces(results), Predicates.<Pilot>alwaysTrue(), new XMLScoresFactory(this,
-				results));
+				results), new XMLScorer());
 	}
 
 	public GenericScores newInstance(ScoresXMLRaceResults results) {
 		return new GenericScores(extractPilots(results.getOverallPilots()), extractRaces(results), Predicates.<Pilot>alwaysTrue(), new XMLScoresFactory(this,
-				results));
+				results), new XMLScorer());
 	}
 
 	private Set<Pilot> extractPilots(List<ScoresXMLOverallScore> overallScores) {

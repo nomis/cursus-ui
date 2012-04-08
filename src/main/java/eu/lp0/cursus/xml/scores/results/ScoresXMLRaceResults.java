@@ -35,11 +35,13 @@ import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLRaceRef;
 
 @Root(name = "raceResults")
-public class ScoresXMLRaceResults {
+public class ScoresXMLRaceResults extends AbstractScoresXMLResults {
 	public ScoresXMLRaceResults() {
 	}
 
 	public ScoresXMLRaceResults(ExportReferenceManager refMgr, Scores scores) {
+		super(scores);
+
 		Preconditions.checkArgument(!scores.getRaces().isEmpty(), "No race"); //$NON-NLS-1$
 		Preconditions.checkArgument(scores.getRaces().size() == 1, "Multiple races not allowed"); //$NON-NLS-1$
 		Race race_ = scores.getRaces().iterator().next();

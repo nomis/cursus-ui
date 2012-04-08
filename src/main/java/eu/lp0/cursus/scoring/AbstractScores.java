@@ -36,12 +36,14 @@ public abstract class AbstractScores extends AbstractForwardingScores {
 	protected final List<Race> races;
 	protected final Series series;
 	protected final Set<Pilot> fleet;
+	protected final String scorer;
 	private final ScoresFactory scoresFactory;
 
-	public AbstractScores(Set<Pilot> pilots, List<Race> races, Predicate<Pilot> fleetFilter, ScoresFactory scoresFactory) {
+	public AbstractScores(Set<Pilot> pilots, List<Race> races, Predicate<Pilot> fleetFilter, ScoresFactory scoresFactory, Scorer scorer) {
 		this.pilots = ImmutableSet.copyOf(pilots);
 		this.races = ImmutableList.copyOf(races);
 		this.scoresFactory = scoresFactory;
+		this.scorer = scorer.getUUID();
 
 		Preconditions.checkArgument(!this.pilots.isEmpty(), "No pilots"); //$NON-NLS-1$
 		Preconditions.checkArgument(!this.races.isEmpty(), "No races"); //$NON-NLS-1$
@@ -89,5 +91,10 @@ public abstract class AbstractScores extends AbstractForwardingScores {
 	@Override
 	public Set<Pilot> getFleet() {
 		return fleet;
+	}
+
+	@Override
+	public String getScorer() {
+		return scorer;
 	}
 }
