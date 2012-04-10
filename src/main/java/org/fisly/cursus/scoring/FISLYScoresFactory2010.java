@@ -70,7 +70,7 @@ public class FISLYScoresFactory2010 extends AbstractScoresFactory {
 
 	@Override
 	public OverallPenaltiesData newOverallPenaltiesData(Scores scores) {
-		return new GenericOverallPenaltiesData<Scores>(scores);
+		return new GenericOverallPenaltiesData<Scores>(scores, 0);
 	}
 
 	@Override

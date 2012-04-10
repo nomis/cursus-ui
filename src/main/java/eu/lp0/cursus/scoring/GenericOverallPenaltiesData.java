@@ -17,11 +17,22 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.google.common.collect.Sets;
+
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.db.data.Race;
 
 public class GenericOverallPenaltiesData<T extends ScoredData & RacePenaltiesData> extends AbstractOverallPenaltiesData<T> {
-	public GenericOverallPenaltiesData(T scores) {
+	private final int eventNonAttendancePenalty;
+
+	public GenericOverallPenaltiesData(T scores, int eventNonAttendancePenalty) {
 		super(scores);
+
+		this.eventNonAttendancePenalty = eventNonAttendancePenalty;
 	}
 
 	@Override
@@ -30,6 +41,16 @@ public class GenericOverallPenaltiesData<T extends ScoredData & RacePenaltiesDat
 
 		for (Integer racePenalties : scores.getRacePenalties(pilot).values()) {
 			penalties += racePenalties;
+		}
+
+		Set<Event> events = new HashSet<Event>();
+		for (Race race : scores.getRaces()) {
+			events.add(race.getEvent());
+		}
+		for (Event event : events) {
+			if (Sets.intersection(Sets.newHashSet(event.getRaces()), pilot.getRaces().keySet()).isEmpty()) {
+				penalties += eventNonAttendancePenalty;
+			}
 		}
 
 		return penalties;

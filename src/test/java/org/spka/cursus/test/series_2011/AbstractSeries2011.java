@@ -54,6 +54,8 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 
 	protected final String EVENT3_NAME = "Race Event 3"; //$NON-NLS-1$
 	protected final int EVENT3_PILOTS = 19;
+	protected final int EVENT3_PILOTS_DAY1 = 18;
+	protected final int EVENT3_PILOTS_DAY2 = 19;
 	protected final int EVENT3_FLEET = 23;
 	protected final String RACE5_NAME = "Race 5"; //$NON-NLS-1$
 	protected final String RACE6_NAME = "Race 6"; //$NON-NLS-1$
@@ -819,7 +821,6 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			race5.getAttendees().put(sco156, new RaceAttendee(race5, sco156, RaceAttendee.Type.PILOT));
 			race5.getAttendees().put(sco159, new RaceAttendee(race5, sco159, RaceAttendee.Type.PILOT));
 			race5.getAttendees().put(sco179, new RaceAttendee(race5, sco179, RaceAttendee.Type.PILOT));
-			race5.getAttendees().put(sco200, new RaceAttendee(race5, sco200, RaceAttendee.Type.PILOT));
 			race5.getAttendees().put(sco248, new RaceAttendee(race5, sco248, RaceAttendee.Type.M_RACE_MASTER));
 			race5.getAttendees().put(sco249, new RaceAttendee(race5, sco249, RaceAttendee.Type.PILOT));
 			race5.getAttendees().put(sco320, new RaceAttendee(race5, sco320, RaceAttendee.Type.PILOT));
@@ -925,7 +926,6 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			race6.getAttendees().put(sco156, new RaceAttendee(race6, sco156, RaceAttendee.Type.PILOT));
 			race6.getAttendees().put(sco159, new RaceAttendee(race6, sco159, RaceAttendee.Type.PILOT));
 			race6.getAttendees().put(sco179, new RaceAttendee(race6, sco179, RaceAttendee.Type.PILOT));
-			race6.getAttendees().put(sco200, new RaceAttendee(race6, sco200, RaceAttendee.Type.PILOT));
 			race6.getAttendees().put(sco248, new RaceAttendee(race6, sco248, RaceAttendee.Type.PILOT));
 			race6.getAttendees().put(sco249, new RaceAttendee(race6, sco249, RaceAttendee.Type.PILOT));
 			race6.getAttendees().put(sco320, new RaceAttendee(race6, sco320, RaceAttendee.Type.PILOT));
@@ -1083,7 +1083,6 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			race7.getAttendees().put(sco156, new RaceAttendee(race7, sco156, RaceAttendee.Type.PILOT));
 			race7.getAttendees().put(sco159, new RaceAttendee(race7, sco159, RaceAttendee.Type.M_RACE_MASTER));
 			race7.getAttendees().put(sco179, new RaceAttendee(race7, sco179, RaceAttendee.Type.PILOT));
-			race7.getAttendees().put(sco200, new RaceAttendee(race7, sco200, RaceAttendee.Type.PILOT));
 			race7.getAttendees().put(sco248, new RaceAttendee(race7, sco248, RaceAttendee.Type.PILOT));
 			race7.getAttendees().put(sco249, new RaceAttendee(race7, sco249, RaceAttendee.Type.PILOT));
 			race7.getAttendees().put(sco320, new RaceAttendee(race7, sco320, RaceAttendee.Type.PILOT));

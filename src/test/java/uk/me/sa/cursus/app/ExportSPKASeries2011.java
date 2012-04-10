@@ -70,6 +70,7 @@ public class ExportSPKASeries2011 {
 				}
 
 				export = new ScoresXML(seriesScores, eventScores, raceScores);
+				debugPrintScores(seriesScores);
 
 				DatabaseSession.commit();
 			} finally {
