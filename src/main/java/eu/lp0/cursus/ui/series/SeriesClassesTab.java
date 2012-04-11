@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.PersistenceException;
 import javax.swing.JScrollPane;
@@ -225,17 +224,17 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 			// It's very important for resorting that no other rows
 			// have been modified when firing individual updates
 			for (int i = 0; i < selected.length; i++) {
-				applyClasses(rows.get(i).getClasses(), cls, action);
+				applyClasses(rows.get(i), cls, action);
 				model.fireTableCellUpdated(selected[i], 0);
 			}
 		}
 	}
 
-	private void applyClasses(Set<Class> classes, Class cls, boolean action) {
+	private void applyClasses(Pilot pilot, Class cls, boolean action) {
 		if (action) {
-			classes.add(cls);
+			pilot.getClasses().add(cls);
 		} else {
-			classes.remove(cls);
+			pilot.getClasses().remove(cls);
 		}
 	}
 
@@ -251,7 +250,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 				item = row;
 
 				row = pilotDAO.get(row);
-				applyClasses(row.getClasses(), cls, action);
+				applyClasses(row, cls, action);
 				pilotDAO.persist(row);
 			}
 
