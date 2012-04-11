@@ -41,7 +41,7 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 	});
 
 	public enum FleetMethod {
-		RACE, EVENT, SERIES, PILOTS;
+		RACE, EVENT, SERIES, SCORED, PILOTS;
 	}
 
 	public GenericRacePointsData(T scores, FleetMethod fleetMethod) {
@@ -119,6 +119,20 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 				for (Race race : event.getRaces()) {
 					pilots.addAll(race.getAttendees().keySet());
 				}
+			}
+
+			int fleetSize = Sets.intersection(scores.getFleet(), pilots).size();
+			for (Race race : scores.getRaces()) {
+				fleetSizes.put(race, fleetSize);
+			}
+
+			break;
+		}
+
+		case SCORED: {
+			Set<Pilot> pilots = new HashSet<Pilot>(scores.getPilots().size() * 2);
+			for (Race race : scores.getRaces()) {
+				pilots.addAll(race.getAttendees().keySet());
 			}
 
 			int fleetSize = Sets.intersection(scores.getFleet(), pilots).size();
