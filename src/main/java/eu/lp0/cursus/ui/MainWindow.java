@@ -46,6 +46,7 @@ import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseTabSync;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
+import eu.lp0.cursus.ui.event.EventAttendeesTab;
 import eu.lp0.cursus.ui.event.EventResultsTab;
 import eu.lp0.cursus.ui.menu.MainMenu;
 import eu.lp0.cursus.ui.preferences.JFrameAutoPrefs;
@@ -80,6 +81,7 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 	private AbstractDatabaseTab<Series> serClassesTab;
 	private AbstractDatabaseTab<Series> serResultsTab;
 	private List<AbstractDatabaseTab<Series>> seriesTabs;
+	private AbstractDatabaseTab<Event> evtPilotsTab;
 	private AbstractDatabaseTab<Event> evtResultsTab;
 	private List<AbstractDatabaseTab<Event>> eventTabs;
 	private AbstractDatabaseTab<Race> racAttendeesTab;
@@ -174,9 +176,10 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 		}
 
 		{ // Event
+			evtPilotsTab = new EventAttendeesTab(this);
 			evtResultsTab = new EventResultsTab(this);
 
-			eventTabs = Arrays.asList(evtResultsTab);
+			eventTabs = Arrays.asList(evtPilotsTab, evtResultsTab);
 		}
 
 		{ // Race

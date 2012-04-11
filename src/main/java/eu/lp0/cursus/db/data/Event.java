@@ -18,12 +18,15 @@
 package eu.lp0.cursus.db.data;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
@@ -99,6 +102,17 @@ public final class Event extends AbstractEntity implements Comparable<Event>, Ra
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	private Set<Pilot> attendees = new HashSet<Pilot>();
+
+	@ManyToMany(mappedBy = "events")
+	public Set<Pilot> getAttendees() {
+		return attendees;
+	}
+
+	public void setAttendees(Set<Pilot> attendees) {
+		this.attendees = attendees;
 	}
 
 	private List<Race> races = new ArrayList<Race>();

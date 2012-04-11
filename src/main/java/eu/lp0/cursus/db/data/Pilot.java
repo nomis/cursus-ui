@@ -152,6 +152,18 @@ public final class Pilot extends AbstractEntity {
 		this.classes = classes;
 	}
 
+	private Set<Event> events = new HashSet<Event>();
+
+	@ManyToMany
+	@JoinTable
+	public Set<Event> getEvents() {
+		return events;
+	}
+
+	public void setEvents(Set<Event> events) {
+		this.events = events;
+	}
+
 	private Map<Race, RaceAttendee> races = new HashMap<Race, RaceAttendee>();
 
 	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "pilot", orphanRemoval = true)
