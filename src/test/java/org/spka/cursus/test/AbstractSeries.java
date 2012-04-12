@@ -34,6 +34,12 @@ import eu.lp0.cursus.test.db.AbstractDatabaseTest;
 public class AbstractSeries extends AbstractDatabaseTest {
 	protected final String SERIES_COUNTRY = "Scotland"; //$NON-NLS-1$
 
+	protected void attendEvent(Event event, Pilot pilot) {
+		pilot = pilotDAO.get(pilot);
+		pilot.getEvents().add(event);
+		pilotDAO.persist(pilot);
+	}
+
 	/**
 	 * Get all the pilots in a Scotland series
 	 */
@@ -66,6 +72,12 @@ public class AbstractSeries extends AbstractDatabaseTest {
 					}
 				}
 
+				for (Event event_ : pilot.getEvents()) {
+					if (event_.compareTo(event) <= 0) {
+						return pilot.getCountry().equals(SERIES_COUNTRY);
+					}
+				}
+
 				return false;
 			}
 		});
@@ -84,7 +96,25 @@ public class AbstractSeries extends AbstractDatabaseTest {
 					}
 				}
 
+				for (Event event_ : pilot.getEvents()) {
+					if (event_.compareTo(event) <= 0) {
+						return pilot.getCountry().equals(SERIES_COUNTRY);
+					}
+				}
+
 				return false;
+			}
+		});
+	}
+
+	/**
+	 * Get all the events up to and and including the specified event
+	 */
+	protected Set<Event> getSeriesResultsEvents(Series series, final Event event) {
+		return Sets.filter(Sets.newHashSet(series.getEvents()), new Predicate<Event>() {
+			@Override
+			public boolean apply(Event event_) {
+				return (event_.compareTo(event) <= 0);
 			}
 		});
 	}

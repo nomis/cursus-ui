@@ -84,8 +84,8 @@ public class XMLScoresFactory extends AbstractScoresFactory {
 
 	private ScoresXMLEventRaceResults getEventRaceResults(Race race) {
 		if (seriesResults != null) {
-			for (ScoresXMLSeriesEventResults seriesEventResults : seriesResults.getEvents()) {
-				for (ScoresXMLEventRaceResults eventRaceResults : seriesEventResults.getRaces()) {
+			for (ScoresXMLSeriesEventResults seriesEventResults : seriesResults.getEventResults()) {
+				for (ScoresXMLEventRaceResults eventRaceResults : seriesEventResults.getRaceResults()) {
 					if (file.dereference(eventRaceResults.getRace()).equals(race)) {
 						return eventRaceResults;
 					}

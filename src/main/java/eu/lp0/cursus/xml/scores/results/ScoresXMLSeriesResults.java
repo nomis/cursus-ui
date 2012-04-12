@@ -35,6 +35,7 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.xml.ExportReferenceManager;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
+import eu.lp0.cursus.xml.scores.entity.ScoresXMLEventRef;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLSeriesRef;
 
 @Root(name = "seriesResults")
@@ -49,6 +50,11 @@ public class ScoresXMLSeriesResults extends AbstractScoresXMLResults {
 
 		discards = scores.getDiscardCount();
 
+		events = new ArrayList<ScoresXMLEventRef>(scores.getEvents().size());
+		for (Event event : scores.getEvents()) {
+			events.add((ScoresXMLEventRef)refMgr.get(event));
+		}
+
 		overallPilots = new ArrayList<ScoresXMLOverallScore>(scores.getOverallOrder().size());
 		for (Pilot pilot : scores.getOverallOrder()) {
 			overallPilots.add(new ScoresXMLOverallScore(refMgr, scores, pilot));
@@ -59,9 +65,9 @@ public class ScoresXMLSeriesResults extends AbstractScoresXMLResults {
 			events_.put(race.getEvent(), race);
 		}
 
-		events = new ArrayList<ScoresXMLSeriesEventResults>(events_.keySet().size());
+		eventResults = new ArrayList<ScoresXMLSeriesEventResults>(events_.keySet().size());
 		for (Entry<Event, Collection<Race>> event : events_.asMap().entrySet()) {
-			events.add(new ScoresXMLSeriesEventResults(refMgr, scores, event.getKey(), event.getValue()));
+			eventResults.add(new ScoresXMLSeriesEventResults(refMgr, scores, event.getKey(), event.getValue()));
 		}
 	}
 
@@ -87,6 +93,17 @@ public class ScoresXMLSeriesResults extends AbstractScoresXMLResults {
 		this.discards = discards;
 	}
 
+	@ElementList
+	private ArrayList<ScoresXMLEventRef> events;
+
+	public ArrayList<ScoresXMLEventRef> getEvents() {
+		return events;
+	}
+
+	public void setEvents(ArrayList<ScoresXMLEventRef> events) {
+		this.events = events;
+	}
+
 	@ElementList(name = "overallOrder")
 	private ArrayList<ScoresXMLOverallScore> overallPilots;
 
@@ -99,13 +116,13 @@ public class ScoresXMLSeriesResults extends AbstractScoresXMLResults {
 	}
 
 	@ElementList
-	private ArrayList<ScoresXMLSeriesEventResults> events;
+	private ArrayList<ScoresXMLSeriesEventResults> eventResults;
 
-	public ArrayList<ScoresXMLSeriesEventResults> getEvents() {
-		return events;
+	public ArrayList<ScoresXMLSeriesEventResults> getEventResults() {
+		return eventResults;
 	}
 
-	public void setEvents(ArrayList<ScoresXMLSeriesEventResults> events) {
-		this.events = events;
+	public void setEventResults(ArrayList<ScoresXMLSeriesEventResults> events) {
+		this.eventResults = events;
 	}
 }

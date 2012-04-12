@@ -151,18 +151,18 @@ public class XMLScores {
 	}
 
 	public GenericScores newInstance(ScoresXMLSeriesResults results) {
-		return new GenericScores(extractPilots(results.getOverallPilots()), extractRaces(results), Predicates.<Pilot>alwaysTrue(), new XMLScoresFactory(this,
-				results), new XMLScorer());
+		return new GenericScores(extractPilots(results.getOverallPilots()), extractRaces(results), extractEvents(results), Predicates.<Pilot>alwaysTrue(),
+				new XMLScoresFactory(this, results), new XMLScorer());
 	}
 
 	public GenericScores newInstance(ScoresXMLEventResults results) {
-		return new GenericScores(extractPilots(results.getOverallPilots()), extractRaces(results), Predicates.<Pilot>alwaysTrue(), new XMLScoresFactory(this,
-				results), new XMLScorer());
+		return new GenericScores(extractPilots(results.getOverallPilots()), extractRaces(results), extractEvents(results), Predicates.<Pilot>alwaysTrue(),
+				new XMLScoresFactory(this, results), new XMLScorer());
 	}
 
 	public GenericScores newInstance(ScoresXMLRaceResults results) {
-		return new GenericScores(extractPilots(results.getOverallPilots()), extractRaces(results), Predicates.<Pilot>alwaysTrue(), new XMLScoresFactory(this,
-				results), new XMLScorer());
+		return new GenericScores(extractPilots(results.getOverallPilots()), extractRaces(results), extractEvents(results), Predicates.<Pilot>alwaysTrue(),
+				new XMLScoresFactory(this, results), new XMLScorer());
 	}
 
 	private Set<Pilot> extractPilots(List<ScoresXMLOverallScore> overallScores) {
@@ -175,8 +175,8 @@ public class XMLScores {
 
 	private List<Race> extractRaces(ScoresXMLSeriesResults results) {
 		List<Race> races_ = new ArrayList<Race>();
-		for (ScoresXMLSeriesEventResults eventResults : results.getEvents()) {
-			for (ScoresXMLEventRaceResults race : eventResults.getRaces()) {
+		for (ScoresXMLSeriesEventResults eventResults : results.getEventResults()) {
+			for (ScoresXMLEventRaceResults race : eventResults.getRaceResults()) {
 				races_.add(dereference(race.getRace()));
 			}
 		}
@@ -185,13 +185,37 @@ public class XMLScores {
 
 	private List<Race> extractRaces(ScoresXMLEventResults results) {
 		List<Race> races_ = new ArrayList<Race>();
-		for (ScoresXMLEventRaceResults race : results.getRaces()) {
-			races_.add(dereference(race.getRace()));
+		for (ScoresXMLEventRaceResults raceResults : results.getRaces()) {
+			races_.add(dereference(raceResults.getRace()));
 		}
 		return races_;
 	}
 
 	private List<Race> extractRaces(ScoresXMLRaceResults results) {
 		return Collections.singletonList(dereference(results.getRace()));
+	}
+
+	private Set<Event> extractEvents(ScoresXMLSeriesResults results) {
+		Set<Event> events_ = new HashSet<Event>();
+		for (ScoresXMLEventRef event_ : results.getEvents()) {
+			events_.add(dereference(event_));
+		}
+		return events_;
+	}
+
+	private Set<Event> extractEvents(ScoresXMLEventResults results) {
+		Set<Event> events_ = new HashSet<Event>();
+		for (ScoresXMLEventRef event : results.getEvents()) {
+			events_.add(dereference(event));
+		}
+		return events_;
+	}
+
+	private Set<Event> extractEvents(ScoresXMLRaceResults results) {
+		Set<Event> events_ = new HashSet<Event>();
+		for (ScoresXMLEventRef event : results.getEvents()) {
+			events_.add(dereference(event));
+		}
+		return events_;
 	}
 }

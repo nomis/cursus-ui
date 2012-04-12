@@ -154,7 +154,7 @@ public final class Pilot extends AbstractEntity {
 
 	private Set<Event> events = new HashSet<Event>();
 
-	@ManyToMany
+	@ManyToMany(cascade = { CascadeType.DETACH })
 	@JoinTable
 	public Set<Event> getEvents() {
 		return events;

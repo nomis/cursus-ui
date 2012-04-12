@@ -20,6 +20,7 @@ package eu.lp0.cursus.scoring;
 import java.util.List;
 import java.util.Set;
 
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
@@ -28,6 +29,8 @@ public interface ScoredData {
 	public Set<Pilot> getPilots();
 
 	public List<Race> getRaces();
+
+	public Set<Event> getEvents();
 
 	public Series getSeries();
 

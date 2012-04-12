@@ -26,7 +26,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -107,8 +106,7 @@ public final class Event extends AbstractEntity implements Comparable<Event>, Ra
 
 	private Set<Pilot> attendees = new HashSet<Pilot>();
 
-	@ManyToMany
-	@JoinTable
+	@ManyToMany(cascade = { CascadeType.DETACH }, mappedBy = "events")
 	public Set<Pilot> getAttendees() {
 		return attendees;
 	}

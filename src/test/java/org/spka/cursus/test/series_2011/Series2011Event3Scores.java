@@ -37,7 +37,7 @@ import eu.lp0.cursus.test.util.RaceAssertUtil;
 /**
  * Scores at the end of event 3 (31/03/2012 to 01/04/2012)
  */
-public class Series2011Event3Scores extends Series2011Event2Scores {
+public class Series2011Event3Scores extends Series2011NonEvent3Scores {
 	@Override
 	@Before
 	public void createData() throws Exception {
@@ -79,7 +79,8 @@ public class Series2011Event3Scores extends Series2011Event2Scores {
 			races.addAll(event2.getRaces());
 			races.addAll(event3.getRaces());
 
-			Scores scores = scorer.scoreRaces(races, getSeriesResultsPilots(series, event3), Predicates.in(getSeriesResultsPilots(series, event3)));
+			Scores scores = scorer.scoreRaces(races, getSeriesResultsPilots(series, event3), getSeriesResultsEvents(series, event3),
+					Predicates.in(getSeriesResultsPilots(series, event3)));
 			checkSeriesAtEvent3(scores);
 
 			DatabaseSession.commit();
@@ -365,13 +366,13 @@ public class Series2011Event3Scores extends Series2011Event2Scores {
 		overallAssertUtil.assertPilot(sco153, 0, 89, 14, 24, 14);
 		overallAssertUtil.assertPilot(sco320, 0, 107, 15, 24, 24);
 		overallAssertUtil.assertPilot(sco060, 0, 107, 16, 24, 24);
-		overallAssertUtil.assertPilot(sco136, 1, 131, 17, 24, 24);
+		overallAssertUtil.assertPilot(sco136, 2, 132, 17, 24, 24);
 		overallAssertUtil.assertPilot(sco040, 2, 139, 18, 24, 24);
-		overallAssertUtil.assertPilot(sco018, 1, 141, 19, 24, 24);
-		overallAssertUtil.assertPilot(sco198, 1, 147, 20, 24, 24);
+		overallAssertUtil.assertPilot(sco018, 2, 142, 19, 24, 24);
+		overallAssertUtil.assertPilot(sco198, 4, 150, 20, 24, 24);
 		overallAssertUtil.assertPilot(sco156, 1, 158, 21, 24, 24);
 		overallAssertUtil.assertPilot(sco197, 1, 160, 22, 24, 24);
-		overallAssertUtil.assertPilot(sco158, 2, 163, 23, 24, 24);
+		overallAssertUtil.assertPilot(sco158, 5, 166, 23, 24, 24);
 		overallAssertUtil.assertOrder();
 	}
 

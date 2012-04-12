@@ -38,9 +38,9 @@ public class ScoresXMLSeriesEventResults {
 	public ScoresXMLSeriesEventResults(ExportReferenceManager refMgr, Scores scores, Event event, Collection<Race> races) {
 		this.event = refMgr.get(event);
 
-		this.races = new ArrayList<ScoresXMLEventRaceResults>(races.size());
+		this.raceResults = new ArrayList<ScoresXMLEventRaceResults>(races.size());
 		for (Race race : races) {
-			this.races.add(new ScoresXMLEventRaceResults(refMgr, scores, race));
+			this.raceResults.add(new ScoresXMLEventRaceResults(refMgr, scores, race));
 		}
 	}
 
@@ -56,13 +56,13 @@ public class ScoresXMLSeriesEventResults {
 	}
 
 	@ElementList
-	private ArrayList<ScoresXMLEventRaceResults> races;
+	private ArrayList<ScoresXMLEventRaceResults> raceResults;
 
-	public ArrayList<ScoresXMLEventRaceResults> getRaces() {
-		return races;
+	public ArrayList<ScoresXMLEventRaceResults> getRaceResults() {
+		return raceResults;
 	}
 
-	public void setRaces(ArrayList<ScoresXMLEventRaceResults> race) {
-		this.races = race;
+	public void setRaceResults(ArrayList<ScoresXMLEventRaceResults> raceResults) {
+		this.raceResults = raceResults;
 	}
 }

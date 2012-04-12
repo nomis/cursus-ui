@@ -25,6 +25,7 @@ import java.util.Set;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Table;
 
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
@@ -59,6 +60,11 @@ public abstract class AbstractForwardingScores implements Scores {
 	@Override
 	public List<Race> getRaces() {
 		return delegateScoredData().getRaces();
+	}
+
+	@Override
+	public Set<Event> getEvents() {
+		return delegateScoredData().getEvents();
 	}
 
 	@Override

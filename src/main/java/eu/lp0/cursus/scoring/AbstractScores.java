@@ -27,6 +27,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
@@ -34,12 +35,13 @@ import eu.lp0.cursus.db.data.Series;
 public abstract class AbstractScores extends AbstractForwardingScores {
 	protected final Set<Pilot> pilots;
 	protected final List<Race> races;
+	protected final Set<Event> events;
 	protected final Series series;
 	protected final Set<Pilot> fleet;
 	protected final String scorer;
 	private final ScoresFactory scoresFactory;
 
-	public AbstractScores(Set<Pilot> pilots, List<Race> races, Predicate<Pilot> fleetFilter, ScoresFactory scoresFactory, Scorer scorer) {
+	public AbstractScores(Set<Pilot> pilots, List<Race> races, Set<Event> events, Predicate<Pilot> fleetFilter, ScoresFactory scoresFactory, Scorer scorer) {
 		this.pilots = ImmutableSet.copyOf(pilots);
 		this.races = ImmutableList.copyOf(races);
 		this.scoresFactory = scoresFactory;
@@ -57,6 +59,13 @@ public abstract class AbstractScores extends AbstractForwardingScores {
 		}
 		Preconditions.checkArgument(checkSeries.size() == 1, "Multiple series not allowed"); //$NON-NLS-1$
 		series = checkSeries.iterator().next();
+
+		// Implicitly add events from the races to the set of events
+		Set<Event> raceEvents = new HashSet<Event>(series.getEvents().size() * 2);
+		for (Race race : races) {
+			raceEvents.add(race.getEvent());
+		}
+		this.events = ImmutableSet.copyOf(Sets.union(events, raceEvents));
 
 		fleet = ImmutableSet.copyOf(Sets.filter(series.getPilots(), fleetFilter));
 	}
@@ -81,6 +90,11 @@ public abstract class AbstractScores extends AbstractForwardingScores {
 	@Override
 	public List<Race> getRaces() {
 		return races;
+	}
+
+	@Override
+	public Set<Event> getEvents() {
+		return events;
 	}
 
 	@Override

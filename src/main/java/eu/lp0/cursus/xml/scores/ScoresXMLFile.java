@@ -59,50 +59,49 @@ public class ScoresXMLFile {
 		if (seriesScores != null) {
 			checkSeries.add(seriesScores.getSeries());
 			races.addAll(seriesScores.getRaces());
+			events.addAll(seriesScores.getEvents());
 			pilots.addAll(seriesScores.getPilots());
 		}
 
 		if (eventScores != null) {
-			this.eventScores = new ArrayList<ScoresXMLEventResults>(eventScores.size());
+			this.eventResults = new ArrayList<ScoresXMLEventResults>(eventScores.size());
 			for (Scores scores : eventScores) {
 				checkSeries.add(scores.getSeries());
 				races.addAll(scores.getRaces());
+				events.addAll(scores.getEvents());
 				pilots.addAll(scores.getPilots());
 			}
 		}
 
 		if (raceScores != null) {
-			this.raceScores = new ArrayList<ScoresXMLRaceResults>(raceScores.size());
+			this.raceResults = new ArrayList<ScoresXMLRaceResults>(raceScores.size());
 			for (Scores scores : raceScores) {
 				checkSeries.add(scores.getSeries());
 				races.addAll(scores.getRaces());
+				events.addAll(scores.getEvents());
 				pilots.addAll(scores.getPilots());
 			}
 		}
 		Preconditions.checkArgument(!checkSeries.isEmpty(), "No series"); //$NON-NLS-1$
 		Preconditions.checkArgument(checkSeries.size() == 1, "Multiple series not allowed"); //$NON-NLS-1$
 
-		for (Race race : races) {
-			events.add(race.getEvent());
-		}
-
 		generator = Constants.APP_DESC;
 		series = new ScoresXMLSeries(refMgr, checkSeries.iterator().next(), events, races, pilots);
 		refMgr.put(series);
 
 		if (seriesScores != null) {
-			this.seriesScores = new ScoresXMLSeriesResults(refMgr, seriesScores);
+			this.seriesResults = new ScoresXMLSeriesResults(refMgr, seriesScores);
 		}
 
 		if (eventScores != null) {
 			for (Scores scores : eventScores) {
-				this.eventScores.add(new ScoresXMLEventResults(refMgr, scores));
+				this.eventResults.add(new ScoresXMLEventResults(refMgr, scores));
 			}
 		}
 
 		if (raceScores != null) {
 			for (Scores scores : raceScores) {
-				this.raceScores.add(new ScoresXMLRaceResults(refMgr, scores));
+				this.raceResults.add(new ScoresXMLRaceResults(refMgr, scores));
 			}
 		}
 	}
@@ -130,35 +129,35 @@ public class ScoresXMLFile {
 	}
 
 	@Element(required = false)
-	private ScoresXMLSeriesResults seriesScores;
+	private ScoresXMLSeriesResults seriesResults;
 
-	public ScoresXMLSeriesResults getSeriesScores() {
-		return seriesScores;
+	public ScoresXMLSeriesResults getSeriesResults() {
+		return seriesResults;
 	}
 
-	public void setSeriesScores(ScoresXMLSeriesResults seriesScores) {
-		this.seriesScores = seriesScores;
-	}
-
-	@ElementList(required = false, inline = true)
-	private ArrayList<ScoresXMLEventResults> eventScores;
-
-	public ArrayList<ScoresXMLEventResults> getEventScores() {
-		return eventScores;
-	}
-
-	public void setEventScores(ArrayList<ScoresXMLEventResults> eventScores) {
-		this.eventScores = eventScores;
+	public void setSeriesResults(ScoresXMLSeriesResults seriesResults) {
+		this.seriesResults = seriesResults;
 	}
 
 	@ElementList(required = false, inline = true)
-	private ArrayList<ScoresXMLRaceResults> raceScores;
+	private ArrayList<ScoresXMLEventResults> eventResults;
 
-	public ArrayList<ScoresXMLRaceResults> getRaceScores() {
-		return raceScores;
+	public ArrayList<ScoresXMLEventResults> getEventResults() {
+		return eventResults;
 	}
 
-	public void setRaceScores(ArrayList<ScoresXMLRaceResults> raceScores) {
-		this.raceScores = raceScores;
+	public void setEventResults(ArrayList<ScoresXMLEventResults> eventResults) {
+		this.eventResults = eventResults;
+	}
+
+	@ElementList(required = false, inline = true)
+	private ArrayList<ScoresXMLRaceResults> raceResults;
+
+	public ArrayList<ScoresXMLRaceResults> getRaceResults() {
+		return raceResults;
+	}
+
+	public void setRaceResults(ArrayList<ScoresXMLRaceResults> raceResults) {
+		this.raceResults = raceResults;
 	}
 }

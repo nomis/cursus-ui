@@ -22,6 +22,7 @@ import java.util.Set;
 
 import com.google.common.base.Predicate;
 
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
@@ -36,8 +37,8 @@ public class GenericScores extends AbstractScores {
 	protected final OverallPointsData overallPointsData;
 	protected final OverallPositionData overallPositionData;
 
-	public GenericScores(Set<Pilot> pilots, List<Race> races, Predicate<Pilot> fleetFilter, ScoresFactory scoresFactory, Scorer scorer) {
-		super(pilots, races, fleetFilter, scoresFactory, scorer);
+	public GenericScores(Set<Pilot> pilots, List<Race> races, Set<Event> events, Predicate<Pilot> fleetFilter, ScoresFactory scoresFactory, Scorer scorer) {
+		super(pilots, races, events, fleetFilter, scoresFactory, scorer);
 
 		raceLapsData = scoresFactory.newRaceLapsData(this);
 		racePointsData = scoresFactory.newRacePointsData(this);

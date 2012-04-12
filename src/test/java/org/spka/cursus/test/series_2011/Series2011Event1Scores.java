@@ -37,9 +37,11 @@ import eu.lp0.cursus.test.util.RaceAssertUtil;
 /**
  * Scores at the end of event 1 (29/10/2011 to 30/10/2011)
  */
-public class Series2011Event1Scores extends AbstractSeries2011 {
+public class Series2011Event1Scores extends Series2011NonEvent1Scores {
+	@Override
 	@Before
 	public void createData() throws Exception {
+		super.createData();
 		createEvent1Races();
 	}
 
@@ -72,7 +74,8 @@ public class Series2011Event1Scores extends AbstractSeries2011 {
 			List<Race> races = new ArrayList<Race>();
 			races.addAll(event1.getRaces());
 
-			Scores scores = scorer.scoreRaces(races, getSeriesResultsPilots(series, event1), Predicates.in(getSeriesResultsPilots(series, event1)));
+			Scores scores = scorer.scoreRaces(races, getSeriesResultsPilots(series, event1), getSeriesResultsEvents(series, event1),
+					Predicates.in(getSeriesResultsPilots(series, event1)));
 			checkSeriesAtEvent1(scores);
 
 			DatabaseSession.commit();
@@ -109,9 +112,10 @@ public class Series2011Event1Scores extends AbstractSeries2011 {
 		race1AssertUtil.assertPilot(sco158, 2, 0, false, 17, 17);
 		race1AssertUtil.assertPilot(sco320, 1, 0, false, 18, 18);
 		race1AssertUtil.assertPilot(sco249, 1, 0, false, 19, 19);
-		race1AssertUtil.assertPilot(sco060, 0, 0, false, 23, 20);
-		race1AssertUtil.assertPilot(sco153, 0, 0, false, 23, 20);
-		race1AssertUtil.assertPilot(sco156, 0, 0, false, 23, 20);
+		race1AssertUtil.assertPilot(sco040, 0, 0, false, 24, 20);
+		race1AssertUtil.assertPilot(sco060, 0, 0, false, 24, 20);
+		race1AssertUtil.assertPilot(sco153, 0, 0, false, 24, 20);
+		race1AssertUtil.assertPilot(sco156, 0, 0, false, 24, 20);
 		race1AssertUtil.assertDone(0);
 
 		OverallAssertUtil overallAssertUtil = new OverallAssertUtil(scores);
@@ -127,19 +131,18 @@ public class Series2011Event1Scores extends AbstractSeries2011 {
 		overallAssertUtil.assertPilot(sco467, 0, 10, 10);
 		overallAssertUtil.assertPilot(sco159, 0, 11, 11);
 		overallAssertUtil.assertPilot(sco019, 0, 12, 12);
-		overallAssertUtil.assertPilot(sco018, 0, 13, 13);
-		overallAssertUtil.assertPilot(sco198, 0, 14, 14);
+		overallAssertUtil.assertPilot(sco018, 1, 14, 13);
+		overallAssertUtil.assertPilot(sco198, 1, 15, 14);
 		overallAssertUtil.assertPilot(sco087, 0, 15, 15);
 		overallAssertUtil.assertPilot(sco197, 0, 16, 16);
-		overallAssertUtil.assertPilot(sco158, 0, 17, 17);
+		overallAssertUtil.assertPilot(sco158, 1, 18, 17);
 		overallAssertUtil.assertPilot(sco320, 0, 18, 18);
 		overallAssertUtil.assertPilot(sco249, 0, 19, 19);
-		overallAssertUtil.assertPilot(sco060, 0, 23, 20);
-		overallAssertUtil.assertPilot(sco153, 0, 23, 20);
-		overallAssertUtil.assertPilot(sco156, 0, 23, 20);
+		overallAssertUtil.assertPilot(sco060, 0, 24, 20);
+		overallAssertUtil.assertPilot(sco153, 0, 24, 20);
+		overallAssertUtil.assertPilot(sco156, 0, 24, 20);
+		overallAssertUtil.assertPilot(sco040, 1, 25, 23);
 		overallAssertUtil.assertOrder();
-
-		debugPrintScores(scores);
 	}
 
 	@Test

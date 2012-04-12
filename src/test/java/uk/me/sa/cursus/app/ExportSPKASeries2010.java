@@ -92,11 +92,11 @@ public class ExportSPKASeries2010 {
 		List<Scores> eventScores = new ArrayList<Scores>();
 		List<Scores> raceScores = new ArrayList<Scores>();
 		XMLScores xmlScores = new XMLScores(file);
-		seriesScores = xmlScores.newInstance(file.getSeriesScores());
-		for (ScoresXMLEventResults scores : file.getEventScores()) {
+		seriesScores = xmlScores.newInstance(file.getSeriesResults());
+		for (ScoresXMLEventResults scores : file.getEventResults()) {
 			eventScores.add(xmlScores.newInstance(scores));
 		}
-		for (ScoresXMLRaceResults scores : file.getRaceScores()) {
+		for (ScoresXMLRaceResults scores : file.getRaceResults()) {
 			raceScores.add(xmlScores.newInstance(scores));
 		}
 

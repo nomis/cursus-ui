@@ -54,6 +54,11 @@ public class ScoresXMLEventResults extends AbstractScoresXMLResults {
 
 		discards = scores.getDiscardCount();
 
+		events = new ArrayList<ScoresXMLEventRef>(scores.getEvents().size());
+		for (Event event_ : scores.getEvents()) {
+			events.add((ScoresXMLEventRef)refMgr.get(event_));
+		}
+
 		overallPilots = new ArrayList<ScoresXMLOverallScore>(scores.getOverallOrder().size());
 		for (Pilot pilot : scores.getOverallOrder()) {
 			overallPilots.add(new ScoresXMLOverallScore(refMgr, scores, pilot));
@@ -85,6 +90,17 @@ public class ScoresXMLEventResults extends AbstractScoresXMLResults {
 
 	public void setDiscards(int discards) {
 		this.discards = discards;
+	}
+
+	@ElementList
+	private ArrayList<ScoresXMLEventRef> events;
+
+	public ArrayList<ScoresXMLEventRef> getEvents() {
+		return events;
+	}
+
+	public void setEvents(ArrayList<ScoresXMLEventRef> events) {
+		this.events = events;
 	}
 
 	@ElementList(name = "overallOrder")

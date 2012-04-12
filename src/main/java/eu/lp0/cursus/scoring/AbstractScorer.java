@@ -18,6 +18,7 @@
 package eu.lp0.cursus.scoring;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,7 +55,7 @@ public abstract class AbstractScorer implements Scorer {
 		for (Event event : series.getEvents()) {
 			races.addAll(event.getRaces());
 		}
-		return scoreRaces(races, pilots, fleetFilter);
+		return scoreRaces(races, pilots, Sets.newHashSet(series.getEvents()), fleetFilter);
 	}
 
 	@Override
@@ -117,7 +118,12 @@ public abstract class AbstractScorer implements Scorer {
 	}
 
 	@Override
-	public abstract Scores scoreRaces(List<Race> races, Set<Pilot> pilots, Predicate<Pilot> fleetFilter);
+	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots, Predicate<Pilot> fleetFilter) {
+		return scoreRaces(races, pilots, Collections.<Event>emptySet(), fleetFilter);
+	}
+
+	@Override
+	public abstract Scores scoreRaces(List<Race> races, Set<Pilot> pilots, Set<Event> events, Predicate<Pilot> fleetFilter);
 
 	public final String getUUID() {
 		return getClass().getAnnotation(ScoringSystem.class).uuid();

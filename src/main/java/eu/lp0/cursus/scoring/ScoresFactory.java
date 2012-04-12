@@ -22,9 +22,10 @@ import java.util.Set;
 
 import com.google.common.base.Predicate;
 
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
 public interface ScoresFactory extends ScoresFactorySubset {
-	public Scores newScores(Set<Pilot> pilots, List<Race> races, Predicate<Pilot> fleetFilter, Scorer scorer);
+	public Scores newScores(Set<Pilot> pilots, List<Race> races, Set<Event> events, Predicate<Pilot> fleetFilter, Scorer scorer);
 }

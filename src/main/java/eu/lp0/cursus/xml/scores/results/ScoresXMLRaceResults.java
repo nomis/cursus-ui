@@ -26,12 +26,14 @@ import org.simpleframework.xml.Root;
 
 import com.google.common.base.Preconditions;
 
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.xml.ExportReferenceManager;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore;
+import eu.lp0.cursus.xml.scores.entity.ScoresXMLEventRef;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLRaceRef;
 
 @Root(name = "raceResults")
@@ -48,6 +50,11 @@ public class ScoresXMLRaceResults extends AbstractScoresXMLResults {
 		race = refMgr.get(race_);
 
 		fleet = scores.getFleetSize(race_);
+
+		events = new ArrayList<ScoresXMLEventRef>(scores.getEvents().size());
+		for (Event event_ : scores.getEvents()) {
+			events.add((ScoresXMLEventRef)refMgr.get(event_));
+		}
 
 		overallPilots = new ArrayList<ScoresXMLOverallScore>(scores.getOverallOrder().size());
 		for (Pilot pilot : scores.getOverallOrder()) {
@@ -80,6 +87,17 @@ public class ScoresXMLRaceResults extends AbstractScoresXMLResults {
 
 	public void setFleet(int fleet) {
 		this.fleet = fleet;
+	}
+
+	@ElementList
+	private ArrayList<ScoresXMLEventRef> events;
+
+	public ArrayList<ScoresXMLEventRef> getEvents() {
+		return events;
+	}
+
+	public void setEvents(ArrayList<ScoresXMLEventRef> events) {
+		this.events = events;
 	}
 
 	@ElementList(name = "overallOrder")

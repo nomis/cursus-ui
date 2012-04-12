@@ -88,7 +88,7 @@ public class ExportFISLYEurope2011Class8 {
 			ScoresXMLFile file = import_.getData();
 			Scores seriesScores;
 			XMLScores xmlScores = new XMLScores(file);
-			seriesScores = xmlScores.newInstance(file.getSeriesScores());
+			seriesScores = xmlScores.newInstance(file.getSeriesResults());
 
 			ScoresXML export2 = new ScoresXML(seriesScores, null, null);
 			export2.to(SERIES_FILE_A2);
@@ -104,7 +104,7 @@ public class ExportFISLYEurope2011Class8 {
 			ScoresXMLFile file = import_.getData();
 			Scores seriesScores;
 			XMLScores xmlScores = new XMLScores(file);
-			seriesScores = xmlScores.newInstance(file.getSeriesScores());
+			seriesScores = xmlScores.newInstance(file.getSeriesResults());
 
 			ScoresXML export2 = new ScoresXML(seriesScores, null, null);
 			export2.to(SERIES_FILE_M2);
@@ -120,7 +120,7 @@ public class ExportFISLYEurope2011Class8 {
 			ScoresXMLFile file = import_.getData();
 			Scores seriesScores;
 			XMLScores xmlScores = new XMLScores(file);
-			seriesScores = xmlScores.newInstance(file.getSeriesScores());
+			seriesScores = xmlScores.newInstance(file.getSeriesResults());
 
 			ScoresXML export2 = new ScoresXML(seriesScores, null, null);
 			export2.to(SERIES_FILE_F2);

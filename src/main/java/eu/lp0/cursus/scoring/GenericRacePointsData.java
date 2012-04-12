@@ -116,6 +116,8 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 		case SERIES: {
 			Set<Pilot> pilots = new HashSet<Pilot>(scores.getSeries().getPilots().size() * 2);
 			for (Event event : scores.getSeries().getEvents()) {
+				pilots.addAll(event.getAttendees());
+
 				for (Race race : event.getRaces()) {
 					pilots.addAll(race.getAttendees().keySet());
 				}
@@ -131,6 +133,9 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 
 		case SCORED: {
 			Set<Pilot> pilots = new HashSet<Pilot>(scores.getPilots().size() * 2);
+			for (Event event : scores.getEvents()) {
+				pilots.addAll(event.getAttendees());
+			}
 			for (Race race : scores.getRaces()) {
 				pilots.addAll(race.getAttendees().keySet());
 			}

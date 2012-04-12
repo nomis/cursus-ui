@@ -36,19 +36,28 @@ import eu.lp0.cursus.scoring.ScorerFactory;
 public abstract class AbstractSeries2011 extends AbstractSeries {
 	protected final String SERIES_NAME = "SPKA Race Series 2011/12"; //$NON-NLS-1$
 	protected final int SERIES_FLEET = 23;
-	protected final int SERIES_FLEET_AT_EVENT1 = 22;
-	protected final int SERIES_FLEET_AT_EVENT2 = 22;
+	protected final int SERIES_FLEET_AT_NON_EVENT1 = 23;
+	protected final int SERIES_FLEET_AT_EVENT1 = 23;
+	protected final int SERIES_FLEET_AT_NON_EVENT2 = 23;
+	protected final int SERIES_FLEET_AT_EVENT2 = 23;
+	protected final int SERIES_FLEET_AT_NON_EVENT3 = 23;
 	protected final int SERIES_FLEET_AT_EVENT3 = 23;
+
+	protected final String NON_EVENT1_NAME = "Non-Event 1"; //$NON-NLS-1$
 
 	protected final String EVENT1_NAME = "Race Event 1"; //$NON-NLS-1$
 	protected final int EVENT1_FLEET = 22;
 	protected final String RACE1_NAME = "Race 1"; //$NON-NLS-1$
+
+	protected final String NON_EVENT2_NAME = "Non-Event 2"; //$NON-NLS-1$
 
 	protected final String EVENT2_NAME = "Race Event 2"; //$NON-NLS-1$
 	protected final int EVENT2_FLEET = 20;
 	protected final String RACE2_NAME = "Race 2"; //$NON-NLS-1$
 	protected final String RACE3_NAME = "Race 3"; //$NON-NLS-1$
 	protected final String RACE4_NAME = "Race 4"; //$NON-NLS-1$
+
+	protected final String NON_EVENT3_NAME = "Non-Event 3"; //$NON-NLS-1$
 
 	protected final String EVENT3_NAME = "Race Event 3"; //$NON-NLS-1$
 	protected final int EVENT3_FLEET = 19;
@@ -86,12 +95,15 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 	protected Pilot b1045;
 
 	private Series _series;
+	private Event _nonEvent1;
 	private Event _event1;
 	private Race _race1;
+	private Event _nonEvent2;
 	private Event _event2;
 	private Race _race2;
 	private Race _race3;
 	private Race _race4;
+	private Event _nonEvent3;
 	private Event _event3;
 	private Race _race5;
 	private Race _race6;
@@ -200,6 +212,55 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			DatabaseSession.commit();
 
 			_series = series;
+		} finally {
+			db.endSession();
+		}
+	}
+
+	protected void createNonEvent1Data() throws Exception {
+		createSeriesData();
+
+		if (_nonEvent1 != null) {
+			return;
+		}
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+
+			Event nonEvent1 = new Event(series, NON_EVENT1_NAME);
+			series.getEvents().add(nonEvent1);
+			eventDAO.persist(nonEvent1);
+
+			// attendEvent(nonEvent1, sco018);
+			attendEvent(nonEvent1, sco019);
+			attendEvent(nonEvent1, sco040);
+			attendEvent(nonEvent1, sco060);
+			attendEvent(nonEvent1, sco068);
+			attendEvent(nonEvent1, sco081);
+			attendEvent(nonEvent1, sco087);
+			attendEvent(nonEvent1, sco116);
+			attendEvent(nonEvent1, sco136);
+			attendEvent(nonEvent1, sco153);
+			attendEvent(nonEvent1, sco156);
+			// attendEvent(nonEvent1, sco158);
+			attendEvent(nonEvent1, sco159);
+			attendEvent(nonEvent1, sco179);
+			attendEvent(nonEvent1, sco197);
+			// attendEvent(nonEvent1, sco198);
+			attendEvent(nonEvent1, sco200);
+			attendEvent(nonEvent1, sco248);
+			attendEvent(nonEvent1, sco249);
+			attendEvent(nonEvent1, sco320);
+			attendEvent(nonEvent1, sco467);
+			attendEvent(nonEvent1, sco528);
+			attendEvent(nonEvent1, sco808);
+
+			DatabaseSession.commit();
+
+			_nonEvent1 = nonEvent1;
 		} finally {
 			db.endSession();
 		}
@@ -351,6 +412,55 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			DatabaseSession.commit();
 
 			_race1 = race1;
+		} finally {
+			db.endSession();
+		}
+	}
+
+	protected void createNonEvent2Data() throws Exception {
+		createSeriesData();
+
+		if (_nonEvent2 != null) {
+			return;
+		}
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+
+			Event nonEvent2 = new Event(series, NON_EVENT2_NAME);
+			series.getEvents().add(nonEvent2);
+			eventDAO.persist(nonEvent2);
+
+			attendEvent(nonEvent2, sco018);
+			attendEvent(nonEvent2, sco019);
+			attendEvent(nonEvent2, sco040);
+			attendEvent(nonEvent2, sco060);
+			attendEvent(nonEvent2, sco068);
+			attendEvent(nonEvent2, sco081);
+			attendEvent(nonEvent2, sco087);
+			attendEvent(nonEvent2, sco116);
+			attendEvent(nonEvent2, sco136);
+			attendEvent(nonEvent2, sco153);
+			attendEvent(nonEvent2, sco156);
+			// attendEvent(nonEvent2, sco158);
+			attendEvent(nonEvent2, sco159);
+			attendEvent(nonEvent2, sco179);
+			attendEvent(nonEvent2, sco197);
+			// attendEvent(nonEvent2, sco198);
+			attendEvent(nonEvent2, sco200);
+			attendEvent(nonEvent2, sco248);
+			attendEvent(nonEvent2, sco249);
+			attendEvent(nonEvent2, sco320);
+			attendEvent(nonEvent2, sco467);
+			attendEvent(nonEvent2, sco528);
+			attendEvent(nonEvent2, sco808);
+
+			DatabaseSession.commit();
+
+			_nonEvent2 = nonEvent2;
 		} finally {
 			db.endSession();
 		}
@@ -748,6 +858,55 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			DatabaseSession.commit();
 
 			_race4 = race4;
+		} finally {
+			db.endSession();
+		}
+	}
+
+	protected void createNonEvent3Data() throws Exception {
+		createSeriesData();
+
+		if (_nonEvent3 != null) {
+			return;
+		}
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+
+			Event nonEvent3 = new Event(series, NON_EVENT3_NAME);
+			series.getEvents().add(nonEvent3);
+			eventDAO.persist(nonEvent3);
+
+			attendEvent(nonEvent3, sco018);
+			attendEvent(nonEvent3, sco019);
+			attendEvent(nonEvent3, sco040);
+			attendEvent(nonEvent3, sco060);
+			attendEvent(nonEvent3, sco068);
+			attendEvent(nonEvent3, sco081);
+			attendEvent(nonEvent3, sco087);
+			attendEvent(nonEvent3, sco116);
+			// attendEvent(nonEvent3, sco136);
+			attendEvent(nonEvent3, sco153);
+			attendEvent(nonEvent3, sco156);
+			// attendEvent(nonEvent3, sco158);
+			attendEvent(nonEvent3, sco159);
+			attendEvent(nonEvent3, sco179);
+			attendEvent(nonEvent3, sco197);
+			// attendEvent(nonEvent3, sco198);
+			attendEvent(nonEvent3, sco200);
+			attendEvent(nonEvent3, sco248);
+			attendEvent(nonEvent3, sco249);
+			attendEvent(nonEvent3, sco320);
+			attendEvent(nonEvent3, sco467);
+			attendEvent(nonEvent3, sco528);
+			attendEvent(nonEvent3, sco808);
+
+			DatabaseSession.commit();
+
+			_nonEvent3 = nonEvent3;
 		} finally {
 			db.endSession();
 		}

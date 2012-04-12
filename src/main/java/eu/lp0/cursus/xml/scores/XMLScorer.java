@@ -22,6 +22,7 @@ import java.util.Set;
 
 import com.google.common.base.Predicate;
 
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.AbstractScorer;
@@ -31,7 +32,7 @@ import eu.lp0.cursus.scoring.ScoringSystem;
 @ScoringSystem(uuid = "285a2a01-b07a-1598-0787-ca0ef476a78d", name = "XML Import", hide = true)
 public class XMLScorer extends AbstractScorer {
 	@Override
-	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots, Predicate<Pilot> fleetFilter) {
+	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots, Set<Event> events, Predicate<Pilot> fleetFilter) {
 		throw new UnsupportedOperationException();
 	}
 }

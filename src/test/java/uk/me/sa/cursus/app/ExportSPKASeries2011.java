@@ -62,10 +62,12 @@ public class ExportSPKASeries2011 {
 				seriesScores = scorer.scoreSeries(series, Predicates.in(getSeriesResultsPilots(series)));
 
 				for (Event event : series.getEvents()) {
-					eventScores.add(scorer.scoreRaces(event.getRaces(), Predicates.in(getEventResultsPilots(series, event))));
+					if (!event.getRaces().isEmpty()) {
+						eventScores.add(scorer.scoreRaces(event.getRaces(), Predicates.in(getEventResultsPilots(series, event))));
 
-					for (Race race : event.getRaces()) {
-						raceScores.add(scorer.scoreRaces(Collections.singletonList(race), Predicates.in(getEventResultsPilots(series, event))));
+						for (Race race : event.getRaces()) {
+							raceScores.add(scorer.scoreRaces(Collections.singletonList(race), Predicates.in(getEventResultsPilots(series, event))));
+						}
 					}
 				}
 
@@ -93,11 +95,11 @@ public class ExportSPKASeries2011 {
 		List<Scores> eventScores = new ArrayList<Scores>();
 		List<Scores> raceScores = new ArrayList<Scores>();
 		XMLScores xmlScores = new XMLScores(file);
-		seriesScores = xmlScores.newInstance(file.getSeriesScores());
-		for (ScoresXMLEventResults scores : file.getEventScores()) {
+		seriesScores = xmlScores.newInstance(file.getSeriesResults());
+		for (ScoresXMLEventResults scores : file.getEventResults()) {
 			eventScores.add(xmlScores.newInstance(scores));
 		}
-		for (ScoresXMLRaceResults scores : file.getRaceScores()) {
+		for (ScoresXMLRaceResults scores : file.getRaceResults()) {
 			raceScores.add(xmlScores.newInstance(scores));
 		}
 
