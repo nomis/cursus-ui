@@ -35,15 +35,24 @@ import eu.lp0.cursus.util.Constants;
 public final class Penalty implements Comparable<Penalty>, Cloneable {
 	public enum Type implements TranslatedEnum {
 		/** Number of penalties where the points given for them are calculated automatically */
-		AUTOMATIC ("penalty.automatic"), //$NON-NLS-1$
+		AUTOMATIC ("penalty.automatic", 1), //$NON-NLS-1$
 
 		/** Total fixed penalty points to be applied */
-		FIXED ("penalty.fixed"); //$NON-NLS-1$
+		FIXED ("penalty.fixed", 1), //$NON-NLS-1$
+
+		/** Lap count adjustment to be applied */
+		LAPS ("penalty.laps", 0); //$NON-NLS-1$
 
 		private final String key;
+		private final int defaultValue;
 
-		private Type(String key) {
+		private Type(String key, int defaultValue) {
 			this.key = key;
+			this.defaultValue = defaultValue;
+		}
+
+		public int getDefaultValue() {
+			return defaultValue;
 		}
 
 		@Override
@@ -64,7 +73,7 @@ public final class Penalty implements Comparable<Penalty>, Cloneable {
 	}
 
 	public Penalty(Type type, String reason) {
-		this(type, 1, reason);
+		this(type, type.getDefaultValue(), reason);
 	}
 
 	public Penalty(Type type, int value, String reason) {

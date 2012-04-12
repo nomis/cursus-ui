@@ -72,6 +72,10 @@ public class GenericRacePenaltiesData<T extends ScoredData> extends AbstractRace
 				// Fixed penalty added/removed
 				penalties += penalty.getValue();
 				break;
+
+			case LAPS:
+				// This is applied in RaceLapsData
+				break;
 			}
 		}
 

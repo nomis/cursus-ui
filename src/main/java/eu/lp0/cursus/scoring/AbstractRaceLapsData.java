@@ -18,18 +18,23 @@
 package eu.lp0.cursus.scoring;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ArrayTable;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Table;
 
+import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.db.data.RaceAttendee;
 
 public abstract class AbstractRaceLapsData<T extends ScoredData> implements RaceLapsData {
 	private static final int EXPECTED_MAXIMUM_LAPS = 32;
@@ -73,14 +78,45 @@ public abstract class AbstractRaceLapsData<T extends ScoredData> implements Race
 				raceOrder.put(lapCount, pilot);
 			}
 
-			List<Integer> reverseLaps = Ordering.natural().reverse().sortedCopy(raceOrder.keySet());
-			List<Pilot> pilotOrder = new ArrayList<Pilot>(scores.getPilots().size());
-			for (Integer lap : reverseLaps) {
-				pilotOrder.addAll(raceOrder.get(lap));
-			}
-			raceLapOrder.put(race, pilotOrder);
-		}
+			// This has to be done in a deterministic order, so do it by pilot order
+			// It is intentional that pilots can end up having 0 laps but be considered to have completed the race
+			for (Pilot pilot : getPilotOrder(raceOrder)) {
+				RaceAttendee attendee = race.getAttendees().get(pilot);
+				if (attendee != null) {
+					for (Penalty penalty : attendee.getPenalties()) {
+						if (penalty.getType() == Penalty.Type.LAPS && penalty.getValue() != 0) {
+							int lapCount = raceLaps.get(race, pilot);
 
+							raceOrder.remove(lapCount, pilot);
+							lapCount += penalty.getValue();
+							if (lapCount < 0) {
+								lapCount = 0;
+							}
+							raceLaps.put(race, pilot, lapCount);
+							if (penalty.getValue() > 0) {
+								// Increase in laps, put them at the end of the next lap
+								raceOrder.put(lapCount, pilot);
+							} else {
+								// Decrease in laps, put them at the start of the previous lap
+								raceOrder.replaceValues(lapCount,
+										Iterables.concat(Collections.singletonList(pilot), ImmutableList.copyOf(raceOrder.get(lapCount))));
+							}
+						}
+					}
+				}
+			}
+
+			raceLapOrder.put(race, getPilotOrder(raceOrder));
+		}
+	}
+
+	private List<Pilot> getPilotOrder(ListMultimap<Integer, Pilot> raceOrder) {
+		List<Integer> reverseLaps = Ordering.natural().reverse().sortedCopy(raceOrder.keySet());
+		List<Pilot> pilotOrder = new ArrayList<Pilot>(scores.getPilots().size());
+		for (Integer lap : reverseLaps) {
+			pilotOrder.addAll(raceOrder.get(lap));
+		}
+		return pilotOrder;
 	}
 
 	@Override

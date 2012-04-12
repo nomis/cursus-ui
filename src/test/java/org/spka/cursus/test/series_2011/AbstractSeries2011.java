@@ -537,12 +537,14 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			RaceAttendee att808 = new RaceAttendee(race2, sco808, RaceAttendee.Type.PILOT);
 			att808.getPenalties().add(new Penalty(Penalty.Type.AUTOMATIC));
 			race2.getAttendees().put(sco808, att808);
-			race2.getAttendees().put(b1045, new RaceAttendee(race2, b1045, RaceAttendee.Type.PILOT));
+			RaceAttendee att1045 = new RaceAttendee(race2, b1045, RaceAttendee.Type.PILOT);
+			// http://www.flickr.com/photos/lp0/6838159693/in/set-72157629234378617/
+			// B1045 didn't cross the start line before the race started
+			att1045.getPenalties().add(new Penalty(Penalty.Type.LAPS, -1));
+			race2.getAttendees().put(b1045, att1045);
 			race2.getEvents().add(new RaceEvent(RaceEvent.Type.START));
 			// 1
 			race2.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "200", sco200)); //$NON-NLS-1$
-			// http://www.flickr.com/photos/lp0/6838159693/in/set-72157629234378617/
-			// B1045 didn't cross the start line before the race started
 			race2.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "B1045", b1045)); //$NON-NLS-1$
 			race2.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
 			race2.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "81", sco081)); //$NON-NLS-1$
