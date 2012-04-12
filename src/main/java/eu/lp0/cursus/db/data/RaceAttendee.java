@@ -43,7 +43,7 @@ import eu.lp0.cursus.i18n.TranslatedEnum;
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "race_id", "pilot_id" }) })
 public final class RaceAttendee extends AbstractEntity {
 	/**
-	 * The fleet consists only of the PILOTs
+	 * The fleet consists of the attendees
 	 * 
 	 * Mandatory/voluntary participation in other activities may affect the scores of pilots who didn't compete
 	 */
