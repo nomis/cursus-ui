@@ -35,12 +35,16 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Predicates;
+import com.google.common.collect.Sets;
+
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.EventDAO;
 import eu.lp0.cursus.db.dao.PilotDAO;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.BooleanDatabaseColumn;
@@ -96,6 +100,16 @@ public class EventAttendeesTab extends AbstractDatabaseTab<Event> {
 						}
 						return true;
 					}
+				}, new StringDatabaseColumn<Pilot>("pilot.race-count") { //$NON-NLS-1$
+					@Override
+					protected String getValue(Pilot row, boolean editing) {
+						return String.valueOf(Sets.filter(row.getRaces().keySet(), Predicates.in(currentEvent.getRaces())).size());
+					}
+
+					@Override
+					protected boolean setValue(Pilot row, String value) {
+						return false;
+					}
 				}, new RaceNumbersDatabaseColumnModel("pilot.race-number"), //$NON-NLS-1$
 				new StringDatabaseColumn<Pilot>("pilot.name") { //$NON-NLS-1$
 					@Override
@@ -105,8 +119,7 @@ public class EventAttendeesTab extends AbstractDatabaseTab<Event> {
 
 					@Override
 					protected boolean setValue(Pilot row, String value) {
-						row.setName(value);
-						return true;
+						return false;
 					}
 				}, new EnumDatabaseColumn<Pilot, Gender>("pilot.gender", Gender.class, true) { //$NON-NLS-1$
 					@Override
@@ -116,8 +129,7 @@ public class EventAttendeesTab extends AbstractDatabaseTab<Event> {
 
 					@Override
 					protected boolean setEnumValue(Pilot row, Gender value) {
-						row.setGender(value);
-						return true;
+						return false;
 					}
 				}, new StringDatabaseColumn<Pilot>("pilot.country") { //$NON-NLS-1$
 					@Override
@@ -127,14 +139,14 @@ public class EventAttendeesTab extends AbstractDatabaseTab<Event> {
 
 					@Override
 					protected boolean setValue(Pilot row, String value) {
-						row.setCountry(value);
-						return true;
+						return false;
 					}
 				}));
 		model.setupModel(table);
 		table.getRowSorter().setSortKeys(
 				Arrays.asList(new RowSorter.SortKey(0, SortOrder.DESCENDING), new RowSorter.SortKey(1, SortOrder.ASCENDING), new RowSorter.SortKey(2,
-						SortOrder.ASCENDING), new RowSorter.SortKey(3, SortOrder.ASCENDING), new RowSorter.SortKey(4, SortOrder.ASCENDING)));
+						SortOrder.ASCENDING), new RowSorter.SortKey(3, SortOrder.ASCENDING), new RowSorter.SortKey(4, SortOrder.ASCENDING),
+						new RowSorter.SortKey(5, SortOrder.ASCENDING)));
 
 		table.addKeyListener(new KeyAdapter() {
 			@Override
@@ -233,12 +245,18 @@ public class EventAttendeesTab extends AbstractDatabaseTab<Event> {
 			DatabaseSession.begin();
 
 			newEvent = eventDAO.get(event);
+			for (Race race : newEvent.getRaces()) {
+				;
+			}
 			newPilots = new ArrayList<Pilot>(newEvent.getSeries().getPilots());
 			for (Pilot pilot : newPilots) {
 				for (RaceNumber raceNumber : pilot.getRaceNumbers()) {
 					;
 				}
 				for (Event event_ : pilot.getEvents()) {
+					;
+				}
+				for (Race race : pilot.getRaces().keySet()) {
 					;
 				}
 			}
@@ -252,8 +270,8 @@ public class EventAttendeesTab extends AbstractDatabaseTab<Event> {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				model.updateModel(newPilots);
 				currentEvent = newEvent;
+				model.updateModel(newPilots);
 			}
 		});
 	}
