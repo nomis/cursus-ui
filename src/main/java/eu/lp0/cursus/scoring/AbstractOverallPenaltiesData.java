@@ -18,11 +18,13 @@
 package eu.lp0.cursus.scoring;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 
+import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
 
 public abstract class AbstractOverallPenaltiesData<T extends ScoredData> implements OverallPenaltiesData {
@@ -35,6 +37,16 @@ public abstract class AbstractOverallPenaltiesData<T extends ScoredData> impleme
 				overallPenalties.put(pilot, calculateOverallPenalties(pilot));
 			}
 			return overallPenalties;
+		}
+	});
+	protected final Supplier<Map<Pilot, List<Penalty>>> lazySimulatedOverallPenalties = Suppliers.memoize(new Supplier<Map<Pilot, List<Penalty>>>() {
+		@Override
+		public Map<Pilot, List<Penalty>> get() {
+			Map<Pilot, List<Penalty>> simulatedOverallPenalties = new HashMap<Pilot, List<Penalty>>(scores.getPilots().size() * 2);
+			for (Pilot pilot : scores.getPilots()) {
+				simulatedOverallPenalties.put(pilot, calculateSimulatedOverallPenalties(pilot));
+			}
+			return simulatedOverallPenalties;
 		}
 	});
 
@@ -52,5 +64,17 @@ public abstract class AbstractOverallPenaltiesData<T extends ScoredData> impleme
 		return lazyOverallPenalties.get().get(pilot);
 	}
 
+	@Override
+	public Map<Pilot, ? extends List<Penalty>> getSimulatedOverallPenalties() {
+		return lazySimulatedOverallPenalties.get();
+	}
+
+	@Override
+	public List<Penalty> getSimulatedOverallPenalties(Pilot pilot) {
+		return lazySimulatedOverallPenalties.get().get(pilot);
+	}
+
 	protected abstract int calculateOverallPenalties(Pilot pilot);
+
+	protected abstract List<Penalty> calculateSimulatedOverallPenalties(Pilot pilot);
 }

@@ -17,6 +17,7 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Supplier;
@@ -24,6 +25,7 @@ import com.google.common.base.Suppliers;
 import com.google.common.collect.ArrayTable;
 import com.google.common.collect.Table;
 
+import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
@@ -41,6 +43,19 @@ public abstract class AbstractRacePenaltiesData<T extends ScoredData> implements
 			return racePenalties;
 		}
 	});
+	protected final Supplier<Table<Pilot, Race, List<Penalty>>> lazySimulatedRacePenalties = Suppliers
+			.memoize(new Supplier<Table<Pilot, Race, List<Penalty>>>() {
+				@Override
+				public Table<Pilot, Race, List<Penalty>> get() {
+					Table<Pilot, Race, List<Penalty>> simulatedRacePenalties = ArrayTable.create(scores.getPilots(), scores.getRaces());
+					for (Race race : scores.getRaces()) {
+						for (Pilot pilot : scores.getPilots()) {
+							simulatedRacePenalties.put(pilot, race, calculateSimulatedRacePenalties(pilot, race));
+						}
+					}
+					return simulatedRacePenalties;
+				}
+			});
 
 	public AbstractRacePenaltiesData(T scores) {
 		this.scores = scores;
@@ -66,5 +81,23 @@ public abstract class AbstractRacePenaltiesData<T extends ScoredData> implements
 		return lazyRacePenalties.get().get(pilot, race);
 	}
 
+	public Table<Pilot, Race, List<Penalty>> getSimulatedRacePenalties() {
+		return lazySimulatedRacePenalties.get();
+	}
+
+	public Map<Race, List<Penalty>> getSimulatedRacePenalties(Pilot pilot) {
+		return lazySimulatedRacePenalties.get().row(pilot);
+	}
+
+	public Map<Pilot, List<Penalty>> getSimulatedRacePenalties(Race race) {
+		return lazySimulatedRacePenalties.get().column(race);
+	}
+
+	public List<Penalty> getSimulatedRacePenalties(Pilot pilot, Race race) {
+		return lazySimulatedRacePenalties.get().get(pilot, race);
+	}
+
 	protected abstract int calculateRacePenalties(Pilot pilot, Race race);
+
+	protected abstract List<Penalty> calculateSimulatedRacePenalties(Pilot pilot, Race race);
 }

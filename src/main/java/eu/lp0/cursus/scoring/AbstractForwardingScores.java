@@ -26,6 +26,7 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Event;
+import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
@@ -216,6 +217,26 @@ public abstract class AbstractForwardingScores implements Scores {
 		return delegateRacePenaltiesData().getRacePenalties(pilot, race);
 	}
 
+	@Override
+	public Table<Pilot, Race, List<Penalty>> getSimulatedRacePenalties() {
+		return delegateRacePenaltiesData().getSimulatedRacePenalties();
+	}
+
+	@Override
+	public Map<Race, List<Penalty>> getSimulatedRacePenalties(Pilot pilot) {
+		return Collections.unmodifiableMap(delegateRacePenaltiesData().getSimulatedRacePenalties(pilot));
+	}
+
+	@Override
+	public Map<Pilot, List<Penalty>> getSimulatedRacePenalties(Race race) {
+		return Collections.unmodifiableMap(delegateRacePenaltiesData().getSimulatedRacePenalties(race));
+	}
+
+	@Override
+	public List<Penalty> getSimulatedRacePenalties(Pilot pilot, Race race) {
+		return Collections.unmodifiableList(delegateRacePenaltiesData().getSimulatedRacePenalties(pilot, race));
+	}
+
 	// RacePositionsData
 	@Override
 	public Table<Race, Pilot, Integer> getRacePositions() {
@@ -292,6 +313,16 @@ public abstract class AbstractForwardingScores implements Scores {
 	@Override
 	public int getOverallPenalties(Pilot pilot) {
 		return delegateOverallPenaltiesData().getOverallPenalties(pilot);
+	}
+
+	@Override
+	public Map<Pilot, ? extends List<Penalty>> getSimulatedOverallPenalties() {
+		return Collections.unmodifiableMap(delegateOverallPenaltiesData().getSimulatedOverallPenalties());
+	}
+
+	@Override
+	public List<Penalty> getSimulatedOverallPenalties(Pilot pilot) {
+		return Collections.unmodifiableList(delegateOverallPenaltiesData().getSimulatedOverallPenalties(pilot));
 	}
 
 	// OverallPointsData

@@ -17,10 +17,15 @@
  */
 package eu.lp0.cursus.xml.scores.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.Scores;
@@ -42,6 +47,14 @@ public class ScoresXMLRaceScore {
 		penalties = scores.getRacePenalties(pilot_, race_);
 		points = scores.getRacePoints(pilot_, race_);
 		position = scores.getRacePosition(pilot_, race_);
+
+		List<Penalty> simulatedPenalties_ = scores.getSimulatedRacePenalties(pilot_, race_);
+		if (!simulatedPenalties_.isEmpty()) {
+			simulatedPenalties = new ArrayList<ScoresXMLPenalty>();
+			for (Penalty penalty : simulatedPenalties_) {
+				simulatedPenalties.add(new ScoresXMLPenalty(penalty));
+			}
+		}
 	}
 
 	@Element
@@ -119,5 +132,16 @@ public class ScoresXMLRaceScore {
 
 	public void setPosition(int position) {
 		this.position = position;
+	}
+
+	@ElementList(required = false)
+	private ArrayList<ScoresXMLPenalty> simulatedPenalties;
+
+	public ArrayList<ScoresXMLPenalty> getSimulatedPenalties() {
+		return simulatedPenalties;
+	}
+
+	public void setSimulatedPenalties(ArrayList<ScoresXMLPenalty> simulatedPenalties) {
+		this.simulatedPenalties = simulatedPenalties;
 	}
 }

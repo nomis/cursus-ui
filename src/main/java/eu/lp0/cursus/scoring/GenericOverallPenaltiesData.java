@@ -17,12 +17,35 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.google.common.base.Preconditions;
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
 import eu.lp0.cursus.db.data.Event;
+import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.db.data.Race;
 
 public class GenericOverallPenaltiesData<T extends ScoredData & RacePenaltiesData> extends AbstractOverallPenaltiesData<T> {
+	protected final Supplier<Map<Event, Set<Race>>> lazyEventRaces = Suppliers.memoize(new Supplier<Map<Event, Set<Race>>>() {
+		@Override
+		public Map<Event, Set<Race>> get() {
+			Map<Event, Set<Race>> eventRaces = new LinkedHashMap<Event, Set<Race>>(scores.getEvents().size() * 2);
+			for (Event event : Ordering.natural().sortedCopy(scores.getEvents())) {
+				eventRaces.put(event, ImmutableSet.copyOf(event.getRaces()));
+			}
+			return eventRaces;
+		}
+	});
 	private final int eventNonAttendancePenalty;
 
 	public GenericOverallPenaltiesData(T scores, int eventNonAttendancePenalty) {
@@ -39,9 +62,35 @@ public class GenericOverallPenaltiesData<T extends ScoredData & RacePenaltiesDat
 			penalties += racePenalties;
 		}
 
-		for (Event event : scores.getEvents()) {
-			if (!event.getAttendees().contains(pilot) && Sets.intersection(Sets.newHashSet(event.getRaces()), pilot.getRaces().keySet()).isEmpty()) {
-				penalties += eventNonAttendancePenalty;
+		for (Penalty penalty : getSimulatedOverallPenalties(pilot)) {
+			switch (penalty.getType()) {
+			case FIXED:
+			case EVENT_NON_ATTENDANCE:
+				// Fixed penalty added/removed
+				penalties += penalty.getValue();
+				break;
+
+			case AUTOMATIC:
+				// This can only be applied in RacePenaltiesData
+			case LAPS:
+				// This can only be applied in RaceLapsData
+				Preconditions.checkArgument(false, "Invalid overall penalty type: " + penalty.getType()); //$NON-NLS-1$
+				break;
+			}
+		}
+
+		return penalties;
+	}
+
+	@Override
+	protected List<Penalty> calculateSimulatedOverallPenalties(Pilot pilot) {
+		List<Penalty> penalties = new ArrayList<Penalty>(1);
+
+		if (eventNonAttendancePenalty != 0) {
+			for (Event event : lazyEventRaces.get().keySet()) {
+				if (!event.getAttendees().contains(pilot) && Sets.intersection(lazyEventRaces.get().get(event), pilot.getRaces().keySet()).isEmpty()) {
+					penalties.add(new Penalty(Penalty.Type.EVENT_NON_ATTENDANCE, eventNonAttendancePenalty, event.getName()));
+				}
 			}
 		}
 

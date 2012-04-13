@@ -18,12 +18,14 @@
 package eu.lp0.cursus.xml.scores;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.LinkedListMultimap;
 
+import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.AbstractOverallPenaltiesData;
@@ -46,6 +48,7 @@ import eu.lp0.cursus.scoring.RacePositionsData;
 import eu.lp0.cursus.scoring.ScoredData;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
+import eu.lp0.cursus.xml.scores.data.ScoresXMLPenalty;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLRaceRef;
 
@@ -106,6 +109,21 @@ class XMLScoresFactory extends AbstractScoresFactory {
 			protected int calculateRacePenalties(Pilot pilot, Race race) {
 				return subset.getRaceScore(pilot, race).getPenalties();
 			}
+
+			@Override
+			protected List<Penalty> calculateSimulatedRacePenalties(Pilot pilot, Race race) {
+				List<ScoresXMLPenalty> xmlPenalties = subset.getRaceScore(pilot, race).getSimulatedPenalties();
+				if (xmlPenalties == null) {
+					return Collections.emptyList();
+				}
+
+				List<Penalty> penalties = new ArrayList<Penalty>(xmlPenalties.size());
+				for (ScoresXMLPenalty xmlPenalty : xmlPenalties) {
+					Penalty penalty = new Penalty(xmlPenalty.getType(), xmlPenalty.getValue(), XMLScores.wrapNull(xmlPenalty.getReason()));
+					penalties.add(penalty);
+				}
+				return penalties;
+			}
 		};
 	}
 
@@ -146,6 +164,21 @@ class XMLScoresFactory extends AbstractScoresFactory {
 			@Override
 			protected int calculateOverallPenalties(Pilot pilot) {
 				return subset.getOverallScore(pilot).getPenalties();
+			}
+
+			@Override
+			protected List<Penalty> calculateSimulatedOverallPenalties(Pilot pilot) {
+				List<ScoresXMLPenalty> xmlPenalties = subset.getOverallScore(pilot).getSimulatedPenalties();
+				if (xmlPenalties == null) {
+					return Collections.emptyList();
+				}
+
+				List<Penalty> penalties = new ArrayList<Penalty>(xmlPenalties.size());
+				for (ScoresXMLPenalty xmlPenalty : xmlPenalties) {
+					Penalty penalty = new Penalty(xmlPenalty.getType(), xmlPenalty.getValue(), XMLScores.wrapNull(xmlPenalty.getReason()));
+					penalties.add(penalty);
+				}
+				return penalties;
 			}
 		};
 	}

@@ -177,7 +177,7 @@ public class XMLScores {
 		}
 	}
 
-	private static String wrapNull(String value) {
+	static String wrapNull(String value) {
 		return value == null ? "" : value; //$NON-NLS-1$
 	}
 

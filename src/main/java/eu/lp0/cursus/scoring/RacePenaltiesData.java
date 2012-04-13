@@ -17,10 +17,12 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Table;
 
+import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 
@@ -32,4 +34,12 @@ public interface RacePenaltiesData {
 	public Map<Pilot, Integer> getRacePenalties(Race race);
 
 	public int getRacePenalties(Pilot pilot, Race race);
+
+	public Table<Pilot, Race, List<Penalty>> getSimulatedRacePenalties();
+
+	public Map<Race, List<Penalty>> getSimulatedRacePenalties(Pilot pilot);
+
+	public Map<Pilot, List<Penalty>> getSimulatedRacePenalties(Race race);
+
+	public List<Penalty> getSimulatedRacePenalties(Pilot pilot, Race race);
 }

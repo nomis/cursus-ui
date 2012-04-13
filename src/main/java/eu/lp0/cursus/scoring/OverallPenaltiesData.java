@@ -17,12 +17,18 @@
  */
 package eu.lp0.cursus.scoring;
 
+import java.util.List;
 import java.util.Map;
 
+import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
 
 public interface OverallPenaltiesData {
 	public Map<Pilot, Integer> getOverallPenalties();
 
 	public int getOverallPenalties(Pilot pilot);
+
+	public Map<Pilot, ? extends List<Penalty>> getSimulatedOverallPenalties();
+
+	public List<Penalty> getSimulatedOverallPenalties(Pilot pilot);
 }

@@ -18,8 +18,11 @@
 package eu.lp0.cursus.scoring;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 
 import eu.lp0.cursus.db.data.Event;
@@ -50,7 +53,7 @@ public class GenericRacePenaltiesData<T extends ScoredData> extends AbstractRace
 
 		int autoPenalties = countPreviousAutomaticPenalties(pilot, race);
 		int penalties = 0;
-		for (Penalty penalty : Ordering.natural().sortedCopy(attendee.getPenalties())) {
+		for (Penalty penalty : Iterables.concat(Ordering.natural().sortedCopy(attendee.getPenalties()), getSimulatedRacePenalties(pilot, race))) {
 			switch (penalty.getType()) {
 			case AUTOMATIC:
 				if (penalty.getValue() >= 0) {
@@ -75,6 +78,11 @@ public class GenericRacePenaltiesData<T extends ScoredData> extends AbstractRace
 
 			case LAPS:
 				// This is applied in RaceLapsData
+				break;
+
+			case EVENT_NON_ATTENDANCE:
+				// This should only be applied in OverallPenaltiesData
+				Preconditions.checkArgument(false, "Invalid race penalty type: " + penalty.getType()); //$NON-NLS-1$
 				break;
 			}
 		}
@@ -129,5 +137,10 @@ public class GenericRacePenaltiesData<T extends ScoredData> extends AbstractRace
 			break;
 		}
 		return previousRaces;
+	}
+
+	@Override
+	protected List<Penalty> calculateSimulatedRacePenalties(Pilot pilot, Race race) {
+		return Collections.emptyList();
 	}
 }

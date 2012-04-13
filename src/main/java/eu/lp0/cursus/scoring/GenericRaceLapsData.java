@@ -40,7 +40,7 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.db.data.RaceEvent;
 
-public class GenericRaceLapsData<T extends ScoredData> extends AbstractRaceLapsData<T> {
+public class GenericRaceLapsData<T extends ScoredData & RacePenaltiesData> extends AbstractRaceLapsData<T> {
 	private static final int EXPECTED_MAXIMUM_LAPS = 32;
 	private final boolean scoreBeforeStart;
 	private final boolean scoreAfterFinish;
@@ -75,7 +75,8 @@ public class GenericRaceLapsData<T extends ScoredData> extends AbstractRaceLapsD
 
 		// It is intentional that pilots can end up having 0 laps but be considered to have completed the race
 		for (RaceAttendee attendee : Maps.filterKeys(race.getAttendees(), Predicates.in(scores.getPilots())).values()) {
-			for (Penalty penalty : attendee.getPenalties()) {
+			for (Penalty penalty : Iterables.concat(Ordering.natural().sortedCopy(attendee.getPenalties()),
+					scores.getSimulatedRacePenalties(attendee.getPilot(), race))) {
 				if (penalty.getType() == Penalty.Type.LAPS && penalty.getValue() != 0) {
 					Pilot pilot = attendee.getPilot();
 					int lapCount = laps.get(pilot);
