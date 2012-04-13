@@ -128,15 +128,14 @@ public class XMLScoresFactory extends AbstractScoresFactory {
 	public RaceLapsData newRaceLapsData(Scores scores) {
 		return new AbstractRaceLapsData<ScoredData>(scores) {
 			@Override
-			protected Iterable<Pilot> calculateRaceLaps(Race race) {
-				List<Pilot> pilotLaps = new ArrayList<Pilot>();
+			protected List<Pilot> calculateRaceLapsInOrder(Race race, Map<Pilot, Integer> laps) {
+				List<Pilot> pilots = new ArrayList<Pilot>();
 				for (ScoresXMLRaceScore raceScore : getRaceScores(race)) {
 					Pilot pilot = file.dereference(raceScore.getPilot());
-					for (int i = 0; i < raceScore.getLaps(); i++) {
-						pilotLaps.add(pilot);
-					}
+					pilots.add(pilot);
+					laps.put(pilot, raceScore.getLaps());
 				}
-				return pilotLaps;
+				return pilots;
 			}
 		};
 	}
