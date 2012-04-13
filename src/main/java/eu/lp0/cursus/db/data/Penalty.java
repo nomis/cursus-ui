@@ -26,6 +26,7 @@ import com.google.common.collect.ComparisonChain;
 
 import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.i18n.TranslatedEnum;
+import eu.lp0.cursus.ui.common.HiddenEnumConstant;
 import eu.lp0.cursus.util.Constants;
 
 /**
@@ -41,7 +42,11 @@ public final class Penalty implements Comparable<Penalty>, Cloneable {
 		FIXED ("penalty.fixed", 1), //$NON-NLS-1$
 
 		/** Lap count adjustment to be applied */
-		LAPS ("penalty.laps", 0); //$NON-NLS-1$
+		LAPS ("penalty.laps", 0), //$NON-NLS-1$
+
+		/** Non-attendance at event penalty */
+		@HiddenEnumConstant
+		EVENT_NON_ATTENDANCE ("penalty.event-non-attendance", 1); //$NON-NLS-1$
 
 		private final String key;
 		private final int defaultValue;

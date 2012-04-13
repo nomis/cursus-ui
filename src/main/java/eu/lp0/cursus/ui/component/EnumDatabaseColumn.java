@@ -22,6 +22,8 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 
@@ -29,6 +31,7 @@ import eu.lp0.cursus.db.dao.EntityDAO;
 import eu.lp0.cursus.db.data.Entity;
 import eu.lp0.cursus.i18n.LocaleChangeEvent;
 import eu.lp0.cursus.i18n.TranslatedEnum;
+import eu.lp0.cursus.ui.common.HiddenEnumConstant;
 
 public abstract class EnumDatabaseColumn<T extends Entity, V extends Enum<?>> extends DatabaseColumn<T, Object> {
 	private final MutableListComboBoxModel<Object> values;
@@ -64,7 +67,22 @@ public abstract class EnumDatabaseColumn<T extends Entity, V extends Enum<?>> ex
 		if (nullable) {
 			return Lists.<Object>asList("", type.getEnumConstants()); //$NON-NLS-1$
 		} else {
-			return Arrays.asList((Object[])type.getEnumConstants());
+			return Lists.<Object>newArrayList(Iterables.filter(Arrays.asList(type.getEnumConstants()), new Predicate<V>() {
+				@Override
+				public boolean apply(V input) {
+					return !isHiddenEnumConstant(input);
+				}
+			}));
+		}
+	}
+
+	public static boolean isHiddenEnumConstant(Enum<?> value) {
+		try {
+			return value.getClass().getField(value.name()).isAnnotationPresent(HiddenEnumConstant.class);
+		} catch (SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

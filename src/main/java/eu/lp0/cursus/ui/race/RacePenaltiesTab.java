@@ -187,12 +187,14 @@ public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 			// Add all penalties from the database
 			for (RaceAttendee attendee : race.getAttendees().values()) {
 				for (Penalty penalty : attendee.getPenalties()) {
-					penalties.add(new RaceAttendeePenalty(attendee, penalty));
+					if (!EnumDatabaseColumn.isHiddenEnumConstant(penalty.getType())) {
+						penalties.add(new RaceAttendeePenalty(attendee, penalty));
+					}
 				}
 			}
 			// Add all unsaved penalties
 			for (RaceAttendeePenalty penalty : model) {
-				if (penalty.getDatabaseAttendee() == null) {
+				if (penalty.getDatabaseAttendee() == null && !EnumDatabaseColumn.isHiddenEnumConstant(penalty.getPenalty().getType())) {
 					// But only if there is no pilot set or the pilot is attending the race
 					//
 					// Note: it is not safe to modify the penalty here (to unset the pilot)
