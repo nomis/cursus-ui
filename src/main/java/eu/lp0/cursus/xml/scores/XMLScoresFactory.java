@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 
 import eu.lp0.cursus.db.data.Pilot;
@@ -49,79 +48,14 @@ import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLRaceRef;
-import eu.lp0.cursus.xml.scores.results.ScoresXMLEventRaceResults;
-import eu.lp0.cursus.xml.scores.results.ScoresXMLEventResults;
-import eu.lp0.cursus.xml.scores.results.ScoresXMLRaceResults;
-import eu.lp0.cursus.xml.scores.results.ScoresXMLSeriesEventResults;
-import eu.lp0.cursus.xml.scores.results.ScoresXMLSeriesResults;
 
-public class XMLScoresFactory extends AbstractScoresFactory {
-	private final XMLScores file;
-	private final ScoresXMLSeriesResults seriesResults;
-	private final ScoresXMLEventResults eventResults;
-	private final ScoresXMLRaceResults raceResults;
+class XMLScoresFactory extends AbstractScoresFactory {
+	private final XMLScores xmlScores;
+	private final XMLScores.Subset subset;
 
-	public XMLScoresFactory(XMLScores file, ScoresXMLSeriesResults seriesResults) {
-		this.file = file;
-		this.seriesResults = seriesResults;
-		this.eventResults = null;
-		this.raceResults = null;
-	}
-
-	public XMLScoresFactory(XMLScores file, ScoresXMLEventResults eventResults) {
-		this.file = file;
-		this.seriesResults = null;
-		this.eventResults = eventResults;
-		this.raceResults = null;
-	}
-
-	public XMLScoresFactory(XMLScores file, ScoresXMLRaceResults raceResults) {
-		this.file = file;
-		this.seriesResults = null;
-		this.eventResults = null;
-		this.raceResults = raceResults;
-	}
-
-	private ScoresXMLEventRaceResults getEventRaceResults(Race race) {
-		if (seriesResults != null) {
-			for (ScoresXMLSeriesEventResults seriesEventResults : seriesResults.getEventResults()) {
-				for (ScoresXMLEventRaceResults eventRaceResults : seriesEventResults.getRaceResults()) {
-					if (file.dereference(eventRaceResults.getRace()).equals(race)) {
-						return eventRaceResults;
-					}
-				}
-			}
-		} else if (eventResults != null) {
-			for (ScoresXMLEventRaceResults eventRaceResults : eventResults.getRaces()) {
-				if (file.dereference(eventRaceResults.getRace()).equals(race)) {
-					return eventRaceResults;
-				}
-			}
-		}
-		Preconditions.checkState(false);
-		return null;
-	}
-
-	private List<ScoresXMLRaceScore> getRaceScores(Race race) {
-		if (seriesResults != null || eventResults != null) {
-			return getEventRaceResults(race).getRacePilots();
-		} else if (raceResults != null) {
-			return raceResults.getRacePilots();
-		}
-		Preconditions.checkState(false);
-		return null;
-	}
-
-	private List<ScoresXMLOverallScore> getOverallScores() {
-		if (seriesResults != null) {
-			return seriesResults.getOverallPilots();
-		} else if (eventResults != null) {
-			return eventResults.getOverallPilots();
-		} else if (raceResults != null) {
-			return raceResults.getOverallPilots();
-		}
-		Preconditions.checkState(false);
-		return null;
+	public XMLScoresFactory(XMLScores xmlScores, XMLScores.Subset subset) {
+		this.xmlScores = xmlScores;
+		this.subset = subset;
 	}
 
 	@Override
@@ -130,8 +64,8 @@ public class XMLScoresFactory extends AbstractScoresFactory {
 			@Override
 			protected List<Pilot> calculateRaceLapsInOrder(Race race, Map<Pilot, Integer> laps) {
 				List<Pilot> pilots = new ArrayList<Pilot>();
-				for (ScoresXMLRaceScore raceScore : getRaceScores(race)) {
-					Pilot pilot = file.dereference(raceScore.getPilot());
+				for (ScoresXMLRaceScore raceScore : subset.getRaceScores(race)) {
+					Pilot pilot = xmlScores.dereference(raceScore.getPilot());
 					pilots.add(pilot);
 					laps.put(pilot, raceScore.getLaps());
 				}
@@ -145,20 +79,14 @@ public class XMLScoresFactory extends AbstractScoresFactory {
 		return new AbstractRacePointsData<ScoredData>(scores) {
 			@Override
 			public int getFleetSize(Race race) {
-				if (seriesResults != null || eventResults != null) {
-					return getEventRaceResults(race).getFleet();
-				} else if (raceResults != null) {
-					return raceResults.getFleet();
-				}
-				Preconditions.checkState(false);
-				return 0;
+				return subset.getFleetSize(race);
 			}
 
 			@Override
 			protected Map<Pilot, Integer> calculateRacePoints(Race race) {
 				Map<Pilot, Integer> racePoints = new HashMap<Pilot, Integer>();
-				for (ScoresXMLRaceScore raceScore : getRaceScores(race)) {
-					Pilot pilot = file.dereference(raceScore.getPilot());
+				for (ScoresXMLRaceScore raceScore : subset.getRaceScores(race)) {
+					Pilot pilot = xmlScores.dereference(raceScore.getPilot());
 					racePoints.put(pilot, raceScore.getPoints());
 				}
 				return racePoints;
@@ -166,14 +94,7 @@ public class XMLScoresFactory extends AbstractScoresFactory {
 
 			@Override
 			protected boolean calculateSimulatedRacePoints(Pilot pilot, Race race) {
-				for (ScoresXMLRaceScore raceScore : getRaceScores(race)) {
-					Pilot pilot_ = file.dereference(raceScore.getPilot());
-					if (pilot_.equals(pilot)) {
-						return raceScore.isSimulated();
-					}
-				}
-				Preconditions.checkState(false);
-				return false;
+				return subset.getRaceScore(pilot, race).isSimulated();
 			}
 		};
 	}
@@ -183,14 +104,7 @@ public class XMLScoresFactory extends AbstractScoresFactory {
 		return new AbstractRacePenaltiesData<ScoredData>(scores) {
 			@Override
 			protected int calculateRacePenalties(Pilot pilot, Race race) {
-				for (ScoresXMLRaceScore raceScore : getRaceScores(race)) {
-					Pilot pilot_ = file.dereference(raceScore.getPilot());
-					if (pilot_.equals(pilot)) {
-						return raceScore.getPenalties();
-					}
-				}
-				Preconditions.checkState(false);
-				return 0;
+				return subset.getRaceScore(pilot, race).getPenalties();
 			}
 		};
 	}
@@ -201,8 +115,8 @@ public class XMLScoresFactory extends AbstractScoresFactory {
 			@Override
 			protected LinkedListMultimap<Integer, Pilot> calculateRacePositionsWithOrder(Race race) {
 				LinkedListMultimap<Integer, Pilot> racePositions = LinkedListMultimap.create();
-				for (ScoresXMLRaceScore raceScore : getRaceScores(race)) {
-					Pilot pilot = file.dereference(raceScore.getPilot());
+				for (ScoresXMLRaceScore raceScore : subset.getRaceScores(race)) {
+					Pilot pilot = xmlScores.dereference(raceScore.getPilot());
 					racePositions.put(raceScore.getPosition(), pilot);
 				}
 				return racePositions;
@@ -212,29 +126,13 @@ public class XMLScoresFactory extends AbstractScoresFactory {
 
 	@Override
 	public RaceDiscardsData newRaceDiscardsData(Scores scores) {
-		int discards;
-		if (seriesResults != null) {
-			discards = seriesResults.getDiscards();
-		} else if (eventResults != null) {
-			discards = eventResults.getDiscards();
-		} else if (raceResults != null) {
-			discards = 0;
-		} else {
-			Preconditions.checkState(false);
-			return null;
-		}
-		return new AbstractRaceDiscardsData<Scores>(scores, discards) {
+		return new AbstractRaceDiscardsData<Scores>(scores, subset.getDiscards()) {
 			@Override
 			protected List<Race> calculateDiscardedRaces(Pilot pilot) {
 				List<Race> races = new ArrayList<Race>();
 				if (discards > 0) {
-					for (ScoresXMLOverallScore overallScore : getOverallScores()) {
-						Pilot pilot_ = file.dereference(overallScore.getPilot());
-						if (pilot_.equals(pilot)) {
-							for (ScoresXMLRaceRef race : overallScore.getDiscards()) {
-								races.add(file.dereference(race));
-							}
-						}
+					for (ScoresXMLRaceRef race : subset.getOverallScore(pilot).getDiscards()) {
+						races.add(xmlScores.dereference(race));
 					}
 				}
 				return races;
@@ -247,14 +145,7 @@ public class XMLScoresFactory extends AbstractScoresFactory {
 		return new AbstractOverallPenaltiesData<ScoredData>(scores) {
 			@Override
 			protected int calculateOverallPenalties(Pilot pilot) {
-				for (ScoresXMLOverallScore overallScore : getOverallScores()) {
-					Pilot pilot_ = file.dereference(overallScore.getPilot());
-					if (pilot_.equals(pilot)) {
-						return overallScore.getPenalties();
-					}
-				}
-				Preconditions.checkState(false);
-				return 0;
+				return subset.getOverallScore(pilot).getPenalties();
 			}
 		};
 	}
@@ -264,14 +155,7 @@ public class XMLScoresFactory extends AbstractScoresFactory {
 		return new AbstractOverallPointsData<ScoredData>(scores) {
 			@Override
 			protected int calculateOverallPoints(Pilot pilot) {
-				for (ScoresXMLOverallScore overallScore : getOverallScores()) {
-					Pilot pilot_ = file.dereference(overallScore.getPilot());
-					if (pilot_.equals(pilot)) {
-						return overallScore.getPoints();
-					}
-				}
-				Preconditions.checkState(false);
-				return 0;
+				return subset.getOverallScore(pilot).getPoints();
 			}
 		};
 	}
@@ -282,9 +166,9 @@ public class XMLScoresFactory extends AbstractScoresFactory {
 			@Override
 			protected LinkedListMultimap<Integer, Pilot> calculateOverallPositionsWithOrder() {
 				LinkedListMultimap<Integer, Pilot> overallPositions = LinkedListMultimap.create();
-				for (ScoresXMLOverallScore overallScore : getOverallScores()) {
-					Pilot pilot_ = file.dereference(overallScore.getPilot());
-					overallPositions.put(overallScore.getPosition(), pilot_);
+				for (ScoresXMLOverallScore overallScore : subset.getOverallScores()) {
+					Pilot pilot = xmlScores.dereference(overallScore.getPilot());
+					overallPositions.put(overallScore.getPosition(), pilot);
 				}
 				return overallPositions;
 			}

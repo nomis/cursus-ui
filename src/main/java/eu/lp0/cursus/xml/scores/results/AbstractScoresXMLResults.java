@@ -17,9 +17,13 @@
  */
 package eu.lp0.cursus.xml.scores.results;
 
+import java.util.ArrayList;
+
 import org.simpleframework.xml.Attribute;
 
 import eu.lp0.cursus.scoring.Scores;
+import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
+import eu.lp0.cursus.xml.scores.entity.ScoresXMLEventRef;
 
 public abstract class AbstractScoresXMLResults {
 	public AbstractScoresXMLResults() {
@@ -40,4 +44,8 @@ public abstract class AbstractScoresXMLResults {
 	public void setScorer(String scorer) {
 		this.scorer = scorer;
 	}
+
+	public abstract ArrayList<ScoresXMLEventRef> getEvents();
+
+	public abstract ArrayList<ScoresXMLOverallScore> getOverallPilots();
 }

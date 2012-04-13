@@ -17,15 +17,19 @@
  */
 package eu.lp0.cursus.xml.scores;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicates;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Event;
@@ -41,6 +45,7 @@ import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLPenalty;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceAttendee;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceNumber;
+import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLClass;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLClassRef;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLEvent;
@@ -51,6 +56,7 @@ import eu.lp0.cursus.xml.scores.entity.ScoresXMLRace;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLRaceRef;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLSeries;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLSeriesRef;
+import eu.lp0.cursus.xml.scores.results.AbstractScoresXMLResults;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLEventRaceResults;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLEventResults;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLRaceResults;
@@ -66,12 +72,57 @@ public class XMLScores {
 	private Map<ScoresXMLEvent, Event> events = new HashMap<ScoresXMLEvent, Event>();
 	private Map<ScoresXMLRace, Race> races = new HashMap<ScoresXMLRace, Race>();
 
+	private Multimap<? super AbstractScoresXMLResults, Race> resultsRaces = LinkedHashMultimap.create();
+	private Multimap<? super AbstractScoresXMLResults, Event> resultsEvents = HashMultimap.create();
+	private Multimap<? super AbstractScoresXMLResults, Pilot> resultsPilots = HashMultimap.create();
+
+	private Map<Race, ScoresXMLEventRaceResults> seriesEventRaceResults = new HashMap<Race, ScoresXMLEventRaceResults>();
+	private Table<ScoresXMLEventResults, Race, ScoresXMLEventRaceResults> eventEventRaceResults = HashBasedTable.create();
+
+	private Map<? super AbstractScoresXMLResults, Table<Pilot, Race, ScoresXMLRaceScore>> resultsPilotRaceScores = new HashMap<AbstractScoresXMLResults, Table<Pilot, Race, ScoresXMLRaceScore>>();
+	private Table<? super AbstractScoresXMLResults, Pilot, ScoresXMLOverallScore> resultsPilotOverallScores = HashBasedTable.create();
+
 	public XMLScores(ScoresXMLFile file) {
 		this.file = file;
-		extractData();
+		extractEntities();
+		extractSeriesResults();
+		extractEventResults();
+		extractRaceResults();
 	}
 
-	private void extractData() {
+	public GenericScores newInstance(ScoresXMLSeriesResults results) {
+		return newInstance(results, new Subset(results));
+	}
+
+	public GenericScores newInstance(ScoresXMLEventResults results) {
+		return newInstance(results, new Subset(results));
+	}
+
+	public GenericScores newInstance(ScoresXMLRaceResults results) {
+		return newInstance(results, new Subset(results));
+	}
+
+	Series dereference(ScoresXMLSeriesRef series_) {
+		return series.get(refMgr.get(series_));
+	}
+
+	Class dereference(ScoresXMLClassRef class_) {
+		return classes.get(refMgr.get(class_));
+	}
+
+	Pilot dereference(ScoresXMLPilotRef pilot) {
+		return pilots.get(refMgr.get(pilot));
+	}
+
+	Event dereference(ScoresXMLEventRef event) {
+		return events.get(refMgr.get(event));
+	}
+
+	Race dereference(ScoresXMLRaceRef race) {
+		return races.get(refMgr.get(race));
+	}
+
+	private void extractEntities() {
 		ScoresXMLSeries xmlSeries = file.getSeries();
 		refMgr.put(xmlSeries);
 		Series series_ = new Series(wrapNull(xmlSeries.getName()), wrapNull(xmlSeries.getDescription()));
@@ -101,19 +152,19 @@ public class XMLScores {
 
 		for (ScoresXMLEvent xmlEvent : file.getSeries().getEvents()) {
 			refMgr.put(xmlEvent);
-			Event event_ = new Event(series_, wrapNull(xmlEvent.getName()), wrapNull(xmlEvent.getDescription()));
-			events.put(xmlEvent, event_);
-			series_.getEvents().add(event_);
+			Event event = new Event(series_, wrapNull(xmlEvent.getName()), wrapNull(xmlEvent.getDescription()));
+			events.put(xmlEvent, event);
+			series_.getEvents().add(event);
 
 			for (ScoresXMLRace xmlRace : xmlEvent.getRaces()) {
 				refMgr.put(xmlRace);
-				Race race_ = new Race(event_, wrapNull(xmlRace.getName()), wrapNull(xmlRace.getDescription()));
-				races.put(xmlRace, race_);
-				event_.getRaces().add(race_);
+				Race race = new Race(event, wrapNull(xmlRace.getName()), wrapNull(xmlRace.getDescription()));
+				races.put(xmlRace, race);
+				event.getRaces().add(race);
 
 				for (ScoresXMLRaceAttendee xmlRaceAttendee : xmlRace.getAttendees()) {
-					RaceAttendee attendee = new RaceAttendee(race_, dereference(xmlRaceAttendee.getPilot()), xmlRaceAttendee.getType());
-					race_.getAttendees().put(attendee.getPilot(), attendee);
+					RaceAttendee attendee = new RaceAttendee(race, dereference(xmlRaceAttendee.getPilot()), xmlRaceAttendee.getType());
+					race.getAttendees().put(attendee.getPilot(), attendee);
 
 					if (xmlRaceAttendee.getPenalties() != null) {
 						for (ScoresXMLPenalty xmlPenalty : xmlRaceAttendee.getPenalties()) {
@@ -130,92 +181,169 @@ public class XMLScores {
 		return value == null ? "" : value; //$NON-NLS-1$
 	}
 
-	public Series dereference(ScoresXMLSeriesRef series_) {
-		return series.get(refMgr.get(series_));
-	}
-
-	public Class dereference(ScoresXMLClassRef class_) {
-		return classes.get(refMgr.get(class_));
-	}
-
-	public Pilot dereference(ScoresXMLPilotRef pilot) {
-		return pilots.get(refMgr.get(pilot));
-	}
-
-	public Event dereference(ScoresXMLEventRef event) {
-		return events.get(refMgr.get(event));
-	}
-
-	public Race dereference(ScoresXMLRaceRef race) {
-		return races.get(refMgr.get(race));
-	}
-
-	public GenericScores newInstance(ScoresXMLSeriesResults results) {
-		return new GenericScores(extractPilots(results.getOverallPilots()), extractRaces(results), extractEvents(results), Predicates.<Pilot>alwaysTrue(),
-				new XMLScoresFactory(this, results), new XMLScorer());
-	}
-
-	public GenericScores newInstance(ScoresXMLEventResults results) {
-		return new GenericScores(extractPilots(results.getOverallPilots()), extractRaces(results), extractEvents(results), Predicates.<Pilot>alwaysTrue(),
-				new XMLScoresFactory(this, results), new XMLScorer());
-	}
-
-	public GenericScores newInstance(ScoresXMLRaceResults results) {
-		return new GenericScores(extractPilots(results.getOverallPilots()), extractRaces(results), extractEvents(results), Predicates.<Pilot>alwaysTrue(),
-				new XMLScoresFactory(this, results), new XMLScorer());
-	}
-
-	private Set<Pilot> extractPilots(List<ScoresXMLOverallScore> overallScores) {
-		Set<Pilot> pilots_ = new HashSet<Pilot>();
-		for (ScoresXMLOverallScore overallScore : overallScores) {
-			pilots_.add(dereference(overallScore.getPilot()));
+	private void extractSeriesResults() {
+		ScoresXMLSeriesResults seriesResults = file.getSeriesResults();
+		for (ScoresXMLEventRef event : seriesResults.getEvents()) {
+			resultsEvents.put(seriesResults, dereference(event));
 		}
-		return pilots_;
-	}
 
-	private List<Race> extractRaces(ScoresXMLSeriesResults results) {
-		List<Race> races_ = new ArrayList<Race>();
-		for (ScoresXMLSeriesEventResults eventResults : results.getEventResults()) {
-			for (ScoresXMLEventRaceResults race : eventResults.getRaceResults()) {
-				races_.add(dereference(race.getRace()));
+		Table<Pilot, Race, ScoresXMLRaceScore> raceScores = HashBasedTable.create();
+		for (ScoresXMLSeriesEventResults seriesEventResults : seriesResults.getEventResults()) {
+			for (ScoresXMLEventRaceResults eventRaceResults : seriesEventResults.getRaceResults()) {
+				seriesEventRaceResults.put(dereference(eventRaceResults.getRace()), eventRaceResults);
+
+				Race race = dereference(eventRaceResults.getRace());
+				resultsRaces.put(seriesResults, race);
+				for (ScoresXMLRaceScore raceScore : eventRaceResults.getRacePilots()) {
+					raceScores.row(dereference(raceScore.getPilot())).put(race, raceScore);
+				}
 			}
 		}
-		return races_;
-	}
+		resultsPilotRaceScores.put(seriesResults, raceScores);
 
-	private List<Race> extractRaces(ScoresXMLEventResults results) {
-		List<Race> races_ = new ArrayList<Race>();
-		for (ScoresXMLEventRaceResults raceResults : results.getRaces()) {
-			races_.add(dereference(raceResults.getRace()));
+		for (ScoresXMLOverallScore overallScore : seriesResults.getOverallPilots()) {
+			Pilot pilot = dereference(overallScore.getPilot());
+			resultsPilotOverallScores.row(seriesResults).put(pilot, overallScore);
+			resultsPilots.put(seriesResults, pilot);
 		}
-		return races_;
 	}
 
-	private List<Race> extractRaces(ScoresXMLRaceResults results) {
-		return Collections.singletonList(dereference(results.getRace()));
-	}
+	private void extractEventResults() {
+		for (ScoresXMLEventResults eventResult : file.getEventResults()) {
+			for (ScoresXMLEventRef event : eventResult.getEvents()) {
+				resultsEvents.put(eventResult, dereference(event));
+			}
 
-	private Set<Event> extractEvents(ScoresXMLSeriesResults results) {
-		Set<Event> events_ = new HashSet<Event>();
-		for (ScoresXMLEventRef event_ : results.getEvents()) {
-			events_.add(dereference(event_));
+			Table<Pilot, Race, ScoresXMLRaceScore> raceScores = HashBasedTable.create();
+			for (ScoresXMLEventRaceResults eventRaceResults : eventResult.getRaces()) {
+				eventEventRaceResults.row(eventResult).put(dereference(eventRaceResults.getRace()), eventRaceResults);
+
+				Race race = dereference(eventRaceResults.getRace());
+				resultsRaces.put(eventResult, race);
+				for (ScoresXMLRaceScore raceScore : eventRaceResults.getRacePilots()) {
+					raceScores.row(dereference(raceScore.getPilot())).put(race, raceScore);
+				}
+			}
+			resultsPilotRaceScores.put(eventResult, raceScores);
+
+			for (ScoresXMLOverallScore overallScore : eventResult.getOverallPilots()) {
+				Pilot pilot = dereference(overallScore.getPilot());
+				resultsPilotOverallScores.row(eventResult).put(pilot, overallScore);
+				resultsPilots.put(eventResult, pilot);
+			}
 		}
-		return events_;
 	}
 
-	private Set<Event> extractEvents(ScoresXMLEventResults results) {
-		Set<Event> events_ = new HashSet<Event>();
-		for (ScoresXMLEventRef event : results.getEvents()) {
-			events_.add(dereference(event));
+	private void extractRaceResults() {
+		for (ScoresXMLRaceResults raceResult : file.getRaceResults()) {
+			Race race = dereference(raceResult.getRace());
+			resultsRaces.put(raceResult, race);
+
+			Table<Pilot, Race, ScoresXMLRaceScore> raceScores = HashBasedTable.create();
+			for (ScoresXMLRaceScore raceScore : raceResult.getRacePilots()) {
+				raceScores.row(dereference(raceScore.getPilot())).put(race, raceScore);
+			}
+			resultsPilotRaceScores.put(raceResult, raceScores);
+
+			for (ScoresXMLOverallScore overallScore : raceResult.getOverallPilots()) {
+				Pilot pilot = dereference(overallScore.getPilot());
+				resultsPilotOverallScores.row(raceResult).put(pilot, overallScore);
+				resultsPilots.put(raceResult, pilot);
+			}
 		}
-		return events_;
 	}
 
-	private Set<Event> extractEvents(ScoresXMLRaceResults results) {
-		Set<Event> events_ = new HashSet<Event>();
-		for (ScoresXMLEventRef event : results.getEvents()) {
-			events_.add(dereference(event));
+	private GenericScores newInstance(AbstractScoresXMLResults results, Subset subset) {
+		return new GenericScores(ImmutableSet.copyOf(resultsPilots.get(results)), ImmutableList.copyOf(resultsRaces.get(results)),
+				ImmutableSet.copyOf(resultsEvents.get(results)), Predicates.<Pilot>alwaysTrue(), new XMLScoresFactory(this, subset), new XMLScorer());
+	}
+
+	class Subset {
+		private final ScoresXMLSeriesResults seriesResults;
+		private final ScoresXMLEventResults eventResults;
+		private final ScoresXMLRaceResults raceResults;
+
+		private final Map<Race, ScoresXMLEventRaceResults> eventRaceResults;
+		private final Table<Pilot, Race, ScoresXMLRaceScore> pilotRaceScores;
+		private final Map<Pilot, ScoresXMLOverallScore> pilotOverallScores;
+
+		public Subset(ScoresXMLSeriesResults seriesResults) {
+			Preconditions.checkNotNull(seriesResults);
+			Preconditions.checkArgument(file.getSeriesResults().equals(seriesResults));
+			this.seriesResults = seriesResults;
+			this.eventResults = null;
+			this.raceResults = null;
+			this.eventRaceResults = seriesEventRaceResults;
+			this.pilotRaceScores = resultsPilotRaceScores.get(seriesResults);
+			this.pilotOverallScores = resultsPilotOverallScores.row(seriesResults);
 		}
-		return events_;
+
+		public Subset(ScoresXMLEventResults eventResults) {
+			Preconditions.checkNotNull(eventResults);
+			Preconditions.checkArgument(file.getEventResults().contains(eventResults));
+			this.seriesResults = null;
+			this.eventResults = eventResults;
+			this.raceResults = null;
+			this.eventRaceResults = eventEventRaceResults.row(eventResults);
+			this.pilotRaceScores = resultsPilotRaceScores.get(eventResults);
+			this.pilotOverallScores = resultsPilotOverallScores.row(eventResults);
+		}
+
+		public Subset(ScoresXMLRaceResults raceResults) {
+			Preconditions.checkNotNull(raceResults);
+			Preconditions.checkArgument(file.getRaceResults().contains(raceResults));
+			this.seriesResults = null;
+			this.eventResults = null;
+			this.raceResults = raceResults;
+			this.eventRaceResults = null;
+			this.pilotRaceScores = resultsPilotRaceScores.get(raceResults);
+			this.pilotOverallScores = resultsPilotOverallScores.row(raceResults);
+		}
+
+		public int getDiscards() {
+			if (seriesResults != null) {
+				return seriesResults.getDiscards();
+			} else if (eventResults != null) {
+				return eventResults.getDiscards();
+			} else {
+				return 0;
+			}
+		}
+
+		public int getFleetSize(Race race) {
+			if (eventRaceResults != null) {
+				return eventRaceResults.get(race).getFleet();
+			} else {
+				return raceResults.getFleet();
+			}
+		}
+
+		public List<ScoresXMLRaceScore> getRaceScores(Race race) {
+			if (eventRaceResults != null) {
+				return eventRaceResults.get(race).getRacePilots();
+			} else {
+				return raceResults.getRacePilots();
+			}
+		}
+
+		public ScoresXMLRaceScore getRaceScore(Pilot pilot, Race race) {
+			return pilotRaceScores.row(pilot).get(race);
+		}
+
+		public List<ScoresXMLOverallScore> getOverallScores() {
+			if (seriesResults != null) {
+				return seriesResults.getOverallPilots();
+			} else if (eventResults != null) {
+				return eventResults.getOverallPilots();
+			} else if (raceResults != null) {
+				return raceResults.getOverallPilots();
+			}
+			Preconditions.checkState(false);
+			return null;
+		}
+
+		public ScoresXMLOverallScore getOverallScore(Pilot pilot) {
+			return pilotOverallScores.get(pilot);
+		}
 	}
 }
