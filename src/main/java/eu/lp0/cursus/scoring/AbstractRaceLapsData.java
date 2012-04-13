@@ -18,7 +18,6 @@
 package eu.lp0.cursus.scoring;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -27,10 +26,11 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.google.common.base.Predicates;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ArrayTable;
 import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Table;
 
@@ -68,19 +68,13 @@ public abstract class AbstractRaceLapsData<T extends ScoredData> implements Race
 		for (Race race : scores.getRaces()) {
 			Map<Pilot, Integer> laps = raceLaps.row(race);
 			ListMultimap<Integer, Pilot> raceOrder = ArrayListMultimap.create(EXPECTED_MAXIMUM_LAPS, scores.getPilots().size());
-			SortedSet<Pilot> noLaps = new TreeSet<Pilot>(new PilotRaceNumberComparator());
 
-			noLaps.addAll(scores.getPilots());
 			for (Pilot pilot : scores.getPilots()) {
 				laps.put(pilot, 0);
 			}
 
 			for (Pilot pilot : calculateRaceLaps(race)) {
 				int lapCount = raceLaps.get(race, pilot);
-
-				if (lapCount == 0) {
-					noLaps.remove(pilot);
-				}
 
 				raceOrder.remove(lapCount, pilot);
 				raceLaps.put(race, pilot, ++lapCount);
@@ -89,41 +83,38 @@ public abstract class AbstractRaceLapsData<T extends ScoredData> implements Race
 
 			// Save pilot order
 			List<Pilot> origPilotOrder = getPilotOrder(raceOrder);
+			SortedSet<Pilot> noLaps = new TreeSet<Pilot>(new PilotRaceNumberComparator());
 			Set<Integer> changed = new HashSet<Integer>();
 
 			// It is intentional that pilots can end up having 0 laps but be considered to have completed the race
-			for (Pilot pilot : scores.getPilots()) {
-				RaceAttendee attendee = race.getAttendees().get(pilot);
-				if (attendee != null) {
-					for (Penalty penalty : attendee.getPenalties()) {
-						if (penalty.getType() == Penalty.Type.LAPS && penalty.getValue() != 0) {
-							int lapCount = raceLaps.get(race, pilot);
+			for (RaceAttendee attendee : Maps.filterKeys(race.getAttendees(), Predicates.in(scores.getPilots())).values()) {
+				for (Penalty penalty : attendee.getPenalties()) {
+					if (penalty.getType() == Penalty.Type.LAPS && penalty.getValue() != 0) {
+						Pilot pilot = attendee.getPilot();
+						int lapCount = raceLaps.get(race, pilot);
 
-							raceOrder.remove(lapCount, pilot);
-							changed.add(lapCount);
+						raceOrder.remove(lapCount, pilot);
+						changed.add(lapCount);
 
-							lapCount += penalty.getValue();
-							if (lapCount < 0) {
-								lapCount = 0;
-							}
-							raceLaps.put(race, pilot, lapCount);
-
-							raceOrder.put(lapCount, pilot);
-							changed.add(lapCount);
+						lapCount += penalty.getValue();
+						if (lapCount <= 0) {
+							lapCount = 0;
+							noLaps.add(pilot);
 						}
+						raceLaps.put(race, pilot, lapCount);
+
+						raceOrder.put(lapCount, pilot);
+						changed.add(lapCount);
 					}
 				}
 			}
 
 			// Apply original pilot order
-			raceLapOrder.put(race, getPilotOrder(raceOrder));
 			if (!changed.isEmpty()) {
 				origPilotOrder.addAll(noLaps);
 
 				for (Integer lapCount : changed) {
-					List<Pilot> pilots = Lists.newArrayList(raceOrder.get(lapCount));
-					Collections.sort(pilots, Ordering.explicit(origPilotOrder));
-					raceOrder.replaceValues(lapCount, pilots);
+					raceOrder.replaceValues(lapCount, Ordering.explicit(origPilotOrder).sortedCopy(raceOrder.get(lapCount)));
 				}
 
 				raceLapOrder.put(race, getPilotOrder(raceOrder));
