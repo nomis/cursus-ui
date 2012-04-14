@@ -26,15 +26,18 @@ import java.io.Writer;
 import org.simpleframework.xml.convert.Registry;
 import org.simpleframework.xml.convert.RegistryStrategy;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.stream.Format;
 
 import com.google.common.base.Throwables;
 
+import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.xml.ExportException;
 import eu.lp0.cursus.xml.ImportException;
 
 public abstract class AbstractXMLFile<T> {
 	private static Registry registry = new Registry();
 	private static RegistryStrategy strategy = new RegistryStrategy(registry);
+	private static Format format = new Format(1, Constants.XML_PROLOGUE);
 
 	static {
 		try {
@@ -65,7 +68,7 @@ public abstract class AbstractXMLFile<T> {
 	}
 
 	protected Persister newPersister() {
-		return new Persister(strategy);
+		return new Persister(strategy, format);
 	}
 
 	public void from(InputStream stream) throws ImportException {

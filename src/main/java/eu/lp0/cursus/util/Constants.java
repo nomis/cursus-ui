@@ -23,6 +23,7 @@ public class Constants {
 	public static final String APP_URL = "http://cursus.lp0.eu/"; //$NON-NLS-1$
 	public static final String APP_DESC = APP_NAME + " " + APP_VERSION; //$NON-NLS-1$
 
+	public static final String XML_PROLOGUE = "<?xml version=\"1.1\" encoding=\"UTF-8\" standalone=\"yes\"?>"; //$NON-NLS-1$
 	public static final String XML_XMLNS = "http://www.w3.org/XML/1998/namespace"; //$NON-NLS-1$
 	public static final String SCORES_XMLNS = "http://dtd.s85.org/eu/lp0/cursus/Scores"; //$NON-NLS-1$
 
