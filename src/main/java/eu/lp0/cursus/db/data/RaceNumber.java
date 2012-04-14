@@ -64,11 +64,11 @@ public final class RaceNumber extends AbstractEntity implements Comparable<RaceN
 
 	@Column(nullable = false, length = Constants.MAX_STRING_LEN)
 	public String getOrganisation() {
-		return organisation.replaceAll("[0-9]", "").toUpperCase(Locale.ENGLISH); //$NON-NLS-1$ //$NON-NLS-2$;
+		return organisation.toUpperCase(Locale.ENGLISH).replaceAll("[^A-Z]", ""); //$NON-NLS-1$ //$NON-NLS-2$;
 	}
 
 	public void setOrganisation(String organisation) {
-		this.organisation = organisation.replaceAll("[0-9]", "").toUpperCase(Locale.ENGLISH); //$NON-NLS-1$ //$NON-NLS-2$
+		this.organisation = organisation.toUpperCase(Locale.ENGLISH).replaceAll("[^A-Z]", ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private Integer number;
