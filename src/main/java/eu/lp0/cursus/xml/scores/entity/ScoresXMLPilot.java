@@ -30,6 +30,8 @@ import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.xml.AbstractXMLEntity;
 import eu.lp0.cursus.xml.ExportReferenceManager;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceNumber;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLClassRef;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLPilotRef;
 
 @Root(name = "pilot")
 public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {

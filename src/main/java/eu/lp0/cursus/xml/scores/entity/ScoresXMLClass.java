@@ -23,6 +23,7 @@ import org.simpleframework.xml.Root;
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.xml.AbstractXMLEntity;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLClassRef;
 
 @Root(name = "class")
 public class ScoresXMLClass extends AbstractXMLEntity<Class> {

@@ -30,6 +30,7 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.xml.AbstractXMLEntity;
 import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLEventRef;
 
 @Root(name = "event")
 public class ScoresXMLEvent extends AbstractXMLEntity<Event> {

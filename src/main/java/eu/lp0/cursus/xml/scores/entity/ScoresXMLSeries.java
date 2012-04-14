@@ -38,6 +38,7 @@ import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.xml.AbstractXMLEntity;
 import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLSeriesRef;
 
 @Root(name = "series")
 public class ScoresXMLSeries extends AbstractXMLEntity<Series> {

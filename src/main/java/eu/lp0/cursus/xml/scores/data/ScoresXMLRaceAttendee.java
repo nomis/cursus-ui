@@ -27,7 +27,7 @@ import org.simpleframework.xml.Root;
 import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.xml.ExportReferenceManager;
-import eu.lp0.cursus.xml.scores.entity.ScoresXMLPilotRef;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLPilotRef;
 
 @Root(name = "attendee")
 public class ScoresXMLRaceAttendee implements Comparable<ScoresXMLRaceAttendee> {

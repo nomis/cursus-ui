@@ -15,19 +15,20 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores.entity;
+package eu.lp0.cursus.xml.scores.ref;
 
 import org.simpleframework.xml.Root;
 
-import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.xml.AbstractXMLRef;
+import eu.lp0.cursus.xml.scores.entity.ScoresXMLEvent;
 
-@Root(name = "series")
-public class ScoresXMLSeriesRef extends AbstractXMLRef<Series> {
-	public ScoresXMLSeriesRef() {
+@Root(name = "event")
+public class ScoresXMLEventRef extends AbstractXMLRef<Event> {
+	public ScoresXMLEventRef() {
 	}
 
-	public ScoresXMLSeriesRef(ScoresXMLSeries entity) {
+	public ScoresXMLEventRef(ScoresXMLEvent entity) {
 		super(entity);
 	}
 }

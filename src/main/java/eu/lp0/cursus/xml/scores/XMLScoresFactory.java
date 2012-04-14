@@ -50,7 +50,7 @@ import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLPenalty;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore;
-import eu.lp0.cursus.xml.scores.entity.ScoresXMLRaceRef;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLRaceRef;
 
 class XMLScoresFactory extends AbstractScoresFactory {
 	private final XMLScores xmlScores;

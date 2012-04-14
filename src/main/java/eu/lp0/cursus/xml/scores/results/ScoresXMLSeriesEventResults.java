@@ -28,7 +28,7 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.xml.ExportReferenceManager;
-import eu.lp0.cursus.xml.scores.entity.ScoresXMLEventRef;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLEventRef;
 
 @Root(name = "seriesEventResults")
 public class ScoresXMLSeriesEventResults {

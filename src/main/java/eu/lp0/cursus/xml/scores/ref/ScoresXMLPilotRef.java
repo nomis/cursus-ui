@@ -15,12 +15,13 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores.entity;
+package eu.lp0.cursus.xml.scores.ref;
 
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.xml.AbstractXMLRef;
+import eu.lp0.cursus.xml.scores.entity.ScoresXMLPilot;
 
 @Root(name = "pilot")
 public class ScoresXMLPilotRef extends AbstractXMLRef<Pilot> {

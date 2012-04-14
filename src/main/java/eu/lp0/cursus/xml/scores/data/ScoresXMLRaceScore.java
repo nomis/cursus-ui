@@ -30,7 +30,7 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.xml.ExportReferenceManager;
-import eu.lp0.cursus.xml.scores.entity.ScoresXMLPilotRef;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLPilotRef;
 
 @Root(name = "raceScore")
 public class ScoresXMLRaceScore {
