@@ -26,9 +26,8 @@ import org.simpleframework.xml.Root;
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Pilot;
-import eu.lp0.cursus.util.Constants;
-import eu.lp0.cursus.xml.AbstractXMLEntity;
 import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceNumber;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLClassRef;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLPilotRef;
@@ -54,7 +53,7 @@ public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {
 		}
 	}
 
-	@Element(required = Constants.SIMPLE_XML_EMPTY_STRING_REQUIRED_ELEMENT_BUG)
+	@Element
 	private String name;
 
 	public String getName() {
@@ -76,7 +75,7 @@ public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {
 		this.gender = gender;
 	}
 
-	@Element(required = Constants.SIMPLE_XML_EMPTY_STRING_REQUIRED_ELEMENT_BUG)
+	@Element
 	private String country;
 
 	public String getCountry() {

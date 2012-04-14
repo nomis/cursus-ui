@@ -32,8 +32,8 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.xml.scores.ScoresXML;
 import eu.lp0.cursus.xml.scores.ScoresXMLFile;
+import eu.lp0.cursus.xml.scores.ScoresXML;
 import eu.lp0.cursus.xml.scores.XMLScores;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLEventResults;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLRaceResults;
@@ -44,7 +44,7 @@ public class ExportSPKASeries2010 {
 
 	@Ignore
 	public static class AllScores extends Series2010Event4Scores {
-		public final ScoresXML export;
+		public final ScoresXMLFile export;
 
 		public AllScores() throws Exception {
 			Scores seriesScores;
@@ -69,7 +69,7 @@ public class ExportSPKASeries2010 {
 					}
 				}
 
-				export = new ScoresXML(seriesScores, eventScores, raceScores);
+				export = new ScoresXMLFile(seriesScores, eventScores, raceScores);
 
 				DatabaseSession.commit();
 			} finally {
@@ -81,13 +81,13 @@ public class ExportSPKASeries2010 {
 	}
 
 	public static void main(String[] args) throws Exception {
-		ScoresXML export1 = new AllScores().export;
+		ScoresXMLFile export1 = new AllScores().export;
 		export1.to(SERIES_FILE1);
 
-		ScoresXML import_ = new ScoresXML();
+		ScoresXMLFile import_ = new ScoresXMLFile();
 		import_.from(SERIES_FILE1);
 
-		ScoresXMLFile file = import_.getData();
+		ScoresXML file = import_.getData();
 		Scores seriesScores;
 		List<Scores> eventScores = new ArrayList<Scores>();
 		List<Scores> raceScores = new ArrayList<Scores>();
@@ -100,7 +100,7 @@ public class ExportSPKASeries2010 {
 			raceScores.add(xmlScores.newInstance(scores));
 		}
 
-		ScoresXML export2 = new ScoresXML(seriesScores, eventScores, raceScores);
+		ScoresXMLFile export2 = new ScoresXMLFile(seriesScores, eventScores, raceScores);
 		export2.to(SERIES_FILE2);
 	}
 }

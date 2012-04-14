@@ -15,14 +15,20 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml;
+package eu.lp0.cursus.xml.common;
 
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Namespace;
+import org.simpleframework.xml.NamespaceList;
 
 import com.google.common.collect.ComparisonChain;
 
 import eu.lp0.cursus.db.data.AbstractEntity;
+import eu.lp0.cursus.util.Constants;
 
+// Workaround for Simple bug to stop it outputting the xmlns on the "id" attribute
+// (it will realise that the root has the "xml" namespace defined)
+@NamespaceList(@Namespace(prefix = "xml", reference = Constants.XML_XMLNS))
 public abstract class AbstractXMLEntity<T extends AbstractEntity> implements Comparable<AbstractXMLEntity<T>> {
 	public AbstractXMLEntity() {
 	}
@@ -31,7 +37,9 @@ public abstract class AbstractXMLEntity<T extends AbstractEntity> implements Com
 		id = generateId(entity);
 	}
 
-	@Attribute
+	// Simple won't let me omit the reference value as it then outputs ""
+	@Namespace(prefix = "xml", reference = Constants.XML_XMLNS)
+	@Attribute(name = "id")
 	private String id;
 
 	public String getId() {

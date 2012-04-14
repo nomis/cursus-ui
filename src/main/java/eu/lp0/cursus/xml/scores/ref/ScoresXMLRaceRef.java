@@ -20,7 +20,7 @@ package eu.lp0.cursus.xml.scores.ref;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.xml.AbstractXMLRef;
+import eu.lp0.cursus.xml.common.AbstractXMLRef;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLRace;
 
 @Root(name = "race")

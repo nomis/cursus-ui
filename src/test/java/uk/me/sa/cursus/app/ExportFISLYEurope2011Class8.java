@@ -27,8 +27,8 @@ import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.FleetFilter;
 import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.xml.scores.ScoresXML;
 import eu.lp0.cursus.xml.scores.ScoresXMLFile;
+import eu.lp0.cursus.xml.scores.ScoresXML;
 import eu.lp0.cursus.xml.scores.XMLScores;
 
 public class ExportFISLYEurope2011Class8 {
@@ -41,9 +41,9 @@ public class ExportFISLYEurope2011Class8 {
 
 	@Ignore
 	public static class AllScores extends Series2011Class8Scores {
-		public final ScoresXML exportA;
-		public final ScoresXML exportM;
-		public final ScoresXML exportF;
+		public final ScoresXMLFile exportA;
+		public final ScoresXMLFile exportM;
+		public final ScoresXMLFile exportF;
 
 		public AllScores() throws Exception {
 			Scores seriesScoresA;
@@ -62,9 +62,9 @@ public class ExportFISLYEurope2011Class8 {
 				seriesScoresM = scorer.scoreSeries(series, FleetFilter.from(Gender.MALE));
 				seriesScoresF = scorer.scoreSeries(series, FleetFilter.from(Gender.FEMALE));
 
-				exportA = new ScoresXML(seriesScoresA, null, null);
-				exportM = new ScoresXML(seriesScoresM, null, null);
-				exportF = new ScoresXML(seriesScoresF, null, null);
+				exportA = new ScoresXMLFile(seriesScoresA, null, null);
+				exportM = new ScoresXMLFile(seriesScoresM, null, null);
+				exportF = new ScoresXMLFile(seriesScoresF, null, null);
 
 				DatabaseSession.commit();
 			} finally {
@@ -79,50 +79,50 @@ public class ExportFISLYEurope2011Class8 {
 		AllScores allScores = new AllScores();
 
 		{
-			ScoresXML export1 = allScores.exportA;
+			ScoresXMLFile export1 = allScores.exportA;
 			export1.to(SERIES_FILE_A1);
 
-			ScoresXML import_ = new ScoresXML();
+			ScoresXMLFile import_ = new ScoresXMLFile();
 			import_.from(SERIES_FILE_A1);
 
-			ScoresXMLFile file = import_.getData();
+			ScoresXML file = import_.getData();
 			Scores seriesScores;
 			XMLScores xmlScores = new XMLScores(file);
 			seriesScores = xmlScores.newInstance(file.getSeriesResults());
 
-			ScoresXML export2 = new ScoresXML(seriesScores, null, null);
+			ScoresXMLFile export2 = new ScoresXMLFile(seriesScores, null, null);
 			export2.to(SERIES_FILE_A2);
 		}
 
 		{
-			ScoresXML export1 = allScores.exportM;
+			ScoresXMLFile export1 = allScores.exportM;
 			export1.to(SERIES_FILE_M1);
 
-			ScoresXML import_ = new ScoresXML();
+			ScoresXMLFile import_ = new ScoresXMLFile();
 			import_.from(SERIES_FILE_M1);
 
-			ScoresXMLFile file = import_.getData();
+			ScoresXML file = import_.getData();
 			Scores seriesScores;
 			XMLScores xmlScores = new XMLScores(file);
 			seriesScores = xmlScores.newInstance(file.getSeriesResults());
 
-			ScoresXML export2 = new ScoresXML(seriesScores, null, null);
+			ScoresXMLFile export2 = new ScoresXMLFile(seriesScores, null, null);
 			export2.to(SERIES_FILE_M2);
 		}
 
 		{
-			ScoresXML export1 = allScores.exportF;
+			ScoresXMLFile export1 = allScores.exportF;
 			export1.to(SERIES_FILE_F1);
 
-			ScoresXML import_ = new ScoresXML();
+			ScoresXMLFile import_ = new ScoresXMLFile();
 			import_.from(SERIES_FILE_F1);
 
-			ScoresXMLFile file = import_.getData();
+			ScoresXML file = import_.getData();
 			Scores seriesScores;
 			XMLScores xmlScores = new XMLScores(file);
 			seriesScores = xmlScores.newInstance(file.getSeriesResults());
 
-			ScoresXML export2 = new ScoresXML(seriesScores, null, null);
+			ScoresXMLFile export2 = new ScoresXMLFile(seriesScores, null, null);
 			export2.to(SERIES_FILE_F2);
 		}
 	}

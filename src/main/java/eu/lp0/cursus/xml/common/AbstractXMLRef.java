@@ -15,20 +15,28 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores;
+package eu.lp0.cursus.xml.common;
 
-import java.util.List;
+import org.simpleframework.xml.Attribute;
 
-import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.xml.ExportReferenceManager;
-import eu.lp0.cursus.xml.common.AbstractXMLFile;
+import eu.lp0.cursus.db.data.AbstractEntity;
 
-public class ScoresXMLFile extends AbstractXMLFile<ScoresXML> {
-	public ScoresXMLFile() {
-		super(ScoresXML.class);
+public abstract class AbstractXMLRef<T extends AbstractEntity> {
+	public AbstractXMLRef() {
 	}
 
-	public ScoresXMLFile(Scores seriesScores, List<Scores> eventScores, List<Scores> raceScores) {
-		super(ScoresXML.class, new ScoresXML(new ExportReferenceManager(), seriesScores, eventScores, raceScores));
+	public AbstractXMLRef(AbstractXMLEntity<T> entity) {
+		ref = entity.getId();
+	}
+
+	@Attribute
+	private String ref;
+
+	public String getRef() {
+		return ref;
+	}
+
+	public void setRef(String ref) {
+		this.ref = ref;
 	}
 }

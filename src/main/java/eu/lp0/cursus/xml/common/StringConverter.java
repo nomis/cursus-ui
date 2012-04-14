@@ -15,28 +15,28 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml;
+package eu.lp0.cursus.xml.common;
 
-import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.convert.Converter;
+import org.simpleframework.xml.stream.InputNode;
+import org.simpleframework.xml.stream.OutputNode;
 
-import eu.lp0.cursus.db.data.AbstractEntity;
-
-public abstract class AbstractXMLRef<T extends AbstractEntity> {
-	public AbstractXMLRef() {
+class StringConverter implements Converter<String> {
+	/**
+	 * Workaround for Simple's inability to read an empty element as an empty string
+	 */
+	@Override
+	public String read(InputNode node) throws Exception {
+		String value = node.getValue();
+		return value == null ? "" : value; //$NON-NLS-1$
 	}
 
-	public AbstractXMLRef(AbstractXMLEntity<T> entity) {
-		ref = entity.getId();
-	}
-
-	@Attribute
-	private String ref;
-
-	public String getRef() {
-		return ref;
-	}
-
-	public void setRef(String ref) {
-		this.ref = ref;
+	/**
+	 * Preserve whitespace
+	 */
+	@Override
+	public void write(OutputNode node, String value) throws Exception {
+		node.setAttribute("xml:space", "preserve"); //$NON-NLS-1$ //$NON-NLS-2$ 
+		node.setValue(value);
 	}
 }

@@ -23,7 +23,6 @@ import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Penalty.Type;
-import eu.lp0.cursus.util.Constants;
 
 @Root(name = "penalty")
 public class ScoresXMLPenalty {
@@ -58,7 +57,7 @@ public class ScoresXMLPenalty {
 		this.value = value;
 	}
 
-	@Element(required = Constants.SIMPLE_XML_EMPTY_STRING_REQUIRED_ELEMENT_BUG)
+	@Element
 	private String reason;
 
 	public String getReason() {

@@ -23,6 +23,8 @@ import java.util.Map;
 import com.google.common.base.Preconditions;
 
 import eu.lp0.cursus.db.data.AbstractEntity;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
+import eu.lp0.cursus.xml.common.AbstractXMLRef;
 
 public class ExportReferenceManager {
 	private Map<String, AbstractXMLRef<?>> map = new HashMap<String, AbstractXMLRef<?>>();

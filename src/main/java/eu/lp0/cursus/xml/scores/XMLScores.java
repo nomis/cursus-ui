@@ -64,7 +64,7 @@ import eu.lp0.cursus.xml.scores.results.ScoresXMLSeriesEventResults;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLSeriesResults;
 
 public class XMLScores {
-	private ScoresXMLFile file;
+	private ScoresXML scoresXML;
 	private ImportReferenceManager refMgr = new ImportReferenceManager();
 	private Map<ScoresXMLSeries, Series> series = new HashMap<ScoresXMLSeries, Series>();
 	private Map<ScoresXMLClass, Class> classes = new HashMap<ScoresXMLClass, Class>();
@@ -82,8 +82,8 @@ public class XMLScores {
 	private Map<? super AbstractScoresXMLResults, Table<Pilot, Race, ScoresXMLRaceScore>> resultsPilotRaceScores = new HashMap<AbstractScoresXMLResults, Table<Pilot, Race, ScoresXMLRaceScore>>();
 	private Table<? super AbstractScoresXMLResults, Pilot, ScoresXMLOverallScore> resultsPilotOverallScores = HashBasedTable.create();
 
-	public XMLScores(ScoresXMLFile file) {
-		this.file = file;
+	public XMLScores(ScoresXML scoresXML) {
+		this.scoresXML = scoresXML;
 		extractEntities();
 		extractSeriesResults();
 		extractEventResults();
@@ -123,19 +123,19 @@ public class XMLScores {
 	}
 
 	private void extractEntities() {
-		ScoresXMLSeries xmlSeries = file.getSeries();
+		ScoresXMLSeries xmlSeries = scoresXML.getSeries();
 		refMgr.put(xmlSeries);
 		Series series_ = new Series(wrapNull(xmlSeries.getName()), wrapNull(xmlSeries.getDescription()));
 		series.put(xmlSeries, series_);
 
-		for (ScoresXMLClass xmlClass : file.getSeries().getClasses()) {
+		for (ScoresXMLClass xmlClass : scoresXML.getSeries().getClasses()) {
 			refMgr.put(xmlClass);
 			Class class_ = new Class(series_, wrapNull(xmlClass.getName()), wrapNull(xmlClass.getDescription()));
 			classes.put(xmlClass, class_);
 			series_.getClasses().add(class_);
 		}
 
-		for (ScoresXMLPilot xmlPilot : file.getSeries().getPilots()) {
+		for (ScoresXMLPilot xmlPilot : scoresXML.getSeries().getPilots()) {
 			refMgr.put(xmlPilot);
 			Pilot pilot_ = new Pilot(series_, wrapNull(xmlPilot.getName()), xmlPilot.getGender(), wrapNull(xmlPilot.getCountry()));
 			pilots.put(xmlPilot, pilot_);
@@ -150,7 +150,7 @@ public class XMLScores {
 			}
 		}
 
-		for (ScoresXMLEvent xmlEvent : file.getSeries().getEvents()) {
+		for (ScoresXMLEvent xmlEvent : scoresXML.getSeries().getEvents()) {
 			refMgr.put(xmlEvent);
 			Event event = new Event(series_, wrapNull(xmlEvent.getName()), wrapNull(xmlEvent.getDescription()));
 			events.put(xmlEvent, event);
@@ -182,7 +182,7 @@ public class XMLScores {
 	}
 
 	private void extractSeriesResults() {
-		ScoresXMLSeriesResults seriesResults = file.getSeriesResults();
+		ScoresXMLSeriesResults seriesResults = scoresXML.getSeriesResults();
 		for (ScoresXMLEventRef event : seriesResults.getEvents()) {
 			resultsEvents.put(seriesResults, dereference(event));
 		}
@@ -209,7 +209,7 @@ public class XMLScores {
 	}
 
 	private void extractEventResults() {
-		for (ScoresXMLEventResults eventResult : file.getEventResults()) {
+		for (ScoresXMLEventResults eventResult : scoresXML.getEventResults()) {
 			for (ScoresXMLEventRef event : eventResult.getEvents()) {
 				resultsEvents.put(eventResult, dereference(event));
 			}
@@ -235,7 +235,7 @@ public class XMLScores {
 	}
 
 	private void extractRaceResults() {
-		for (ScoresXMLRaceResults raceResult : file.getRaceResults()) {
+		for (ScoresXMLRaceResults raceResult : scoresXML.getRaceResults()) {
 			Race race = dereference(raceResult.getRace());
 			resultsRaces.put(raceResult, race);
 
@@ -269,7 +269,7 @@ public class XMLScores {
 
 		public Subset(ScoresXMLSeriesResults seriesResults) {
 			Preconditions.checkNotNull(seriesResults);
-			Preconditions.checkArgument(file.getSeriesResults().equals(seriesResults));
+			Preconditions.checkArgument(scoresXML.getSeriesResults().equals(seriesResults));
 			this.seriesResults = seriesResults;
 			this.eventResults = null;
 			this.raceResults = null;
@@ -280,7 +280,7 @@ public class XMLScores {
 
 		public Subset(ScoresXMLEventResults eventResults) {
 			Preconditions.checkNotNull(eventResults);
-			Preconditions.checkArgument(file.getEventResults().contains(eventResults));
+			Preconditions.checkArgument(scoresXML.getEventResults().contains(eventResults));
 			this.seriesResults = null;
 			this.eventResults = eventResults;
 			this.raceResults = null;
@@ -291,7 +291,7 @@ public class XMLScores {
 
 		public Subset(ScoresXMLRaceResults raceResults) {
 			Preconditions.checkNotNull(raceResults);
-			Preconditions.checkArgument(file.getRaceResults().contains(raceResults));
+			Preconditions.checkArgument(scoresXML.getRaceResults().contains(raceResults));
 			this.seriesResults = null;
 			this.eventResults = null;
 			this.raceResults = raceResults;

@@ -28,9 +28,8 @@ import org.simpleframework.xml.Root;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
-import eu.lp0.cursus.util.Constants;
-import eu.lp0.cursus.xml.AbstractXMLEntity;
 import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceAttendee;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLRaceRef;
 
@@ -54,7 +53,7 @@ public class ScoresXMLRace extends AbstractXMLEntity<Race> {
 		Collections.sort(attendees);
 	}
 
-	@Element(required = Constants.SIMPLE_XML_EMPTY_STRING_REQUIRED_ELEMENT_BUG)
+	@Element
 	private String name;
 
 	public String getName() {
@@ -65,7 +64,7 @@ public class ScoresXMLRace extends AbstractXMLEntity<Race> {
 		this.name = name;
 	}
 
-	@Element(required = Constants.SIMPLE_XML_EMPTY_STRING_REQUIRED_ELEMENT_BUG)
+	@Element
 	private String description;
 
 	public String getDescription() {

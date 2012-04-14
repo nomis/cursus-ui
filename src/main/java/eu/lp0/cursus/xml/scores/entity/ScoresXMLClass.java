@@ -21,8 +21,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Class;
-import eu.lp0.cursus.util.Constants;
-import eu.lp0.cursus.xml.AbstractXMLEntity;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLClassRef;
 
 @Root(name = "class")
@@ -37,7 +36,7 @@ public class ScoresXMLClass extends AbstractXMLEntity<Class> {
 		description = class_.getDescription();
 	}
 
-	@Element(required = Constants.SIMPLE_XML_EMPTY_STRING_REQUIRED_ELEMENT_BUG)
+	@Element
 	private String name;
 
 	public String getName() {
@@ -48,7 +47,7 @@ public class ScoresXMLClass extends AbstractXMLEntity<Class> {
 		this.name = name;
 	}
 
-	@Element(required = Constants.SIMPLE_XML_EMPTY_STRING_REQUIRED_ELEMENT_BUG)
+	@Element
 	private String description;
 
 	public String getDescription() {
