@@ -3,6 +3,7 @@
 	<xsl:output method="html" version="5.0" encoding="UTF-8" indent="yes"/>
 
 	<xsl:variable name="params" select="/r:cursus/r:param"/>
+	<xsl:variable name="classes" select="/r:cursus/r:class"/>
 
 	<xsl:template match="/r:cursus">
 		<xsl:apply-templates select="document(r:load/@href)/z:cursus"/>
@@ -77,7 +78,11 @@
 			<xsl:attribute name="class">results <xsl:value-of select="$class"/></xsl:attribute>
 			<thead>
 				<tr>
-					<th class="type" colspan="3"><xsl:value-of select="$type"/></th>
+					<th class="type" colspan="2"><xsl:value-of select="$type"/></th>
+					<xsl:if test="count($classes) > 0">
+						<th class="classes"><xsl:attribute name="colspan"><xsl:value-of select="count($classes)"/></xsl:attribute>Classes</th>
+					</xsl:if>
+					<td></td>
 
 					<!-- Output all the events -->
 					<xsl:for-each select="$events">
@@ -103,6 +108,9 @@
 				<tr>
 					<th class="pos left">Position</th>
 					<th class="pilot name">Name</th>
+					<xsl:for-each select="$classes">
+						<th class="class"><xsl:value-of select="r:output"/></th>
+					</xsl:for-each>
 					<th class="pilot num">Race <abbr name="Number">No.</abbr></th>
 
 					<!-- Output all the races -->
@@ -129,12 +137,19 @@
 			</thead>
 			<tbody>
 				<xsl:for-each select="z:overallOrder/z:overallScore">
+						<!-- Keep a reference to the current pilot's classes while looping through $classes -->
+						<xsl:variable name="zPilotClasses" select="/z:cursus/z:series/z:pilots/z:pilot[@xml:id=current()/z:pilot/@ref]/z:class"/>
 						<!-- Count the people with the same position and use it to add a "=" -->
 						<xsl:variable name="joint" select="count(../z:overallScore[@position=current()/@position]) > 1"/>
 
 						<tr>
 							<th class="pos left"><xsl:value-of select="@position"/><xsl:if test="$joint">=</xsl:if></th>
 							<td class="pilot name"><xsl:value-of select="/z:cursus/z:series/z:pilots/z:pilot[@xml:id=current()/z:pilot/@ref]/z:name"/></td>
+							<xsl:for-each select="$classes">
+								<td class="pilot class">
+									<xsl:if test="$zPilotClasses[@ref=/z:cursus/z:series/z:classes/z:class[z:name=current()/r:name]/@xml:id]">*</xsl:if>
+								</td>
+							</xsl:for-each>
 							<td class="pilot num"><xsl:value-of select="/z:cursus/z:series/z:pilots/z:pilot[@xml:id=current()/z:pilot/@ref]/z:raceNumber/z:organisation"/>&#xA0;<xsl:value-of select="format-number(number(/z:cursus/z:series/z:pilots/z:pilot[@xml:id=current()/z:pilot/@ref]/z:raceNumber/z:number), '000')"/></td>
 
 							<!-- For each race score for this pilot -->

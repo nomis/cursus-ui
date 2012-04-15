@@ -145,8 +145,10 @@ public class XMLScores {
 			RaceNumber raceNumber = new RaceNumber(pilot_, wrapNull(xmlRaceNumber.getOrganisation()), xmlRaceNumber.getNumber());
 			pilot_.setRaceNumber(raceNumber);
 
-			for (ScoresXMLClassRef xmlClass : xmlPilot.getClasses()) {
-				pilot_.getClasses().add(dereference(xmlClass));
+			if (xmlPilot.getClasses() != null) {
+				for (ScoresXMLClassRef xmlClass : xmlPilot.getClasses()) {
+					pilot_.getClasses().add(dereference(xmlClass));
+				}
 			}
 		}
 

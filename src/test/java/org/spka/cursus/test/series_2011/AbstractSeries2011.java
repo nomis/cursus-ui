@@ -21,6 +21,7 @@ import org.spka.cursus.scoring.SPKAConstants;
 import org.spka.cursus.test.AbstractSeries;
 
 import eu.lp0.cursus.db.DatabaseSession;
+import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Penalty;
@@ -69,6 +70,8 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 
 	protected Scorer scorer = ScorerFactory.newScorer(SPKAConstants.UUID_2011);
 
+	protected Class junior;
+	protected Class _16inWheel;
 	protected Pilot sco018;
 	protected Pilot sco019;
 	protected Pilot sco040;
@@ -128,6 +131,13 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			// Create the 2011/12 series
 			Series series = new Series(SERIES_NAME);
 
+			// Create classes
+			junior = new Class(series, "Junior"); //$NON-NLS-1$
+			series.getClasses().add(junior);
+
+			_16inWheel = new Class(series, "16\" Wheel"); //$NON-NLS-1$
+			series.getClasses().add(_16inWheel);
+
 			// Add all the pilots
 			sco018 = new Pilot(series, "SCO018", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
 			series.getPilots().add(sco018);
@@ -148,21 +158,26 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			series.getPilots().add(sco081);
 
 			sco087 = new Pilot(series, "SCO087", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
+			sco087.getClasses().add(_16inWheel);
 			series.getPilots().add(sco087);
 
 			sco116 = new Pilot(series, "SCO116", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
+			sco116.getClasses().add(junior);
 			series.getPilots().add(sco116);
 
 			sco136 = new Pilot(series, "SCO136", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
 			series.getPilots().add(sco136);
 
 			sco153 = new Pilot(series, "SCO153", Gender.FEMALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
+			sco153.getClasses().add(_16inWheel);
 			series.getPilots().add(sco153);
 
 			sco156 = new Pilot(series, "SCO156", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
+			sco156.getClasses().add(junior);
 			series.getPilots().add(sco156);
 
 			sco158 = new Pilot(series, "SCO158", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
+			sco158.getClasses().add(_16inWheel);
 			series.getPilots().add(sco158);
 
 			sco159 = new Pilot(series, "SCO159", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -175,24 +190,29 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			series.getPilots().add(sco197);
 
 			sco198 = new Pilot(series, "SCO198", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
+			sco198.getClasses().add(_16inWheel);
 			series.getPilots().add(sco198);
 
 			sco200 = new Pilot(series, "SCO200", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
 			series.getPilots().add(sco200);
 
 			sco248 = new Pilot(series, "SCO248", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
+			sco248.getClasses().add(_16inWheel);
 			series.getPilots().add(sco248);
 
 			sco249 = new Pilot(series, "SCO249", Gender.FEMALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
 			series.getPilots().add(sco249);
 
 			sco320 = new Pilot(series, "SCO320", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
+			sco320.getClasses().add(_16inWheel);
 			series.getPilots().add(sco320);
 
 			sco467 = new Pilot(series, "SCO467", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
+			sco467.getClasses().add(_16inWheel);
 			series.getPilots().add(sco467);
 
 			sco528 = new Pilot(series, "SCO528", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
+			sco528.getClasses().add(_16inWheel);
 			series.getPilots().add(sco528);
 
 			sco808 = new Pilot(series, "SCO808", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$

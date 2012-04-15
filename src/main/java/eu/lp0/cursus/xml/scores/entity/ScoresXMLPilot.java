@@ -47,9 +47,11 @@ public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {
 			raceNumber = new ScoresXMLRaceNumber(pilot.getRaceNumber());
 		}
 
-		classes = new ArrayList<ScoresXMLClassRef>(pilot.getClasses().size());
-		for (Class class_ : pilot.getClasses()) {
-			classes.add((ScoresXMLClassRef)refMgr.get(class_));
+		if (!pilot.getClasses().isEmpty()) {
+			classes = new ArrayList<ScoresXMLClassRef>(pilot.getClasses().size());
+			for (Class class_ : pilot.getClasses()) {
+				classes.add((ScoresXMLClassRef)refMgr.get(class_));
+			}
 		}
 	}
 
@@ -97,7 +99,7 @@ public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {
 		this.raceNumber = raceNumber;
 	}
 
-	@ElementList
+	@ElementList(required = false, inline = true)
 	private ArrayList<ScoresXMLClassRef> classes;
 
 	public ArrayList<ScoresXMLClassRef> getClasses() {
