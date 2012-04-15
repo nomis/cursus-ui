@@ -38,7 +38,13 @@
 							<xsl:attribute name="class"><xsl:apply-templates select="." mode="r:index"/></xsl:attribute>
 							<xsl:text> </xsl:text>
 							<a>
+								<xsl:variable name="desc"><xsl:apply-templates select="." mode="r:desc"/></xsl:variable>
 								<xsl:attribute name="href">#<xsl:apply-templates select="." mode="r:index"/></xsl:attribute>
+								<xsl:if test="$desc != ''">
+									<xsl:attribute name="title">
+										<xsl:value-of select="$desc"/>
+									</xsl:attribute>
+								</xsl:if>
 								<xsl:apply-templates select="." mode="r:name"/>
 							</a>
 							<xsl:text> </xsl:text>
@@ -74,6 +80,11 @@
 			<xsl:when test="$results">
 				<a>
 					<xsl:attribute name="href">#<xsl:apply-templates select="$results" mode="r:index"/></xsl:attribute>
+					<xsl:if test="z:description != ''">
+						<xsl:attribute name="title">
+							<xsl:value-of select="z:description"/>
+						</xsl:attribute>
+					</xsl:if>
 					<xsl:value-of select="z:name"/>
 				</a>
 			</xsl:when>

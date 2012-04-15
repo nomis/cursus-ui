@@ -26,7 +26,25 @@
 	<xsl:template match="z:raceResults" mode="r:index">race<xsl:value-of select="count(./preceding-sibling::z:raceResults)+1"/></xsl:template>
 
 	<xsl:template match="z:event|z:race" mode="r:th">
-		<xsl:value-of select="z:name"/>
+		<span>
+			<xsl:if test="z:description != ''">
+				<xsl:attribute name="title">
+					<xsl:value-of select="z:description"/>
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:value-of select="z:name"/>
+		</span>
+	</xsl:template>
+
+	<xsl:template match="z:event|z:race" mode="r:penalty">
+		<strong>
+			<xsl:if test="z:description != ''">
+				<xsl:attribute name="title">
+					<xsl:value-of select="z:description"/>
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:value-of select="z:name"/>
+		</strong>
 	</xsl:template>
 
 	<xsl:template match="z:seriesResults" mode="r:body">
@@ -232,13 +250,13 @@
 													<xsl:if test="$class != 'series'">
 														<xsl:for-each select="$realPenalties">
 															<xsl:apply-templates select="." mode="r:internal">
-																<xsl:with-param name="name" select="current()/../../z:name"/>
+																<xsl:with-param name="race" select="current()/../.."/>
 															</xsl:apply-templates>
 														</xsl:for-each>
 													</xsl:if>
 													<xsl:for-each select="$simuPenalties">
 														<xsl:apply-templates select="." mode="r:internal">
-															<xsl:with-param name="name"/>
+															<xsl:with-param name="race"/>
 														</xsl:apply-templates>
 													</xsl:for-each>
 												</ul>
@@ -257,11 +275,11 @@
 	</xsl:template>
 
 	<xsl:template match="z:penalty" mode="r:internal">
-		<xsl:param name="name"/>
+		<xsl:param name="race"/>
 		<xsl:variable name="absvalue" select="@value * (@value >= 0) - @value * (@value &lt; 0)"/>
 
 		<li>
-			<xsl:if test="$name != ''"><strong><xsl:value-of select="$name"/></strong>: </xsl:if>
+			<xsl:if test="$race"><xsl:apply-templates select="$race" mode="r:penalty"/>: </xsl:if>
 			<xsl:choose>
 				<xsl:when test="@type = 'EVENT_NON_ATTENDANCE'">Did not attend <strong><xsl:value-of select="z:reason"/></strong></xsl:when>
 				<xsl:otherwise><xsl:value-of select="z:reason"/></xsl:otherwise>
