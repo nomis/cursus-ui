@@ -86,7 +86,7 @@
 		<xsl:variable name="notes" select="($penalties and $class != 'series') or (not($dnp) and z:overallOrder/z:overallScore/z:penalty) or ($dnp and z:overallOrder/z:overallScore/z:penalty[@type != 'EVENT_NON_ATTENDANCE'])"/>
 
 		<h1><xsl:value-of select="$name"/></h1>
-		<table border="1">
+		<table>
 			<xsl:attribute name="class">results <xsl:value-of select="$class"/></xsl:attribute>
 			<thead>
 				<tr>
