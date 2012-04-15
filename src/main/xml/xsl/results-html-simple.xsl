@@ -13,7 +13,7 @@
 	<xsl:template match="/z:cursus" mode="r:page">
 		<html>
 			<head>
-				<title>Scores for <xsl:value-of select="z:series/z:name"/></title>
+				<title>Results for <xsl:value-of select="z:series/z:name"/></title>
 
 				<xsl:for-each select="$params[@name='stylesheet']">
 					<link rel="stylesheet" type="text/css">
