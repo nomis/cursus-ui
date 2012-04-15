@@ -1,4 +1,5 @@
 table.results { border-collapse: collapse; color: #000; background: #fff; border: 1px solid #000; }
+table.results caption { caption-side: bottom; }
 th { padding: 0.1em 0.25em 0.1em 0.25em; border: 1px solid #888; }
 td { padding: 0.1em 0.2em 0.1em 0.2em; border: 1px solid #888; }
 tr:first-child th, tr:first-child td { border-top: none; }
