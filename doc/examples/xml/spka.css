@@ -1,0 +1,17 @@
+table.results { border-collapse: collapse; background: #fff }
+th { padding: 0.1em 0.25em 0.1em 0.25em; }
+td { padding: 0.1em 0.2em 0.1em 0.2em; }
+td { text-align: center; }
+th.type, th.classes, th.event, th.race, td.pilot.name { text-align: left; }
+tr:hover { background: #ff8; }
+.race.pts em { font-style: normal; color: #f00; }
+.over.pts { font-weight: bold; }
+.notes ul.pen { padding: 0; }
+.notes ul.pen, .notes ul.pen li { display: inline; }
+.notes ul.pen li:after { content: ", "; }
+.notes ul.pen li:last-child:after { content: ""; }
+
+ul.menu { padding: 0.2em 0 0.2em 0; border-top: 1px solid; border-bottom: 1px solid; }
+ul.menu, ul.menu li { display: inline; line-height: 2; }
+ul.menu li { border-left: 1px solid; padding: 0.2em 0 0.2em 0.75ex; }
+ul.menu li:last-child { border-right: 1px solid; padding-right: 0.75ex; }
