@@ -56,11 +56,16 @@
 	</xsl:template>
 
 	<xsl:template match="/z:cursus/z:seriesResults|/z:cursus/z:eventResults|/z:cursus/z:raceResults">
-		<xsl:param name="name"/><!-- Name of results -->
-		<xsl:param name="class"/><!-- CSS class for table -->
-		<xsl:param name="type"/><!-- Type of results -->
-		<xsl:param name="events"/><!-- Set of event results -->
-		<xsl:param name="races"/><!-- Set of event/race results -->
+		<!-- Name of results -->
+		<xsl:param name="name"/>
+		<!-- CSS class for table -->
+		<xsl:param name="class"/>
+		<!-- Type of results -->
+		<xsl:param name="type"/>
+		<!-- Set of event results -->
+		<xsl:param name="events"/>
+		<!-- Set of event/race results -->
+		<xsl:param name="races"/>
 
 		<!-- Output laps if these are race results -->
 		<xsl:variable name="laps" select="count($events) = 0"/>
