@@ -164,14 +164,16 @@ public class XMLScores {
 				races.put(xmlRace, race);
 				event.getRaces().add(race);
 
-				for (ScoresXMLRaceAttendee xmlRaceAttendee : xmlRace.getAttendees()) {
-					RaceAttendee attendee = new RaceAttendee(race, dereference(xmlRaceAttendee.getPilot()), xmlRaceAttendee.getType());
-					race.getAttendees().put(attendee.getPilot(), attendee);
+				if (xmlRace.getAttendees() != null) {
+					for (ScoresXMLRaceAttendee xmlRaceAttendee : xmlRace.getAttendees()) {
+						RaceAttendee attendee = new RaceAttendee(race, dereference(xmlRaceAttendee.getPilot()), xmlRaceAttendee.getType());
+						race.getAttendees().put(attendee.getPilot(), attendee);
 
-					if (xmlRaceAttendee.getPenalties() != null) {
-						for (ScoresXMLPenalty xmlPenalty : xmlRaceAttendee.getPenalties()) {
-							Penalty penalty = new Penalty(xmlPenalty.getType(), xmlPenalty.getValue(), wrapNull(xmlPenalty.getReason()));
-							attendee.getPenalties().add(penalty);
+						if (xmlRaceAttendee.getPenalties() != null) {
+							for (ScoresXMLPenalty xmlPenalty : xmlRaceAttendee.getPenalties()) {
+								Penalty penalty = new Penalty(xmlPenalty.getType(), xmlPenalty.getValue(), wrapNull(xmlPenalty.getReason()));
+								attendee.getPenalties().add(penalty);
+							}
 						}
 					}
 				}

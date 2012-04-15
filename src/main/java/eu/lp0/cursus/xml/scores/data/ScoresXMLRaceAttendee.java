@@ -68,7 +68,7 @@ public class ScoresXMLRaceAttendee implements Comparable<ScoresXMLRaceAttendee> 
 		this.type = type;
 	}
 
-	@ElementList(required = false)
+	@ElementList(required = false, inline = true)
 	private ArrayList<ScoresXMLPenalty> penalties;
 
 	public ArrayList<ScoresXMLPenalty> getPenalties() {

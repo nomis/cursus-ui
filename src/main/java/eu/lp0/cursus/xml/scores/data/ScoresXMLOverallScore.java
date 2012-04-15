@@ -116,7 +116,7 @@ public class ScoresXMLOverallScore {
 		this.discards = discards;
 	}
 
-	@ElementList(required = false)
+	@ElementList(required = false, inline = true)
 	private ArrayList<ScoresXMLPenalty> simulatedPenalties;
 
 	public ArrayList<ScoresXMLPenalty> getSimulatedPenalties() {

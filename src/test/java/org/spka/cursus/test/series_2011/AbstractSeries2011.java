@@ -535,7 +535,7 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			event2.getRaces().add(race2);
 			// race2.getAttendees().put(sco018, new RaceAttendee(race2, sco018, RaceAttendee.Type.PILOT));
 			RaceAttendee att019 = new RaceAttendee(race2, sco019, RaceAttendee.Type.PILOT);
-			att019.getPenalties().add(new Penalty(Penalty.Type.AUTOMATIC));
+			att019.getPenalties().add(new Penalty(Penalty.Type.AUTOMATIC, "Hit a mark")); //$NON-NLS-1$
 			race2.getAttendees().put(sco019, att019);
 			race2.getAttendees().put(sco060, new RaceAttendee(race2, sco060, RaceAttendee.Type.PILOT));
 			race2.getAttendees().put(sco068, new RaceAttendee(race2, sco068, RaceAttendee.Type.PILOT));
@@ -555,12 +555,12 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			race2.getAttendees().put(sco467, new RaceAttendee(race2, sco467, RaceAttendee.Type.PILOT));
 			race2.getAttendees().put(sco528, new RaceAttendee(race2, sco528, RaceAttendee.Type.PILOT));
 			RaceAttendee att808 = new RaceAttendee(race2, sco808, RaceAttendee.Type.PILOT);
-			att808.getPenalties().add(new Penalty(Penalty.Type.AUTOMATIC));
+			att808.getPenalties().add(new Penalty(Penalty.Type.AUTOMATIC, "Hit a mark")); //$NON-NLS-1$
 			race2.getAttendees().put(sco808, att808);
 			RaceAttendee att1045 = new RaceAttendee(race2, b1045, RaceAttendee.Type.PILOT);
 			// http://www.flickr.com/photos/lp0/6838159693/in/set-72157629234378617/
 			// B1045 didn't cross the start line before the race started
-			att1045.getPenalties().add(new Penalty(Penalty.Type.LAPS, -1));
+			att1045.getPenalties().add(new Penalty(Penalty.Type.LAPS, -1, "Jumped start")); //$NON-NLS-1$
 			race2.getAttendees().put(b1045, att1045);
 			race2.getEvents().add(new RaceEvent(RaceEvent.Type.START));
 			// 1

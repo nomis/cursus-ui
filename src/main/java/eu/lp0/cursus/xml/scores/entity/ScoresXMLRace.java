@@ -44,10 +44,12 @@ public class ScoresXMLRace extends AbstractXMLEntity<Race> {
 		name = race.getName();
 		description = race.getDescription();
 
-		attendees = new ArrayList<ScoresXMLRaceAttendee>(race.getAttendees().size());
-		for (RaceAttendee attendee : race.getAttendees().values()) {
-			if (pilots.contains(attendee.getPilot())) {
-				attendees.add(new ScoresXMLRaceAttendee(refMgr, attendee));
+		if (!race.getAttendees().isEmpty()) {
+			attendees = new ArrayList<ScoresXMLRaceAttendee>(race.getAttendees().size());
+			for (RaceAttendee attendee : race.getAttendees().values()) {
+				if (pilots.contains(attendee.getPilot())) {
+					attendees.add(new ScoresXMLRaceAttendee(refMgr, attendee));
+				}
 			}
 		}
 		Collections.sort(attendees);
@@ -75,7 +77,7 @@ public class ScoresXMLRace extends AbstractXMLEntity<Race> {
 		this.description = description;
 	}
 
-	@ElementList
+	@ElementList(required = false, inline = true)
 	private ArrayList<ScoresXMLRaceAttendee> attendees;
 
 	public ArrayList<ScoresXMLRaceAttendee> getAttendees() {
