@@ -5,31 +5,8 @@
 	<xsl:variable name="params" select="/r:cursus/r:param"/>
 	<xsl:variable name="classes" select="/r:cursus/r:class"/>
 
-	<xsl:template match="/r:cursus">
-		<xsl:apply-templates select="document(r:load/@href)/z:cursus" mode="page"/>
-	</xsl:template>
-
-	<xsl:template match="/z:cursus" mode="page">
-		<html>
-			<head>
-				<title>Scores for <xsl:value-of select="z:series/z:name"/></title>
-
-				<xsl:for-each select="$params[@name='stylesheet']">
-					<link rel="stylesheet" type="text/css">
-						<xsl:attribute name="href">
-							<xsl:value-of select="@href"/>
-						</xsl:attribute>
-					</link>
-				</xsl:for-each>
-			</head>
-			<body>
-				<xsl:apply-templates select="z:seriesResults|z:eventResults|z:raceResults" mode="body"/>
-			</body>
-		</html>
-	</xsl:template>
-
-	<xsl:template match="z:seriesResults" mode="body">
-		<xsl:apply-templates select="." mode="common">
+	<xsl:template match="z:seriesResults" mode="r:body">
+		<xsl:apply-templates select="." mode="r:internal">
 			<xsl:with-param name="name" select="/z:cursus/z:series[@xml:id=current()/z:series/@ref]/z:name"/>
 			<xsl:with-param name="class">series</xsl:with-param>
 			<xsl:with-param name="type">Overall</xsl:with-param>
@@ -38,8 +15,8 @@
 		</xsl:apply-templates>
 	</xsl:template>
 
-	<xsl:template match="z:eventResults" mode="body">
-		<xsl:apply-templates select="." mode="common">
+	<xsl:template match="z:eventResults" mode="r:body">
+		<xsl:apply-templates select="." mode="r:internal">
 			<xsl:with-param name="name" select="/z:cursus/z:series/z:events/z:event[@xml:id=current()/z:event/@ref]/z:name"/>
 			<xsl:with-param name="class">event</xsl:with-param>
 			<xsl:with-param name="type">Event</xsl:with-param>
@@ -48,8 +25,8 @@
 		</xsl:apply-templates>
 	</xsl:template>
 
-	<xsl:template match="z:raceResults" mode="body">
-		<xsl:apply-templates select="." mode="common">
+	<xsl:template match="z:raceResults" mode="r:body">
+		<xsl:apply-templates select="." mode="r:internal">
 			<xsl:with-param name="name" select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=current()/z:race/@ref]/z:name"/>
 			<xsl:with-param name="class">race</xsl:with-param>
 			<xsl:with-param name="type">Race</xsl:with-param>
@@ -58,7 +35,7 @@
 		</xsl:apply-templates>
 	</xsl:template>
 
-	<xsl:template match="z:seriesResults|z:eventResults|z:raceResults" mode="common">
+	<xsl:template match="z:seriesResults|z:eventResults|z:raceResults" mode="r:internal">
 		<!-- Name of results -->
 		<xsl:param name="name"/>
 		<!-- Class of results -->
@@ -212,7 +189,7 @@
 											<xsl:if test="$simuPenalties">
 												<ul class="pen">
 													<xsl:for-each select="$simuPenalties">
-														<xsl:apply-templates select=".">
+														<xsl:apply-templates select="." mode="r:internal">
 															<xsl:with-param name="name"/>
 														</xsl:apply-templates>
 													</xsl:for-each>
@@ -226,13 +203,13 @@
 												<ul class="pen">
 													<xsl:if test="$class != 'series'">
 														<xsl:for-each select="$realPenalties">
-															<xsl:apply-templates select=".">
+															<xsl:apply-templates select="." mode="r:internal">
 																<xsl:with-param name="name" select="current()/../../z:name"/>
 															</xsl:apply-templates>
 														</xsl:for-each>
 													</xsl:if>
 													<xsl:for-each select="$simuPenalties">
-														<xsl:apply-templates select=".">
+														<xsl:apply-templates select="." mode="r:internal">
 															<xsl:with-param name="name"/>
 														</xsl:apply-templates>
 													</xsl:for-each>
@@ -248,7 +225,7 @@
 		</table>
 	</xsl:template>
 
-	<xsl:template match="z:penalty">
+	<xsl:template match="z:penalty" mode="r:internal">
 		<xsl:param name="name"/>
 		<xsl:variable name="absvalue" select="@value * (@value >= 0) - @value * (@value &lt; 0)"/>
 
