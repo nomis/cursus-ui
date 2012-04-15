@@ -17,7 +17,7 @@
 				<xsl:for-each select="$params[@name='stylesheet']">
 					<link rel="stylesheet" type="text/css">
 						<xsl:attribute name="href">
-							<xsl:value-of select="@value"/>
+							<xsl:value-of select="@href"/>
 						</xsl:attribute>
 					</link>
 				</xsl:for-each>
@@ -72,8 +72,10 @@
 		<xsl:variable name="laps" select="count($events) = 0"/>
 		<!-- Determine if there are any penalties -->
 		<xsl:variable name="penalties" select="sum(z:overallOrder/z:overallScore/@penalties) > 0"/>
+		<!-- Show did not participate column -->
+		<xsl:variable name="dnp" select="$penalties and $params[@name='show-dnp'] and $class = 'series'"/>
 		<!-- Determine if there are any penalties -->
-		<xsl:variable name="notes" select="($penalties and $class != 'series') or z:overallOrder/z:overallScore/z:penalty"/>
+		<xsl:variable name="notes" select="($penalties and $class != 'series') or (not($dnp) and z:overallOrder/z:overallScore/z:penalty) or ($dnp and z:overallOrder/z:overallScore/z:penalty[@type != 'EVENT_NON_ATTENDANCE'])"/>
 
 		<h1><xsl:value-of select="$name"/></h1>
 		<table border="1">
@@ -81,7 +83,7 @@
 			<thead>
 				<tr>
 					<th class="type" colspan="2"><xsl:value-of select="$type"/></th>
-					<xsl:if test="count($classes) > 0">
+					<xsl:if test="$classes">
 						<th class="classes"><xsl:attribute name="colspan"><xsl:value-of select="count($classes)"/></xsl:attribute>Classes</th>
 					</xsl:if>
 					<td></td>
@@ -101,8 +103,8 @@
 						<xsl:attribute name="colspan">
 							<xsl:choose>
 								<!-- If these are not race results, extra padding is required for the race/laps columns -->
-								<xsl:when test="$laps"><xsl:value-of select="count($races) * 2 + number($penalties) + number($notes) + 2"/></xsl:when>
-								<xsl:otherwise><xsl:value-of select="@discards + number($penalties) + number($notes) + 2"/></xsl:otherwise>
+								<xsl:when test="$laps"><xsl:value-of select="count($races) * 2 + number($penalties) + number($dnp) + number($notes) + 2"/></xsl:when>
+								<xsl:otherwise><xsl:value-of select="@discards + number($penalties) + number($dnp) + number($notes) + 2"/></xsl:otherwise>
 							</xsl:choose>
 						</xsl:attribute>
 					</td>
@@ -113,7 +115,7 @@
 					<xsl:for-each select="$classes">
 						<th class="class"><xsl:value-of select="r:output"/></th>
 					</xsl:for-each>
-					<th class="pilot num">Race <abbr name="Number">No.</abbr></th>
+					<th class="pilot num">Race <abbr title="Number">No.</abbr></th>
 
 					<!-- Output all the races -->
 					<xsl:for-each select="$races">
@@ -130,7 +132,10 @@
 
 					<!-- Output penalties column if there are any penalties -->
 					<xsl:if test="$penalties">
-						<th class="pen"><abbr name="Penalties">Pen</abbr></th>
+						<th class="pen"><abbr title="Penalties">Pen</abbr></th>
+						<xsl:if test="$dnp">
+							<th class="dnp"><abbr title="Did not participate">DNP</abbr></th>
+						</xsl:if>
 					</xsl:if>
 
 					<th class="pts">Points</th>
@@ -180,7 +185,16 @@
 
 							<!-- Output penalties column if there are any penalties -->
 							<xsl:if test="$penalties">
-								<td class="over pen"><xsl:value-of select="@penalties"/></td>
+								<xsl:choose>
+									<xsl:when test="$dnp">
+										<!-- Count of DNP penalties -->
+										<xsl:variable name="dnpCount" select="sum(z:penalty[@type = 'EVENT_NON_ATTENDANCE']/@value)"/>
+
+										<td class="over pen"><xsl:value-of select="@penalties - $dnpCount"/></td>
+										<td class="over dnp"><xsl:value-of select="$dnpCount"/></td>
+									</xsl:when>
+									<xsl:otherwise><td class="over pen"><xsl:value-of select="@penalties"/></td></xsl:otherwise>
+								</xsl:choose>
 							</xsl:if>
 
 							<td class="over pts"><xsl:value-of select="@points"/></td>
@@ -189,24 +203,41 @@
 
 							<xsl:if test="$notes">
 								<td class="notes">
-									<xsl:variable name="realPenalties" select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=$races/z:race/@ref]/z:attendee/z:pilot[@ref=current()/z:pilot/@ref]/../z:penalty"/>
-									<xsl:variable name="simuPenalties" select="z:penalty"/>
-									<xsl:if test="($realPenalties and $class != 'series') or $simuPenalties">
-										<ul class="pen">
-											<xsl:if test="$class != 'series'">
-												<xsl:for-each select="$realPenalties">
-													<xsl:apply-templates select=".">
-														<xsl:with-param name="name" select="current()/../../z:name"/>
-													</xsl:apply-templates>
-												</xsl:for-each>
+									<xsl:choose>
+										<xsl:when test="$dnp">
+											<xsl:variable name="simuPenalties" select="z:penalty[@type != 'EVENT_NON_ATTENDANCE']"/>
+											<!-- If DNP then this is a series, so we don't show real penalties -->
+											<xsl:if test="$simuPenalties">
+												<ul class="pen">
+													<xsl:for-each select="$simuPenalties">
+														<xsl:apply-templates select=".">
+															<xsl:with-param name="name"/>
+														</xsl:apply-templates>
+													</xsl:for-each>
+												</ul>
 											</xsl:if>
-											<xsl:for-each select="$simuPenalties">
-												<xsl:apply-templates select=".">
-													<xsl:with-param name="name"/>
-												</xsl:apply-templates>
-											</xsl:for-each>
-										</ul>
-									</xsl:if>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:variable name="realPenalties" select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=$races/z:race/@ref]/z:attendee/z:pilot[@ref=current()/z:pilot/@ref]/../z:penalty"/>
+											<xsl:variable name="simuPenalties" select="z:penalty"/>
+											<xsl:if test="($realPenalties and $class != 'series') or $simuPenalties">
+												<ul class="pen">
+													<xsl:if test="$class != 'series'">
+														<xsl:for-each select="$realPenalties">
+															<xsl:apply-templates select=".">
+																<xsl:with-param name="name" select="current()/../../z:name"/>
+															</xsl:apply-templates>
+														</xsl:for-each>
+													</xsl:if>
+													<xsl:for-each select="$simuPenalties">
+														<xsl:apply-templates select=".">
+															<xsl:with-param name="name"/>
+														</xsl:apply-templates>
+													</xsl:for-each>
+												</ul>
+											</xsl:if>
+										</xsl:otherwise>
+									</xsl:choose>
 								</td>
 							</xsl:if>
 						</tr>
@@ -231,13 +262,13 @@
 					<xsl:value-of select="@value"/> penalt<xsl:choose><xsl:when test="$absvalue = 1">y</xsl:when><xsl:otherwise>s</xsl:otherwise></xsl:choose>
 				</xsl:when>
 				<xsl:when test="@type = 'FIXED'">
-					<xsl:value-of select="@value"/> penalty point<xsl:if test="$absvalue != 1">s</xsl:if>
+					<xsl:value-of select="@value"/> point<xsl:if test="$absvalue != 1">s</xsl:if>
 				</xsl:when>
 				<xsl:when test="@type = 'LAPS'">
 					<xsl:value-of select="$absvalue"/> lap<xsl:if test="$absvalue != 1">s</xsl:if><xsl:choose><xsl:when test="@value > 0"> added</xsl:when><xsl:otherwise> removed</xsl:otherwise></xsl:choose>
 				</xsl:when>
 				<xsl:when test="@type = 'EVENT_NON_ATTENDANCE'">
-					<xsl:value-of select="@value"/> penalty point<xsl:if test="$absvalue != 1">s</xsl:if>
+					<xsl:value-of select="@value"/> point<xsl:if test="$absvalue != 1">s</xsl:if>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="@value"/> <xsl:value-of select="@type"/>
