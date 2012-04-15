@@ -39,24 +39,36 @@ public abstract class AbstractSeries2010 extends AbstractSeries {
 	protected final int SERIES_FLEET = 19;
 
 	protected final String EVENT1_NAME = "Race Event 1"; //$NON-NLS-1$
+	protected final String EVENT1_DESC = "Luce Bay (16/10/2010 and 17/10/2010)"; //$NON-NLS-1$
 	protected final int EVENT1_FLEET = 17;
 	protected final String RACE1_NAME = "Race 1"; //$NON-NLS-1$
+	protected final String RACE1_DESC = "Luce Bay (17/10/2010)"; //$NON-NLS-1$
 	protected final String RACE2_NAME = "Race 2"; //$NON-NLS-1$
+	protected final String RACE2_DESC = "Luce Bay (17/10/2010)"; //$NON-NLS-1$
 	protected final String RACE3_NAME = "Race 3"; //$NON-NLS-1$
+	protected final String RACE3_DESC = "Luce Bay (17/10/2010)"; //$NON-NLS-1$
 
 	protected final String EVENT2_NAME = "Race Event 2"; //$NON-NLS-1$
+	protected final String EVENT2_DESC = "West Sands (27/11/2010)"; //$NON-NLS-1$
 	protected final int EVENT2_FLEET = 13;
 	protected final String RACE4_NAME = "Race 4"; //$NON-NLS-1$
+	protected final String RACE4_DESC = "West Sands (27/11/2010)"; //$NON-NLS-1$
 
 	protected final String EVENT3_NAME = "Race Event 3"; //$NON-NLS-1$
+	protected final String EVENT3_DESC = "Luce Bay (12/02/2011 and 13/02/2011)"; //$NON-NLS-1$
 	protected final int EVENT3_FLEET = 15;
 	protected final String RACE5_NAME = "Race 5"; //$NON-NLS-1$
+	protected final String RACE5_DESC = "Luce Bay (12/02/2011)"; //$NON-NLS-1$
 
 	protected final String EVENT4_NAME = "Race Event 4"; //$NON-NLS-1$
+	protected final String EVENT4_DESC = "West Sands (18/06/2011 and 19/06/2011)"; //$NON-NLS-1$
 	protected final int EVENT4_FLEET = 15;
 	protected final String RACE6_NAME = "Race 6"; //$NON-NLS-1$
+	protected final String RACE6_DESC = "West Sands (18/06/2011)"; //$NON-NLS-1$
 	protected final String RACE7_NAME = "Race 7"; //$NON-NLS-1$
+	protected final String RACE7_DESC = "West Sands (18/06/2011)"; //$NON-NLS-1$
 	protected final String RACE8_NAME = "Race 8"; //$NON-NLS-1$
+	protected final String RACE8_DESC = "West Sands (19/06/2011)"; //$NON-NLS-1$
 
 	protected Scorer scorer = ScorerFactory.newScorer(SPKAConstants.UUID_2010);
 
@@ -217,7 +229,7 @@ public abstract class AbstractSeries2010 extends AbstractSeries {
 
 			Series series = seriesDAO.find(SERIES_NAME);
 
-			Event event1 = new Event(series, EVENT1_NAME);
+			Event event1 = new Event(series, EVENT1_NAME, EVENT1_DESC);
 			series.getEvents().add(event1);
 			eventDAO.persist(event1);
 
@@ -249,7 +261,7 @@ public abstract class AbstractSeries2010 extends AbstractSeries {
 			Series series = seriesDAO.find(SERIES_NAME);
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 
-			Race race1 = new Race(event1, RACE1_NAME);
+			Race race1 = new Race(event1, RACE1_NAME, RACE1_DESC);
 			event1.getRaces().add(race1);
 			race1.getAttendees().put(sco018, new RaceAttendee(race1, sco018, RaceAttendee.Type.PILOT));
 			race1.getAttendees().put(sco019, new RaceAttendee(race1, sco019, RaceAttendee.Type.PILOT));
@@ -335,7 +347,7 @@ public abstract class AbstractSeries2010 extends AbstractSeries {
 			Series series = seriesDAO.find(SERIES_NAME);
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 
-			Race race2 = new Race(event1, RACE2_NAME);
+			Race race2 = new Race(event1, RACE2_NAME, RACE2_DESC);
 			event1.getRaces().add(race2);
 			race2.getAttendees().put(sco018, new RaceAttendee(race2, sco018, RaceAttendee.Type.PILOT));
 			race2.getAttendees().put(sco019, new RaceAttendee(race2, sco019, RaceAttendee.Type.PILOT));
@@ -426,7 +438,7 @@ public abstract class AbstractSeries2010 extends AbstractSeries {
 			Series series = seriesDAO.find(SERIES_NAME);
 			Event event1 = eventDAO.find(series, EVENT1_NAME);
 
-			Race race3 = new Race(event1, RACE3_NAME);
+			Race race3 = new Race(event1, RACE3_NAME, RACE3_DESC);
 			event1.getRaces().add(race3);
 			race3.getAttendees().put(sco018, new RaceAttendee(race3, sco018, RaceAttendee.Type.PILOT));
 			race3.getAttendees().put(sco019, new RaceAttendee(race3, sco019, RaceAttendee.Type.PILOT));
@@ -531,7 +543,7 @@ public abstract class AbstractSeries2010 extends AbstractSeries {
 
 			Series series = seriesDAO.find(SERIES_NAME);
 
-			Event event2 = new Event(series, EVENT2_NAME);
+			Event event2 = new Event(series, EVENT2_NAME, EVENT2_DESC);
 			series.getEvents().add(event2);
 			eventDAO.persist(event2);
 
@@ -561,7 +573,7 @@ public abstract class AbstractSeries2010 extends AbstractSeries {
 			Series series = seriesDAO.find(SERIES_NAME);
 			Event event2 = eventDAO.find(series, EVENT2_NAME);
 
-			Race race4 = new Race(event2, RACE4_NAME);
+			Race race4 = new Race(event2, RACE4_NAME, RACE4_DESC);
 			event2.getRaces().add(race4);
 			race4.getAttendees().put(sco019, new RaceAttendee(race4, sco019, RaceAttendee.Type.M_RACE_MASTER));
 			race4.getAttendees().put(sco060, new RaceAttendee(race4, sco060, RaceAttendee.Type.M_SCORER));
@@ -644,7 +656,7 @@ public abstract class AbstractSeries2010 extends AbstractSeries {
 
 			Series series = seriesDAO.find(SERIES_NAME);
 
-			Event event3 = new Event(series, EVENT3_NAME);
+			Event event3 = new Event(series, EVENT3_NAME, EVENT3_DESC);
 			series.getEvents().add(event3);
 			eventDAO.persist(event3);
 
@@ -674,7 +686,7 @@ public abstract class AbstractSeries2010 extends AbstractSeries {
 			Series series = seriesDAO.find(SERIES_NAME);
 			Event event3 = eventDAO.find(series, EVENT3_NAME);
 
-			Race race5 = new Race(event3, RACE5_NAME);
+			Race race5 = new Race(event3, RACE5_NAME, RACE5_DESC);
 			event3.getRaces().add(race5);
 			race5.getAttendees().put(sco018, new RaceAttendee(race5, sco018, RaceAttendee.Type.PILOT));
 			race5.getAttendees().put(sco019, new RaceAttendee(race5, sco019, RaceAttendee.Type.PILOT));
@@ -767,7 +779,7 @@ public abstract class AbstractSeries2010 extends AbstractSeries {
 
 			Series series = seriesDAO.find(SERIES_NAME);
 
-			Event event4 = new Event(series, EVENT4_NAME);
+			Event event4 = new Event(series, EVENT4_NAME, EVENT4_DESC);
 			series.getEvents().add(event4);
 			eventDAO.persist(event4);
 
@@ -799,7 +811,7 @@ public abstract class AbstractSeries2010 extends AbstractSeries {
 			Series series = seriesDAO.find(SERIES_NAME);
 			Event event4 = eventDAO.find(series, EVENT4_NAME);
 
-			Race race6 = new Race(event4, RACE6_NAME);
+			Race race6 = new Race(event4, RACE6_NAME, RACE6_DESC);
 			event4.getRaces().add(race6);
 			race6.getAttendees().put(sco018, new RaceAttendee(race6, sco018, RaceAttendee.Type.PILOT));
 			race6.getAttendees().put(sco019, new RaceAttendee(race6, sco019, RaceAttendee.Type.PILOT));
@@ -918,7 +930,7 @@ public abstract class AbstractSeries2010 extends AbstractSeries {
 			Series series = seriesDAO.find(SERIES_NAME);
 			Event event4 = eventDAO.find(series, EVENT4_NAME);
 
-			Race race7 = new Race(event4, RACE7_NAME);
+			Race race7 = new Race(event4, RACE7_NAME, RACE7_DESC);
 			event4.getRaces().add(race7);
 			race7.getAttendees().put(sco018, new RaceAttendee(race7, sco018, RaceAttendee.Type.PILOT));
 			race7.getAttendees().put(sco019, new RaceAttendee(race7, sco019, RaceAttendee.Type.PILOT));
@@ -1017,7 +1029,7 @@ public abstract class AbstractSeries2010 extends AbstractSeries {
 			Series series = seriesDAO.find(SERIES_NAME);
 			Event event4 = eventDAO.find(series, EVENT4_NAME);
 
-			Race race8 = new Race(event4, RACE8_NAME);
+			Race race8 = new Race(event4, RACE8_NAME, RACE8_DESC);
 			event4.getRaces().add(race8);
 			race8.getAttendees().put(sco018, new RaceAttendee(race8, sco018, RaceAttendee.Type.PILOT));
 			race8.getAttendees().put(sco019, new RaceAttendee(race8, sco019, RaceAttendee.Type.PILOT));
