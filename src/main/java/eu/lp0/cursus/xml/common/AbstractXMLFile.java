@@ -30,14 +30,15 @@ import org.simpleframework.xml.stream.Format;
 
 import com.google.common.base.Throwables;
 
-import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.xml.ExportException;
 import eu.lp0.cursus.xml.ImportException;
 
 public abstract class AbstractXMLFile<T> {
+	public static final String XML_PROLOGUE = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"; //$NON-NLS-1$
+
 	private static Registry registry = new Registry();
 	private static RegistryStrategy strategy = new RegistryStrategy(registry);
-	private static Format format = new Format(1, Constants.XML_PROLOGUE);
+	private static Format format = new Format(1, XML_PROLOGUE);
 
 	static {
 		try {

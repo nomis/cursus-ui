@@ -45,9 +45,11 @@ import eu.lp0.cursus.xml.scores.results.ScoresXMLEventResults;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLRaceResults;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLSeriesResults;
 
-@Namespace(reference = Constants.SCORES_XMLNS)
+@Namespace(reference = ScoresXML.SCORES_XMLNS)
 @Root(name = "cursus")
 public class ScoresXML extends AbstractXMLRoot {
+	public static final String SCORES_XMLNS = CURSUS_XMLNS + ".1"; //$NON-NLS-1$
+
 	public ScoresXML() {
 	}
 

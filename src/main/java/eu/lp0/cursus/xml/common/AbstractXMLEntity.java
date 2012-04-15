@@ -24,11 +24,10 @@ import org.simpleframework.xml.NamespaceList;
 import com.google.common.collect.ComparisonChain;
 
 import eu.lp0.cursus.db.data.AbstractEntity;
-import eu.lp0.cursus.util.Constants;
 
 // Workaround for Simple bug to stop it outputting the xmlns on the "id" attribute
 // (it will realise that the root has the "xml" namespace defined)
-@NamespaceList(@Namespace(prefix = "xml", reference = Constants.XML_XMLNS))
+@NamespaceList(@Namespace(prefix = "xml", reference = AbstractXMLRoot.XML_XMLNS))
 public abstract class AbstractXMLEntity<T extends AbstractEntity> implements Comparable<AbstractXMLEntity<T>> {
 	public AbstractXMLEntity() {
 	}
@@ -38,7 +37,7 @@ public abstract class AbstractXMLEntity<T extends AbstractEntity> implements Com
 	}
 
 	// Simple won't let me omit the reference value as it then outputs ""
-	@Namespace(prefix = "xml", reference = Constants.XML_XMLNS)
+	@Namespace(prefix = "xml", reference = AbstractXMLRoot.XML_XMLNS)
 	@Attribute(name = "id")
 	private String id;
 

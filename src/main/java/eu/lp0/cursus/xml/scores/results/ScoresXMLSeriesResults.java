@@ -96,6 +96,7 @@ public class ScoresXMLSeriesResults extends AbstractScoresXMLResults {
 	@ElementList
 	private ArrayList<ScoresXMLEventRef> events;
 
+	@Override
 	public ArrayList<ScoresXMLEventRef> getEvents() {
 		return events;
 	}
@@ -107,6 +108,7 @@ public class ScoresXMLSeriesResults extends AbstractScoresXMLResults {
 	@ElementList(name = "overallOrder")
 	private ArrayList<ScoresXMLOverallScore> overallPilots;
 
+	@Override
 	public ArrayList<ScoresXMLOverallScore> getOverallPilots() {
 		return overallPilots;
 	}
@@ -115,7 +117,7 @@ public class ScoresXMLSeriesResults extends AbstractScoresXMLResults {
 		this.overallPilots = overallPilots;
 	}
 
-	@ElementList
+	@ElementList(inline = true)
 	private ArrayList<ScoresXMLSeriesEventResults> eventResults;
 
 	public ArrayList<ScoresXMLSeriesEventResults> getEventResults() {

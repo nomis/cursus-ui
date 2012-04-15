@@ -55,7 +55,7 @@ public class ScoresXMLSeriesEventResults {
 		this.event = event;
 	}
 
-	@ElementList
+	@ElementList(inline = true)
 	private ArrayList<ScoresXMLEventRaceResults> raceResults;
 
 	public ArrayList<ScoresXMLEventRaceResults> getRaceResults() {

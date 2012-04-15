@@ -20,8 +20,10 @@ package eu.lp0.cursus.xml.common;
 import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.NamespaceList;
 
-import eu.lp0.cursus.util.Constants;
-
-@NamespaceList(@Namespace(prefix = "xml", reference = Constants.XML_XMLNS))
+@NamespaceList(@Namespace(prefix = "xml", reference = AbstractXMLRoot.XML_XMLNS))
 public class AbstractXMLRoot {
+	public static final String XML_XMLNS = "http://www.w3.org/XML/1998/namespace"; //$NON-NLS-1$
+
+	// FIXME change when PEN request is approved
+	public static final String CURSUS_XMLNS = "urn:oid:1.3.6.1.3.63193331266300908.1.0.1"; //$NON-NLS-1$
 }
