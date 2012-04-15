@@ -3,7 +3,7 @@ th { padding: 0.1em 0.25em 0.1em 0.25em; }
 td { padding: 0.1em 0.2em 0.1em 0.2em; }
 td { text-align: center; }
 th.type, th.classes, th.event, th.race, td.pilot.name { text-align: left; }
-tr:hover { background: #ff8; }
+tbody tr:hover { background: #ff8; }
 .race.pts.dis { color: #0b0; }
 .race.pts.sim { color: #f00; }
 .over.pts { font-weight: bold; }
