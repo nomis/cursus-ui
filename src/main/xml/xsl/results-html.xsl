@@ -175,12 +175,9 @@
 
 							<!-- For each race score for this pilot -->
 							<xsl:for-each select="$races/z:raceOrder/z:raceScore/z:pilot[@ref=current()/z:pilot/@ref]/..">
-								<td class="race pts">
-									<!-- Output the race points with emphasis if simulated -->
-									<xsl:choose>
-										<xsl:when test="@simulated = 'true'"><em><xsl:value-of select="@points"/></em></xsl:when>
-										<xsl:otherwise><xsl:value-of select="@points"/></xsl:otherwise>
-									</xsl:choose>
+								<td>
+									<xsl:attribute name="class" xml:space="preserve">race pts <xsl:if test="@simulated = 'true'">sim</xsl:if> <xsl:if test="@discarded = 'true'">dis</xsl:if></xsl:attribute>
+									<xsl:value-of select="@points"/>
 								</td>
 								<xsl:if test="$laps">
 									<td class="race laps"><xsl:value-of select="@laps"/></td>

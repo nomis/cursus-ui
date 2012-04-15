@@ -4,7 +4,8 @@ td { padding: 0.1em 0.2em 0.1em 0.2em; }
 td { text-align: center; }
 th.type, th.classes, th.event, th.race, td.pilot.name { text-align: left; }
 tr:hover { background: #ff8; }
-.race.pts em { font-style: normal; color: #f00; }
+.race.pts.sim { color: #f00; }
+.race.pts.dis { color: #0b0; }
 .over.pts { font-weight: bold; }
 .notes ul.pen { padding: 0; }
 .notes ul.pen, .notes ul.pen li { display: inline; }
