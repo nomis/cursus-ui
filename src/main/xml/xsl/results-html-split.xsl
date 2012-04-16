@@ -11,9 +11,22 @@
 	</xsl:template>
 
 	<xsl:template match="/z:cursus" mode="r:page">
+		<xsl:for-each select="z:seriesResults|z:eventResults|z:raceResults">
+			<xsl:variable name="index"><xsl:apply-templates select="." mode="r:index"/></xsl:variable>
+			<xsl:if test="$index = $params['split']/@this">
+				<xsl:apply-templates select="/z:cursus" mode="r:split">
+					<xsl:with-param name="results" select="."/>
+				</xsl:apply-templates>
+			</xsl:if>
+		</xsl:for-each>
+	</xsl:template>
+
+	<xsl:template match="/z:cursus" mode="r:split">
+		<xsl:param name="results"/>
+
 		<html>
 			<head>
-				<title>Results for <xsl:value-of select="z:series/z:name"/></title>
+				<title>Results for <xsl:value-of select="z:series/z:name"/> – <xsl:apply-templates select="$results" mode="r:name"/></title>
 
 				<xsl:for-each select="$params[@name='stylesheet']">
 					<link rel="stylesheet" type="text/css">
@@ -22,13 +35,6 @@
 						</xsl:attribute>
 					</link>
 				</xsl:for-each>
-				<style type="text/css">
-					<!-- Turn the sections on and off based on the current target -->
-					<xsl:for-each select="z:seriesResults|z:eventResults|z:raceResults">
-						#<xsl:apply-templates select="." mode="r:index"/>:not(:target) { display: none; }
-						#<xsl:apply-templates select="." mode="r:index"/>:target { display: block; }
-					</xsl:for-each>
-				</style>
 			</head>
 			<body>
 				<!-- Menu for series/event/race results -->
@@ -36,29 +42,28 @@
 					<xsl:for-each select="z:seriesResults|z:eventResults|z:raceResults">
 						<xsl:variable name="index"><xsl:apply-templates select="." mode="r:index"/></xsl:variable>
 						<li>
-							<xsl:attribute name="class"><xsl:value-of select="$index"/></xsl:attribute>
+							<xsl:attribute name="class"><xsl:value-of select="$index"/><xsl:text> </xsl:text><xsl:if test="$index = $params['split']/@this">current</xsl:if></xsl:attribute>
 							<xsl:text> </xsl:text>
-							<a>
-								<xsl:variable name="desc"><xsl:apply-templates select="." mode="r:desc"/></xsl:variable>
-								<xsl:attribute name="href">#<xsl:value-of select="$index"/></xsl:attribute>
-								<xsl:if test="$desc != ''">
-									<xsl:attribute name="title">
-										<xsl:value-of select="$desc"/>
-									</xsl:attribute>
-								</xsl:if>
-								<xsl:apply-templates select="." mode="r:name"/>
-							</a>
+							<xsl:choose>
+								<xsl:when test="$index = $params['split']/@this"><xsl:apply-templates select="." mode="r:name"/></xsl:when>
+								<xsl:otherwise>
+									<a>
+										<xsl:variable name="desc"><xsl:apply-templates select="." mode="r:desc"/></xsl:variable>
+										<xsl:attribute name="href"><xsl:value-of select="$params['split']/@prefix"/><xsl:value-of select="$index"/><xsl:value-of select="$params['split']/@suffix"/></xsl:attribute>
+										<xsl:if test="$desc != ''">
+											<xsl:attribute name="title">
+												<xsl:value-of select="$desc"/>
+											</xsl:attribute>
+										</xsl:if>
+										<xsl:apply-templates select="." mode="r:name"/>
+									</a>
+								</xsl:otherwise>
+							</xsl:choose>
 							<xsl:text> </xsl:text>
 						</li>
 					</xsl:for-each>
 				</ul>
-				<!-- Tables for series/event/race results -->
-				<xsl:for-each select="z:seriesResults|z:eventResults|z:raceResults">
-					<div>
-						<xsl:attribute name="id"><xsl:apply-templates select="." mode="r:index"/></xsl:attribute>
-						<xsl:apply-templates select="." mode="r:body"/>
-					</div>
-				</xsl:for-each>
+				<xsl:apply-templates select="$results" mode="r:body"/>
 			</body>
 		</html>
 	</xsl:template>
@@ -77,10 +82,11 @@
 
 	<xsl:template match="z:event|z:race" mode="th">
 		<xsl:param name="results"/>
+		<xsl:variable name="index"><xsl:apply-templates select="$results" mode="r:index"/></xsl:variable>
 		<xsl:choose>
-			<xsl:when test="$results">
+			<xsl:when test="$results and $index != $params['split']/@this">
 				<a>
-					<xsl:attribute name="href">#<xsl:apply-templates select="$results" mode="r:index"/></xsl:attribute>
+					<xsl:attribute name="href"><xsl:value-of select="$params['split']/@prefix"/><xsl:apply-templates select="$results" mode="r:index"/><xsl:value-of select="$params['split']/@suffix"/></xsl:attribute>
 					<xsl:if test="z:description != ''">
 						<xsl:attribute name="title">
 							<xsl:value-of select="z:description"/>

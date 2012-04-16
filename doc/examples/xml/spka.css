@@ -10,7 +10,7 @@ tbody tr:first-child th, tbody tr:first-child td { border-top: 1px solid #888; }
 thead tr:last-child th, thead tr:last-child td { border-bottom: 1px solid #888; }
 
 td { text-align: center; }
-th.type, th.classes, th.event, th.race, td.pilot.name { text-align: left; }
+th.type, th.classes, th.event, th.race, th.parent, td.pilot.name { text-align: left; }
 tbody tr:hover { background: #ff8; }
 
 .race.pts.dis { color: #0a0; }

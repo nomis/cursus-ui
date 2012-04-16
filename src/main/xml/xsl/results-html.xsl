@@ -55,6 +55,7 @@
 			<xsl:with-param name="type"><xsl:apply-templates select="." mode="r:type"/></xsl:with-param>
 			<xsl:with-param name="events" select="z:seriesEventResults"/>
 			<xsl:with-param name="races" select="z:seriesEventResults/z:eventRaceResults"/>
+			<xsl:with-param name="parent"/>
 		</xsl:apply-templates>
 	</xsl:template>
 
@@ -66,10 +67,12 @@
 			<xsl:with-param name="type"><xsl:apply-templates select="." mode="r:type"/></xsl:with-param>
 			<xsl:with-param name="events" select="."/>
 			<xsl:with-param name="races" select="z:eventRaceResults"/>
+			<xsl:with-param name="parent"/>
 		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="z:raceResults" mode="r:body">
+		<xsl:variable name="parent" select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=current()/z:race/@ref]/../.."/>
 		<xsl:apply-templates select="." mode="r:internal">
 			<xsl:with-param name="name"><xsl:apply-templates select="." mode="r:name"/></xsl:with-param>
 			<xsl:with-param name="desc"><xsl:apply-templates select="." mode="r:desc"/></xsl:with-param>
@@ -77,6 +80,7 @@
 			<xsl:with-param name="type"><xsl:apply-templates select="." mode="r:type"/></xsl:with-param>
 			<xsl:with-param name="events" select="/.."/>
 			<xsl:with-param name="races" select="."/>
+			<xsl:with-param name="parent" select="$parent"/>
 		</xsl:apply-templates>
 	</xsl:template>
 
@@ -93,6 +97,8 @@
 		<xsl:param name="events"/>
 		<!-- Set of event/race results -->
 		<xsl:param name="races"/>
+		<!-- Parent of these results -->
+		<xsl:param name="parent"/>
 
 		<!-- Output laps if these are race results -->
 		<xsl:variable name="laps" select="count($events) = 0"/>
@@ -125,7 +131,13 @@
 					</xsl:for-each>
 
 					<!-- Padding on top row -->
-					<td class="pad">
+					<th>
+						<xsl:attribute name="class">
+							<xsl:choose>
+								<xsl:when test="$parent">parent</xsl:when>
+								<xsl:otherwise>pad</xsl:otherwise>
+							</xsl:choose>
+						</xsl:attribute>
 						<xsl:attribute name="colspan">
 							<xsl:choose>
 								<!-- If these are not race results, extra padding is required for the race/laps columns -->
@@ -133,7 +145,10 @@
 								<xsl:otherwise><xsl:value-of select="@discards + number($penalties) + number($dnp) + number($notes) + 2"/></xsl:otherwise>
 							</xsl:choose>
 						</xsl:attribute>
-					</td>
+						<xsl:if test="$parent">
+							<xsl:apply-templates select="$parent" mode="r:th"/>
+						</xsl:if>
+					</th>
 				</tr>
 				<tr>
 					<th class="pos left">Position</th>
