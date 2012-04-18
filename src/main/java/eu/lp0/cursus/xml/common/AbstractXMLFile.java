@@ -34,7 +34,7 @@ import eu.lp0.cursus.xml.ExportException;
 import eu.lp0.cursus.xml.ImportException;
 
 public abstract class AbstractXMLFile<T> {
-	public static final String XML_PROLOGUE = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"; //$NON-NLS-1$
+	public static final String XML_PROLOGUE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"; //$NON-NLS-1$
 
 	private static Registry registry = new Registry();
 	private static RegistryStrategy strategy = new RegistryStrategy(registry);
