@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xml:lang="en" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:r="urn:oid:1.3.6.1.3.63193331266300908.1.0.1.2" xmlns:z="urn:oid:1.3.6.1.3.63193331266300908.1.0.1.1">
 	<xsl:output method="html" version="5.0" encoding="UTF-8" indent="yes"/>
 
-	<xsl:variable name="params" select="/r:cursus/r:param"/>
+	<xsl:variable name="flags" select="/r:cursus/r:flag"/>
 	<xsl:variable name="classes" select="/r:cursus/r:class"/>
 
 	<xsl:template match="z:seriesResults" mode="r:name"><xsl:value-of select="/z:cursus/z:series[@xml:id=current()/z:series/@ref]/z:name"/></xsl:template>
@@ -105,7 +105,7 @@
 		<!-- Determine if there are any penalties -->
 		<xsl:variable name="penalties" select="sum(z:overallOrder/z:overallScore/@penalties) > 0"/>
 		<!-- Show did not participate column -->
-		<xsl:variable name="dnp" select="$penalties and $params[@name='show-dnp'] and $class = 'series'"/>
+		<xsl:variable name="dnp" select="$penalties and $flags[@name='show-dnp'] and $class = 'series'"/>
 		<!-- Determine if there are any penalties -->
 		<xsl:variable name="notes" select="($penalties and $class != 'series') or (not($dnp) and z:overallOrder/z:overallScore/z:penalty) or ($dnp and z:overallOrder/z:overallScore/z:penalty[@type != 'EVENT_NON_ATTENDANCE'])"/>
 

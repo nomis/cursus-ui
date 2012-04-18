@@ -4,7 +4,9 @@
 
 	<xsl:output method="html" version="5.0" encoding="UTF-8" indent="yes"/>
 
-	<xsl:variable name="params" select="/r:cursus/r:param"/>
+	<xsl:variable name="stylesheet" select="/r:cursus/r:stylesheet"/>
+	<xsl:variable name="split" select="/r:cursus/r:split"/>
+	<xsl:variable name="this" select="concat($split/@type, $split/@index)"/>
 
 	<xsl:template match="/r:cursus">
 		<xsl:apply-templates select="document(r:load/@href)/z:cursus" mode="r:page"/>
@@ -13,7 +15,7 @@
 	<xsl:template match="/z:cursus" mode="r:page">
 		<xsl:for-each select="z:seriesResults|z:eventResults|z:raceResults">
 			<xsl:variable name="index"><xsl:apply-templates select="." mode="r:index"/></xsl:variable>
-			<xsl:if test="$index = $params['split']/@this">
+			<xsl:if test="$index = $this">
 				<xsl:apply-templates select="/z:cursus" mode="r:split">
 					<xsl:with-param name="results" select="."/>
 				</xsl:apply-templates>
@@ -28,7 +30,7 @@
 			<head>
 				<title>Results for <xsl:value-of select="z:series/z:name"/> – <xsl:apply-templates select="$results" mode="r:name"/></title>
 
-				<xsl:for-each select="$params[@name='stylesheet']">
+				<xsl:for-each select="$stylesheet">
 					<link rel="stylesheet" type="text/css">
 						<xsl:attribute name="href">
 							<xsl:value-of select="@href"/>
@@ -42,14 +44,14 @@
 					<xsl:for-each select="z:seriesResults|z:eventResults|z:raceResults">
 						<xsl:variable name="index"><xsl:apply-templates select="." mode="r:index"/></xsl:variable>
 						<li>
-							<xsl:attribute name="class"><xsl:value-of select="$index"/><xsl:text> </xsl:text><xsl:if test="$index = $params['split']/@this">current</xsl:if></xsl:attribute>
+							<xsl:attribute name="class"><xsl:value-of select="$index"/><xsl:text> </xsl:text><xsl:if test="$index = $this">current</xsl:if></xsl:attribute>
 							<xsl:text> </xsl:text>
 							<xsl:choose>
-								<xsl:when test="$index = $params['split']/@this"><xsl:apply-templates select="." mode="r:name"/></xsl:when>
+								<xsl:when test="$index = $this"><xsl:apply-templates select="." mode="r:name"/></xsl:when>
 								<xsl:otherwise>
 									<a>
 										<xsl:variable name="desc"><xsl:apply-templates select="." mode="r:desc"/></xsl:variable>
-										<xsl:attribute name="href"><xsl:value-of select="$params['split']/@prefix"/><xsl:value-of select="$index"/><xsl:value-of select="$params['split']/@suffix"/></xsl:attribute>
+										<xsl:attribute name="href"><xsl:value-of select="$split/@prefix"/><xsl:value-of select="$index"/><xsl:value-of select="$split/@suffix"/></xsl:attribute>
 										<xsl:if test="$desc != ''">
 											<xsl:attribute name="title">
 												<xsl:value-of select="$desc"/>
@@ -84,9 +86,9 @@
 		<xsl:param name="results"/>
 		<xsl:variable name="index"><xsl:apply-templates select="$results" mode="r:index"/></xsl:variable>
 		<xsl:choose>
-			<xsl:when test="$results and $index != $params['split']/@this">
+			<xsl:when test="$results and $index != $this">
 				<a>
-					<xsl:attribute name="href"><xsl:value-of select="$params['split']/@prefix"/><xsl:apply-templates select="$results" mode="r:index"/><xsl:value-of select="$params['split']/@suffix"/></xsl:attribute>
+					<xsl:attribute name="href"><xsl:value-of select="$split/@prefix"/><xsl:apply-templates select="$results" mode="r:index"/><xsl:value-of select="$split/@suffix"/></xsl:attribute>
 					<xsl:if test="z:description != ''">
 						<xsl:attribute name="title">
 							<xsl:value-of select="z:description"/>

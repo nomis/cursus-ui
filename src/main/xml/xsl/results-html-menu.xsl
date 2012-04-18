@@ -4,7 +4,7 @@
 
 	<xsl:output method="html" version="5.0" encoding="UTF-8" indent="yes"/>
 
-	<xsl:variable name="params" select="/r:cursus/r:param"/>
+	<xsl:variable name="stylesheet" select="/r:cursus/r:stylesheet"/>
 
 	<xsl:template match="/r:cursus">
 		<xsl:apply-templates select="document(r:load/@href)/z:cursus" mode="r:page"/>
@@ -15,7 +15,7 @@
 			<head>
 				<title>Results for <xsl:value-of select="z:series/z:name"/></title>
 
-				<xsl:for-each select="$params[@name='stylesheet']">
+				<xsl:for-each select="$stylesheet">
 					<link rel="stylesheet" type="text/css">
 						<xsl:attribute name="href">
 							<xsl:value-of select="@href"/>
