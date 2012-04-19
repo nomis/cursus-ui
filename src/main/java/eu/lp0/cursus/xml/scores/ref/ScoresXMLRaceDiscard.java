@@ -15,28 +15,31 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.common;
+package eu.lp0.cursus.xml.scores.ref;
 
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
 
-import eu.lp0.cursus.db.data.AbstractEntity;
+import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 
-public abstract class AbstractXMLRef<T extends AbstractEntity> {
-	public AbstractXMLRef() {
+@Root(name = "discard")
+public class ScoresXMLRaceDiscard implements ScoresXMLRaceRef {
+	public ScoresXMLRaceDiscard() {
 	}
 
-	public AbstractXMLRef(AbstractXMLEntity<T> entity) {
-		ref = entity.getId();
+	public ScoresXMLRaceDiscard(Race race_) {
+		race = AbstractXMLEntity.generateId(race_);
 	}
 
-	@Attribute
-	private String ref;
+	@Attribute(name = "race")
+	private String race;
 
-	public String getRef() {
-		return ref;
+	public String getRace() {
+		return race;
 	}
 
-	public void setRef(String ref) {
-		this.ref = ref;
+	public void setRace(String race) {
+		this.race = race;
 	}
 }

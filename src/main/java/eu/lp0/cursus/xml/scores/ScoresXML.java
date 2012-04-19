@@ -38,7 +38,6 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.util.Constants;
-import eu.lp0.cursus.xml.ExportReferenceManager;
 import eu.lp0.cursus.xml.common.AbstractXMLRoot;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLSeries;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLEventResults;
@@ -53,13 +52,14 @@ public class ScoresXML extends AbstractXMLRoot {
 	public ScoresXML() {
 	}
 
-	public ScoresXML(ExportReferenceManager refMgr, Scores seriesScores, List<Scores> eventScores, List<Scores> raceScores) {
+	public ScoresXML(Scores seriesScores, List<Scores> eventScores, List<Scores> raceScores) {
 		Set<Series> checkSeries = new HashSet<Series>();
 		SortedSet<Event> events = new TreeSet<Event>();
 		SortedSet<Race> races = new TreeSet<Race>();
 		Set<Pilot> pilots = new HashSet<Pilot>();
 
 		if (seriesScores != null) {
+			this.seriesResults = new ScoresXMLSeriesResults(seriesScores);
 			checkSeries.add(seriesScores.getSeries());
 			races.addAll(seriesScores.getRaces());
 			events.addAll(seriesScores.getEvents());
@@ -69,6 +69,7 @@ public class ScoresXML extends AbstractXMLRoot {
 		if (eventScores != null) {
 			this.eventResults = new ArrayList<ScoresXMLEventResults>(eventScores.size());
 			for (Scores scores : eventScores) {
+				this.eventResults.add(new ScoresXMLEventResults(scores));
 				checkSeries.add(scores.getSeries());
 				races.addAll(scores.getRaces());
 				events.addAll(scores.getEvents());
@@ -79,6 +80,7 @@ public class ScoresXML extends AbstractXMLRoot {
 		if (raceScores != null) {
 			this.raceResults = new ArrayList<ScoresXMLRaceResults>(raceScores.size());
 			for (Scores scores : raceScores) {
+				this.raceResults.add(new ScoresXMLRaceResults(scores));
 				checkSeries.add(scores.getSeries());
 				races.addAll(scores.getRaces());
 				events.addAll(scores.getEvents());
@@ -89,24 +91,7 @@ public class ScoresXML extends AbstractXMLRoot {
 		Preconditions.checkArgument(checkSeries.size() == 1, "Multiple series not allowed"); //$NON-NLS-1$
 
 		generator = Constants.APP_DESC;
-		series = new ScoresXMLSeries(refMgr, checkSeries.iterator().next(), events, races, pilots);
-		refMgr.put(series);
-
-		if (seriesScores != null) {
-			this.seriesResults = new ScoresXMLSeriesResults(refMgr, seriesScores);
-		}
-
-		if (eventScores != null) {
-			for (Scores scores : eventScores) {
-				this.eventResults.add(new ScoresXMLEventResults(refMgr, scores));
-			}
-		}
-
-		if (raceScores != null) {
-			for (Scores scores : raceScores) {
-				this.raceResults.add(new ScoresXMLRaceResults(refMgr, scores));
-			}
-		}
+		series = new ScoresXMLSeries(checkSeries.iterator().next(), events, races, pilots);
 	}
 
 	@Attribute

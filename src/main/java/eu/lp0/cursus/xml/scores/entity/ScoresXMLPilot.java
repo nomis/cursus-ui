@@ -26,18 +26,16 @@ import org.simpleframework.xml.Root;
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Pilot;
-import eu.lp0.cursus.xml.ExportReferenceManager;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceNumber;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLClassRef;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLPilotRef;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLClassMember;
 
 @Root(name = "pilot")
 public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {
 	public ScoresXMLPilot() {
 	}
 
-	public ScoresXMLPilot(ExportReferenceManager refMgr, Pilot pilot) {
+	public ScoresXMLPilot(Pilot pilot) {
 		super(pilot);
 
 		name = pilot.getName();
@@ -48,9 +46,9 @@ public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {
 		}
 
 		if (!pilot.getClasses().isEmpty()) {
-			classes = new ArrayList<ScoresXMLClassRef>(pilot.getClasses().size());
+			classes = new ArrayList<ScoresXMLClassMember>(pilot.getClasses().size());
 			for (Class class_ : pilot.getClasses()) {
-				classes.add((ScoresXMLClassRef)refMgr.get(class_));
+				classes.add(new ScoresXMLClassMember(class_));
 			}
 		}
 	}
@@ -100,18 +98,13 @@ public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {
 	}
 
 	@ElementList(required = false, inline = true)
-	private ArrayList<ScoresXMLClassRef> classes;
+	private ArrayList<ScoresXMLClassMember> classes;
 
-	public ArrayList<ScoresXMLClassRef> getClasses() {
+	public ArrayList<ScoresXMLClassMember> getClasses() {
 		return classes;
 	}
 
-	public void setClasses(ArrayList<ScoresXMLClassRef> classes) {
+	public void setClasses(ArrayList<ScoresXMLClassMember> classes) {
 		this.classes = classes;
-	}
-
-	@Override
-	public ScoresXMLPilotRef makeReference() {
-		return new ScoresXMLPilotRef(this);
 	}
 }

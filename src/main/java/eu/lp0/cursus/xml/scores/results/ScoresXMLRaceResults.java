@@ -20,7 +20,6 @@ package eu.lp0.cursus.xml.scores.results;
 import java.util.ArrayList;
 
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -30,51 +29,51 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLEventRef;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLRaceRef;
 
 @Root(name = "raceResults")
-public class ScoresXMLRaceResults extends AbstractScoresXMLResults {
+public class ScoresXMLRaceResults extends AbstractScoresXMLResults implements ScoresXMLRaceRef {
 	public ScoresXMLRaceResults() {
 	}
 
-	public ScoresXMLRaceResults(ExportReferenceManager refMgr, Scores scores) {
+	public ScoresXMLRaceResults(Scores scores) {
 		super(scores);
 
 		Preconditions.checkArgument(!scores.getRaces().isEmpty(), "No race"); //$NON-NLS-1$
 		Preconditions.checkArgument(scores.getRaces().size() == 1, "Multiple races not allowed"); //$NON-NLS-1$
 		Race race_ = scores.getRaces().iterator().next();
-		race = refMgr.get(race_);
+		race = AbstractXMLEntity.generateId(race_);
 
 		fleet = scores.getFleetSize(race_);
 
 		events = new ArrayList<ScoresXMLEventRef>(scores.getEvents().size());
 		for (Event event_ : scores.getEvents()) {
-			events.add((ScoresXMLEventRef)refMgr.get(event_));
+			events.add(new ScoresXMLEventRef(event_));
 		}
 
 		overallPilots = new ArrayList<ScoresXMLOverallScore>(scores.getOverallOrder().size());
 		for (Pilot pilot : scores.getOverallOrder()) {
-			overallPilots.add(new ScoresXMLOverallScore(refMgr, scores, pilot));
+			overallPilots.add(new ScoresXMLOverallScore(scores, pilot));
 		}
 
 		racePilots = new ArrayList<ScoresXMLRaceScore>(scores.getRaceOrder(race_).size());
 		for (Pilot pilot : scores.getRaceOrder(race_)) {
-			racePilots.add(new ScoresXMLRaceScore(refMgr, scores, race_, pilot));
+			racePilots.add(new ScoresXMLRaceScore(scores, race_, pilot));
 		}
 	}
 
-	@Element
-	private ScoresXMLRaceRef race;
+	@Attribute
+	private String race;
 
-	public ScoresXMLRaceRef getRace() {
+	public String getRace() {
 		return race;
 	}
 
-	public void setRace(ScoresXMLRaceRef race) {
+	public void setRace(String race) {
 		this.race = race;
 	}
 
@@ -89,9 +88,10 @@ public class ScoresXMLRaceResults extends AbstractScoresXMLResults {
 		this.fleet = fleet;
 	}
 
-	@ElementList
+	@ElementList(name = "eventRefs")
 	private ArrayList<ScoresXMLEventRef> events;
 
+	@Override
 	public ArrayList<ScoresXMLEventRef> getEvents() {
 		return events;
 	}
@@ -103,6 +103,7 @@ public class ScoresXMLRaceResults extends AbstractScoresXMLResults {
 	@ElementList(name = "overallOrder")
 	private ArrayList<ScoresXMLOverallScore> overallPilots;
 
+	@Override
 	public ArrayList<ScoresXMLOverallScore> getOverallPilots() {
 		return overallPilots;
 	}

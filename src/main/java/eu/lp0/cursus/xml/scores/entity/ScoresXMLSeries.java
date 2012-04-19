@@ -35,16 +35,14 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.xml.ExportReferenceManager;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLSeriesRef;
 
 @Root(name = "series")
 public class ScoresXMLSeries extends AbstractXMLEntity<Series> {
 	public ScoresXMLSeries() {
 	}
 
-	public ScoresXMLSeries(ExportReferenceManager refMgr, Series series, SortedSet<Event> events, SortedSet<Race> races, Set<Pilot> pilots) {
+	public ScoresXMLSeries(Series series, SortedSet<Event> events, SortedSet<Race> races, Set<Pilot> pilots) {
 		super(series);
 
 		name = series.getName();
@@ -57,19 +55,19 @@ public class ScoresXMLSeries extends AbstractXMLEntity<Series> {
 
 		classes = new ArrayList<ScoresXMLClass>(classes_.size());
 		for (Class class_ : classes_) {
-			classes.add(refMgr.put(new ScoresXMLClass(class_)));
+			classes.add(new ScoresXMLClass(class_));
 		}
 		Collections.sort(classes);
 
 		this.pilots = new ArrayList<ScoresXMLPilot>(pilots.size());
 		for (Pilot pilot : pilots) {
-			this.pilots.add(refMgr.put(new ScoresXMLPilot(refMgr, pilot)));
+			this.pilots.add(new ScoresXMLPilot(pilot));
 		}
 		Collections.sort(this.pilots);
 
 		this.events = new ArrayList<ScoresXMLEvent>(events.size());
 		for (Event event : events) {
-			this.events.add(refMgr.put(new ScoresXMLEvent(refMgr, event, Sets.intersection(new TreeSet<Race>(event.getRaces()), races), pilots)));
+			this.events.add(new ScoresXMLEvent(event, Sets.intersection(new TreeSet<Race>(event.getRaces()), races), pilots));
 		}
 	}
 
@@ -126,10 +124,5 @@ public class ScoresXMLSeries extends AbstractXMLEntity<Series> {
 
 	public void setEvents(ArrayList<ScoresXMLEvent> events) {
 		this.events = events;
-	}
-
-	@Override
-	public ScoresXMLSeriesRef makeReference() {
-		return new ScoresXMLSeriesRef(this);
 	}
 }

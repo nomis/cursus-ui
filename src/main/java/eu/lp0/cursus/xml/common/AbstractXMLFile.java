@@ -26,6 +26,7 @@ import java.io.Writer;
 import org.simpleframework.xml.convert.Registry;
 import org.simpleframework.xml.convert.RegistryStrategy;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.TreeStrategy;
 import org.simpleframework.xml.stream.Format;
 
 import com.google.common.base.Throwables;
@@ -37,7 +38,7 @@ public abstract class AbstractXMLFile<T> {
 	public static final String XML_PROLOGUE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"; //$NON-NLS-1$
 
 	private static Registry registry = new Registry();
-	private static RegistryStrategy strategy = new RegistryStrategy(registry);
+	private static RegistryStrategy strategy = new RegistryStrategy(registry, new TreeStrategy("__label__", "__length__")); //$NON-NLS-1$ //$NON-NLS-2$
 	private static Format format = new Format(1, XML_PROLOGUE);
 
 	static {

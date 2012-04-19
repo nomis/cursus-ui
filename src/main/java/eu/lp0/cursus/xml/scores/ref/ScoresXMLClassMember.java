@@ -15,45 +15,32 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores.entity;
+package eu.lp0.cursus.xml.scores.ref;
 
-import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 
-@Root(name = "class")
-public class ScoresXMLClass extends AbstractXMLEntity<Class> {
-	public ScoresXMLClass() {
+@Root(name = "member")
+public class ScoresXMLClassMember implements ScoresXMLClassRef {
+	public ScoresXMLClassMember() {
 	}
 
-	public ScoresXMLClass(Class class_) {
-		super(class_);
-
-		name = class_.getName();
-		description = class_.getDescription();
+	public ScoresXMLClassMember(Class class_) {
+		this.class_ = AbstractXMLEntity.generateId(class_);
 	}
 
-	@Element
-	private String name;
+	@Attribute(name = "class")
+	private String class_;
 
-	public String getName() {
-		return name;
+	@Override
+	public String getClass_() {
+		return class_;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Element
-	private String description;
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
+	public void setClass_(String class_) {
+		this.class_ = class_;
 	}
 }

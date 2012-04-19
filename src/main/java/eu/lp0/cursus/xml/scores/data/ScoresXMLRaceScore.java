@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -29,16 +28,16 @@ import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLPilotRef;
 
 @Root(name = "raceScore")
-public class ScoresXMLRaceScore {
+public class ScoresXMLRaceScore implements ScoresXMLPilotRef {
 	public ScoresXMLRaceScore() {
 	}
 
-	public ScoresXMLRaceScore(ExportReferenceManager refMgr, Scores scores, Race race_, Pilot pilot_) {
-		pilot = refMgr.get(pilot_);
+	public ScoresXMLRaceScore(Scores scores, Race race_, Pilot pilot_) {
+		pilot = AbstractXMLEntity.generateId(pilot_);
 
 		laps = scores.getLaps(pilot_, race_);
 		setSimulated(scores.hasSimulatedRacePoints(pilot_, race_));
@@ -57,14 +56,14 @@ public class ScoresXMLRaceScore {
 		}
 	}
 
-	@Element
-	private ScoresXMLPilotRef pilot;
+	@Attribute
+	private String pilot;
 
-	public ScoresXMLPilotRef getPilot() {
+	public String getPilot() {
 		return pilot;
 	}
 
-	public void setPilot(ScoresXMLPilotRef pilot) {
+	public void setPilot(String pilot) {
 		this.pilot = pilot;
 	}
 

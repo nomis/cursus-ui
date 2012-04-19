@@ -17,18 +17,29 @@
  */
 package eu.lp0.cursus.xml.scores.ref;
 
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Event;
-import eu.lp0.cursus.xml.common.AbstractXMLRef;
-import eu.lp0.cursus.xml.scores.entity.ScoresXMLEvent;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 
-@Root(name = "event")
-public class ScoresXMLEventRef extends AbstractXMLRef<Event> {
+@Root(name = "eventRef")
+public class ScoresXMLEventRef {
 	public ScoresXMLEventRef() {
 	}
 
-	public ScoresXMLEventRef(ScoresXMLEvent entity) {
-		super(entity);
+	public ScoresXMLEventRef(Event event) {
+		this.event = AbstractXMLEntity.generateId(event);
+	}
+
+	@Attribute
+	private String event;
+
+	public String getEvent() {
+		return event;
+	}
+
+	public void setEvent(String event) {
+		this.event = event;
 	}
 }

@@ -17,18 +17,6 @@
  */
 package eu.lp0.cursus.xml.scores.ref;
 
-import org.simpleframework.xml.Root;
-
-import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.xml.common.AbstractXMLRef;
-import eu.lp0.cursus.xml.scores.entity.ScoresXMLSeries;
-
-@Root(name = "series")
-public class ScoresXMLSeriesRef extends AbstractXMLRef<Series> {
-	public ScoresXMLSeriesRef() {
-	}
-
-	public ScoresXMLSeriesRef(ScoresXMLSeries entity) {
-		super(entity);
-	}
+public interface ScoresXMLSeriesRef {
+	public String getSeries();
 }

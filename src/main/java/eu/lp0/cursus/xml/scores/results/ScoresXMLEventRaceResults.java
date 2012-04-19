@@ -20,41 +20,40 @@ package eu.lp0.cursus.xml.scores.results;
 import java.util.ArrayList;
 
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLRaceRef;
 
 @Root(name = "eventRaceResults")
-public class ScoresXMLEventRaceResults {
+public class ScoresXMLEventRaceResults implements ScoresXMLRaceRef {
 	public ScoresXMLEventRaceResults() {
 	}
 
-	public ScoresXMLEventRaceResults(ExportReferenceManager refMgr, Scores scores, Race race) {
-		this.race = refMgr.get(race);
+	public ScoresXMLEventRaceResults(Scores scores, Race race) {
+		this.race = AbstractXMLEntity.generateId(race);
 
 		fleet = scores.getFleetSize(race);
 
 		racePilots = new ArrayList<ScoresXMLRaceScore>(scores.getRaceOrder(race).size());
 		for (Pilot pilot : scores.getRaceOrder(race)) {
-			racePilots.add(new ScoresXMLRaceScore(refMgr, scores, race, pilot));
+			racePilots.add(new ScoresXMLRaceScore(scores, race, pilot));
 		}
 	}
 
-	@Element
-	private ScoresXMLRaceRef race;
+	@Attribute
+	private String race;
 
-	public ScoresXMLRaceRef getRace() {
+	public String getRace() {
 		return race;
 	}
 
-	public void setRace(ScoresXMLRaceRef race) {
+	public void setRace(String race) {
 		this.race = race;
 	}
 

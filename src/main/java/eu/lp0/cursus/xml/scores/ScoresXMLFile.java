@@ -20,7 +20,6 @@ package eu.lp0.cursus.xml.scores;
 import java.util.List;
 
 import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.xml.ExportReferenceManager;
 import eu.lp0.cursus.xml.common.AbstractXMLFile;
 
 public class ScoresXMLFile extends AbstractXMLFile<ScoresXML> {
@@ -29,6 +28,6 @@ public class ScoresXMLFile extends AbstractXMLFile<ScoresXML> {
 	}
 
 	public ScoresXMLFile(Scores seriesScores, List<Scores> eventScores, List<Scores> raceScores) {
-		super(ScoresXML.class, new ScoresXML(new ExportReferenceManager(), seriesScores, eventScores, raceScores));
+		super(ScoresXML.class, new ScoresXML(seriesScores, eventScores, raceScores));
 	}
 }

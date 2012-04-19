@@ -12,13 +12,13 @@
 	<xsl:variable name="flags" select="/r:cursus/r:flag"/>
 	<xsl:variable name="classes" select="/r:cursus/r:class"/>
 
-	<xsl:template match="z:seriesResults" mode="r:name"><xsl:value-of select="/z:cursus/z:series[@xml:id=current()/z:series/@ref]/z:name"/></xsl:template>
-	<xsl:template match="z:eventResults" mode="r:name"><xsl:value-of select="/z:cursus/z:series/z:events/z:event[@xml:id=current()/z:event/@ref]/z:name"/></xsl:template>
-	<xsl:template match="z:raceResults" mode="r:name"><xsl:value-of select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=current()/z:race/@ref]/z:name"/></xsl:template>
+	<xsl:template match="z:seriesResults" mode="r:name"><xsl:value-of select="/z:cursus/z:series[@xml:id=current()/@series]/z:name"/></xsl:template>
+	<xsl:template match="z:eventResults" mode="r:name"><xsl:value-of select="/z:cursus/z:series/z:events/z:event[@xml:id=current()/@event]/z:name"/></xsl:template>
+	<xsl:template match="z:raceResults" mode="r:name"><xsl:value-of select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=current()/@race]/z:name"/></xsl:template>
 
-	<xsl:template match="z:seriesResults" mode="r:desc"><xsl:value-of select="/z:cursus/z:series[@xml:id=current()/z:series/@ref]/z:description"/></xsl:template>
-	<xsl:template match="z:eventResults" mode="r:desc"><xsl:value-of select="/z:cursus/z:series/z:events/z:event[@xml:id=current()/z:event/@ref]/z:description"/></xsl:template>
-	<xsl:template match="z:raceResults" mode="r:desc"><xsl:value-of select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=current()/z:race/@ref]/z:description"/></xsl:template>
+	<xsl:template match="z:seriesResults" mode="r:desc"><xsl:value-of select="/z:cursus/z:series[@xml:id=current()/@series]/z:description"/></xsl:template>
+	<xsl:template match="z:eventResults" mode="r:desc"><xsl:value-of select="/z:cursus/z:series/z:events/z:event[@xml:id=current()/@event]/z:description"/></xsl:template>
+	<xsl:template match="z:raceResults" mode="r:desc"><xsl:value-of select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=current()/@race]/z:description"/></xsl:template>
 
 	<xsl:template match="z:seriesResults" mode="r:class">series</xsl:template>
 	<xsl:template match="z:eventResults" mode="r:class">event</xsl:template>
@@ -79,7 +79,7 @@
 	</xsl:template>
 
 	<xsl:template match="z:raceResults" mode="r:body">
-		<xsl:variable name="parent" select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=current()/z:race/@ref]/../.."/>
+		<xsl:variable name="parent" select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=current()/@race]/../.."/>
 		<xsl:apply-templates select="." mode="r:internal">
 			<xsl:with-param name="name"><xsl:apply-templates select="." mode="r:name"/></xsl:with-param>
 			<xsl:with-param name="desc"><xsl:apply-templates select="." mode="r:desc"/></xsl:with-param>
@@ -133,7 +133,7 @@
 								<xsl:attribute name="colspan">
 									<xsl:value-of select="count(z:eventRaceResults)"/>
 								</xsl:attribute>
-								<xsl:apply-templates select="/z:cursus/z:series/z:events/z:event[@xml:id=current()/z:event/@ref]" mode="r:th"/>
+								<xsl:apply-templates select="/z:cursus/z:series/z:events/z:event[@xml:id=current()/@event]" mode="r:th"/>
 						</th>
 					</xsl:for-each>
 
@@ -168,7 +168,7 @@
 					<!-- Output all the races -->
 					<xsl:for-each select="$races">
 						<th class="race">
-							<xsl:apply-templates select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=current()/z:race/@ref]" mode="r:th"/>
+							<xsl:apply-templates select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=current()/@race]" mode="r:th"/>
 						</th>
 						<xsl:if test="$laps">
 							<th class="laps">Laps</th>
@@ -199,22 +199,22 @@
 			<tbody>
 				<xsl:for-each select="z:overallOrder/z:overallScore">
 						<!-- Keep a reference to the current pilot's classes while looping through $classes -->
-						<xsl:variable name="zPilotClasses" select="/z:cursus/z:series/z:pilots/z:pilot[@xml:id=current()/z:pilot/@ref]/z:class"/>
+						<xsl:variable name="zPilotClasses" select="/z:cursus/z:series/z:pilots/z:pilot[@xml:id=current()/@pilot]/z:member"/>
 						<!-- Count the people with the same position and use it to add a "=" -->
 						<xsl:variable name="joint" select="count(../z:overallScore[@position=current()/@position]) > 1"/>
 
 						<tr>
 							<th class="pos left"><xsl:value-of select="@position"/><xsl:if test="$joint">=</xsl:if></th>
-							<td class="pilot name"><xsl:value-of select="/z:cursus/z:series/z:pilots/z:pilot[@xml:id=current()/z:pilot/@ref]/z:name"/></td>
+							<td class="pilot name"><xsl:value-of select="/z:cursus/z:series/z:pilots/z:pilot[@xml:id=current()/@pilot]/z:name"/></td>
 							<xsl:for-each select="$classes">
 								<td class="pilot class">
-									<xsl:if test="$zPilotClasses[@ref=/z:cursus/z:series/z:classes/z:class[z:name=current()/r:name]/@xml:id]">*</xsl:if>
+									<xsl:if test="$zPilotClasses[@class=/z:cursus/z:series/z:classes/z:class[z:name=current()/r:name]/@xml:id]">*</xsl:if>
 								</td>
 							</xsl:for-each>
-							<td class="pilot num"><xsl:value-of select="/z:cursus/z:series/z:pilots/z:pilot[@xml:id=current()/z:pilot/@ref]/z:raceNumber/z:organisation"/><xsl:text> </xsl:text><xsl:value-of select="format-number(number(/z:cursus/z:series/z:pilots/z:pilot[@xml:id=current()/z:pilot/@ref]/z:raceNumber/z:number), '000')"/></td>
+							<td class="pilot num"><xsl:value-of select="/z:cursus/z:series/z:pilots/z:pilot[@xml:id=current()/@pilot]/z:raceNumber/z:organisation"/><xsl:text> </xsl:text><xsl:value-of select="format-number(number(/z:cursus/z:series/z:pilots/z:pilot[@xml:id=current()/@pilot]/z:raceNumber/z:number), '000')"/></td>
 
 							<!-- For each race score for this pilot -->
-							<xsl:for-each select="$races/z:raceOrder/z:raceScore/z:pilot[@ref=current()/z:pilot/@ref]/..">
+							<xsl:for-each select="$races/z:raceOrder/z:raceScore[@pilot=current()/@pilot]">
 								<td>
 									<xsl:attribute name="class" xml:space="preserve">race pts <xsl:if test="@simulated = 'true'">sim</xsl:if> <xsl:if test="@discarded = 'true'">dis</xsl:if></xsl:attribute>
 									<xsl:value-of select="@points"/>
@@ -225,9 +225,9 @@
 							</xsl:for-each>
 
 							<!-- For each discarded race -->
-							<xsl:for-each select="z:discards/z:race">
+							<xsl:for-each select="z:discard">
 								<!-- Find the results for the race referenced by the discard and then find the points for that pilot -->
-								<td class="dis"><xsl:value-of select="../../../..//z:eventRaceResults/z:race[@ref=current()/@ref]/../z:raceOrder/z:raceScore/z:pilot[@ref=current()/../../z:pilot/@ref]/../@points"/></td>
+								<td class="dis"><xsl:value-of select="../../..//z:eventRaceResults[@race=current()/@race]/z:raceOrder/z:raceScore[@pilot=current()/../@pilot]/@points"/></td>
 							</xsl:for-each>
 
 							<!-- Output penalties column if there are any penalties -->
@@ -265,7 +265,7 @@
 											</xsl:if>
 										</xsl:when>
 										<xsl:otherwise>
-											<xsl:variable name="realPenalties" select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=$races/z:race/@ref]/z:attendee/z:pilot[@ref=current()/z:pilot/@ref]/../z:penalty"/>
+											<xsl:variable name="realPenalties" select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=$races/@race]/z:attendee[@pilot=current()/@pilot]/z:penalty"/>
 											<xsl:variable name="simuPenalties" select="z:penalty"/>
 											<xsl:if test="($realPenalties and $class != 'series') or $simuPenalties">
 												<ul class="pen">

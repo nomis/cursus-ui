@@ -28,17 +28,15 @@ import org.simpleframework.xml.Root;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
-import eu.lp0.cursus.xml.ExportReferenceManager;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceAttendee;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLRaceRef;
 
 @Root(name = "race")
 public class ScoresXMLRace extends AbstractXMLEntity<Race> {
 	public ScoresXMLRace() {
 	}
 
-	public ScoresXMLRace(ExportReferenceManager refMgr, Race race, Set<Pilot> pilots) {
+	public ScoresXMLRace(Race race, Set<Pilot> pilots) {
 		super(race);
 
 		name = race.getName();
@@ -48,7 +46,7 @@ public class ScoresXMLRace extends AbstractXMLEntity<Race> {
 			attendees = new ArrayList<ScoresXMLRaceAttendee>(race.getAttendees().size());
 			for (RaceAttendee attendee : race.getAttendees().values()) {
 				if (pilots.contains(attendee.getPilot())) {
-					attendees.add(new ScoresXMLRaceAttendee(refMgr, attendee));
+					attendees.add(new ScoresXMLRaceAttendee(attendee));
 				}
 			}
 		}
@@ -86,10 +84,5 @@ public class ScoresXMLRace extends AbstractXMLEntity<Race> {
 
 	public void setAttendees(ArrayList<ScoresXMLRaceAttendee> attendees) {
 		this.attendees = attendees;
-	}
-
-	@Override
-	public ScoresXMLRaceRef makeReference() {
-		return new ScoresXMLRaceRef(this);
 	}
 }

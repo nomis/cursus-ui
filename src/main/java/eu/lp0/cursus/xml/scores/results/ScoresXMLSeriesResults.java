@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.Map.Entry;
 
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -33,31 +32,31 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLEventRef;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLSeriesRef;
 
 @Root(name = "seriesResults")
-public class ScoresXMLSeriesResults extends AbstractScoresXMLResults {
+public class ScoresXMLSeriesResults extends AbstractScoresXMLResults implements ScoresXMLSeriesRef {
 	public ScoresXMLSeriesResults() {
 	}
 
-	public ScoresXMLSeriesResults(ExportReferenceManager refMgr, Scores scores) {
+	public ScoresXMLSeriesResults(Scores scores) {
 		super(scores);
 
-		series = refMgr.get(scores.getSeries());
+		series = AbstractXMLEntity.generateId(scores.getSeries());
 
 		discards = scores.getDiscardCount();
 
 		events = new ArrayList<ScoresXMLEventRef>(scores.getEvents().size());
 		for (Event event : scores.getEvents()) {
-			events.add((ScoresXMLEventRef)refMgr.get(event));
+			events.add(new ScoresXMLEventRef(event));
 		}
 
 		overallPilots = new ArrayList<ScoresXMLOverallScore>(scores.getOverallOrder().size());
 		for (Pilot pilot : scores.getOverallOrder()) {
-			overallPilots.add(new ScoresXMLOverallScore(refMgr, scores, pilot));
+			overallPilots.add(new ScoresXMLOverallScore(scores, pilot));
 		}
 
 		Multimap<Event, Race> events_ = LinkedHashMultimap.create(scores.getRaces().size(), scores.getRaces().size());
@@ -67,18 +66,18 @@ public class ScoresXMLSeriesResults extends AbstractScoresXMLResults {
 
 		eventResults = new ArrayList<ScoresXMLSeriesEventResults>(events_.keySet().size());
 		for (Entry<Event, Collection<Race>> event : events_.asMap().entrySet()) {
-			eventResults.add(new ScoresXMLSeriesEventResults(refMgr, scores, event.getKey(), event.getValue()));
+			eventResults.add(new ScoresXMLSeriesEventResults(scores, event.getKey(), event.getValue()));
 		}
 	}
 
-	@Element
-	private ScoresXMLSeriesRef series;
+	@Attribute
+	private String series;
 
-	public ScoresXMLSeriesRef getSeries() {
+	public String getSeries() {
 		return series;
 	}
 
-	public void setSeries(ScoresXMLSeriesRef series) {
+	public void setSeries(String series) {
 		this.series = series;
 	}
 
@@ -93,7 +92,7 @@ public class ScoresXMLSeriesResults extends AbstractScoresXMLResults {
 		this.discards = discards;
 	}
 
-	@ElementList
+	@ElementList(name = "eventRefs")
 	private ArrayList<ScoresXMLEventRef> events;
 
 	@Override

@@ -72,13 +72,13 @@
 
 	<xsl:template match="z:event" mode="r:th">
 		<xsl:apply-templates select="." mode="th">
-			<xsl:with-param name="results" select="/z:cursus/z:eventResults/z:event[@ref=current()/@xml:id]/.."/>
+			<xsl:with-param name="results" select="/z:cursus/z:eventResults[@event=current()/@xml:id]"/>
 		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="z:race" mode="r:th">
 		<xsl:apply-templates select="." mode="th">
-			<xsl:with-param name="results" select="/z:cursus/z:raceResults/z:race[@ref=current()/@xml:id]/.."/>
+			<xsl:with-param name="results" select="/z:cursus/z:raceResults[@race=current()/@xml:id]"/>
 		</xsl:apply-templates>
 	</xsl:template>
 

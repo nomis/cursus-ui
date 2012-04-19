@@ -20,22 +20,21 @@ package eu.lp0.cursus.xml.scores.data;
 import java.util.ArrayList;
 
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.RaceAttendee;
-import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLPilotRef;
 
 @Root(name = "attendee")
-public class ScoresXMLRaceAttendee implements Comparable<ScoresXMLRaceAttendee> {
+public class ScoresXMLRaceAttendee implements Comparable<ScoresXMLRaceAttendee>, ScoresXMLPilotRef {
 	public ScoresXMLRaceAttendee() {
 	}
 
-	public ScoresXMLRaceAttendee(ExportReferenceManager refMgr, RaceAttendee attendee) {
-		pilot = refMgr.get(attendee.getPilot());
+	public ScoresXMLRaceAttendee(RaceAttendee attendee) {
+		pilot = AbstractXMLEntity.generateId(attendee.getPilot());
 		type = attendee.getType();
 
 		if (!attendee.getPenalties().isEmpty()) {
@@ -46,14 +45,14 @@ public class ScoresXMLRaceAttendee implements Comparable<ScoresXMLRaceAttendee> 
 		}
 	}
 
-	@Element
-	private ScoresXMLPilotRef pilot;
+	@Attribute
+	private String pilot;
 
-	public ScoresXMLPilotRef getPilot() {
+	public String getPilot() {
 		return pilot;
 	}
 
-	public void setPilot(ScoresXMLPilotRef pilot) {
+	public void setPilot(String pilot) {
 		this.pilot = pilot;
 	}
 
@@ -81,6 +80,6 @@ public class ScoresXMLRaceAttendee implements Comparable<ScoresXMLRaceAttendee> 
 
 	@Override
 	public int compareTo(ScoresXMLRaceAttendee o) {
-		return getPilot().getRef().compareTo(o.getPilot().getRef());
+		return getPilot().compareTo(o.getPilot());
 	}
 }

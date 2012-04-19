@@ -49,8 +49,6 @@ public abstract class AbstractXMLEntity<T extends AbstractEntity> implements Com
 		this.id = id;
 	}
 
-	public abstract AbstractXMLRef<T> makeReference();
-
 	public static String generateId(AbstractEntity entity) {
 		return String.format("%s%x", entity.getClass().getSimpleName(), entity.getId()); //$NON-NLS-1$
 	}

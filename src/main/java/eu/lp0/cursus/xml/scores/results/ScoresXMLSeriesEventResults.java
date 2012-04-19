@@ -20,38 +20,37 @@ package eu.lp0.cursus.xml.scores.results;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.xml.ExportReferenceManager;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLEventRef;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 
 @Root(name = "seriesEventResults")
 public class ScoresXMLSeriesEventResults {
 	public ScoresXMLSeriesEventResults() {
 	}
 
-	public ScoresXMLSeriesEventResults(ExportReferenceManager refMgr, Scores scores, Event event, Collection<Race> races) {
-		this.event = refMgr.get(event);
+	public ScoresXMLSeriesEventResults(Scores scores, Event event, Collection<Race> races) {
+		this.event = AbstractXMLEntity.generateId(event);
 
 		this.raceResults = new ArrayList<ScoresXMLEventRaceResults>(races.size());
 		for (Race race : races) {
-			this.raceResults.add(new ScoresXMLEventRaceResults(refMgr, scores, race));
+			this.raceResults.add(new ScoresXMLEventRaceResults(scores, race));
 		}
 	}
 
-	@Element
-	private ScoresXMLEventRef event;
+	@Attribute
+	private String event;
 
-	public ScoresXMLEventRef getEvent() {
+	public String getEvent() {
 		return event;
 	}
 
-	public void setEvent(ScoresXMLEventRef event) {
+	public void setEvent(String event) {
 		this.event = event;
 	}
 

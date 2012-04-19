@@ -50,7 +50,7 @@ import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLPenalty;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLRaceRef;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLRaceDiscard;
 
 class XMLScoresFactory extends AbstractScoresFactory {
 	private final XMLScores xmlScores;
@@ -68,7 +68,7 @@ class XMLScoresFactory extends AbstractScoresFactory {
 			protected List<Pilot> calculateRaceLapsInOrder(Race race, Map<Pilot, Integer> laps) {
 				List<Pilot> pilots = new ArrayList<Pilot>();
 				for (ScoresXMLRaceScore raceScore : subset.getRaceScores(race)) {
-					Pilot pilot = xmlScores.dereference(raceScore.getPilot());
+					Pilot pilot = xmlScores.dereference(raceScore);
 					pilots.add(pilot);
 					laps.put(pilot, raceScore.getLaps());
 				}
@@ -89,7 +89,7 @@ class XMLScoresFactory extends AbstractScoresFactory {
 			protected Map<Pilot, Integer> calculateRacePoints(Race race) {
 				Map<Pilot, Integer> racePoints = new HashMap<Pilot, Integer>();
 				for (ScoresXMLRaceScore raceScore : subset.getRaceScores(race)) {
-					Pilot pilot = xmlScores.dereference(raceScore.getPilot());
+					Pilot pilot = xmlScores.dereference(raceScore);
 					racePoints.put(pilot, raceScore.getPoints());
 				}
 				return racePoints;
@@ -134,7 +134,7 @@ class XMLScoresFactory extends AbstractScoresFactory {
 			protected LinkedListMultimap<Integer, Pilot> calculateRacePositionsWithOrder(Race race) {
 				LinkedListMultimap<Integer, Pilot> racePositions = LinkedListMultimap.create();
 				for (ScoresXMLRaceScore raceScore : subset.getRaceScores(race)) {
-					Pilot pilot = xmlScores.dereference(raceScore.getPilot());
+					Pilot pilot = xmlScores.dereference(raceScore);
 					racePositions.put(raceScore.getPosition(), pilot);
 				}
 				return racePositions;
@@ -149,7 +149,7 @@ class XMLScoresFactory extends AbstractScoresFactory {
 			protected List<Race> calculateDiscardedRaces(Pilot pilot) {
 				List<Race> races = new ArrayList<Race>();
 				if (discards > 0) {
-					for (ScoresXMLRaceRef race : subset.getOverallScore(pilot).getDiscards()) {
+					for (ScoresXMLRaceDiscard race : subset.getOverallScore(pilot).getDiscards()) {
 						races.add(xmlScores.dereference(race));
 					}
 				}
@@ -200,7 +200,7 @@ class XMLScoresFactory extends AbstractScoresFactory {
 			protected LinkedListMultimap<Integer, Pilot> calculateOverallPositionsWithOrder() {
 				LinkedListMultimap<Integer, Pilot> overallPositions = LinkedListMultimap.create();
 				for (ScoresXMLOverallScore overallScore : subset.getOverallScores()) {
-					Pilot pilot = xmlScores.dereference(overallScore.getPilot());
+					Pilot pilot = xmlScores.dereference(overallScore);
 					overallPositions.put(overallScore.getPosition(), pilot);
 				}
 				return overallPositions;

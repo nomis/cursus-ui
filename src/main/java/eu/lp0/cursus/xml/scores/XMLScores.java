@@ -40,7 +40,6 @@ import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.GenericScores;
-import eu.lp0.cursus.xml.ImportReferenceManager;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLPenalty;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceAttendee;
@@ -51,6 +50,7 @@ import eu.lp0.cursus.xml.scores.entity.ScoresXMLEvent;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLPilot;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLRace;
 import eu.lp0.cursus.xml.scores.entity.ScoresXMLSeries;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLClassMember;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLClassRef;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLEventRef;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLPilotRef;
@@ -65,12 +65,11 @@ import eu.lp0.cursus.xml.scores.results.ScoresXMLSeriesResults;
 
 public class XMLScores {
 	private ScoresXML scoresXML;
-	private ImportReferenceManager refMgr = new ImportReferenceManager();
-	private Map<ScoresXMLSeries, Series> series = new HashMap<ScoresXMLSeries, Series>();
-	private Map<ScoresXMLClass, Class> classes = new HashMap<ScoresXMLClass, Class>();
-	private Map<ScoresXMLPilot, Pilot> pilots = new HashMap<ScoresXMLPilot, Pilot>();
-	private Map<ScoresXMLEvent, Event> events = new HashMap<ScoresXMLEvent, Event>();
-	private Map<ScoresXMLRace, Race> races = new HashMap<ScoresXMLRace, Race>();
+	private Map<String, Series> series = new HashMap<String, Series>();
+	private Map<String, Class> classes = new HashMap<String, Class>();
+	private Map<String, Pilot> pilots = new HashMap<String, Pilot>();
+	private Map<String, Event> events = new HashMap<String, Event>();
+	private Map<String, Race> races = new HashMap<String, Race>();
 
 	private Multimap<? super AbstractScoresXMLResults, Race> resultsRaces = LinkedHashMultimap.create();
 	private Multimap<? super AbstractScoresXMLResults, Event> resultsEvents = HashMultimap.create();
@@ -102,43 +101,40 @@ public class XMLScores {
 		return newInstance(results, new Subset(results));
 	}
 
-	Series dereference(ScoresXMLSeriesRef series_) {
-		return series.get(refMgr.get(series_));
+	Series dereference(ScoresXMLSeriesRef seriesRef) {
+		return series.get(seriesRef.getSeries());
 	}
 
 	Class dereference(ScoresXMLClassRef class_) {
-		return classes.get(refMgr.get(class_));
+		return classes.get(class_.getClass_());
 	}
 
-	Pilot dereference(ScoresXMLPilotRef pilot) {
-		return pilots.get(refMgr.get(pilot));
+	Pilot dereference(ScoresXMLPilotRef pilotRef) {
+		return pilots.get(pilotRef.getPilot());
 	}
 
 	Event dereference(ScoresXMLEventRef event) {
-		return events.get(refMgr.get(event));
+		return events.get(event.getEvent());
 	}
 
-	Race dereference(ScoresXMLRaceRef race) {
-		return races.get(refMgr.get(race));
+	Race dereference(ScoresXMLRaceRef raceRef) {
+		return races.get(raceRef.getRace());
 	}
 
 	private void extractEntities() {
 		ScoresXMLSeries xmlSeries = scoresXML.getSeries();
-		refMgr.put(xmlSeries);
 		Series series_ = new Series(wrapNull(xmlSeries.getName()), wrapNull(xmlSeries.getDescription()));
-		series.put(xmlSeries, series_);
+		series.put(xmlSeries.getId(), series_);
 
-		for (ScoresXMLClass xmlClass : scoresXML.getSeries().getClasses()) {
-			refMgr.put(xmlClass);
+		for (ScoresXMLClass xmlClass : xmlSeries.getClasses()) {
 			Class class_ = new Class(series_, wrapNull(xmlClass.getName()), wrapNull(xmlClass.getDescription()));
-			classes.put(xmlClass, class_);
+			classes.put(xmlClass.getId(), class_);
 			series_.getClasses().add(class_);
 		}
 
-		for (ScoresXMLPilot xmlPilot : scoresXML.getSeries().getPilots()) {
-			refMgr.put(xmlPilot);
+		for (ScoresXMLPilot xmlPilot : xmlSeries.getPilots()) {
 			Pilot pilot_ = new Pilot(series_, wrapNull(xmlPilot.getName()), xmlPilot.getGender(), wrapNull(xmlPilot.getCountry()));
-			pilots.put(xmlPilot, pilot_);
+			pilots.put(xmlPilot.getId(), pilot_);
 			series_.getPilots().add(pilot_);
 
 			ScoresXMLRaceNumber xmlRaceNumber = xmlPilot.getRaceNumber();
@@ -146,27 +142,25 @@ public class XMLScores {
 			pilot_.setRaceNumber(raceNumber);
 
 			if (xmlPilot.getClasses() != null) {
-				for (ScoresXMLClassRef xmlClass : xmlPilot.getClasses()) {
+				for (ScoresXMLClassMember xmlClass : xmlPilot.getClasses()) {
 					pilot_.getClasses().add(dereference(xmlClass));
 				}
 			}
 		}
 
-		for (ScoresXMLEvent xmlEvent : scoresXML.getSeries().getEvents()) {
-			refMgr.put(xmlEvent);
+		for (ScoresXMLEvent xmlEvent : xmlSeries.getEvents()) {
 			Event event = new Event(series_, wrapNull(xmlEvent.getName()), wrapNull(xmlEvent.getDescription()));
-			events.put(xmlEvent, event);
+			events.put(xmlEvent.getId(), event);
 			series_.getEvents().add(event);
 
 			for (ScoresXMLRace xmlRace : xmlEvent.getRaces()) {
-				refMgr.put(xmlRace);
 				Race race = new Race(event, wrapNull(xmlRace.getName()), wrapNull(xmlRace.getDescription()));
-				races.put(xmlRace, race);
+				races.put(xmlRace.getId(), race);
 				event.getRaces().add(race);
 
 				if (xmlRace.getAttendees() != null) {
 					for (ScoresXMLRaceAttendee xmlRaceAttendee : xmlRace.getAttendees()) {
-						RaceAttendee attendee = new RaceAttendee(race, dereference(xmlRaceAttendee.getPilot()), xmlRaceAttendee.getType());
+						RaceAttendee attendee = new RaceAttendee(race, dereference(xmlRaceAttendee), xmlRaceAttendee.getType());
 						race.getAttendees().put(attendee.getPilot(), attendee);
 
 						if (xmlRaceAttendee.getPenalties() != null) {
@@ -194,19 +188,19 @@ public class XMLScores {
 		Table<Pilot, Race, ScoresXMLRaceScore> raceScores = HashBasedTable.create();
 		for (ScoresXMLSeriesEventResults seriesEventResults : seriesResults.getEventResults()) {
 			for (ScoresXMLEventRaceResults eventRaceResults : seriesEventResults.getRaceResults()) {
-				seriesEventRaceResults.put(dereference(eventRaceResults.getRace()), eventRaceResults);
+				seriesEventRaceResults.put(dereference(eventRaceResults), eventRaceResults);
 
-				Race race = dereference(eventRaceResults.getRace());
+				Race race = dereference(eventRaceResults);
 				resultsRaces.put(seriesResults, race);
 				for (ScoresXMLRaceScore raceScore : eventRaceResults.getRacePilots()) {
-					raceScores.row(dereference(raceScore.getPilot())).put(race, raceScore);
+					raceScores.row(dereference(raceScore)).put(race, raceScore);
 				}
 			}
 		}
 		resultsPilotRaceScores.put(seriesResults, raceScores);
 
 		for (ScoresXMLOverallScore overallScore : seriesResults.getOverallPilots()) {
-			Pilot pilot = dereference(overallScore.getPilot());
+			Pilot pilot = dereference(overallScore);
 			resultsPilotOverallScores.row(seriesResults).put(pilot, overallScore);
 			resultsPilots.put(seriesResults, pilot);
 		}
@@ -220,18 +214,18 @@ public class XMLScores {
 
 			Table<Pilot, Race, ScoresXMLRaceScore> raceScores = HashBasedTable.create();
 			for (ScoresXMLEventRaceResults eventRaceResults : eventResult.getRaces()) {
-				eventEventRaceResults.row(eventResult).put(dereference(eventRaceResults.getRace()), eventRaceResults);
+				eventEventRaceResults.row(eventResult).put(dereference(eventRaceResults), eventRaceResults);
 
-				Race race = dereference(eventRaceResults.getRace());
+				Race race = dereference(eventRaceResults);
 				resultsRaces.put(eventResult, race);
 				for (ScoresXMLRaceScore raceScore : eventRaceResults.getRacePilots()) {
-					raceScores.row(dereference(raceScore.getPilot())).put(race, raceScore);
+					raceScores.row(dereference(raceScore)).put(race, raceScore);
 				}
 			}
 			resultsPilotRaceScores.put(eventResult, raceScores);
 
 			for (ScoresXMLOverallScore overallScore : eventResult.getOverallPilots()) {
-				Pilot pilot = dereference(overallScore.getPilot());
+				Pilot pilot = dereference(overallScore);
 				resultsPilotOverallScores.row(eventResult).put(pilot, overallScore);
 				resultsPilots.put(eventResult, pilot);
 			}
@@ -240,17 +234,17 @@ public class XMLScores {
 
 	private void extractRaceResults() {
 		for (ScoresXMLRaceResults raceResult : scoresXML.getRaceResults()) {
-			Race race = dereference(raceResult.getRace());
+			Race race = dereference(raceResult);
 			resultsRaces.put(raceResult, race);
 
 			Table<Pilot, Race, ScoresXMLRaceScore> raceScores = HashBasedTable.create();
 			for (ScoresXMLRaceScore raceScore : raceResult.getRacePilots()) {
-				raceScores.row(dereference(raceScore.getPilot())).put(race, raceScore);
+				raceScores.row(dereference(raceScore)).put(race, raceScore);
 			}
 			resultsPilotRaceScores.put(raceResult, raceScores);
 
 			for (ScoresXMLOverallScore overallScore : raceResult.getOverallPilots()) {
-				Pilot pilot = dereference(overallScore.getPilot());
+				Pilot pilot = dereference(overallScore);
 				resultsPilotOverallScores.row(raceResult).put(pilot, overallScore);
 				resultsPilots.put(raceResult, pilot);
 			}

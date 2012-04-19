@@ -17,18 +17,6 @@
  */
 package eu.lp0.cursus.xml.scores.ref;
 
-import org.simpleframework.xml.Root;
-
-import eu.lp0.cursus.db.data.Pilot;
-import eu.lp0.cursus.xml.common.AbstractXMLRef;
-import eu.lp0.cursus.xml.scores.entity.ScoresXMLPilot;
-
-@Root(name = "pilot")
-public class ScoresXMLPilotRef extends AbstractXMLRef<Pilot> {
-	public ScoresXMLPilotRef() {
-	}
-
-	public ScoresXMLPilotRef(ScoresXMLPilot entity) {
-		super(entity);
-	}
+public interface ScoresXMLPilotRef {
+	public String getPilot();
 }

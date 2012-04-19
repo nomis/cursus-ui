@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -32,7 +31,7 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLEventRef;
 
@@ -41,7 +40,7 @@ public class ScoresXMLEventResults extends AbstractScoresXMLResults {
 	public ScoresXMLEventResults() {
 	}
 
-	public ScoresXMLEventResults(ExportReferenceManager refMgr, Scores scores) {
+	public ScoresXMLEventResults(Scores scores) {
 		super(scores);
 
 		Set<Event> checkEvent = new HashSet<Event>();
@@ -50,34 +49,34 @@ public class ScoresXMLEventResults extends AbstractScoresXMLResults {
 		}
 		Preconditions.checkArgument(!checkEvent.isEmpty(), "No event"); //$NON-NLS-1$
 		Preconditions.checkArgument(checkEvent.size() == 1, "Multiple events not allowed"); //$NON-NLS-1$
-		event = refMgr.get(checkEvent.iterator().next());
+		event = AbstractXMLEntity.generateId(checkEvent.iterator().next());
 
 		discards = scores.getDiscardCount();
 
 		events = new ArrayList<ScoresXMLEventRef>(scores.getEvents().size());
 		for (Event event_ : scores.getEvents()) {
-			events.add((ScoresXMLEventRef)refMgr.get(event_));
+			events.add(new ScoresXMLEventRef(event_));
 		}
 
 		overallPilots = new ArrayList<ScoresXMLOverallScore>(scores.getOverallOrder().size());
 		for (Pilot pilot : scores.getOverallOrder()) {
-			overallPilots.add(new ScoresXMLOverallScore(refMgr, scores, pilot));
+			overallPilots.add(new ScoresXMLOverallScore(scores, pilot));
 		}
 
 		races = new ArrayList<ScoresXMLEventRaceResults>(scores.getRaces().size());
 		for (Race race : scores.getRaces()) {
-			races.add(new ScoresXMLEventRaceResults(refMgr, scores, race));
+			races.add(new ScoresXMLEventRaceResults(scores, race));
 		}
 	}
 
-	@Element
-	private ScoresXMLEventRef event;
+	@Attribute
+	private String event;
 
-	public ScoresXMLEventRef getEvent() {
+	public String getEvent() {
 		return event;
 	}
 
-	public void setEvent(ScoresXMLEventRef event) {
+	public void setEvent(String event) {
 		this.event = event;
 	}
 
@@ -92,7 +91,7 @@ public class ScoresXMLEventResults extends AbstractScoresXMLResults {
 		this.discards = discards;
 	}
 
-	@ElementList
+	@ElementList(name = "eventRefs")
 	private ArrayList<ScoresXMLEventRef> events;
 
 	@Override

@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -29,26 +28,26 @@ import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.xml.ExportReferenceManager;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLPilotRef;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLRaceRef;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLRaceDiscard;
 
 @Root(name = "overallScore")
-public class ScoresXMLOverallScore {
+public class ScoresXMLOverallScore implements ScoresXMLPilotRef {
 	public ScoresXMLOverallScore() {
 	}
 
-	public ScoresXMLOverallScore(ExportReferenceManager refMgr, Scores scores, Pilot pilot) {
-		this.pilot = refMgr.get(pilot);
+	public ScoresXMLOverallScore(Scores scores, Pilot pilot) {
+		this.pilot = AbstractXMLEntity.generateId(pilot);
 
 		penalties = scores.getOverallPenalties(pilot);
 		points = scores.getOverallPoints(pilot);
 		position = scores.getOverallPosition(pilot);
 
 		if (scores.getDiscardCount() > 0) {
-			discards = new ArrayList<ScoresXMLRaceRef>(scores.getDiscardCount());
+			discards = new ArrayList<ScoresXMLRaceDiscard>(scores.getDiscardCount());
 			for (Race race : scores.getDiscardedRaces(pilot)) {
-				discards.add((ScoresXMLRaceRef)refMgr.get(race));
+				discards.add(new ScoresXMLRaceDiscard(race));
 			}
 		}
 
@@ -61,14 +60,14 @@ public class ScoresXMLOverallScore {
 		}
 	}
 
-	@Element
-	private ScoresXMLPilotRef pilot;
+	@Attribute
+	private String pilot;
 
-	public ScoresXMLPilotRef getPilot() {
+	public String getPilot() {
 		return pilot;
 	}
 
-	public void setPilot(ScoresXMLPilotRef pilot) {
+	public void setPilot(String pilot) {
 		this.pilot = pilot;
 	}
 
@@ -105,14 +104,14 @@ public class ScoresXMLOverallScore {
 		this.position = position;
 	}
 
-	@ElementList(required = false)
-	private ArrayList<ScoresXMLRaceRef> discards;
+	@ElementList(required = false, inline = true)
+	private ArrayList<ScoresXMLRaceDiscard> discards;
 
-	public ArrayList<ScoresXMLRaceRef> getDiscards() {
+	public ArrayList<ScoresXMLRaceDiscard> getDiscards() {
 		return discards;
 	}
 
-	public void setDiscards(ArrayList<ScoresXMLRaceRef> discards) {
+	public void setDiscards(ArrayList<ScoresXMLRaceDiscard> discards) {
 		this.discards = discards;
 	}
 
