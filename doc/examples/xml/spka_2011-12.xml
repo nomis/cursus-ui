@@ -502,7 +502,7 @@
    </event>
   </events>
  </series>
- <seriesResults scorer="9f5cd14f-5eac-b854-03c3-1011a2bed527" series="Series93752afe406c8" discards="2">
+ <seriesResults scorer="30367c0a-8a6e-11e1-b4f3-00e0814d2bec" series="Series93752afe406c8" discards="2">
   <eventRefs>
    <eventRef event="Event93752afe40723"/>
    <eventRef event="Event93752afe406ca"/>
@@ -906,7 +906,7 @@
    </eventRaceResults>
   </seriesEventResults>
  </seriesResults>
- <eventResults scorer="9f5cd14f-5eac-b854-03c3-1011a2bed527" event="Event93752afe406ca" discards="0">
+ <eventResults scorer="30367c0a-8a6e-11e1-b4f3-00e0814d2bec" event="Event93752afe406ca" discards="0">
   <eventRefs>
    <eventRef event="Event93752afe406ca"/>
   </eventRefs>
@@ -961,7 +961,7 @@
    </raceOrder>
   </eventRaceResults>
  </eventResults>
- <eventResults scorer="9f5cd14f-5eac-b854-03c3-1011a2bed527" event="Event93752afe406e3" discards="0">
+ <eventResults scorer="30367c0a-8a6e-11e1-b4f3-00e0814d2bec" event="Event93752afe406e3" discards="0">
   <eventRefs>
    <eventRef event="Event93752afe406e3"/>
   </eventRefs>
@@ -1060,7 +1060,7 @@
    </raceOrder>
   </eventRaceResults>
  </eventResults>
- <eventResults scorer="9f5cd14f-5eac-b854-03c3-1011a2bed527" event="Event93752afe40724" discards="1">
+ <eventResults scorer="30367c0a-8a6e-11e1-b4f3-00e0814d2bec" event="Event93752afe40724" discards="1">
   <eventRefs>
    <eventRef event="Event93752afe40724"/>
   </eventRefs>
@@ -1239,7 +1239,7 @@
    </raceOrder>
   </eventRaceResults>
  </eventResults>
- <raceResults scorer="9f5cd14f-5eac-b854-03c3-1011a2bed527" race="Race93752afe406cb" fleet="22">
+ <raceResults scorer="30367c0a-8a6e-11e1-b4f3-00e0814d2bec" race="Race93752afe406cb" fleet="22">
   <eventRefs>
    <eventRef event="Event93752afe406ca"/>
   </eventRefs>
@@ -1292,7 +1292,7 @@
    <raceScore pilot="Pilot93752afe406a2" laps="0" simulated="false" discarded="false" penalties="0" points="23" position="20"/>
   </raceOrder>
  </raceResults>
- <raceResults scorer="9f5cd14f-5eac-b854-03c3-1011a2bed527" race="Race93752afe406e4" fleet="20">
+ <raceResults scorer="30367c0a-8a6e-11e1-b4f3-00e0814d2bec" race="Race93752afe406e4" fleet="20">
   <eventRefs>
    <eventRef event="Event93752afe406e3"/>
   </eventRefs>
@@ -1341,7 +1341,7 @@
    <raceScore pilot="Pilot93752afe406ab" laps="0" simulated="false" discarded="false" penalties="0" points="21" position="16"/>
   </raceOrder>
  </raceResults>
- <raceResults scorer="9f5cd14f-5eac-b854-03c3-1011a2bed527" race="Race93752afe406f9" fleet="20">
+ <raceResults scorer="30367c0a-8a6e-11e1-b4f3-00e0814d2bec" race="Race93752afe406f9" fleet="20">
   <eventRefs>
    <eventRef event="Event93752afe406e3"/>
   </eventRefs>
@@ -1390,7 +1390,7 @@
    <raceScore pilot="Pilot93752afe406ae" laps="0" simulated="true" discarded="false" penalties="0" points="21" position="17"/>
   </raceOrder>
  </raceResults>
- <raceResults scorer="9f5cd14f-5eac-b854-03c3-1011a2bed527" race="Race93752afe4070e" fleet="20">
+ <raceResults scorer="30367c0a-8a6e-11e1-b4f3-00e0814d2bec" race="Race93752afe4070e" fleet="20">
   <eventRefs>
    <eventRef event="Event93752afe406e3"/>
   </eventRefs>
@@ -1439,7 +1439,7 @@
    <raceScore pilot="Pilot93752afe406ab" laps="0" simulated="false" discarded="false" penalties="0" points="21" position="15"/>
   </raceOrder>
  </raceResults>
- <raceResults scorer="9f5cd14f-5eac-b854-03c3-1011a2bed527" race="Race93752afe40725" fleet="19">
+ <raceResults scorer="30367c0a-8a6e-11e1-b4f3-00e0814d2bec" race="Race93752afe40725" fleet="19">
   <eventRefs>
    <eventRef event="Event93752afe40724"/>
   </eventRefs>
@@ -1486,7 +1486,7 @@
    <raceScore pilot="Pilot93752afe406ab" laps="0" simulated="false" discarded="false" penalties="0" points="20" position="15"/>
   </raceOrder>
  </raceResults>
- <raceResults scorer="9f5cd14f-5eac-b854-03c3-1011a2bed527" race="Race93752afe40739" fleet="19">
+ <raceResults scorer="30367c0a-8a6e-11e1-b4f3-00e0814d2bec" race="Race93752afe40739" fleet="19">
   <eventRefs>
    <eventRef event="Event93752afe40724"/>
   </eventRefs>
@@ -1533,7 +1533,7 @@
    <raceScore pilot="Pilot93752afe406a8" laps="0" simulated="false" discarded="false" penalties="0" points="20" position="16"/>
   </raceOrder>
  </raceResults>
- <raceResults scorer="9f5cd14f-5eac-b854-03c3-1011a2bed527" race="Race93752afe4074d" fleet="19">
+ <raceResults scorer="30367c0a-8a6e-11e1-b4f3-00e0814d2bec" race="Race93752afe4074d" fleet="19">
   <eventRefs>
    <eventRef event="Event93752afe40724"/>
   </eventRefs>
@@ -1580,7 +1580,7 @@
    <raceScore pilot="Pilot93752afe406a8" laps="0" simulated="false" discarded="false" penalties="0" points="20" position="14"/>
   </raceOrder>
  </raceResults>
- <raceResults scorer="9f5cd14f-5eac-b854-03c3-1011a2bed527" race="Race93752afe40761" fleet="19">
+ <raceResults scorer="30367c0a-8a6e-11e1-b4f3-00e0814d2bec" race="Race93752afe40761" fleet="19">
   <eventRefs>
    <eventRef event="Event93752afe40724"/>
   </eventRefs>
@@ -1627,7 +1627,7 @@
    <raceScore pilot="Pilot93752afe406a1" laps="0" simulated="true" discarded="false" penalties="0" points="20" position="14"/>
   </raceOrder>
  </raceResults>
- <raceResults scorer="9f5cd14f-5eac-b854-03c3-1011a2bed527" race="Race93752afe40775" fleet="19">
+ <raceResults scorer="30367c0a-8a6e-11e1-b4f3-00e0814d2bec" race="Race93752afe40775" fleet="19">
   <eventRefs>
    <eventRef event="Event93752afe40724"/>
   </eventRefs>

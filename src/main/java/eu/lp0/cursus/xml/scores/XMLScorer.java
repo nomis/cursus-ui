@@ -29,7 +29,7 @@ import eu.lp0.cursus.scoring.AbstractScorer;
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.scoring.ScoringSystem;
 
-@ScoringSystem(uuid = "285a2a01-b07a-1598-0787-ca0ef476a78d", name = "XML Import", hide = true)
+@ScoringSystem(uuid = "49f62f8c-8a6e-11e1-b00a-00e0814d2bec", name = "XML Import", hide = true)
 public class XMLScorer extends AbstractScorer {
 	@Override
 	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots, Set<Event> events, Predicate<Pilot> fleetFilter) {

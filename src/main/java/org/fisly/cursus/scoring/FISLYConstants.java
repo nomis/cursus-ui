@@ -19,5 +19,5 @@ package org.fisly.cursus.scoring;
 
 public class FISLYConstants {
 	public static final String NAME_2010 = "FISLY 2010-09-29"; //$NON-NLS-1$
-	public static final String UUID_2010 = "ca03de48-6931-ca71-a566-09f613584dd9"; //$NON-NLS-1$
+	public static final String UUID_2010 = "11f5ccaa-8a6e-11e1-862a-00e0814d2bec"; //$NON-NLS-1$
 }
