@@ -210,7 +210,7 @@
 	<xs:element name="seriesResults">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="eventRefs"/>
+				<xs:element ref="scoredEvent" maxOccurs="unbounded"/>
 				<xs:element ref="overallOrder"/>
 				<xs:element ref="seriesEventResults" maxOccurs="unbounded"/>
 			</xs:sequence>
@@ -229,7 +229,7 @@
 	<xs:element name="eventResults">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="eventRefs"/>
+				<xs:element ref="scoredEvent" maxOccurs="unbounded"/>
 				<xs:element ref="overallOrder"/>
 				<xs:element ref="eventRaceResults" maxOccurs="unbounded"/>
 			</xs:sequence>
@@ -242,7 +242,7 @@
 	<xs:element name="raceResults">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="eventRefs"/>
+				<xs:element ref="scoredEvent" maxOccurs="unbounded"/>
 				<xs:element ref="overallOrder"/>
 				<xs:element ref="raceOrder"/>
 			</xs:sequence>
@@ -252,18 +252,10 @@
 		</xs:complexType>
 	</xs:element>
 
-	<xs:element name="eventRefs">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="eventRef" maxOccurs="unbounded"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="eventRef">
+	<xs:element name="scoredEvent">
 		<xs:complexType>
 			<xs:sequence/>
-			<xs:attribute name="event" type="xs:IDREF" use="required"/>
+			<xs:attribute name="ref" type="xs:IDREF" use="required"/>
 		</xs:complexType>
 	</xs:element>
 

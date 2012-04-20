@@ -88,7 +88,7 @@ public class ScoresXMLRaceResults extends AbstractScoresXMLResults implements Sc
 		this.fleet = fleet;
 	}
 
-	@ElementList(name = "eventRefs")
+	@ElementList(inline = true)
 	private ArrayList<ScoresXMLEventRef> events;
 
 	@Override

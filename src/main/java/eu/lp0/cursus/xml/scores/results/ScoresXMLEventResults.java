@@ -91,7 +91,7 @@ public class ScoresXMLEventResults extends AbstractScoresXMLResults {
 		this.discards = discards;
 	}
 
-	@ElementList(name = "eventRefs")
+	@ElementList(inline = true)
 	private ArrayList<ScoresXMLEventRef> events;
 
 	@Override

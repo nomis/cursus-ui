@@ -23,7 +23,7 @@ import org.simpleframework.xml.Root;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 
-@Root(name = "eventRef")
+@Root(name = "scoredEvent")
 public class ScoresXMLEventRef {
 	public ScoresXMLEventRef() {
 	}
@@ -32,7 +32,7 @@ public class ScoresXMLEventRef {
 		this.event = AbstractXMLEntity.generateId(event);
 	}
 
-	@Attribute
+	@Attribute(name = "ref")
 	private String event;
 
 	public String getEvent() {
