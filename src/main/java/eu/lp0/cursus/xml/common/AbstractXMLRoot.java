@@ -25,7 +25,7 @@ public abstract class AbstractXMLRoot {
 	public static final String XML_XMLNS = "http://www.w3.org/XML/1998/namespace"; //$NON-NLS-1$
 	public static final String XSI_XMLNS = "http://www.w3.org/2001/XMLSchema-instance"; //$NON-NLS-1$
 
-	// FIXME change when PEN request is approved
-	public static final String CURSUS_XMLNS = "urn:oid:1.3.6.1.3.63193331266300908.1.0.1"; //$NON-NLS-1$
-	public static final String CURSUS_XSD = "https://xsd.s85.org/urn/oid/1.3.6.1.3.63193331266300908.1.0.1"; //$NON-NLS-1$
+	public static final String NS_XML_CURSUS_OID = "1.3.6.1.4.1.39777.1.0.1"; //$NON-NLS-1$
+	public static final String OID_URN_PREFIX = "urn:oid:"; //$NON-NLS-1$
+	public static final String XSD_URI_PREFIX = "https://xsd.s85.org/urn/oid/"; //$NON-NLS-1$
 }

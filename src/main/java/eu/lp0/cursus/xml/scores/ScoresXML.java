@@ -47,9 +47,9 @@ import eu.lp0.cursus.xml.scores.results.ScoresXMLSeriesResults;
 @Namespace(reference = ScoresXML.SCORES_XMLNS)
 @Root(name = "cursus")
 public class ScoresXML extends AbstractXMLRoot {
-	public static final String SCORES_OID = ".1"; //$NON-NLS-1$
-	public static final String SCORES_XMLNS = CURSUS_XMLNS + SCORES_OID;
-	public static final String SCORES_XSD = CURSUS_XSD + SCORES_OID;
+	public static final String SCORES_OID = NS_XML_CURSUS_OID + ".1"; //$NON-NLS-1$
+	public static final String SCORES_XMLNS = OID_URN_PREFIX + SCORES_OID;
+	public static final String SCORES_XSD = XSD_URI_PREFIX + SCORES_OID;
 
 	// Simple won't let me omit the reference value as it then outputs ""
 	@Namespace(prefix = "xsi", reference = AbstractXMLRoot.XSI_XMLNS)

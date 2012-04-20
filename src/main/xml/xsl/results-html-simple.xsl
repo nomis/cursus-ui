@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns:r="urn:oid:1.3.6.1.3.63193331266300908.1.0.1.2"
-		xmlns:z="urn:oid:1.3.6.1.3.63193331266300908.1.0.1.1"
+		xmlns:r="urn:oid:1.3.6.1.4.1.39777.1.0.1.2"
+		xmlns:z="urn:oid:1.3.6.1.4.1.39777.1.0.1.1"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="urn:oid:1.3.6.1.3.63193331266300908.1.0.1.1 https://xsd.s85.org/urn/oid/1.3.6.1.3.63193331266300908.1.0.1.1
-			urn:oid:1.3.6.1.3.63193331266300908.1.0.1.2 https://xsd.s85.org/urn/oid/1.3.6.1.3.63193331266300908.1.0.1.2"
+		xsi:schemaLocation="urn:oid:1.3.6.1.4.1.39777.1.0.1.1 https://xsd.s85.org/urn/oid/1.3.6.1.4.1.39777.1.0.1.1
+			urn:oid:1.3.6.1.4.1.39777.1.0.1.2 https://xsd.s85.org/urn/oid/1.3.6.1.4.1.39777.1.0.1.2"
 		version="1.0" xml:lang="en">
 
 	<xsl:import href="results-html.xsl"/>
