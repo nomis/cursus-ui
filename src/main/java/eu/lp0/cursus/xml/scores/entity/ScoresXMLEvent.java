@@ -18,6 +18,7 @@
 package eu.lp0.cursus.xml.scores.entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Set;
 
 import org.simpleframework.xml.Element;
@@ -28,6 +29,7 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLEventAttendee;
 
 @Root(name = "event")
 public class ScoresXMLEvent extends AbstractXMLEntity<Event> {
@@ -39,6 +41,14 @@ public class ScoresXMLEvent extends AbstractXMLEntity<Event> {
 
 		name = event.getName();
 		description = event.getDescription();
+
+		if (!event.getAttendees().isEmpty()) {
+			attendees = new ArrayList<ScoresXMLEventAttendee>(event.getAttendees().size());
+			for (Pilot pilot : event.getAttendees()) {
+				attendees.add(new ScoresXMLEventAttendee(pilot));
+			}
+			Collections.sort(attendees);
+		}
 
 		this.races = new ArrayList<ScoresXMLRace>(races.size());
 		for (Race race : races) {
@@ -66,6 +76,17 @@ public class ScoresXMLEvent extends AbstractXMLEntity<Event> {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@ElementList(required = false, inline = true)
+	private ArrayList<ScoresXMLEventAttendee> attendees;
+
+	public ArrayList<ScoresXMLEventAttendee> getAttendees() {
+		return attendees;
+	}
+
+	public void setAttendees(ArrayList<ScoresXMLEventAttendee> attendees) {
+		this.attendees = attendees;
 	}
 
 	@ElementList

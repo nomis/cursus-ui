@@ -17,6 +17,29 @@
  */
 package eu.lp0.cursus.xml.scores.ref;
 
-public interface ScoresXMLEventRef {
-	public String getEvent();
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+
+import eu.lp0.cursus.db.data.Event;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
+
+@Root(name = "scoredEvent")
+public class ScoresXMLScoredEvent implements ScoresXMLEventRef {
+	public ScoresXMLScoredEvent() {
+	}
+
+	public ScoresXMLScoredEvent(Event event) {
+		this.event = AbstractXMLEntity.generateId(event);
+	}
+
+	@Attribute(name = "ref")
+	private String event;
+
+	public String getEvent() {
+		return event;
+	}
+
+	public void setEvent(String event) {
+		this.event = event;
+	}
 }

@@ -23,7 +23,7 @@ import org.simpleframework.xml.Attribute;
 
 import eu.lp0.cursus.scoring.Scores;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLEventRef;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLScoredEvent;
 
 public abstract class AbstractScoresXMLResults {
 	public AbstractScoresXMLResults() {
@@ -45,7 +45,7 @@ public abstract class AbstractScoresXMLResults {
 		this.scorer = scorer;
 	}
 
-	public abstract ArrayList<ScoresXMLEventRef> getEvents();
+	public abstract ArrayList<ScoresXMLScoredEvent> getEvents();
 
 	public abstract ArrayList<ScoresXMLOverallScore> getOverallPilots();
 }

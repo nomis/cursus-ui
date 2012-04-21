@@ -138,9 +138,17 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:group ref="named"/>
+				<xs:element ref="eventAttendee" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="races"/>
 			</xs:sequence>
 			<xs:attribute ref="xml:id" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="eventAttendee">
+		<xs:complexType>
+			<xs:sequence/>
+			<xs:attribute name="pilot" type="xs:IDREF" use="required"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -156,23 +164,23 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:group ref="named"/>
-				<xs:element ref="attendee" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="raceAttendee" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute ref="xml:id" use="required"/>
 		</xs:complexType>
 	</xs:element>
 
-	<xs:element name="attendee">
+	<xs:element name="raceAttendee">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="penalty" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="pilot" type="xs:IDREF" use="required"/>
-			<xs:attribute name="type" type="attendee" use="required"/>
+			<xs:attribute name="type" type="raceAttendee" use="required"/>
 		</xs:complexType>
 	</xs:element>
 
-	<xs:simpleType name="attendee">
+	<xs:simpleType name="raceAttendee">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="PILOT"/>
 			<xs:enumeration value="M_RACE_MASTER"/>

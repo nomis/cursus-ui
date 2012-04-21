@@ -28,7 +28,7 @@ import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLPilotRef;
 
-@Root(name = "attendee")
+@Root(name = "raceAttendee")
 public class ScoresXMLRaceAttendee implements Comparable<ScoresXMLRaceAttendee>, ScoresXMLPilotRef {
 	public ScoresXMLRaceAttendee() {
 	}

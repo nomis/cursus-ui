@@ -265,7 +265,7 @@
 											</xsl:if>
 										</xsl:when>
 										<xsl:otherwise>
-											<xsl:variable name="realPenalties" select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=$races/@race]/z:attendee[@pilot=current()/@pilot]/z:penalty"/>
+											<xsl:variable name="realPenalties" select="/z:cursus/z:series/z:events/z:event/z:races/z:race[@xml:id=$races/@race]/z:raceAttendee[@pilot=current()/@pilot]/z:penalty"/>
 											<xsl:variable name="simuPenalties" select="z:penalty"/>
 											<xsl:if test="($realPenalties and $class != 'series') or $simuPenalties">
 												<ul class="pen">

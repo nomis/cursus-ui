@@ -18,6 +18,7 @@
 package eu.lp0.cursus.xml.scores.entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -50,6 +51,7 @@ public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {
 			for (Class class_ : pilot.getClasses()) {
 				classes.add(new ScoresXMLClassMember(class_));
 			}
+			Collections.sort(classes);
 		}
 	}
 

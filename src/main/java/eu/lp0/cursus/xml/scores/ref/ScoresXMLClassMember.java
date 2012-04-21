@@ -24,7 +24,7 @@ import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 
 @Root(name = "member")
-public class ScoresXMLClassMember implements ScoresXMLClassRef {
+public class ScoresXMLClassMember implements ScoresXMLClassRef, Comparable<ScoresXMLClassMember> {
 	public ScoresXMLClassMember() {
 	}
 
@@ -42,5 +42,10 @@ public class ScoresXMLClassMember implements ScoresXMLClassRef {
 
 	public void setClass_(String class_) {
 		this.class_ = class_;
+	}
+
+	@Override
+	public int compareTo(ScoresXMLClassMember o) {
+		return getClass_().compareTo(o.getClass_());
 	}
 }

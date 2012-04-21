@@ -17,6 +17,35 @@
  */
 package eu.lp0.cursus.xml.scores.ref;
 
-public interface ScoresXMLEventRef {
-	public String getEvent();
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+
+import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.xml.common.AbstractXMLEntity;
+
+@Root(name = "eventAttendee")
+public class ScoresXMLEventAttendee implements ScoresXMLPilotRef, Comparable<ScoresXMLEventAttendee> {
+	public ScoresXMLEventAttendee() {
+	}
+
+	public ScoresXMLEventAttendee(Pilot pilot) {
+		this.pilot = AbstractXMLEntity.generateId(pilot);
+	}
+
+	@Attribute
+	private String pilot;
+
+	@Override
+	public String getPilot() {
+		return pilot;
+	}
+
+	public void setPilot(String pilot) {
+		this.pilot = pilot;
+	}
+
+	@Override
+	public int compareTo(ScoresXMLEventAttendee o) {
+		return getPilot().compareTo(o.getPilot());
+	}
 }
