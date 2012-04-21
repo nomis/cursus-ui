@@ -18,17 +18,18 @@
 package eu.lp0.cursus.scoring;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.SortedSet;
 
 import com.google.common.base.Functions;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import com.google.common.collect.Table;
 
 import eu.lp0.cursus.db.data.Pilot;
@@ -37,12 +38,13 @@ import eu.lp0.cursus.db.data.Race;
 public abstract class AbstractRaceDiscardsData<T extends ScoredData & RacePointsData> implements RaceDiscardsData {
 	protected final T scores;
 	protected final int discards;
-	protected final Supplier<Map<Pilot, LinkedHashSet<Race>>> lazyDiscardedRaces = Suppliers.memoize(new Supplier<Map<Pilot, LinkedHashSet<Race>>>() {
+	protected final Supplier<Map<Pilot, SortedSet<Race>>> lazyDiscardedRaces = Suppliers.memoize(new Supplier<Map<Pilot, SortedSet<Race>>>() {
 		@Override
-		public Map<Pilot, LinkedHashSet<Race>> get() {
-			Map<Pilot, LinkedHashSet<Race>> discardedRaces = new HashMap<Pilot, LinkedHashSet<Race>>(scores.getPilots().size() * 2);
+		public Map<Pilot, SortedSet<Race>> get() {
+			Map<Pilot, SortedSet<Race>> discardedRaces = new HashMap<Pilot, SortedSet<Race>>(scores.getPilots().size() * 2);
 			for (Pilot pilot : scores.getPilots()) {
-				discardedRaces.put(pilot, new LinkedHashSet<Race>(calculateDiscardedRaces(pilot)));
+				List<Race> discardedPilotRaces = calculateDiscardedRaces(pilot);
+				discardedRaces.put(pilot, ImmutableSortedSet.copyOf(Ordering.explicit(discardedPilotRaces), discardedPilotRaces));
 			}
 			return discardedRaces;
 		}
@@ -51,7 +53,7 @@ public abstract class AbstractRaceDiscardsData<T extends ScoredData & RacePoints
 		@Override
 		public Map<Pilot, List<Integer>> get() {
 			Map<Pilot, List<Integer>> pilotDiscards = new HashMap<Pilot, List<Integer>>(scores.getPilots().size() * 2);
-			Map<Pilot, LinkedHashSet<Race>> discardedRaces = lazyDiscardedRaces.get();
+			Map<Pilot, SortedSet<Race>> discardedRaces = lazyDiscardedRaces.get();
 			Table<Pilot, Race, Integer> racePoints = scores.getRacePoints();
 			for (Pilot pilot : scores.getPilots()) {
 				pilotDiscards.put(pilot, Lists.newArrayList(Iterables.transform(discardedRaces.get(pilot), Functions.forMap(racePoints.row(pilot), 0))));
@@ -85,12 +87,12 @@ public abstract class AbstractRaceDiscardsData<T extends ScoredData & RacePoints
 	}
 
 	@Override
-	public final Map<Pilot, ? extends Set<Race>> getDiscardedRaces() {
+	public final Map<Pilot, ? extends SortedSet<Race>> getDiscardedRaces() {
 		return lazyDiscardedRaces.get();
 	}
 
 	@Override
-	public final Set<Race> getDiscardedRaces(Pilot pilot) {
+	public final SortedSet<Race> getDiscardedRaces(Pilot pilot) {
 		return lazyDiscardedRaces.get().get(pilot);
 	}
 

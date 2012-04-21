@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Table;
@@ -290,13 +291,13 @@ public abstract class AbstractForwardingScores implements Scores {
 	}
 
 	@Override
-	public Map<Pilot, ? extends Set<Race>> getDiscardedRaces() {
+	public Map<Pilot, ? extends SortedSet<Race>> getDiscardedRaces() {
 		return Collections.unmodifiableMap(delegateRaceDiscardsData().getDiscardedRaces());
 	}
 
 	@Override
-	public Set<Race> getDiscardedRaces(Pilot pilot) {
-		return Collections.unmodifiableSet(delegateRaceDiscardsData().getDiscardedRaces(pilot));
+	public SortedSet<Race> getDiscardedRaces(Pilot pilot) {
+		return Collections.unmodifiableSortedSet(delegateRaceDiscardsData().getDiscardedRaces(pilot));
 	}
 
 	@Override

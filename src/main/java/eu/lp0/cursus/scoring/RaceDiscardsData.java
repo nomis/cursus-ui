@@ -19,7 +19,7 @@ package eu.lp0.cursus.scoring;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.SortedSet;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
@@ -31,9 +31,9 @@ public interface RaceDiscardsData {
 
 	public int getRaceDiscard(Pilot pilot, int discard);
 
-	public Map<Pilot, ? extends Set<Race>> getDiscardedRaces();
+	public Map<Pilot, ? extends SortedSet<Race>> getDiscardedRaces();
 
-	public Set<Race> getDiscardedRaces(Pilot pilot);
+	public SortedSet<Race> getDiscardedRaces(Pilot pilot);
 
 	public int getDiscardCount();
 }
