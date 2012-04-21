@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.Ignore;
-import org.spka.cursus.test.series_2010.Series2010Event4Scores;
+import org.spka.cursus.test.series_2010.AbstractSeries2010;
 
 import com.google.common.base.Predicates;
 
@@ -32,8 +32,8 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.data.Scores;
-import eu.lp0.cursus.xml.scores.ScoresXMLFile;
 import eu.lp0.cursus.xml.scores.ScoresXML;
+import eu.lp0.cursus.xml.scores.ScoresXMLFile;
 import eu.lp0.cursus.xml.scores.XMLScores;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLEventResults;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLRaceResults;
@@ -43,7 +43,7 @@ public class ExportSPKASeries2010 {
 	public static final File SERIES_FILE2 = new File("target/spka2010_2.xml"); //$NON-NLS-1$
 
 	@Ignore
-	public static class AllScores extends Series2010Event4Scores {
+	public static class AllScores extends AbstractSeries2010 {
 		public final ScoresXMLFile export;
 
 		public AllScores() throws Exception {
@@ -52,7 +52,10 @@ public class ExportSPKASeries2010 {
 			List<Scores> raceScores = new ArrayList<Scores>();
 
 			createDatabase();
-			createData();
+			createEvent1Races();
+			createEvent2Races();
+			createEvent3Races();
+			createEvent4Races();
 
 			db.startSession();
 			try {
