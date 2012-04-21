@@ -16,6 +16,7 @@
 				<xs:element ref="eventResults" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="raceResults" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
+			<xs:attribute ref="xml:lang" use="optional"/>
 			<xs:attribute name="generator" type="xs:string" use="optional"/>
 		</xs:complexType>
 	</xs:element>
@@ -45,6 +46,7 @@
 	<xs:complexType name="string">
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
+				<xs:attribute ref="xml:lang" use="optional"/>
 				<xs:attribute ref="xml:space" use="required"/>
 			</xs:extension>
 		</xs:simpleContent>
