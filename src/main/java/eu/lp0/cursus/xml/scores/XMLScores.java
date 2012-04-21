@@ -84,9 +84,15 @@ public class XMLScores {
 	public XMLScores(ScoresXML scoresXML) {
 		this.scoresXML = scoresXML;
 		extractEntities();
-		extractSeriesResults();
-		extractEventResults();
-		extractRaceResults();
+		if (scoresXML.getSeriesResults() != null) {
+			extractSeriesResults();
+		}
+		if (scoresXML.getEventResults() != null) {
+			extractEventResults();
+		}
+		if (scoresXML.getRaceResults() != null) {
+			extractRaceResults();
+		}
 	}
 
 	public GenericScores newInstance(ScoresXMLSeriesResults results) {
