@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../../src/main/xml/xsl/results-html-simple.xsl"?>
+<cursus xmlns="urn:oid:1.3.6.1.4.1.39777.1.0.1.2">
+	<load href="fisly_2011c8m.xml"/>
+	<stylesheet href="spka.css"/>
+</cursus>
