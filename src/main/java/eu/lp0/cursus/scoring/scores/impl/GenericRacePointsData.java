@@ -44,7 +44,7 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 	});
 
 	public enum FleetMethod {
-		RACE, EVENT, SERIES, SCORED, PILOTS;
+		RACE, EVENT, SERIES, RACES_SCORED, EVENTS_SCORED, PILOTS;
 	}
 
 	public GenericRacePointsData(T scores, FleetMethod fleetMethod) {
@@ -134,13 +134,29 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 			break;
 		}
 
-		case SCORED: {
+		case RACES_SCORED: {
+			Set<Pilot> pilots = new HashSet<Pilot>(scores.getPilots().size() * 2);
+			for (Race race : scores.getRaces()) {
+				pilots.addAll(race.getAttendees().keySet());
+			}
+
+			int fleetSize = Sets.intersection(scores.getFleet(), pilots).size();
+			for (Race race : scores.getRaces()) {
+				fleetSizes.put(race, fleetSize);
+			}
+
+			break;
+		}
+
+		case EVENTS_SCORED: {
 			Set<Pilot> pilots = new HashSet<Pilot>(scores.getPilots().size() * 2);
 			for (Event event : scores.getEvents()) {
 				pilots.addAll(event.getAttendees());
-			}
-			for (Race race : scores.getRaces()) {
-				pilots.addAll(race.getAttendees().keySet());
+
+				// Race attendees implicitly attend the event too
+				for (Race race : event.getRaces()) {
+					pilots.addAll(race.getAttendees().keySet());
+				}
 			}
 
 			int fleetSize = Sets.intersection(scores.getFleet(), pilots).size();

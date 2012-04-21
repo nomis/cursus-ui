@@ -17,22 +17,20 @@
  */
 package org.spka.cursus.scoring;
 
-import java.util.List;
-import java.util.Set;
-
 import com.google.common.base.Predicate;
+import com.google.common.collect.Sets;
 
-import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.data.Scores;
-import eu.lp0.cursus.scoring.scorer.Scorer;
-import eu.lp0.cursus.scoring.scorer.ScoringSystem;
+import eu.lp0.cursus.scoring.scorer.AbstractScorer;
 
-@ScoringSystem(uuid = SPKAConstants.UUID_2010, name = SPKAConstants.NAME_2010)
-public class Scorer2010 extends AbstractSPKAScorer implements Scorer {
+public abstract class AbstractSPKAScorer extends AbstractScorer {
+	/**
+	 * Race scores include all pilots at the event
+	 */
 	@Override
-	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots, Set<Event> events, Predicate<Pilot> fleetFilter) {
-		return new SPKAScoresFactory2010().newScores(pilots, races, events, fleetFilter, this);
+	public Scores scoreRace(Race race, Predicate<Pilot> fleetFilter) {
+		return super.scoreRace(race, Sets.filter(race.getEvent().getAllPilots(), fleetFilter), fleetFilter);
 	}
 }

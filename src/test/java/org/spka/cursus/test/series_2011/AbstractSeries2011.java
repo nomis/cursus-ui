@@ -52,6 +52,7 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 	protected final int EVENT1_FLEET = 22;
 	protected final String RACE1_NAME = "Race 1"; //$NON-NLS-1$
 	protected final String RACE1_DESC = "West Sands (30/10/2011)"; //$NON-NLS-1$
+	protected final int RACE1_PILOTS = 22;
 
 	protected final String NON_EVENT2_NAME = "Non-Event 2"; //$NON-NLS-1$
 	protected final String NON_EVENT2_DESC = "Luce Bay (03/12/2011 and 04/12/2011)"; //$NON-NLS-1$
@@ -61,10 +62,13 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 	protected final int EVENT2_FLEET = 20;
 	protected final String RACE2_NAME = "Race 2"; //$NON-NLS-1$
 	protected final String RACE2_DESC = "West Sands (29/01/2012)"; //$NON-NLS-1$
+	protected final int RACE2_PILOTS = 20;
 	protected final String RACE3_NAME = "Race 3"; //$NON-NLS-1$
 	protected final String RACE3_DESC = "West Sands (29/01/2012)"; //$NON-NLS-1$
+	protected final int RACE3_PILOTS = 20;
 	protected final String RACE4_NAME = "Race 4"; //$NON-NLS-1$
 	protected final String RACE4_DESC = "West Sands (29/01/2012)"; //$NON-NLS-1$
+	protected final int RACE4_PILOTS = 20;
 
 	protected final String NON_EVENT3_NAME = "Non-Event 3"; //$NON-NLS-1$
 	protected final String NON_EVENT3_DESC = "Fraserburgh Esplanade (03/03/2012 and 04/03/2012)"; //$NON-NLS-1$
@@ -74,14 +78,19 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 	protected final int EVENT3_FLEET = 19;
 	protected final String RACE5_NAME = "Race 5"; //$NON-NLS-1$
 	protected final String RACE5_DESC = "Luce Bay (31/03/2012)"; //$NON-NLS-1$
+	protected final int RACE5_PILOTS = 18;
 	protected final String RACE6_NAME = "Race 6"; //$NON-NLS-1$
 	protected final String RACE6_DESC = "Luce Bay (31/03/2012)"; //$NON-NLS-1$
+	protected final int RACE6_PILOTS = 18;
 	protected final String RACE7_NAME = "Race 7"; //$NON-NLS-1$
 	protected final String RACE7_DESC = "Luce Bay (31/03/2012)"; //$NON-NLS-1$
+	protected final int RACE7_PILOTS = 18;
 	protected final String RACE8_NAME = "Race 8"; //$NON-NLS-1$
 	protected final String RACE8_DESC = "Luce Bay (01/04/2012)"; //$NON-NLS-1$
+	protected final int RACE8_PILOTS = 18;
 	protected final String RACE9_NAME = "Race 9"; //$NON-NLS-1$
 	protected final String RACE9_DESC = "Luce Bay (01/04/2012)"; //$NON-NLS-1$
+	protected final int RACE9_PILOTS = 18;
 
 	protected Scorer scorer = ScorerFactory.newScorer(SPKAConstants.UUID_2011);
 
@@ -1010,7 +1019,6 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			race5.getAttendees().put(sco156, new RaceAttendee(race5, sco156, RaceAttendee.Type.PILOT));
 			race5.getAttendees().put(sco159, new RaceAttendee(race5, sco159, RaceAttendee.Type.PILOT));
 			race5.getAttendees().put(sco179, new RaceAttendee(race5, sco179, RaceAttendee.Type.PILOT));
-			race5.getAttendees().put(sco200, new RaceAttendee(race5, sco200, RaceAttendee.Type.PILOT));
 			race5.getAttendees().put(sco248, new RaceAttendee(race5, sco248, RaceAttendee.Type.M_RACE_MASTER));
 			race5.getAttendees().put(sco249, new RaceAttendee(race5, sco249, RaceAttendee.Type.PILOT));
 			race5.getAttendees().put(sco320, new RaceAttendee(race5, sco320, RaceAttendee.Type.PILOT));
@@ -1116,7 +1124,6 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			race6.getAttendees().put(sco156, new RaceAttendee(race6, sco156, RaceAttendee.Type.PILOT));
 			race6.getAttendees().put(sco159, new RaceAttendee(race6, sco159, RaceAttendee.Type.PILOT));
 			race6.getAttendees().put(sco179, new RaceAttendee(race6, sco179, RaceAttendee.Type.PILOT));
-			race6.getAttendees().put(sco200, new RaceAttendee(race6, sco200, RaceAttendee.Type.PILOT));
 			race6.getAttendees().put(sco248, new RaceAttendee(race6, sco248, RaceAttendee.Type.PILOT));
 			race6.getAttendees().put(sco249, new RaceAttendee(race6, sco249, RaceAttendee.Type.PILOT));
 			race6.getAttendees().put(sco320, new RaceAttendee(race6, sco320, RaceAttendee.Type.PILOT));
@@ -1274,7 +1281,6 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			race7.getAttendees().put(sco156, new RaceAttendee(race7, sco156, RaceAttendee.Type.PILOT));
 			race7.getAttendees().put(sco159, new RaceAttendee(race7, sco159, RaceAttendee.Type.M_RACE_MASTER));
 			race7.getAttendees().put(sco179, new RaceAttendee(race7, sco179, RaceAttendee.Type.PILOT));
-			race7.getAttendees().put(sco200, new RaceAttendee(race7, sco200, RaceAttendee.Type.PILOT));
 			race7.getAttendees().put(sco248, new RaceAttendee(race7, sco248, RaceAttendee.Type.PILOT));
 			race7.getAttendees().put(sco249, new RaceAttendee(race7, sco249, RaceAttendee.Type.PILOT));
 			race7.getAttendees().put(sco320, new RaceAttendee(race7, sco320, RaceAttendee.Type.PILOT));
@@ -1346,7 +1352,6 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 
 			Race race8 = new Race(event3, RACE8_NAME, RACE8_DESC);
 			event3.getRaces().add(race8);
-			race8.getAttendees().put(sco018, new RaceAttendee(race8, sco018, RaceAttendee.Type.PILOT));
 			race8.getAttendees().put(sco019, new RaceAttendee(race8, sco019, RaceAttendee.Type.PILOT));
 			race8.getAttendees().put(sco060, new RaceAttendee(race8, sco060, RaceAttendee.Type.PILOT));
 			race8.getAttendees().put(sco068, new RaceAttendee(race8, sco068, RaceAttendee.Type.PILOT));
@@ -1469,7 +1474,6 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 
 			Race race9 = new Race(event3, RACE9_NAME, RACE9_DESC);
 			event3.getRaces().add(race9);
-			race9.getAttendees().put(sco018, new RaceAttendee(race9, sco018, RaceAttendee.Type.PILOT));
 			race9.getAttendees().put(sco019, new RaceAttendee(race9, sco019, RaceAttendee.Type.PILOT));
 			race9.getAttendees().put(sco060, new RaceAttendee(race9, sco060, RaceAttendee.Type.PILOT));
 			race9.getAttendees().put(sco068, new RaceAttendee(race9, sco068, RaceAttendee.Type.M_SCORER));

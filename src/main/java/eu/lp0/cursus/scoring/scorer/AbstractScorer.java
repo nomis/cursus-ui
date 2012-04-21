@@ -66,7 +66,7 @@ public abstract class AbstractScorer implements Scorer {
 
 	@Override
 	public Scores scoreEvent(Event event, Predicate<Pilot> fleetFilter) {
-		return scoreRaces(event.getRaces(), fleetFilter);
+		return scoreRaces(event.getRaces(), Sets.filter(event.getAllPilots(), fleetFilter), fleetFilter);
 	}
 
 	@Override

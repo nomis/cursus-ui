@@ -129,6 +129,16 @@ public final class Event extends AbstractEntity implements Comparable<Event>, Ra
 		this.races = races;
 	}
 
+	@Transient
+	public Set<Pilot> getAllPilots() {
+		Set<Pilot> pilots = new HashSet<Pilot>();
+		pilots.addAll(getAttendees());
+		for (Race race : getRaces()) {
+			pilots.addAll(race.getAttendees().keySet());
+		}
+		return pilots;
+	}
+
 	@Override
 	public String toString() {
 		return getName().length() > 0 ? getName() : "[#" + getId() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ 
