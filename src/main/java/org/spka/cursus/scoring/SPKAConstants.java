@@ -19,10 +19,10 @@ package org.spka.cursus.scoring;
 
 public class SPKAConstants {
 	public static final String NAME_2010 = "SPKA 2010/1"; //$NON-NLS-1$
-	public static final String UUID_2010 = "2552354a-8a6e-11e1-ad73-00e0814d2bec"; //$NON-NLS-1$
+	public static final String UUID_2010 = "e5420c9f-643f-50ce-95bd-06b24b296d3c"; //$NON-NLS-1$
 
 	public static final String NAME_2011 = "SPKA 2011/12"; //$NON-NLS-1$
-	public static final String UUID_2011 = "30367c0a-8a6e-11e1-b4f3-00e0814d2bec"; //$NON-NLS-1$
+	public static final String UUID_2011 = "1576b2bb-6506-5665-b37d-cb4d48b4b834"; //$NON-NLS-1$
 
 	public static final int EVENT_NON_ATTENDANCE_POINTS_2011 = 1;
 }
