@@ -25,6 +25,9 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import com.google.common.base.Predicates;
+import com.google.common.collect.Sets;
+
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
@@ -44,7 +47,7 @@ public class ScoresXMLEvent extends AbstractXMLEntity<Event> {
 
 		if (!event.getAttendees().isEmpty()) {
 			attendees = new ArrayList<ScoresXMLEventAttendee>(event.getAttendees().size());
-			for (Pilot pilot : event.getAttendees()) {
+			for (Pilot pilot : Sets.filter(event.getAttendees(), Predicates.in(pilots))) {
 				attendees.add(new ScoresXMLEventAttendee(pilot));
 			}
 			Collections.sort(attendees);

@@ -25,6 +25,9 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import com.google.common.base.Predicates;
+import com.google.common.collect.Maps;
+
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
@@ -44,10 +47,8 @@ public class ScoresXMLRace extends AbstractXMLEntity<Race> {
 
 		if (!race.getAttendees().isEmpty()) {
 			attendees = new ArrayList<ScoresXMLRaceAttendee>(race.getAttendees().size());
-			for (RaceAttendee attendee : race.getAttendees().values()) {
-				if (pilots.contains(attendee.getPilot())) {
-					attendees.add(new ScoresXMLRaceAttendee(attendee));
-				}
+			for (RaceAttendee attendee : Maps.filterKeys(race.getAttendees(), Predicates.in(pilots)).values()) {
+				attendees.add(new ScoresXMLRaceAttendee(attendee));
 			}
 		}
 		Collections.sort(attendees);
