@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2012  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,8 +26,8 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.scoring.FleetFilter;
-import eu.lp0.cursus.scoring.Scores;
+import eu.lp0.cursus.scoring.data.Scores;
+import eu.lp0.cursus.scoring.scorer.FleetFilter;
 import eu.lp0.cursus.test.util.OverallAssertUtil;
 
 /**

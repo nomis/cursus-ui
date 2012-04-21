@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2012  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,12 +26,12 @@ import com.google.common.collect.Ordering;
 
 import eu.lp0.cursus.db.dao.EntityDAO;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.scoring.PilotRaceNumberComparator;
 import eu.lp0.cursus.ui.component.DatabaseColumn;
 import eu.lp0.cursus.ui.component.DatabaseTableCellEditor;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.MutableListComboBoxModel;
 import eu.lp0.cursus.ui.component.StringDatabaseTableCellRenderer;
+import eu.lp0.cursus.util.PilotRaceNumberComparator;
 
 public class RaceAttendeesDatabaseColumn extends DatabaseColumn<RaceAttendeePenalty, PilotWrapper> {
 	private final MutableListComboBoxModel<PilotWrapper> pilots = new MutableListComboBoxModel<PilotWrapper>();

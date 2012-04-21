@@ -17,27 +17,27 @@
  */
 package org.fisly.cursus.scoring;
 
-import eu.lp0.cursus.scoring.AbstractScoresFactory;
-import eu.lp0.cursus.scoring.AveragingRacePointsData;
-import eu.lp0.cursus.scoring.GenericDiscardCalculator;
-import eu.lp0.cursus.scoring.GenericOverallPenaltiesData;
-import eu.lp0.cursus.scoring.GenericOverallPointsData;
-import eu.lp0.cursus.scoring.GenericOverallPositionData;
-import eu.lp0.cursus.scoring.GenericRaceDiscardsData;
-import eu.lp0.cursus.scoring.GenericRaceLapsData;
-import eu.lp0.cursus.scoring.GenericRacePenaltiesData;
-import eu.lp0.cursus.scoring.GenericRacePointsData;
-import eu.lp0.cursus.scoring.GenericRacePositionsData;
-import eu.lp0.cursus.scoring.OverallPenaltiesData;
-import eu.lp0.cursus.scoring.OverallPointsData;
-import eu.lp0.cursus.scoring.OverallPositionData;
-import eu.lp0.cursus.scoring.PilotRacePlacingComparator;
-import eu.lp0.cursus.scoring.RaceDiscardsData;
-import eu.lp0.cursus.scoring.RaceLapsData;
-import eu.lp0.cursus.scoring.RacePenaltiesData;
-import eu.lp0.cursus.scoring.RacePointsData;
-import eu.lp0.cursus.scoring.RacePositionsData;
-import eu.lp0.cursus.scoring.Scores;
+import eu.lp0.cursus.scoring.data.OverallPenaltiesData;
+import eu.lp0.cursus.scoring.data.OverallPointsData;
+import eu.lp0.cursus.scoring.data.OverallPositionData;
+import eu.lp0.cursus.scoring.data.RaceDiscardsData;
+import eu.lp0.cursus.scoring.data.RaceLapsData;
+import eu.lp0.cursus.scoring.data.RacePenaltiesData;
+import eu.lp0.cursus.scoring.data.RacePointsData;
+import eu.lp0.cursus.scoring.data.RacePositionsData;
+import eu.lp0.cursus.scoring.data.Scores;
+import eu.lp0.cursus.scoring.scores.base.AbstractScoresFactory;
+import eu.lp0.cursus.scoring.scores.impl.AveragingRacePointsData;
+import eu.lp0.cursus.scoring.scores.impl.GenericDiscardCalculator;
+import eu.lp0.cursus.scoring.scores.impl.GenericOverallPenaltiesData;
+import eu.lp0.cursus.scoring.scores.impl.GenericOverallPointsData;
+import eu.lp0.cursus.scoring.scores.impl.GenericOverallPositionData;
+import eu.lp0.cursus.scoring.scores.impl.GenericRaceDiscardsData;
+import eu.lp0.cursus.scoring.scores.impl.GenericRaceLapsData;
+import eu.lp0.cursus.scoring.scores.impl.GenericRacePenaltiesData;
+import eu.lp0.cursus.scoring.scores.impl.GenericRacePointsData;
+import eu.lp0.cursus.scoring.scores.impl.GenericRacePositionsData;
+import eu.lp0.cursus.scoring.scores.impl.PilotRacePlacingComparator;
 
 public class FISLYScoresFactory2010 extends AbstractScoresFactory {
 	protected static final int RACES_PER_DISCARD = 4;

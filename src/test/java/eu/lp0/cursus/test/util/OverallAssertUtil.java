@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2012  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ import java.util.Set;
 import org.junit.Assert;
 
 import eu.lp0.cursus.db.data.Pilot;
-import eu.lp0.cursus.scoring.Scores;
+import eu.lp0.cursus.scoring.data.Scores;
 
 public class OverallAssertUtil {
 	private final Scores scores;

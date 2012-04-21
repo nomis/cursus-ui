@@ -19,7 +19,7 @@ package eu.lp0.cursus.xml.scores;
 
 import java.util.List;
 
-import eu.lp0.cursus.scoring.Scores;
+import eu.lp0.cursus.scoring.data.Scores;
 import eu.lp0.cursus.xml.common.AbstractXMLFile;
 
 public class ScoresXMLFile extends AbstractXMLFile<ScoresXML> {

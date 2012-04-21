@@ -17,12 +17,12 @@
  */
 package org.spka.cursus.scoring;
 
-import eu.lp0.cursus.scoring.AveragingRacePointsData;
-import eu.lp0.cursus.scoring.GenericOverallPenaltiesData;
-import eu.lp0.cursus.scoring.GenericRacePointsData;
-import eu.lp0.cursus.scoring.OverallPenaltiesData;
-import eu.lp0.cursus.scoring.RacePointsData;
-import eu.lp0.cursus.scoring.Scores;
+import eu.lp0.cursus.scoring.data.OverallPenaltiesData;
+import eu.lp0.cursus.scoring.data.RacePointsData;
+import eu.lp0.cursus.scoring.data.Scores;
+import eu.lp0.cursus.scoring.scores.impl.AveragingRacePointsData;
+import eu.lp0.cursus.scoring.scores.impl.GenericOverallPenaltiesData;
+import eu.lp0.cursus.scoring.scores.impl.GenericRacePointsData;
 
 public class SPKAScoresFactory2011 extends SPKAScoresFactory2010 {
 	@Override

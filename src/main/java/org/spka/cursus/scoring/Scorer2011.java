@@ -25,10 +25,10 @@ import com.google.common.base.Predicate;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.scoring.AbstractScorer;
-import eu.lp0.cursus.scoring.Scorer;
-import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.scoring.ScoringSystem;
+import eu.lp0.cursus.scoring.data.Scores;
+import eu.lp0.cursus.scoring.scorer.AbstractScorer;
+import eu.lp0.cursus.scoring.scorer.Scorer;
+import eu.lp0.cursus.scoring.scorer.ScoringSystem;
 
 @ScoringSystem(uuid = SPKAConstants.UUID_2011, name = SPKAConstants.NAME_2011)
 public class Scorer2011 extends AbstractScorer implements Scorer {

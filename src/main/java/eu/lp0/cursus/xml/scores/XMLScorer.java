@@ -25,9 +25,9 @@ import com.google.common.base.Predicate;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.scoring.AbstractScorer;
-import eu.lp0.cursus.scoring.Scores;
-import eu.lp0.cursus.scoring.ScoringSystem;
+import eu.lp0.cursus.scoring.data.Scores;
+import eu.lp0.cursus.scoring.scorer.AbstractScorer;
+import eu.lp0.cursus.scoring.scorer.ScoringSystem;
 
 @ScoringSystem(uuid = "4063fecb-3dbd-5c0a-baeb-1e41769b8091", name = "XML Import", hide = true)
 public class XMLScorer extends AbstractScorer {

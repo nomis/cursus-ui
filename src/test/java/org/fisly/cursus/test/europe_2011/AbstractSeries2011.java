@@ -32,8 +32,8 @@ import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.db.data.RaceEvent;
 import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.scoring.Scorer;
-import eu.lp0.cursus.scoring.ScorerFactory;
+import eu.lp0.cursus.scoring.scorer.Scorer;
+import eu.lp0.cursus.scoring.scorer.ScorerFactory;
 import eu.lp0.cursus.test.db.AbstractDatabaseTest;
 
 public abstract class AbstractSeries2011 extends AbstractDatabaseTest {
