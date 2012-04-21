@@ -142,6 +142,24 @@ public class AbstractUITest extends AbstractDataTest {
 		});
 	}
 
+	public void syncOnDatabaseRefresh() throws Exception {
+		// Wait for the initiation of the database refresh to complete
+		syncOnEventThread();
+
+		// Wait for the database refresh to complete
+		syncOnBackgroundExecutor();
+
+		// Wait for the GUI update from the database refresh to complete
+		syncOnEventThread();
+	}
+
+	public void syncOnDatabaseChange() throws Exception {
+		// Wait for the change to complete
+		syncOnBackgroundExecutor();
+
+		syncOnDatabaseRefresh();
+	}
+
 	public void executeWithTimeout(Runnable run) throws Exception {
 		final FutureTask<Void> task = new FutureTask<Void>(run, null);
 		Background.execute(task);
