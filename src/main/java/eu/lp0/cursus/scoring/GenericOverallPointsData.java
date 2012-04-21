@@ -18,7 +18,9 @@
 package eu.lp0.cursus.scoring;
 
 import java.util.Map.Entry;
-import java.util.Set;
+
+import com.google.common.base.Predicates;
+import com.google.common.collect.Maps;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
@@ -32,13 +34,10 @@ public class GenericOverallPointsData<T extends ScoredData & RacePointsData & Ra
 	protected int calculateOverallPoints(Pilot pilot) {
 		int points = 0;
 
-		Set<Race> discardedRaces = scores.getDiscardedRaces(pilot);
-
 		// Add race points but not discards
-		for (Entry<Race, Integer> racePoints : scores.getRacePoints(pilot).entrySet()) {
-			if (!discardedRaces.contains(racePoints.getKey())) {
-				points += racePoints.getValue();
-			}
+		for (Entry<Race, Integer> racePoints : Maps.filterKeys(scores.getRacePoints(pilot), Predicates.not(Predicates.in(scores.getDiscardedRaces(pilot))))
+				.entrySet()) {
+			points += racePoints.getValue();
 		}
 
 		// Add all penalties (this includes race penalties)
