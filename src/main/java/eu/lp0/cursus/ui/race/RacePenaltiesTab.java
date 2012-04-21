@@ -133,6 +133,7 @@ public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 
 					@Override
 					protected RaceAttendeePenalty newRow() {
+						assert (currentRace != null);
 						return new RaceAttendeePenalty(currentRace);
 					}
 				}));

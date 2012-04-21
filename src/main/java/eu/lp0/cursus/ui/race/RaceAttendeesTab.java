@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2012  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -34,6 +34,8 @@ import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Objects;
 
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.PilotDAO;
@@ -86,12 +88,14 @@ public class RaceAttendeesTab extends AbstractDatabaseTab<Race> {
 				new EnumDatabaseColumn<Pilot, RaceAttendee.Type>("pilot.race-attendee", win, pilotDAO, RaceAttendee.Type.class, true) { //$NON-NLS-1$
 					@Override
 					protected Type getEnumValue(Pilot row) {
+						assert (currentRace != null);
 						RaceAttendee attendee = row.getRaces().get(currentRace);
 						return attendee != null ? attendee.getType() : null;
 					}
 
 					@Override
 					protected boolean setEnumValue(Pilot row, Type value) {
+						assert (currentRace != null);
 						RaceAttendee attendee = row.getRaces().get(currentRace);
 						if (attendee == null) {
 							if (value != null) {
@@ -293,8 +297,11 @@ public class RaceAttendeesTab extends AbstractDatabaseTab<Race> {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				model.updateModel(newPilots);
+				if (!Objects.equal(currentRace, newRace)) {
+					model.updateModel(Collections.<Pilot>emptyList());
+				}
 				currentRace = newRace;
+				model.updateModel(newPilots);
 			}
 		});
 	}
@@ -306,8 +313,8 @@ public class RaceAttendeesTab extends AbstractDatabaseTab<Race> {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				currentRace = null;
 				model.updateModel(Collections.<Pilot>emptyList());
+				currentRace = null;
 			}
 		});
 	}

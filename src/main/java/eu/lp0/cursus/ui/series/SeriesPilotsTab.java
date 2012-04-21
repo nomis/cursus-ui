@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2012  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
@@ -129,6 +130,7 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 
 					@Override
 					protected Pilot newRow() {
+						assert (currentSeries != null);
 						return new Pilot(currentSeries, ""); //$NON-NLS-1$
 					}
 				}));
@@ -254,6 +256,9 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				if (!Objects.equal(currentSeries, newSeries)) {
+					model.updateModel(Collections.<Pilot>emptyList());
+				}
 				currentSeries = newSeries;
 				model.updateModel(newPilots);
 			}
@@ -267,8 +272,8 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				currentSeries = null;
 				model.updateModel(Collections.<Pilot>emptyList());
+				currentSeries = null;
 			}
 		});
 	}

@@ -27,7 +27,6 @@ import javax.swing.JTable;
 import javax.swing.JViewport;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import eu.lp0.cursus.db.Database;
@@ -96,7 +95,6 @@ public class RacePilotSortTest extends AbstractUITest {
 		});
 	}
 
-	@Ignore
 	@Test
 	public void initialViewTestWithSomePilots() throws Exception {
 		// Add some pilots to the first race

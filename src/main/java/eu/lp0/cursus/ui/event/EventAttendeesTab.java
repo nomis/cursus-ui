@@ -35,6 +35,7 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Sets;
 
@@ -87,16 +88,17 @@ public class EventAttendeesTab extends AbstractDatabaseTab<Event> {
 				new BooleanDatabaseColumn<Pilot>("pilot.event-attendee", win, pilotDAO) { //$NON-NLS-1$
 					@Override
 					protected Boolean getValue(Pilot row, boolean editing) {
+						assert (currentEvent != null);
 						return row.getEvents().contains(currentEvent);
 					}
 
 					@Override
 					protected boolean setValue(Pilot row, Boolean value) {
-						Event event = currentEvent;
+						assert (currentEvent != null);
 						if (value) {
-							row.getEvents().add(event);
+							row.getEvents().add(currentEvent);
 						} else {
-							row.getEvents().remove(event);
+							row.getEvents().remove(currentEvent);
 						}
 						return true;
 					}
@@ -270,6 +272,9 @@ public class EventAttendeesTab extends AbstractDatabaseTab<Event> {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				if (!Objects.equal(currentEvent, newEvent)) {
+					model.updateModel(Collections.<Pilot>emptyList());
+				}
 				currentEvent = newEvent;
 				model.updateModel(newPilots);
 			}
@@ -283,8 +288,8 @@ public class EventAttendeesTab extends AbstractDatabaseTab<Event> {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				currentEvent = null;
 				model.updateModel(Collections.<Pilot>emptyList());
+				currentEvent = null;
 			}
 		});
 	}
