@@ -20,16 +20,11 @@ package eu.lp0.cursus.xml.scores.results;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.data.Scores;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 
-@Root(name = "seriesEventResults")
 public class ScoresXMLSeriesEventResults {
 	public ScoresXMLSeriesEventResults() {
 	}
@@ -43,7 +38,6 @@ public class ScoresXMLSeriesEventResults {
 		}
 	}
 
-	@Attribute
 	private String event;
 
 	public String getEvent() {
@@ -54,7 +48,6 @@ public class ScoresXMLSeriesEventResults {
 		this.event = event;
 	}
 
-	@ElementList(inline = true)
 	private ArrayList<ScoresXMLEventRaceResults> raceResults;
 
 	public ArrayList<ScoresXMLEventRaceResults> getRaceResults() {

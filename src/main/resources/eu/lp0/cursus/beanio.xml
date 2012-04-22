@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beanio xmlns="http://www.beanio.org/2011/01"
+<beanio xmlns="http://www.beanio.org/2012/03"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://www.beanio.org/2011/01 http://www.beanio.org/2011/01/mapping.xsd">
+		xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2011/03/mapping.xsd">
 
 	<typeHandler type="eu.lp0.cursus.db.data.Gender" class="eu.lp0.cursus.xml.EnumTypeHandler">
 		<property name="enum" value="eu.lp0.cursus.db.data.Gender"/>
@@ -11,52 +11,77 @@
 		<property name="enum" value="eu.lp0.cursus.db.data.RaceAttendee$Type"/>
 	</typeHandler>
 
-		<typeHandler type="eu.lp0.cursus.db.data.Penalty$Type" class="eu.lp0.cursus.xml.EnumTypeHandler">
+	<typeHandler type="eu.lp0.cursus.db.data.Penalty$Type" class="eu.lp0.cursus.xml.EnumTypeHandler">
 		<property name="enum" value="eu.lp0.cursus.db.data.Penalty$Type"/>
 	</typeHandler>
 
 	<template name="series">
-		<field name="id" minOccurs="1" xmlType="attribute" xmlPrefix="xml" xmlNamespace="http://www.w3.org/XML/1998/namespace"/>
-		<field name="name" minOccurs="1"/>
-		<field name="description" minOccurs="1"/>
-		<bean name="classes" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLClass" xmlName="class" collection="list" xmlWrapper="classes">
-			<field name="id" minOccurs="1" xmlType="attribute" xmlPrefix="xml" xmlNamespace="http://www.w3.org/XML/1998/namespace"/>
-			<field name="name" minOccurs="1"/>
-			<field name="description" minOccurs="1"/>
-		</bean>
-		<bean name="pilots" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLPilot" xmlName="pilot" collection="list" xmlWrapper="pilots">
-			<field name="id" minOccurs="1" xmlType="attribute" xmlPrefix="xml" xmlNamespace="http://www.w3.org/XML/1998/namespace"/>
-			<field name="name" minOccurs="1"/>
-			<field name="gender" minOccurs="0"/>
-			<field name="country" minOccurs="1"/>
-			<bean name="raceNumber" minOccurs="0" class="eu.lp0.cursus.xml.data.entity.DataXMLRaceNumber">
-				<field name="organisation" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-				<field name="number" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-			</bean>
-			<bean name="classes" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.ref.DataXMLClassMember" xmlName="member" collection="list">
-				<field name="class_" minOccurs="1" xmlName="class" xmlType="attribute" xmlNamespace=""/>
-			</bean>
-		</bean>
-		<bean name="events" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLEvent" xmlName="event" collection="list" xmlWrapper="events">
-			<field name="id" xmlType="attribute" xmlPrefix="xml" xmlNamespace="http://www.w3.org/XML/1998/namespace"/>
-			<field name="name"/>
-			<field name="description"/>
-			<bean name="attendees" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.ref.DataXMLEventAttendee" xmlName="eventAttendee" collection="list">
-				<field name="pilot" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-			</bean>
-			<bean name="races" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLRace" xmlName="race" collection="list" xmlWrapper="races">
-				<field name="id" xmlType="attribute" xmlPrefix="xml" xmlNamespace="http://www.w3.org/XML/1998/namespace"/>
-				<field name="name"/>
-				<field name="description"/>
-				<bean name="attendees" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLRaceAttendee" xmlName="raceAttendee" collection="list">
-					<field name="pilot" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-					<field name="type" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-					<bean name="penalties" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLPenalty" xmlName="penalty" collection="list">
-						<include template="penalty"/>
-					</bean>
-				</bean>
-			</bean>
-		</bean>
+		<field name="id" minOccurs="1" xmlType="attribute" xmlNamespace="http://www.w3.org/XML/1998/namespace"/>
+		<include template="name"/>
+		<include template="description"/>
+		<segment name="classes">
+			<segment name="classes" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLClass" xmlName="class" collection="list">
+				<field name="id" minOccurs="1" xmlType="attribute" xmlNamespace="http://www.w3.org/XML/1998/namespace"/>
+				<include template="name"/>
+				<include template="description"/>
+			</segment>
+		</segment>
+		<segment name="pilots">
+			<segment name="pilots" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLPilot" xmlName="pilot" collection="list">
+				<field name="id" minOccurs="1" xmlType="attribute" xmlNamespace="http://www.w3.org/XML/1998/namespace"/>
+				<include template="name"/>
+				<field name="gender" minOccurs="0"/>
+				<segment name="country">
+					<field name="space" ignore="true" default="preserve" xmlType="attribute" xmlNamespace="http://www.w3.org/XML/1998/namespace"/>
+					<field name="country" minOccurs="1" xmlType="text"/>
+				</segment>
+				<segment name="raceNumber" minOccurs="0" class="eu.lp0.cursus.xml.data.entity.DataXMLRaceNumber">
+					<field name="organisation" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+					<field name="number" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+				</segment>
+				<segment name="classes" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.ref.DataXMLClassMember" xmlName="member" collection="list">
+					<field name="class_" minOccurs="1" xmlName="class" xmlType="attribute" xmlNamespace=""/>
+				</segment>
+			</segment>
+		</segment>
+		<segment name="events">
+			<segment name="events" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLEvent" xmlName="event" collection="list">
+				<field name="id" xmlType="attribute" xmlNamespace="http://www.w3.org/XML/1998/namespace"/>
+				<include template="name"/>
+				<include template="description"/>
+				<segment name="attendees" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.ref.DataXMLEventAttendee" xmlName="eventAttendee" collection="list">
+					<field name="pilot" minOccurs="1" xmlName="pilot" xmlType="attribute" xmlNamespace=""/>
+				</segment>
+				<segment name="races">
+					<segment name="races" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLRace" xmlName="race" collection="list">
+						<field name="id" xmlType="attribute" xmlNamespace="http://www.w3.org/XML/1998/namespace"/>
+						<include template="name"/>
+						<include template="description"/>
+						<segment name="attendees" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLRaceAttendee" xmlName="raceAttendee" collection="list">
+							<field name="pilot" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+							<field name="type" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+							<segment name="penalties" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLPenalty" xmlName="penalty" collection="list">
+								<include template="penalty"/>
+							</segment>
+						</segment>
+					</segment>
+				</segment>
+			</segment>
+		</segment>
+	</template>
+	
+	<template name="name">
+		<segment name="name">
+			<field name="space" ignore="true" default="preserve" xmlType="attribute" xmlNamespace="http://www.w3.org/XML/1998/namespace"/>
+			<field name="name" minOccurs="1" xmlType="text"/>
+		</segment>
+	</template>
+	
+	<template name="description">
+		<segment name="description">
+			<field name="space" ignore="true" default="preserve" xmlType="attribute" xmlNamespace="http://www.w3.org/XML/1998/namespace"/>
+			<field name="description" minOccurs="1" xmlType="text"/>
+		</segment>
 	</template>
 
 	<template name="penalty">
@@ -70,10 +95,10 @@
 		<field name="discards" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
 		<include template="scored"/>
 		<include template="overallOrder"/>
-		<bean name="eventResults" minOccurs="1" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.results.ScoresXMLSeriesEventResults" xmlName="seriesEventResults" collection="list">
+		<segment name="eventResults" minOccurs="1" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.results.ScoresXMLSeriesEventResults" xmlName="seriesEventResults" collection="list">
 			<field name="event" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
 			<include template="eventRaceResults"/>
-		</bean>
+		</segment>
 	</template>
 
 	<template name="eventResults">
@@ -85,11 +110,11 @@
 	</template>
 
 	<template name="eventRaceResults">
-		<bean name="raceResults" minOccurs="1" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.results.ScoresXMLEventRaceResults" xmlName="eventRaceResults" collection="list">
+		<segment name="raceResults" minOccurs="1" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.results.ScoresXMLEventRaceResults" xmlName="eventRaceResults" collection="list">
 			<field name="race" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
 			<field name="fleet" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
 			<include template="raceOrder"/>
-		</bean>
+		</segment>
 	</template>
 
 	<template name="raceResults">
@@ -102,43 +127,47 @@
 
 	<template name="scored">
 		<field name="scorer" minOccurs="0" xmlType="attribute" xmlNamespace=""/>
-		<bean name="events" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.ref.ScoresXMLEvent" xmlName="event" collection="list">
+		<segment name="events" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.ref.ScoresXMLEvent" xmlName="event" collection="list">
 			<field name="event" minOccurs="1" xmlType="attribute" xmlName="ref" xmlNamespace=""/>
-		</bean>
+		</segment>
 	</template>
 
 	<template name="overallOrder">
-		<bean name="overallPilots" minOccurs="1" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore" xmlName="overallScore" collection="list" xmlWrapper="overallOrder">
-			<bean name="discards" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.ref.ScoresXMLRaceDiscard" xmlName="discard" collection="list">
-				<field name="race" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-			</bean>
-			<bean name="simulatedPenalties" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLPenalty" xmlName="penalty" collection="list" xmlNamespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.0">
-				<include template="penalty"/>
-			</bean>
-			<field name="pilot" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-			<field name="penalties" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-			<field name="points" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-			<field name="position" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-		</bean>
+		<segment name="overallOrder">
+			<segment name="overallPilots" minOccurs="1" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore" xmlName="overallScore" collection="list">
+				<segment name="discards" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.ref.ScoresXMLRaceDiscard" xmlName="discard" collection="list">
+					<field name="race" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+				</segment>
+				<segment name="simulatedPenalties" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLPenalty" xmlName="penalty" collection="list" xmlNamespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.0.1">
+					<include template="penalty"/>
+				</segment>
+				<field name="pilot" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+				<field name="penalties" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+				<field name="points" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+				<field name="position" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+			</segment>
+		</segment>
 	</template>
 
 	<template name="raceOrder">
-		<bean name="racePilots" minOccurs="1" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore" xmlName="raceScore" collection="list" xmlWrapper="raceOrder">
-			<bean name="simulatedPenalties" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLPenalty" xmlName="penalty" collection="list" xmlNamespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.0">
-				<include template="penalty"/>
-			</bean>
-			<field name="pilot" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-			<field name="laps" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-			<field name="simulated" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-			<field name="discarded" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-			<field name="penalties" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-			<field name="points" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-			<field name="position" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
-		</bean>
+		<segment name="raceOrder">
+			<segment name="racePilots" minOccurs="1" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore" xmlName="raceScore" collection="list">
+				<segment name="simulatedPenalties" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLPenalty" xmlName="penalty" collection="list" xmlNamespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.0.1">
+					<include template="penalty"/>
+				</segment>
+				<field name="pilot" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+				<field name="laps" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+				<field name="simulated" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+				<field name="discarded" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+				<field name="penalties" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+				<field name="points" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+				<field name="position" minOccurs="1" xmlType="attribute" xmlNamespace=""/>
+			</segment>
+		</segment>
 	</template>
 
-	<stream name="DataXML" format="xml" xmlType="none">
-		<writer>
+	<stream name="DataXML" format="xml" xmlType="none" strict="true">
+		<parser>
 			<property name="version" value="1.0"/>
 			<property name="encoding" value="UTF-8"/>
 			<property name="indentation" value="1"/>
@@ -147,41 +176,43 @@
 				xml http://www.w3.org/XML/1998/namespace
 				xsi http://www.w3.org/2001/XMLSchema-instance
 			"/>
-		</writer>
-		<record name="cursus" class="eu.lp0.cursus.xml.data.DataXML" xmlPrefix="" xmlNamespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.1">
+		</parser>
+		<record name="cursus" minOccurs="1" maxOccurs="1" class="eu.lp0.cursus.xml.data.DataXML" xmlPrefix="" xmlNamespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.1.1">
+			<field name="schemaLocation" ignore="true" default="urn:oid:1.3.6.1.4.1.39777.1.0.1.0.1 https://xsd.s85.org/urn/oid/1.3.6.1.4.1.39777.1.0.1.0.1" xmlType="attribute" xmlNamespace="http://www.w3.org/2001/XMLSchema-instance"/>
 			<field name="generator" xmlType="attribute" xmlNamespace=""/>
-			<bean name="series" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLSeries" collection="list" xmlPrefix="" xmlNamespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.0">
+			<segment name="series" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.data.entity.DataXMLSeries" collection="list" xmlPrefix="" xmlNamespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.0.1">
 				<include template="series"/>
-			</bean>
+			</segment>
 		</record>
 	</stream>
 
-	<stream name="ScoresXML" format="xml" xmlType="none">
-		<writer>
+	<stream name="ScoresXML" format="xml" xmlType="none" strict="true">
+		<parser>
 			<property name="version" value="1.0"/>
 			<property name="encoding" value="UTF-8"/>
 			<property name="indentation" value="1"/>
 			<property name="lineSeparator" value="&#xA;"/>
 			<property name="namespaces" value="
-				d urn:oid:1.3.6.1.4.1.39777.1.0.1.0
+				d urn:oid:1.3.6.1.4.1.39777.1.0.1.0.1
 				xml http://www.w3.org/XML/1998/namespace
 				xsi http://www.w3.org/2001/XMLSchema-instance
 			"/>
-		</writer>
-		<record name="cursus" class="eu.lp0.cursus.xml.scores.ScoresXML" xmlPrefix="" xmlNamespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.1">
+		</parser>
+		<record name="cursus" minOccurs="1" maxOccurs="1" class="eu.lp0.cursus.xml.scores.ScoresXML" xmlPrefix="" xmlNamespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.1.1">
+			<field name="schemaLocation" ignore="true" default="urn:oid:1.3.6.1.4.1.39777.1.0.1.0.1 https://xsd.s85.org/urn/oid/1.3.6.1.4.1.39777.1.0.1.0.1 urn:oid:1.3.6.1.4.1.39777.1.0.1.1.1 https://xsd.s85.org/urn/oid/1.3.6.1.4.1.39777.1.0.1.1.1" xmlType="attribute" xmlNamespace="http://www.w3.org/2001/XMLSchema-instance"/>
 			<field name="generator" xmlType="attribute" xmlNamespace=""/>
-			<bean name="series" minOccurs="1" class="eu.lp0.cursus.xml.data.entity.DataXMLSeries" xmlPrefix="" xmlNamespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.0">
+			<segment name="series" minOccurs="1" class="eu.lp0.cursus.xml.data.entity.DataXMLSeries" xmlPrefix="" xmlNamespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.0.1">
 				<include template="series"/>
-			</bean>
-			<bean name="seriesResults" minOccurs="0" class="eu.lp0.cursus.xml.scores.results.ScoresXMLSeriesResults">
+			</segment>
+			<segment name="seriesResults" minOccurs="0" class="eu.lp0.cursus.xml.scores.results.ScoresXMLSeriesResults">
 				<include template="seriesResults"/>
-			</bean>
-			<bean name="eventResults" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.results.ScoresXMLEventResults" collection="list">
+			</segment>
+			<segment name="eventResults" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.results.ScoresXMLEventResults" collection="list">
 				<include template="eventResults"/>
-			</bean>
-			<bean name="raceResults" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.results.ScoresXMLRaceResults" collection="list">
+			</segment>
+			<segment name="raceResults" minOccurs="0" maxOccurs="unbounded" class="eu.lp0.cursus.xml.scores.results.ScoresXMLRaceResults" collection="list">
 				<include template="raceResults"/>
-			</bean>
+			</segment>
 		</record>
 	</stream>
 </beanio>

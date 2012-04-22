@@ -19,18 +19,12 @@ package eu.lp0.cursus.xml.scores.results;
 
 import java.util.ArrayList;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.NamespaceList;
-
+import eu.lp0.cursus.db.data.Event;
+import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.scoring.data.Scores;
-import eu.lp0.cursus.xml.data.DataXML;
-import eu.lp0.cursus.xml.scores.ScoresXML;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLEvent;
 
-@Namespace(reference = ScoresXML.SCORES_XMLNS)
-@NamespaceList({ @Namespace(prefix = "d", reference = DataXML.DATA_XMLNS) })
 public abstract class AbstractScoresXMLResults {
 	public AbstractScoresXMLResults() {
 	}
@@ -38,9 +32,18 @@ public abstract class AbstractScoresXMLResults {
 	public AbstractScoresXMLResults(Scores scores) {
 		this();
 		scorer = scores.getScorer();
+
+		events = new ArrayList<ScoresXMLEvent>(scores.getEvents().size());
+		for (Event event_ : scores.getEvents()) {
+			events.add(new ScoresXMLEvent(event_));
+		}
+
+		overallPilots = new ArrayList<ScoresXMLOverallScore>(scores.getOverallOrder().size());
+		for (Pilot pilot : scores.getOverallOrder()) {
+			overallPilots.add(new ScoresXMLOverallScore(scores, pilot));
+		}
 	}
 
-	@Attribute
 	private String scorer;
 
 	public String getScorer() {
@@ -51,7 +54,23 @@ public abstract class AbstractScoresXMLResults {
 		this.scorer = scorer;
 	}
 
-	public abstract ArrayList<ScoresXMLEvent> getEvents();
+	private ArrayList<ScoresXMLEvent> events;
 
-	public abstract ArrayList<ScoresXMLOverallScore> getOverallPilots();
+	public ArrayList<ScoresXMLEvent> getEvents() {
+		return events;
+	}
+
+	public void setEvents(ArrayList<ScoresXMLEvent> events) {
+		this.events = events;
+	}
+
+	private ArrayList<ScoresXMLOverallScore> overallPilots;
+
+	public ArrayList<ScoresXMLOverallScore> getOverallPilots() {
+		return overallPilots;
+	}
+
+	public void setOverallPilots(ArrayList<ScoresXMLOverallScore> overallPilots) {
+		this.overallPilots = overallPilots;
+	}
 }

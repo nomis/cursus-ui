@@ -19,19 +19,11 @@ package eu.lp0.cursus.xml.data.entity;
 
 import java.util.ArrayList;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.Root;
-
 import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
-import eu.lp0.cursus.xml.data.DataXML;
 import eu.lp0.cursus.xml.data.ref.DataXMLPilotRef;
 
-@Namespace(reference = DataXML.DATA_XMLNS)
-@Root(name = "raceAttendee")
 public class DataXMLRaceAttendee implements Comparable<DataXMLRaceAttendee>, DataXMLPilotRef {
 	public DataXMLRaceAttendee() {
 	}
@@ -48,7 +40,6 @@ public class DataXMLRaceAttendee implements Comparable<DataXMLRaceAttendee>, Dat
 		}
 	}
 
-	@Attribute
 	private String pilot;
 
 	public String getPilot() {
@@ -59,7 +50,6 @@ public class DataXMLRaceAttendee implements Comparable<DataXMLRaceAttendee>, Dat
 		this.pilot = pilot;
 	}
 
-	@Attribute
 	private RaceAttendee.Type type;
 
 	public RaceAttendee.Type getType() {
@@ -70,7 +60,6 @@ public class DataXMLRaceAttendee implements Comparable<DataXMLRaceAttendee>, Dat
 		this.type = type;
 	}
 
-	@ElementList(required = false, inline = true)
 	private ArrayList<DataXMLPenalty> penalties;
 
 	public ArrayList<DataXMLPenalty> getPenalties() {

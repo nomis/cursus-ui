@@ -20,10 +20,6 @@ package eu.lp0.cursus.xml.scores.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-
 import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
@@ -32,7 +28,6 @@ import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.data.entity.DataXMLPenalty;
 import eu.lp0.cursus.xml.data.ref.DataXMLPilotRef;
 
-@Root(name = "raceScore")
 public class ScoresXMLRaceScore implements DataXMLPilotRef {
 	public ScoresXMLRaceScore() {
 	}
@@ -57,7 +52,6 @@ public class ScoresXMLRaceScore implements DataXMLPilotRef {
 		}
 	}
 
-	@Attribute
 	private String pilot;
 
 	public String getPilot() {
@@ -68,7 +62,6 @@ public class ScoresXMLRaceScore implements DataXMLPilotRef {
 		this.pilot = pilot;
 	}
 
-	@Attribute
 	private int laps;
 
 	public int getLaps() {
@@ -79,7 +72,6 @@ public class ScoresXMLRaceScore implements DataXMLPilotRef {
 		this.laps = laps;
 	}
 
-	@Attribute
 	private boolean simulated;
 
 	public boolean isSimulated() {
@@ -90,7 +82,6 @@ public class ScoresXMLRaceScore implements DataXMLPilotRef {
 		this.simulated = simulated;
 	}
 
-	@Attribute
 	private boolean discarded;
 
 	public boolean isDiscarded() {
@@ -101,7 +92,6 @@ public class ScoresXMLRaceScore implements DataXMLPilotRef {
 		this.discarded = discarded;
 	}
 
-	@Attribute
 	private int penalties;
 
 	public int getPenalties() {
@@ -112,7 +102,6 @@ public class ScoresXMLRaceScore implements DataXMLPilotRef {
 		this.penalties = penalties;
 	}
 
-	@Attribute
 	private int points;
 
 	public int getPoints() {
@@ -123,7 +112,6 @@ public class ScoresXMLRaceScore implements DataXMLPilotRef {
 		this.points = points;
 	}
 
-	@Attribute
 	private int position;
 
 	public int getPosition() {
@@ -134,7 +122,6 @@ public class ScoresXMLRaceScore implements DataXMLPilotRef {
 		this.position = position;
 	}
 
-	@ElementList(required = false)
 	private ArrayList<DataXMLPenalty> simulatedPenalties;
 
 	public ArrayList<DataXMLPenalty> getSimulatedPenalties() {

@@ -20,10 +20,6 @@ package eu.lp0.cursus.xml.scores.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-
 import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
@@ -33,7 +29,6 @@ import eu.lp0.cursus.xml.data.entity.DataXMLPenalty;
 import eu.lp0.cursus.xml.data.ref.DataXMLPilotRef;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLRaceDiscard;
 
-@Root(name = "overallScore")
 public class ScoresXMLOverallScore implements DataXMLPilotRef {
 	public ScoresXMLOverallScore() {
 	}
@@ -61,7 +56,6 @@ public class ScoresXMLOverallScore implements DataXMLPilotRef {
 		}
 	}
 
-	@Attribute
 	private String pilot;
 
 	public String getPilot() {
@@ -72,7 +66,6 @@ public class ScoresXMLOverallScore implements DataXMLPilotRef {
 		this.pilot = pilot;
 	}
 
-	@Attribute
 	private int penalties;
 
 	public int getPenalties() {
@@ -83,7 +76,6 @@ public class ScoresXMLOverallScore implements DataXMLPilotRef {
 		this.penalties = penalties;
 	}
 
-	@Attribute
 	private int points;
 
 	public int getPoints() {
@@ -94,7 +86,6 @@ public class ScoresXMLOverallScore implements DataXMLPilotRef {
 		this.points = points;
 	}
 
-	@Attribute
 	private int position;
 
 	public int getPosition() {
@@ -105,7 +96,6 @@ public class ScoresXMLOverallScore implements DataXMLPilotRef {
 		this.position = position;
 	}
 
-	@ElementList(required = false, inline = true)
 	private ArrayList<ScoresXMLRaceDiscard> discards;
 
 	public ArrayList<ScoresXMLRaceDiscard> getDiscards() {
@@ -116,7 +106,6 @@ public class ScoresXMLOverallScore implements DataXMLPilotRef {
 		this.discards = discards;
 	}
 
-	@ElementList(required = false, inline = true)
 	private ArrayList<DataXMLPenalty> simulatedPenalties;
 
 	public ArrayList<DataXMLPenalty> getSimulatedPenalties() {

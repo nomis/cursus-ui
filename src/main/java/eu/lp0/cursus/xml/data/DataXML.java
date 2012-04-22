@@ -20,28 +20,11 @@ package eu.lp0.cursus.xml.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.Root;
-
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.util.Constants;
-import eu.lp0.cursus.xml.common.AbstractXMLRoot;
 import eu.lp0.cursus.xml.data.entity.DataXMLSeries;
 
-@Namespace(reference = DataXML.DATA_XMLNS)
-@Root(name = "cursus")
-public class DataXML extends AbstractXMLRoot {
-	public static final String DATA_OID = NS_XML_CURSUS_OID + ".0"; //$NON-NLS-1$
-	public static final String DATA_XMLNS = OID_URN_PREFIX + DATA_OID;
-	public static final String DATA_XSD = XSD_URI_PREFIX + DATA_OID;
-
-	// Simple won't let me omit the reference value as it then outputs ""
-	@Namespace(prefix = "xsi", reference = AbstractXMLRoot.XSI_XMLNS)
-	@Attribute(name = "schemaLocation")
-	public static final String SCHEMA_LOCATION = DATA_XMLNS + " " + DATA_XSD; //$NON-NLS-1$
-
+public class DataXML {
 	public DataXML() {
 	}
 
@@ -54,7 +37,6 @@ public class DataXML extends AbstractXMLRoot {
 		}
 	}
 
-	@Attribute
 	private String generator;
 
 	public String getGenerator() {
@@ -65,7 +47,6 @@ public class DataXML extends AbstractXMLRoot {
 		this.generator = generator;
 	}
 
-	@ElementList(required = false, inline = true)
 	private ArrayList<DataXMLSeries> series;
 
 	public ArrayList<DataXMLSeries> getSeries() {

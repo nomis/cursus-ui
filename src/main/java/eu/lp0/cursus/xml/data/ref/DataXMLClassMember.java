@@ -17,16 +17,9 @@
  */
 package eu.lp0.cursus.xml.data.ref;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.Root;
-
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
-import eu.lp0.cursus.xml.data.DataXML;
 
-@Namespace(reference = DataXML.DATA_XMLNS)
-@Root(name = "member")
 public class DataXMLClassMember implements DataXMLClassRef, Comparable<DataXMLClassMember> {
 	public DataXMLClassMember() {
 	}
@@ -35,7 +28,6 @@ public class DataXMLClassMember implements DataXMLClassRef, Comparable<DataXMLCl
 		this.class_ = AbstractXMLEntity.generateId(class_);
 	}
 
-	@Attribute(name = "class")
 	private String class_;
 
 	@Override

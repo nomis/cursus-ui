@@ -20,20 +20,12 @@ package eu.lp0.cursus.xml.data.entity;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.Root;
-
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
-import eu.lp0.cursus.xml.data.DataXML;
 import eu.lp0.cursus.xml.data.ref.DataXMLClassMember;
 
-@Namespace(reference = DataXML.DATA_XMLNS)
-@Root(name = "pilot")
 public class DataXMLPilot extends AbstractXMLEntity<Pilot> {
 	public DataXMLPilot() {
 	}
@@ -57,7 +49,6 @@ public class DataXMLPilot extends AbstractXMLEntity<Pilot> {
 		}
 	}
 
-	@Element
 	private String name;
 
 	public String getName() {
@@ -68,7 +59,6 @@ public class DataXMLPilot extends AbstractXMLEntity<Pilot> {
 		this.name = name;
 	}
 
-	@Element(required = false)
 	private Gender gender;
 
 	public Gender getGender() {
@@ -79,7 +69,6 @@ public class DataXMLPilot extends AbstractXMLEntity<Pilot> {
 		this.gender = gender;
 	}
 
-	@Element
 	private String country;
 
 	public String getCountry() {
@@ -90,7 +79,6 @@ public class DataXMLPilot extends AbstractXMLEntity<Pilot> {
 		this.country = country;
 	}
 
-	@Element(required = false)
 	private DataXMLRaceNumber raceNumber;
 
 	public DataXMLRaceNumber getRaceNumber() {
@@ -101,7 +89,6 @@ public class DataXMLPilot extends AbstractXMLEntity<Pilot> {
 		this.raceNumber = raceNumber;
 	}
 
-	@ElementList(required = false, inline = true)
 	private ArrayList<DataXMLClassMember> classes;
 
 	public ArrayList<DataXMLClassMember> getClasses() {

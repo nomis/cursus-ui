@@ -21,23 +21,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map.Entry;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 
 import eu.lp0.cursus.db.data.Event;
-import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.data.Scores;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.data.ref.DataXMLSeriesRef;
-import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLEvent;
 
-@Root(name = "seriesResults")
 public class ScoresXMLSeriesResults extends AbstractScoresXMLResults implements DataXMLSeriesRef {
 	public ScoresXMLSeriesResults() {
 	}
@@ -48,16 +40,6 @@ public class ScoresXMLSeriesResults extends AbstractScoresXMLResults implements 
 		series = AbstractXMLEntity.generateId(scores.getSeries());
 
 		discards = scores.getDiscardCount();
-
-		events = new ArrayList<ScoresXMLEvent>(scores.getEvents().size());
-		for (Event event : scores.getEvents()) {
-			events.add(new ScoresXMLEvent(event));
-		}
-
-		overallPilots = new ArrayList<ScoresXMLOverallScore>(scores.getOverallOrder().size());
-		for (Pilot pilot : scores.getOverallOrder()) {
-			overallPilots.add(new ScoresXMLOverallScore(scores, pilot));
-		}
 
 		Multimap<Event, Race> events_ = LinkedHashMultimap.create(scores.getRaces().size(), scores.getRaces().size());
 		for (Race race : scores.getRaces()) {
@@ -70,7 +52,6 @@ public class ScoresXMLSeriesResults extends AbstractScoresXMLResults implements 
 		}
 	}
 
-	@Attribute
 	private String series;
 
 	public String getSeries() {
@@ -81,7 +62,6 @@ public class ScoresXMLSeriesResults extends AbstractScoresXMLResults implements 
 		this.series = series;
 	}
 
-	@Attribute
 	private int discards;
 
 	public int getDiscards() {
@@ -92,31 +72,6 @@ public class ScoresXMLSeriesResults extends AbstractScoresXMLResults implements 
 		this.discards = discards;
 	}
 
-	@ElementList(inline = true)
-	private ArrayList<ScoresXMLEvent> events;
-
-	@Override
-	public ArrayList<ScoresXMLEvent> getEvents() {
-		return events;
-	}
-
-	public void setEvents(ArrayList<ScoresXMLEvent> events) {
-		this.events = events;
-	}
-
-	@ElementList(name = "overallOrder")
-	private ArrayList<ScoresXMLOverallScore> overallPilots;
-
-	@Override
-	public ArrayList<ScoresXMLOverallScore> getOverallPilots() {
-		return overallPilots;
-	}
-
-	public void setOverallPilots(ArrayList<ScoresXMLOverallScore> overallPilots) {
-		this.overallPilots = overallPilots;
-	}
-
-	@ElementList(inline = true)
 	private ArrayList<ScoresXMLSeriesEventResults> eventResults;
 
 	public ArrayList<ScoresXMLSeriesEventResults> getEventResults() {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		xmlns="urn:oid:1.3.6.1.4.1.39777.1.0.1.2"
+		xmlns="urn:oid:1.3.6.1.4.1.39777.1.0.1.2.1"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="urn:oid:1.3.6.1.4.1.39777.1.0.1.2 https://xsd.s85.org/urn/oid/1.3.6.1.4.1.39777.1.0.1.2"
-		targetNamespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.2">
+		xsi:schemaLocation="urn:oid:1.3.6.1.4.1.39777.1.0.1.2.1 https://xsd.s85.org/urn/oid/1.3.6.1.4.1.39777.1.0.1.2.1"
+		targetNamespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.2.1">
 
 	<xs:element name="cursus">
 		<xs:complexType>

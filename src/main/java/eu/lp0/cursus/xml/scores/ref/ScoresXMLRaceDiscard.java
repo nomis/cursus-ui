@@ -17,17 +17,10 @@
  */
 package eu.lp0.cursus.xml.scores.ref;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.Root;
-
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.data.ref.DataXMLRaceRef;
-import eu.lp0.cursus.xml.scores.ScoresXML;
 
-@Namespace(reference = ScoresXML.SCORES_XMLNS)
-@Root(name = "discard")
 public class ScoresXMLRaceDiscard implements DataXMLRaceRef {
 	public ScoresXMLRaceDiscard() {
 	}
@@ -36,7 +29,6 @@ public class ScoresXMLRaceDiscard implements DataXMLRaceRef {
 		race = AbstractXMLEntity.generateId(race_);
 	}
 
-	@Attribute(name = "race")
 	private String race;
 
 	public String getRace() {

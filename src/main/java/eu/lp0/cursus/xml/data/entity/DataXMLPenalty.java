@@ -17,17 +17,9 @@
  */
 package eu.lp0.cursus.xml.data.entity;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.Root;
-
 import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.Penalty.Type;
-import eu.lp0.cursus.xml.data.DataXML;
 
-@Namespace(reference = DataXML.DATA_XMLNS)
-@Root(name = "penalty")
 public class DataXMLPenalty {
 	public DataXMLPenalty() {
 	}
@@ -38,7 +30,6 @@ public class DataXMLPenalty {
 		reason = penalty.getReason();
 	}
 
-	@Attribute
 	private Type type;
 
 	public Type getType() {
@@ -49,7 +40,6 @@ public class DataXMLPenalty {
 		this.type = type;
 	}
 
-	@Attribute
 	private int value;
 
 	public int getValue() {
@@ -60,9 +50,6 @@ public class DataXMLPenalty {
 		this.value = value;
 	}
 
-	// Simple is anything but
-	@Namespace(reference = DataXML.DATA_XMLNS)
-	@Element
 	private String reason;
 
 	public String getReason() {

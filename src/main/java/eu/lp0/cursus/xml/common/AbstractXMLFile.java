@@ -18,39 +18,29 @@
 package eu.lp0.cursus.xml.common;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.Charset;
 
-import org.simpleframework.xml.convert.Registry;
-import org.simpleframework.xml.convert.RegistryStrategy;
-import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.strategy.TreeStrategy;
-import org.simpleframework.xml.stream.Format;
-
-import com.google.common.base.Throwables;
+import org.beanio.BeanReader;
+import org.beanio.BeanWriter;
+import org.beanio.StreamFactory;
 
 import eu.lp0.cursus.xml.ExportException;
 import eu.lp0.cursus.xml.ImportException;
 
 public abstract class AbstractXMLFile<T> {
-	public static final String XML_PROLOGUE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"; //$NON-NLS-1$
-
-	private static Registry registry = new Registry();
-	private static RegistryStrategy strategy = new RegistryStrategy(registry, new TreeStrategy("__label__", "__length__")); //$NON-NLS-1$ //$NON-NLS-2$
-	private static Format format = new Format(1, XML_PROLOGUE);
-
-	// private static StreamFactory factory = StreamFactory.newInstance();
+	private static StreamFactory factory = StreamFactory.newInstance();
 
 	static {
-		try {
-			registry.bind(String.class, StringConverter.class);
-		} catch (Exception e) {
-			Throwables.propagate(e);
-		}
-
-		//		factory.loadResource("eu/lp0/cursus/beanio.xml"); //$NON-NLS-1$
+		factory.loadResource("eu/lp0/cursus/beanio.xml"); //$NON-NLS-1$
 	}
 
 	private final Class<T> type;
@@ -73,48 +63,35 @@ public abstract class AbstractXMLFile<T> {
 		this.data = data;
 	}
 
-	protected Persister newPersister() {
-		return new Persister(strategy, format);
-	}
-
 	public void from(InputStream stream) throws ImportException {
-		try {
-			data = newPersister().read(type, stream);
-		} catch (Exception e) {
-			throw new ImportException(e);
-		}
+		from(new InputStreamReader(stream, Charset.forName("UTF-8"))); //$NON-NLS-1$
 	}
 
 	public void to(OutputStream stream) throws ExportException {
-		try {
-			newPersister().write(data, stream);
-		} catch (Exception e) {
-			throw new ExportException(e);
-		}
+		to(new OutputStreamWriter(stream, Charset.forName("UTF-8"))); //$NON-NLS-1$
 	}
 
 	public void from(File file) throws ImportException {
 		try {
-			data = newPersister().read(type, file);
-		} catch (Exception e) {
+			from(new FileInputStream(file));
+		} catch (FileNotFoundException e) {
 			throw new ImportException(e);
 		}
 	}
 
 	public void to(File file) throws ExportException {
 		try {
-			// BeanWriter out = factory.createWriter(type.getSimpleName(), file);
-			// out.write(data);
-			// out.close();
-			newPersister().write(data, file);
-		} catch (Exception e) {
+			to(new FileOutputStream(file));
+		} catch (FileNotFoundException e) {
 			throw new ExportException(e);
 		}
 	}
 
 	public void from(Reader reader) throws ImportException {
 		try {
-			data = newPersister().read(type, reader);
+			BeanReader in = factory.createReader(type.getSimpleName(), reader);
+			data = type.cast(in.read());
+			in.close();
 		} catch (Exception e) {
 			throw new ImportException(e);
 		}
@@ -122,7 +99,9 @@ public abstract class AbstractXMLFile<T> {
 
 	public void to(Writer writer) throws ExportException {
 		try {
-			newPersister().write(data, writer);
+			BeanWriter out = factory.createWriter(type.getSimpleName(), writer);
+			out.write(data);
+			out.close();
 		} catch (Exception e) {
 			throw new ExportException(e);
 		}

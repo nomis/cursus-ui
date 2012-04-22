@@ -19,10 +19,6 @@ package eu.lp0.cursus.xml.scores.results;
 
 import java.util.ArrayList;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.data.Scores;
@@ -30,7 +26,6 @@ import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.data.ref.DataXMLRaceRef;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore;
 
-@Root(name = "eventRaceResults")
 public class ScoresXMLEventRaceResults implements DataXMLRaceRef {
 	public ScoresXMLEventRaceResults() {
 	}
@@ -46,7 +41,6 @@ public class ScoresXMLEventRaceResults implements DataXMLRaceRef {
 		}
 	}
 
-	@Attribute
 	private String race;
 
 	public String getRace() {
@@ -57,7 +51,6 @@ public class ScoresXMLEventRaceResults implements DataXMLRaceRef {
 		this.race = race;
 	}
 
-	@Attribute
 	private int fleet;
 
 	public int getFleet() {
@@ -68,7 +61,6 @@ public class ScoresXMLEventRaceResults implements DataXMLRaceRef {
 		this.fleet = fleet;
 	}
 
-	@ElementList(name = "raceOrder")
 	private ArrayList<ScoresXMLRaceScore> racePilots;
 
 	public ArrayList<ScoresXMLRaceScore> getRacePilots() {

@@ -17,16 +17,9 @@
  */
 package eu.lp0.cursus.xml.data.entity;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.Root;
-
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
-import eu.lp0.cursus.xml.data.DataXML;
 
-@Namespace(reference = DataXML.DATA_XMLNS)
-@Root(name = "class")
 public class DataXMLClass extends AbstractXMLEntity<Class> {
 	public DataXMLClass() {
 	}
@@ -38,7 +31,6 @@ public class DataXMLClass extends AbstractXMLEntity<Class> {
 		description = class_.getDescription();
 	}
 
-	@Element
 	private String name;
 
 	public String getName() {
@@ -49,7 +41,6 @@ public class DataXMLClass extends AbstractXMLEntity<Class> {
 		this.name = name;
 	}
 
-	@Element
 	private String description;
 
 	public String getDescription() {

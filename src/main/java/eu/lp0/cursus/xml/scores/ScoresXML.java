@@ -24,12 +24,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.Root;
-
 import com.google.common.base.Preconditions;
 
 import eu.lp0.cursus.db.data.Event;
@@ -38,25 +32,12 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.data.Scores;
 import eu.lp0.cursus.util.Constants;
-import eu.lp0.cursus.xml.common.AbstractXMLRoot;
-import eu.lp0.cursus.xml.data.DataXML;
 import eu.lp0.cursus.xml.data.entity.DataXMLSeries;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLEventResults;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLRaceResults;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLSeriesResults;
 
-@Namespace(reference = ScoresXML.SCORES_XMLNS)
-@Root(name = "cursus")
-public class ScoresXML extends AbstractXMLRoot {
-	public static final String SCORES_OID = NS_XML_CURSUS_OID + ".1"; //$NON-NLS-1$
-	public static final String SCORES_XMLNS = OID_URN_PREFIX + SCORES_OID;
-	public static final String SCORES_XSD = XSD_URI_PREFIX + SCORES_OID;
-
-	// Simple won't let me omit the reference value as it then outputs ""
-	@Namespace(prefix = "xsi", reference = AbstractXMLRoot.XSI_XMLNS)
-	@Attribute(name = "schemaLocation")
-	public static final String SCHEMA_LOCATION = DataXML.DATA_XMLNS + " " + DataXML.DATA_XSD + " " + SCORES_XMLNS + " " + SCORES_XSD; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
+public class ScoresXML {
 	public ScoresXML() {
 	}
 
@@ -102,7 +83,6 @@ public class ScoresXML extends AbstractXMLRoot {
 		series = new DataXMLSeries(checkSeries.iterator().next(), events, races, pilots);
 	}
 
-	@Attribute
 	private String generator;
 
 	public String getGenerator() {
@@ -113,7 +93,6 @@ public class ScoresXML extends AbstractXMLRoot {
 		this.generator = generator;
 	}
 
-	@Element
 	private DataXMLSeries series;
 
 	public DataXMLSeries getSeries() {
@@ -124,7 +103,6 @@ public class ScoresXML extends AbstractXMLRoot {
 		this.series = series;
 	}
 
-	@Element(required = false)
 	private ScoresXMLSeriesResults seriesResults;
 
 	public ScoresXMLSeriesResults getSeriesResults() {
@@ -135,7 +113,6 @@ public class ScoresXML extends AbstractXMLRoot {
 		this.seriesResults = seriesResults;
 	}
 
-	@ElementList(required = false, inline = true)
 	private ArrayList<ScoresXMLEventResults> eventResults;
 
 	public ArrayList<ScoresXMLEventResults> getEventResults() {
@@ -146,7 +123,6 @@ public class ScoresXML extends AbstractXMLRoot {
 		this.eventResults = eventResults;
 	}
 
-	@ElementList(required = false, inline = true)
 	private ArrayList<ScoresXMLRaceResults> raceResults;
 
 	public ArrayList<ScoresXMLRaceResults> getRaceResults() {

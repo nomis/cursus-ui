@@ -19,23 +19,15 @@ package eu.lp0.cursus.xml.scores.results;
 
 import java.util.ArrayList;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-
 import com.google.common.base.Preconditions;
 
-import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.data.Scores;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.data.ref.DataXMLRaceRef;
-import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLEvent;
 
-@Root(name = "raceResults")
 public class ScoresXMLRaceResults extends AbstractScoresXMLResults implements DataXMLRaceRef {
 	public ScoresXMLRaceResults() {
 	}
@@ -50,23 +42,12 @@ public class ScoresXMLRaceResults extends AbstractScoresXMLResults implements Da
 
 		fleet = scores.getFleetSize(race_);
 
-		events = new ArrayList<ScoresXMLEvent>(scores.getEvents().size());
-		for (Event event_ : scores.getEvents()) {
-			events.add(new ScoresXMLEvent(event_));
-		}
-
-		overallPilots = new ArrayList<ScoresXMLOverallScore>(scores.getOverallOrder().size());
-		for (Pilot pilot : scores.getOverallOrder()) {
-			overallPilots.add(new ScoresXMLOverallScore(scores, pilot));
-		}
-
 		racePilots = new ArrayList<ScoresXMLRaceScore>(scores.getRaceOrder(race_).size());
 		for (Pilot pilot : scores.getRaceOrder(race_)) {
 			racePilots.add(new ScoresXMLRaceScore(scores, race_, pilot));
 		}
 	}
 
-	@Attribute
 	private String race;
 
 	public String getRace() {
@@ -77,7 +58,6 @@ public class ScoresXMLRaceResults extends AbstractScoresXMLResults implements Da
 		this.race = race;
 	}
 
-	@Attribute
 	private int fleet;
 
 	public int getFleet() {
@@ -88,31 +68,6 @@ public class ScoresXMLRaceResults extends AbstractScoresXMLResults implements Da
 		this.fleet = fleet;
 	}
 
-	@ElementList(inline = true)
-	private ArrayList<ScoresXMLEvent> events;
-
-	@Override
-	public ArrayList<ScoresXMLEvent> getEvents() {
-		return events;
-	}
-
-	public void setEvents(ArrayList<ScoresXMLEvent> events) {
-		this.events = events;
-	}
-
-	@ElementList(name = "overallOrder")
-	private ArrayList<ScoresXMLOverallScore> overallPilots;
-
-	@Override
-	public ArrayList<ScoresXMLOverallScore> getOverallPilots() {
-		return overallPilots;
-	}
-
-	public void setOverallPilots(ArrayList<ScoresXMLOverallScore> overallPilots) {
-		this.overallPilots = overallPilots;
-	}
-
-	@ElementList(name = "raceOrder")
 	private ArrayList<ScoresXMLRaceScore> racePilots;
 
 	public ArrayList<ScoresXMLRaceScore> getRacePilots() {

@@ -24,11 +24,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.Root;
-
 import com.google.common.collect.Sets;
 
 import eu.lp0.cursus.db.data.Class;
@@ -37,10 +32,7 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
-import eu.lp0.cursus.xml.data.DataXML;
 
-@Namespace(reference = DataXML.DATA_XMLNS)
-@Root(name = "series")
 public class DataXMLSeries extends AbstractXMLEntity<Series> {
 	public DataXMLSeries() {
 	}
@@ -98,7 +90,6 @@ public class DataXMLSeries extends AbstractXMLEntity<Series> {
 		}
 	}
 
-	@Element
 	private String name;
 
 	public String getName() {
@@ -109,7 +100,6 @@ public class DataXMLSeries extends AbstractXMLEntity<Series> {
 		this.name = name;
 	}
 
-	@Element
 	private String description;
 
 	public String getDescription() {
@@ -120,7 +110,6 @@ public class DataXMLSeries extends AbstractXMLEntity<Series> {
 		this.description = description;
 	}
 
-	@ElementList
 	private ArrayList<DataXMLClass> classes;
 
 	public ArrayList<DataXMLClass> getClasses() {
@@ -131,7 +120,6 @@ public class DataXMLSeries extends AbstractXMLEntity<Series> {
 		this.classes = classes;
 	}
 
-	@ElementList
 	private ArrayList<DataXMLPilot> pilots;
 
 	public ArrayList<DataXMLPilot> getPilots() {
@@ -142,7 +130,6 @@ public class DataXMLSeries extends AbstractXMLEntity<Series> {
 		this.pilots = pilots;
 	}
 
-	@ElementList
 	private ArrayList<DataXMLEvent> events;
 
 	public ArrayList<DataXMLEvent> getEvents() {

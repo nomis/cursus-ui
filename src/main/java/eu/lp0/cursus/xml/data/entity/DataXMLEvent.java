@@ -21,11 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.Root;
-
 import com.google.common.base.Predicates;
 import com.google.common.collect.Sets;
 
@@ -33,11 +28,8 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
-import eu.lp0.cursus.xml.data.DataXML;
 import eu.lp0.cursus.xml.data.ref.DataXMLEventAttendee;
 
-@Namespace(reference = DataXML.DATA_XMLNS)
-@Root(name = "event")
 public class DataXMLEvent extends AbstractXMLEntity<Event> {
 	public DataXMLEvent() {
 	}
@@ -82,7 +74,6 @@ public class DataXMLEvent extends AbstractXMLEntity<Event> {
 		}
 	}
 
-	@Element
 	private String name;
 
 	public String getName() {
@@ -93,7 +84,6 @@ public class DataXMLEvent extends AbstractXMLEntity<Event> {
 		this.name = name;
 	}
 
-	@Element
 	private String description;
 
 	public String getDescription() {
@@ -104,7 +94,6 @@ public class DataXMLEvent extends AbstractXMLEntity<Event> {
 		this.description = description;
 	}
 
-	@ElementList(required = false, inline = true)
 	private ArrayList<DataXMLEventAttendee> attendees;
 
 	public ArrayList<DataXMLEventAttendee> getAttendees() {
@@ -115,7 +104,6 @@ public class DataXMLEvent extends AbstractXMLEntity<Event> {
 		this.attendees = attendees;
 	}
 
-	@ElementList
 	private ArrayList<DataXMLRace> races;
 
 	public ArrayList<DataXMLRace> getRaces() {

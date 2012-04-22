@@ -21,11 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.Root;
-
 import com.google.common.base.Predicates;
 import com.google.common.collect.Maps;
 
@@ -33,10 +28,7 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
-import eu.lp0.cursus.xml.data.DataXML;
 
-@Namespace(reference = DataXML.DATA_XMLNS)
-@Root(name = "race")
 public class DataXMLRace extends AbstractXMLEntity<Race> {
 	public DataXMLRace() {
 	}
@@ -71,7 +63,6 @@ public class DataXMLRace extends AbstractXMLEntity<Race> {
 		Collections.sort(attendees);
 	}
 
-	@Element
 	private String name;
 
 	public String getName() {
@@ -82,7 +73,6 @@ public class DataXMLRace extends AbstractXMLEntity<Race> {
 		this.name = name;
 	}
 
-	@Element
 	private String description;
 
 	public String getDescription() {
@@ -93,7 +83,6 @@ public class DataXMLRace extends AbstractXMLEntity<Race> {
 		this.description = description;
 	}
 
-	@ElementList(required = false, inline = true)
 	private ArrayList<DataXMLRaceAttendee> attendees;
 
 	public ArrayList<DataXMLRaceAttendee> getAttendees() {

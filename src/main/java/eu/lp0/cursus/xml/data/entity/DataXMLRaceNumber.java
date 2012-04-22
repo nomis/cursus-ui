@@ -17,15 +17,8 @@
  */
 package eu.lp0.cursus.xml.data.entity;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.Root;
-
 import eu.lp0.cursus.db.data.RaceNumber;
-import eu.lp0.cursus.xml.data.DataXML;
 
-@Namespace(reference = DataXML.DATA_XMLNS)
-@Root(name = "raceNumber")
 public class DataXMLRaceNumber {
 	public DataXMLRaceNumber() {
 	}
@@ -35,7 +28,6 @@ public class DataXMLRaceNumber {
 		number = raceNumber.getNumber();
 	}
 
-	@Attribute
 	private String organisation;
 
 	public String getOrganisation() {
@@ -46,7 +38,6 @@ public class DataXMLRaceNumber {
 		this.organisation = organisation;
 	}
 
-	@Attribute
 	private int number;
 
 	public int getNumber() {

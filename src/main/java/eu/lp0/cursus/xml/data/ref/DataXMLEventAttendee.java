@@ -17,16 +17,9 @@
  */
 package eu.lp0.cursus.xml.data.ref;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.Root;
-
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
-import eu.lp0.cursus.xml.data.DataXML;
 
-@Namespace(reference = DataXML.DATA_XMLNS)
-@Root(name = "eventAttendee")
 public class DataXMLEventAttendee implements DataXMLPilotRef, Comparable<DataXMLEventAttendee> {
 	public DataXMLEventAttendee() {
 	}
@@ -35,7 +28,6 @@ public class DataXMLEventAttendee implements DataXMLPilotRef, Comparable<DataXML
 		this.pilot = AbstractXMLEntity.generateId(pilot);
 	}
 
-	@Attribute
 	private String pilot;
 
 	@Override

@@ -17,18 +17,10 @@
  */
 package eu.lp0.cursus.xml.scores.ref;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.Root;
-
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.data.ref.DataXMLEventRef;
-import eu.lp0.cursus.xml.scores.ScoresXML;
 
-// Simple won't be able to read this as the name conflicts with the data xmlns
-@Namespace(reference = ScoresXML.SCORES_XMLNS)
-@Root(name = "event")
 public class ScoresXMLEvent implements DataXMLEventRef {
 	public ScoresXMLEvent() {
 	}
@@ -37,7 +29,6 @@ public class ScoresXMLEvent implements DataXMLEventRef {
 		this.event = AbstractXMLEntity.generateId(event);
 	}
 
-	@Attribute(name = "ref")
 	private String event;
 
 	public String getEvent() {
