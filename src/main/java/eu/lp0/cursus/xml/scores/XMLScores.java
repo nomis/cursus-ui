@@ -219,7 +219,7 @@ public class XMLScores {
 			}
 
 			Table<Pilot, Race, ScoresXMLRaceScore> raceScores = HashBasedTable.create();
-			for (ScoresXMLEventRaceResults eventRaceResults : eventResult.getRaces()) {
+			for (ScoresXMLEventRaceResults eventRaceResults : eventResult.getRaceResults()) {
 				eventEventRaceResults.row(eventResult).put(dereference(eventRaceResults), eventRaceResults);
 
 				Race race = dereference(eventRaceResults);

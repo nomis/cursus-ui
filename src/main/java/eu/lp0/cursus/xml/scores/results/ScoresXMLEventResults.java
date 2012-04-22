@@ -63,9 +63,9 @@ public class ScoresXMLEventResults extends AbstractScoresXMLResults {
 			overallPilots.add(new ScoresXMLOverallScore(scores, pilot));
 		}
 
-		races = new ArrayList<ScoresXMLEventRaceResults>(scores.getRaces().size());
+		raceResults = new ArrayList<ScoresXMLEventRaceResults>(scores.getRaces().size());
 		for (Race race : scores.getRaces()) {
-			races.add(new ScoresXMLEventRaceResults(scores, race));
+			raceResults.add(new ScoresXMLEventRaceResults(scores, race));
 		}
 	}
 
@@ -116,13 +116,13 @@ public class ScoresXMLEventResults extends AbstractScoresXMLResults {
 	}
 
 	@ElementList(inline = true)
-	private ArrayList<ScoresXMLEventRaceResults> races;
+	private ArrayList<ScoresXMLEventRaceResults> raceResults;
 
-	public ArrayList<ScoresXMLEventRaceResults> getRaces() {
-		return races;
+	public ArrayList<ScoresXMLEventRaceResults> getRaceResults() {
+		return raceResults;
 	}
 
-	public void setRaces(ArrayList<ScoresXMLEventRaceResults> race) {
-		this.races = race;
+	public void setRaceResults(ArrayList<ScoresXMLEventRaceResults> raceResults) {
+		this.raceResults = raceResults;
 	}
 }
