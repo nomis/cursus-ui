@@ -34,6 +34,7 @@
 				<xs:element ref="overallOrder"/>
 				<xs:element ref="seriesEventResults" maxOccurs="unbounded"/>
 			</xs:sequence>
+			<xs:attribute ref="xml:lang" use="optional"/>
 			<xs:attribute name="series" type="xs:IDREF" use="required"/>
 			<xs:attribute name="discards" type="xs:nonNegativeInteger" use="required"/>
 			<xs:attribute name="scorer" type="uuid" use="optional"/>
@@ -53,6 +54,7 @@
 				<xs:element ref="overallOrder"/>
 				<xs:element ref="eventRaceResults" maxOccurs="unbounded"/>
 			</xs:sequence>
+			<xs:attribute ref="xml:lang" use="optional"/>
 			<xs:attribute name="event" type="xs:IDREF" use="required"/>
 			<xs:attribute name="discards" type="xs:nonNegativeInteger" use="required"/>
 			<xs:attribute name="scorer" type="uuid" use="optional"/>
@@ -75,6 +77,7 @@
 	<xs:element name="event">
 		<xs:complexType>
 			<xs:sequence/>
+			<xs:attribute ref="xml:lang" use="optional"/>
 			<xs:attribute name="ref" type="xs:IDREF" use="required"/>
 		</xs:complexType>
 	</xs:element>
@@ -84,6 +87,7 @@
 			<xs:sequence>
 				<xs:element ref="overallScore" maxOccurs="unbounded"/>
 			</xs:sequence>
+			<xs:attribute ref="xml:lang" use="optional"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -93,6 +97,7 @@
 				<xs:element ref="discard" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="data:penalty" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
+			<xs:attribute ref="xml:lang" use="optional"/>
 			<xs:attribute name="pilot" type="xs:IDREF" use="required"/>
 			<xs:attribute name="penalties" type="xs:nonNegativeInteger" use="required"/>
 			<xs:attribute name="points" type="xs:nonNegativeInteger" use="required"/>
@@ -112,6 +117,7 @@
 			<xs:sequence>
 				<xs:element ref="eventRaceResults" maxOccurs="unbounded"/>
 			</xs:sequence>
+			<xs:attribute ref="xml:lang" use="optional"/>
 			<xs:attribute name="event" type="xs:IDREF" use="required"/>
 		</xs:complexType>
 	</xs:element>
@@ -121,6 +127,7 @@
 			<xs:sequence>
 				<xs:element ref="raceOrder"/>
 			</xs:sequence>
+			<xs:attribute ref="xml:lang" use="optional"/>
 			<xs:attribute name="race" type="xs:IDREF" use="required"/>
 			<xs:attribute name="fleet" type="xs:nonNegativeInteger" use="required"/>
 		</xs:complexType>
@@ -131,6 +138,7 @@
 			<xs:sequence>
 				<xs:element ref="raceScore" maxOccurs="unbounded"/>
 			</xs:sequence>
+			<xs:attribute ref="xml:lang" use="optional"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -139,6 +147,7 @@
 			<xs:sequence>
 				<xs:element ref="data:penalty" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
+			<xs:attribute ref="xml:lang" use="optional"/>
 			<xs:attribute name="pilot" type="xs:IDREF" use="required"/>
 			<xs:attribute name="laps" type="xs:nonNegativeInteger" use="required"/>
 			<xs:attribute name="simulated" type="xs:boolean" use="required"/>
