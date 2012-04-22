@@ -41,12 +41,16 @@ public abstract class AbstractXMLFile<T> {
 	private static RegistryStrategy strategy = new RegistryStrategy(registry, new TreeStrategy("__label__", "__length__")); //$NON-NLS-1$ //$NON-NLS-2$
 	private static Format format = new Format(1, XML_PROLOGUE);
 
+	// private static StreamFactory factory = StreamFactory.newInstance();
+
 	static {
 		try {
 			registry.bind(String.class, StringConverter.class);
 		} catch (Exception e) {
 			Throwables.propagate(e);
 		}
+
+		//		factory.loadResource("eu/lp0/cursus/beanio.xml"); //$NON-NLS-1$
 	}
 
 	private final Class<T> type;
@@ -99,6 +103,9 @@ public abstract class AbstractXMLFile<T> {
 
 	public void to(File file) throws ExportException {
 		try {
+			// BeanWriter out = factory.createWriter(type.getSimpleName(), file);
+			// out.write(data);
+			// out.close();
 			newPersister().write(data, file);
 		} catch (Exception e) {
 			throw new ExportException(e);
