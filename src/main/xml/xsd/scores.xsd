@@ -18,7 +18,7 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="data:series"/>
-				<xs:element ref="seriesResults" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="seriesResults" minOccurs="0"/>
 				<xs:element ref="eventResults" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="raceResults" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
