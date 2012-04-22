@@ -15,45 +15,40 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores.entity;
+package eu.lp0.cursus.xml.data.ref;
 
-import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
-import eu.lp0.cursus.db.data.Class;
+import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
+import eu.lp0.cursus.xml.data.DataXML;
 
-@Root(name = "class")
-public class ScoresXMLClass extends AbstractXMLEntity<Class> {
-	public ScoresXMLClass() {
+@Namespace(reference = DataXML.DATA_XMLNS)
+@Root(name = "eventAttendee")
+public class DataXMLEventAttendee implements DataXMLPilotRef, Comparable<DataXMLEventAttendee> {
+	public DataXMLEventAttendee() {
 	}
 
-	public ScoresXMLClass(Class class_) {
-		super(class_);
-
-		name = class_.getName();
-		description = class_.getDescription();
+	public DataXMLEventAttendee(Pilot pilot) {
+		this.pilot = AbstractXMLEntity.generateId(pilot);
 	}
 
-	@Element
-	private String name;
+	@Attribute
+	private String pilot;
 
-	public String getName() {
-		return name;
+	@Override
+	public String getPilot() {
+		return pilot;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPilot(String pilot) {
+		this.pilot = pilot;
 	}
 
-	@Element
-	private String description;
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
+	@Override
+	public int compareTo(DataXMLEventAttendee o) {
+		return getPilot().compareTo(o.getPilot());
 	}
 }

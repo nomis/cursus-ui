@@ -33,7 +33,7 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.data.Scores;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLScoredEvent;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLEvent;
 
 @Root(name = "eventResults")
 public class ScoresXMLEventResults extends AbstractScoresXMLResults {
@@ -53,9 +53,9 @@ public class ScoresXMLEventResults extends AbstractScoresXMLResults {
 
 		discards = scores.getDiscardCount();
 
-		events = new ArrayList<ScoresXMLScoredEvent>(scores.getEvents().size());
+		events = new ArrayList<ScoresXMLEvent>(scores.getEvents().size());
 		for (Event event_ : scores.getEvents()) {
-			events.add(new ScoresXMLScoredEvent(event_));
+			events.add(new ScoresXMLEvent(event_));
 		}
 
 		overallPilots = new ArrayList<ScoresXMLOverallScore>(scores.getOverallOrder().size());
@@ -92,14 +92,14 @@ public class ScoresXMLEventResults extends AbstractScoresXMLResults {
 	}
 
 	@ElementList(inline = true)
-	private ArrayList<ScoresXMLScoredEvent> events;
+	private ArrayList<ScoresXMLEvent> events;
 
 	@Override
-	public ArrayList<ScoresXMLScoredEvent> getEvents() {
+	public ArrayList<ScoresXMLEvent> getEvents() {
 		return events;
 	}
 
-	public void setEvents(ArrayList<ScoresXMLScoredEvent> events) {
+	public void setEvents(ArrayList<ScoresXMLEvent> events) {
 		this.events = events;
 	}
 

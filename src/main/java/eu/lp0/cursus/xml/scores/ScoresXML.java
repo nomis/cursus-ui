@@ -39,7 +39,8 @@ import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.data.Scores;
 import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.xml.common.AbstractXMLRoot;
-import eu.lp0.cursus.xml.scores.entity.ScoresXMLSeries;
+import eu.lp0.cursus.xml.data.DataXML;
+import eu.lp0.cursus.xml.data.entity.DataXMLSeries;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLEventResults;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLRaceResults;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLSeriesResults;
@@ -54,7 +55,7 @@ public class ScoresXML extends AbstractXMLRoot {
 	// Simple won't let me omit the reference value as it then outputs ""
 	@Namespace(prefix = "xsi", reference = AbstractXMLRoot.XSI_XMLNS)
 	@Attribute(name = "schemaLocation")
-	public static final String SCHEMA_LOCATION = SCORES_XMLNS + " " + SCORES_XSD; //$NON-NLS-1$
+	public static final String SCHEMA_LOCATION = DataXML.DATA_XMLNS + " " + DataXML.DATA_XSD + " " + SCORES_XMLNS + " " + SCORES_XSD; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	public ScoresXML() {
 	}
@@ -98,7 +99,7 @@ public class ScoresXML extends AbstractXMLRoot {
 		Preconditions.checkArgument(checkSeries.size() == 1, "Multiple series not allowed"); //$NON-NLS-1$
 
 		generator = Constants.APP_DESC;
-		series = new ScoresXMLSeries(checkSeries.iterator().next(), events, races, pilots);
+		series = new DataXMLSeries(checkSeries.iterator().next(), events, races, pilots);
 	}
 
 	@Attribute
@@ -113,13 +114,13 @@ public class ScoresXML extends AbstractXMLRoot {
 	}
 
 	@Element
-	private ScoresXMLSeries series;
+	private DataXMLSeries series;
 
-	public ScoresXMLSeries getSeries() {
+	public DataXMLSeries getSeries() {
 		return series;
 	}
 
-	public void setSeries(ScoresXMLSeries series) {
+	public void setSeries(DataXMLSeries series) {
 		this.series = series;
 	}
 

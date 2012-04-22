@@ -15,20 +15,23 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores.ref;
+package eu.lp0.cursus.xml.data.ref;
 
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
+import eu.lp0.cursus.xml.data.DataXML;
 
+@Namespace(reference = DataXML.DATA_XMLNS)
 @Root(name = "member")
-public class ScoresXMLClassMember implements ScoresXMLClassRef, Comparable<ScoresXMLClassMember> {
-	public ScoresXMLClassMember() {
+public class DataXMLClassMember implements DataXMLClassRef, Comparable<DataXMLClassMember> {
+	public DataXMLClassMember() {
 	}
 
-	public ScoresXMLClassMember(Class class_) {
+	public DataXMLClassMember(Class class_) {
 		this.class_ = AbstractXMLEntity.generateId(class_);
 	}
 
@@ -45,7 +48,7 @@ public class ScoresXMLClassMember implements ScoresXMLClassRef, Comparable<Score
 	}
 
 	@Override
-	public int compareTo(ScoresXMLClassMember o) {
+	public int compareTo(DataXMLClassMember o) {
 		return getClass_().compareTo(o.getClass_());
 	}
 }

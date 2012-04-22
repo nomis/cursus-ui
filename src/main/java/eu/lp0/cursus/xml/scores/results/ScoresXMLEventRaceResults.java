@@ -27,11 +27,11 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.data.Scores;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
+import eu.lp0.cursus.xml.data.ref.DataXMLRaceRef;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLRaceRef;
 
 @Root(name = "eventRaceResults")
-public class ScoresXMLEventRaceResults implements ScoresXMLRaceRef {
+public class ScoresXMLEventRaceResults implements DataXMLRaceRef {
 	public ScoresXMLEventRaceResults() {
 	}
 

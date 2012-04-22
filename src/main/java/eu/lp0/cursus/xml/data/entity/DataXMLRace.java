@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores.entity;
+package eu.lp0.cursus.xml.data.entity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
 import com.google.common.base.Predicates;
@@ -32,23 +33,39 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
-import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceAttendee;
+import eu.lp0.cursus.xml.data.DataXML;
 
+@Namespace(reference = DataXML.DATA_XMLNS)
 @Root(name = "race")
-public class ScoresXMLRace extends AbstractXMLEntity<Race> {
-	public ScoresXMLRace() {
+public class DataXMLRace extends AbstractXMLEntity<Race> {
+	public DataXMLRace() {
 	}
 
-	public ScoresXMLRace(Race race, Set<Pilot> pilots) {
+	public DataXMLRace(Race race) {
 		super(race);
 
 		name = race.getName();
 		description = race.getDescription();
 
 		if (!race.getAttendees().isEmpty()) {
-			attendees = new ArrayList<ScoresXMLRaceAttendee>(race.getAttendees().size());
+			attendees = new ArrayList<DataXMLRaceAttendee>(race.getAttendees().size());
+			for (RaceAttendee attendee : race.getAttendees().values()) {
+				attendees.add(new DataXMLRaceAttendee(attendee));
+			}
+		}
+		Collections.sort(attendees);
+	}
+
+	public DataXMLRace(Race race, Set<Pilot> pilots) {
+		super(race);
+
+		name = race.getName();
+		description = race.getDescription();
+
+		if (!race.getAttendees().isEmpty()) {
+			attendees = new ArrayList<DataXMLRaceAttendee>(race.getAttendees().size());
 			for (RaceAttendee attendee : Maps.filterKeys(race.getAttendees(), Predicates.in(pilots)).values()) {
-				attendees.add(new ScoresXMLRaceAttendee(attendee));
+				attendees.add(new DataXMLRaceAttendee(attendee));
 			}
 		}
 		Collections.sort(attendees);
@@ -77,13 +94,13 @@ public class ScoresXMLRace extends AbstractXMLEntity<Race> {
 	}
 
 	@ElementList(required = false, inline = true)
-	private ArrayList<ScoresXMLRaceAttendee> attendees;
+	private ArrayList<DataXMLRaceAttendee> attendees;
 
-	public ArrayList<ScoresXMLRaceAttendee> getAttendees() {
+	public ArrayList<DataXMLRaceAttendee> getAttendees() {
 		return attendees;
 	}
 
-	public void setAttendees(ArrayList<ScoresXMLRaceAttendee> attendees) {
+	public void setAttendees(ArrayList<DataXMLRaceAttendee> attendees) {
 		this.attendees = attendees;
 	}
 }

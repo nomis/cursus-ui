@@ -15,41 +15,43 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores.entity;
+package eu.lp0.cursus.xml.data.entity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Gender;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
-import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceNumber;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLClassMember;
+import eu.lp0.cursus.xml.data.DataXML;
+import eu.lp0.cursus.xml.data.ref.DataXMLClassMember;
 
+@Namespace(reference = DataXML.DATA_XMLNS)
 @Root(name = "pilot")
-public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {
-	public ScoresXMLPilot() {
+public class DataXMLPilot extends AbstractXMLEntity<Pilot> {
+	public DataXMLPilot() {
 	}
 
-	public ScoresXMLPilot(Pilot pilot) {
+	public DataXMLPilot(Pilot pilot) {
 		super(pilot);
 
 		name = pilot.getName();
 		gender = pilot.getGender();
 		country = pilot.getCountry();
 		if (pilot.getRaceNumber() != null) {
-			raceNumber = new ScoresXMLRaceNumber(pilot.getRaceNumber());
+			raceNumber = new DataXMLRaceNumber(pilot.getRaceNumber());
 		}
 
 		if (!pilot.getClasses().isEmpty()) {
-			classes = new ArrayList<ScoresXMLClassMember>(pilot.getClasses().size());
+			classes = new ArrayList<DataXMLClassMember>(pilot.getClasses().size());
 			for (Class class_ : pilot.getClasses()) {
-				classes.add(new ScoresXMLClassMember(class_));
+				classes.add(new DataXMLClassMember(class_));
 			}
 			Collections.sort(classes);
 		}
@@ -89,24 +91,24 @@ public class ScoresXMLPilot extends AbstractXMLEntity<Pilot> {
 	}
 
 	@Element(required = false)
-	private ScoresXMLRaceNumber raceNumber;
+	private DataXMLRaceNumber raceNumber;
 
-	public ScoresXMLRaceNumber getRaceNumber() {
+	public DataXMLRaceNumber getRaceNumber() {
 		return raceNumber;
 	}
 
-	public void setRaceNumber(ScoresXMLRaceNumber raceNumber) {
+	public void setRaceNumber(DataXMLRaceNumber raceNumber) {
 		this.raceNumber = raceNumber;
 	}
 
 	@ElementList(required = false, inline = true)
-	private ArrayList<ScoresXMLClassMember> classes;
+	private ArrayList<DataXMLClassMember> classes;
 
-	public ArrayList<ScoresXMLClassMember> getClasses() {
+	public ArrayList<DataXMLClassMember> getClasses() {
 		return classes;
 	}
 
-	public void setClasses(ArrayList<ScoresXMLClassMember> classes) {
+	public void setClasses(ArrayList<DataXMLClassMember> classes) {
 		this.classes = classes;
 	}
 }

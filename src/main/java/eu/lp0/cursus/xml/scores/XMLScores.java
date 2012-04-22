@@ -40,22 +40,22 @@ import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.scoring.scores.impl.GenericScores;
+import eu.lp0.cursus.xml.data.entity.DataXMLClass;
+import eu.lp0.cursus.xml.data.entity.DataXMLEvent;
+import eu.lp0.cursus.xml.data.entity.DataXMLPenalty;
+import eu.lp0.cursus.xml.data.entity.DataXMLPilot;
+import eu.lp0.cursus.xml.data.entity.DataXMLRace;
+import eu.lp0.cursus.xml.data.entity.DataXMLRaceAttendee;
+import eu.lp0.cursus.xml.data.entity.DataXMLRaceNumber;
+import eu.lp0.cursus.xml.data.entity.DataXMLSeries;
+import eu.lp0.cursus.xml.data.ref.DataXMLClassMember;
+import eu.lp0.cursus.xml.data.ref.DataXMLClassRef;
+import eu.lp0.cursus.xml.data.ref.DataXMLEventRef;
+import eu.lp0.cursus.xml.data.ref.DataXMLPilotRef;
+import eu.lp0.cursus.xml.data.ref.DataXMLRaceRef;
+import eu.lp0.cursus.xml.data.ref.DataXMLSeriesRef;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
-import eu.lp0.cursus.xml.scores.data.ScoresXMLPenalty;
-import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceAttendee;
-import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceNumber;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore;
-import eu.lp0.cursus.xml.scores.entity.ScoresXMLClass;
-import eu.lp0.cursus.xml.scores.entity.ScoresXMLEvent;
-import eu.lp0.cursus.xml.scores.entity.ScoresXMLPilot;
-import eu.lp0.cursus.xml.scores.entity.ScoresXMLRace;
-import eu.lp0.cursus.xml.scores.entity.ScoresXMLSeries;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLClassMember;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLClassRef;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLEventRef;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLPilotRef;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLRaceRef;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLSeriesRef;
 import eu.lp0.cursus.xml.scores.results.AbstractScoresXMLResults;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLEventRaceResults;
 import eu.lp0.cursus.xml.scores.results.ScoresXMLEventResults;
@@ -107,70 +107,70 @@ public class XMLScores {
 		return newInstance(results, new Subset(results));
 	}
 
-	Series dereference(ScoresXMLSeriesRef seriesRef) {
+	Series dereference(DataXMLSeriesRef seriesRef) {
 		return series.get(seriesRef.getSeries());
 	}
 
-	Class dereference(ScoresXMLClassRef class_) {
+	Class dereference(DataXMLClassRef class_) {
 		return classes.get(class_.getClass_());
 	}
 
-	Pilot dereference(ScoresXMLPilotRef pilotRef) {
+	Pilot dereference(DataXMLPilotRef pilotRef) {
 		return pilots.get(pilotRef.getPilot());
 	}
 
-	Event dereference(ScoresXMLEventRef event) {
+	Event dereference(DataXMLEventRef event) {
 		return events.get(event.getEvent());
 	}
 
-	Race dereference(ScoresXMLRaceRef raceRef) {
+	Race dereference(DataXMLRaceRef raceRef) {
 		return races.get(raceRef.getRace());
 	}
 
 	private void extractEntities() {
-		ScoresXMLSeries xmlSeries = scoresXML.getSeries();
+		DataXMLSeries xmlSeries = scoresXML.getSeries();
 		Series series_ = new Series(wrapNull(xmlSeries.getName()), wrapNull(xmlSeries.getDescription()));
 		series.put(xmlSeries.getId(), series_);
 
-		for (ScoresXMLClass xmlClass : xmlSeries.getClasses()) {
+		for (DataXMLClass xmlClass : xmlSeries.getClasses()) {
 			Class class_ = new Class(series_, wrapNull(xmlClass.getName()), wrapNull(xmlClass.getDescription()));
 			classes.put(xmlClass.getId(), class_);
 			series_.getClasses().add(class_);
 		}
 
-		for (ScoresXMLPilot xmlPilot : xmlSeries.getPilots()) {
+		for (DataXMLPilot xmlPilot : xmlSeries.getPilots()) {
 			Pilot pilot_ = new Pilot(series_, wrapNull(xmlPilot.getName()), xmlPilot.getGender(), wrapNull(xmlPilot.getCountry()));
 			pilots.put(xmlPilot.getId(), pilot_);
 			series_.getPilots().add(pilot_);
 
-			ScoresXMLRaceNumber xmlRaceNumber = xmlPilot.getRaceNumber();
+			DataXMLRaceNumber xmlRaceNumber = xmlPilot.getRaceNumber();
 			RaceNumber raceNumber = new RaceNumber(pilot_, wrapNull(xmlRaceNumber.getOrganisation()), xmlRaceNumber.getNumber());
 			pilot_.setRaceNumber(raceNumber);
 
 			if (xmlPilot.getClasses() != null) {
-				for (ScoresXMLClassMember xmlClass : xmlPilot.getClasses()) {
+				for (DataXMLClassMember xmlClass : xmlPilot.getClasses()) {
 					pilot_.getClasses().add(dereference(xmlClass));
 				}
 			}
 		}
 
-		for (ScoresXMLEvent xmlEvent : xmlSeries.getEvents()) {
+		for (DataXMLEvent xmlEvent : xmlSeries.getEvents()) {
 			Event event = new Event(series_, wrapNull(xmlEvent.getName()), wrapNull(xmlEvent.getDescription()));
 			events.put(xmlEvent.getId(), event);
 			series_.getEvents().add(event);
 
-			for (ScoresXMLRace xmlRace : xmlEvent.getRaces()) {
+			for (DataXMLRace xmlRace : xmlEvent.getRaces()) {
 				Race race = new Race(event, wrapNull(xmlRace.getName()), wrapNull(xmlRace.getDescription()));
 				races.put(xmlRace.getId(), race);
 				event.getRaces().add(race);
 
 				if (xmlRace.getAttendees() != null) {
-					for (ScoresXMLRaceAttendee xmlRaceAttendee : xmlRace.getAttendees()) {
+					for (DataXMLRaceAttendee xmlRaceAttendee : xmlRace.getAttendees()) {
 						RaceAttendee attendee = new RaceAttendee(race, dereference(xmlRaceAttendee), xmlRaceAttendee.getType());
 						race.getAttendees().put(attendee.getPilot(), attendee);
 
 						if (xmlRaceAttendee.getPenalties() != null) {
-							for (ScoresXMLPenalty xmlPenalty : xmlRaceAttendee.getPenalties()) {
+							for (DataXMLPenalty xmlPenalty : xmlRaceAttendee.getPenalties()) {
 								Penalty penalty = new Penalty(xmlPenalty.getType(), xmlPenalty.getValue(), wrapNull(xmlPenalty.getReason()));
 								attendee.getPenalties().add(penalty);
 							}
@@ -187,7 +187,7 @@ public class XMLScores {
 
 	private void extractSeriesResults() {
 		ScoresXMLSeriesResults seriesResults = scoresXML.getSeriesResults();
-		for (ScoresXMLEventRef event : seriesResults.getEvents()) {
+		for (DataXMLEventRef event : seriesResults.getEvents()) {
 			resultsEvents.put(seriesResults, dereference(event));
 		}
 
@@ -214,7 +214,7 @@ public class XMLScores {
 
 	private void extractEventResults() {
 		for (ScoresXMLEventResults eventResult : scoresXML.getEventResults()) {
-			for (ScoresXMLEventRef event : eventResult.getEvents()) {
+			for (DataXMLEventRef event : eventResult.getEvents()) {
 				resultsEvents.put(eventResult, dereference(event));
 			}
 

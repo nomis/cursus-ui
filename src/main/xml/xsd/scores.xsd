@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 		xmlns="urn:oid:1.3.6.1.4.1.39777.1.0.1.1"
+		xmlns:data="urn:oid:1.3.6.1.4.1.39777.1.0.1.0"
 		xmlns:xml="http://www.w3.org/XML/1998/namespace"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="urn:oid:1.3.6.1.4.1.39777.1.0.1.1 https://xsd.s85.org/urn/oid/1.3.6.1.4.1.39777.1.0.1.1"
+		xsi:schemaLocation="urn:oid:1.3.6.1.4.1.39777.1.0.1.0 https://xsd.s85.org/urn/oid/1.3.6.1.4.1.39777.1.0.1.0
+			urn:oid:1.3.6.1.4.1.39777.1.0.1.1 https://xsd.s85.org/urn/oid/1.3.6.1.4.1.39777.1.0.1.1"
 		targetNamespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.1">
 
 	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+<!--
+	<xs:import namespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.0" schemaLocation="https://xsd.s85.org/urn/oid/1.3.6.1.4.1.39777.1.0.1.0"/>
+-->
+	<xs:import namespace="urn:oid:1.3.6.1.4.1.39777.1.0.1.0" schemaLocation="data.xsd"/>
 
 	<xs:element name="cursus">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="series"/>
+				<xs:element ref="data:series"/>
 				<xs:element ref="seriesResults" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="eventResults" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="raceResults" minOccurs="0" maxOccurs="unbounded"/>
@@ -21,206 +27,10 @@
 		</xs:complexType>
 	</xs:element>
 
-	<xs:element name="series">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:group ref="named"/>
-				<xs:element ref="classes"/>
-				<xs:element ref="pilots"/>
-				<xs:element ref="events"/>
-			</xs:sequence>
-			<xs:attribute ref="xml:id" use="required"/>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:group name="named">
-		<xs:sequence>
-			<xs:element ref="name"/>
-			<xs:element ref="description"/>
-		</xs:sequence>
-	</xs:group>
-
-	<xs:element name="name" type="string"/>
-	<xs:element name="description" type="string"/>
-
-	<xs:complexType name="string">
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute ref="xml:lang" use="optional"/>
-				<xs:attribute ref="xml:space" use="required"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-
-	<xs:element name="classes">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="class" minOccurs="0" maxOccurs="unbounded"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="class">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="name"/>
-				<xs:element ref="description"/>
-			</xs:sequence>
-			<xs:attribute ref="xml:id" use="required"/>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="pilots">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="pilot" minOccurs="0" maxOccurs="unbounded"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="pilot">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="name"/>
-				<xs:element ref="gender" minOccurs="0"/>
-				<xs:element ref="country"/>
-				<xs:element ref="raceNumber" minOccurs="0"/>
-				<xs:element ref="member" minOccurs="0" maxOccurs="unbounded"/>
-			</xs:sequence>
-			<xs:attribute ref="xml:id" use="required"/>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="gender" type="gender"/>
-	<xs:element name="country" type="string"/>
-
-	<xs:simpleType name="gender">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="MALE"/>
-			<xs:enumeration value="FEMALE"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:element name="raceNumber">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="organisation"/>
-				<xs:element ref="number"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="organisation" type="organisation"/>
-	<xs:element name="number" type="xs:nonNegativeInteger"/>
-
-	<xs:complexType name="organisation">
-		<xs:simpleContent>
-			<xs:restriction base="string">
-				<xs:pattern value="[A-Z]+"/>
-			</xs:restriction>
-		</xs:simpleContent>
-	</xs:complexType>
-
-	<xs:element name="member">
-		<xs:complexType>
-			<xs:sequence/>
-			<xs:attribute name="class" type="xs:IDREF" use="required"/>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="events">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="event" minOccurs="0" maxOccurs="unbounded"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="event">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:group ref="named"/>
-				<xs:element ref="eventAttendee" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="races"/>
-			</xs:sequence>
-			<xs:attribute ref="xml:id" use="required"/>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="eventAttendee">
-		<xs:complexType>
-			<xs:sequence/>
-			<xs:attribute name="pilot" type="xs:IDREF" use="required"/>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="races">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="race" minOccurs="0" maxOccurs="unbounded"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="race">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:group ref="named"/>
-				<xs:element ref="raceAttendee" minOccurs="0" maxOccurs="unbounded"/>
-			</xs:sequence>
-			<xs:attribute ref="xml:id" use="required"/>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="raceAttendee">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="penalty" minOccurs="0" maxOccurs="unbounded"/>
-			</xs:sequence>
-			<xs:attribute name="pilot" type="xs:IDREF" use="required"/>
-			<xs:attribute name="type" type="raceAttendee" use="required"/>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:simpleType name="raceAttendee">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="PILOT"/>
-			<xs:enumeration value="M_RACE_MASTER"/>
-			<xs:enumeration value="M_SCORER"/>
-			<xs:enumeration value="M_MARSHAL"/>
-			<xs:enumeration value="V_RACE_MASTER"/>
-			<xs:enumeration value="V_SCORER"/>
-			<xs:enumeration value="V_MARSHAL"/>
-			<xs:enumeration value="DISQUALIFIED"/>
-			<xs:enumeration value="OTHER"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:element name="penalty">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="reason"/>
-			</xs:sequence>
-			<xs:attribute name="type" type="penalty" use="required"/>
-			<xs:attribute name="value" type="xs:integer" use="required"/>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:simpleType name="penalty">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="AUTOMATIC"/>
-			<xs:enumeration value="FIXED"/>
-			<xs:enumeration value="LAPS"/>
-			<xs:enumeration value="EVENT_NON_ATTENDANCE"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:element name="reason" type="string"/>
-
 	<xs:element name="seriesResults">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="scoredEvent" maxOccurs="unbounded"/>
+				<xs:element ref="event" maxOccurs="unbounded"/>
 				<xs:element ref="overallOrder"/>
 				<xs:element ref="seriesEventResults" maxOccurs="unbounded"/>
 			</xs:sequence>
@@ -239,7 +49,7 @@
 	<xs:element name="eventResults">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="scoredEvent" maxOccurs="unbounded"/>
+				<xs:element ref="event" maxOccurs="unbounded"/>
 				<xs:element ref="overallOrder"/>
 				<xs:element ref="eventRaceResults" maxOccurs="unbounded"/>
 			</xs:sequence>
@@ -252,7 +62,7 @@
 	<xs:element name="raceResults">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="scoredEvent" maxOccurs="unbounded"/>
+				<xs:element ref="event" maxOccurs="unbounded"/>
 				<xs:element ref="overallOrder"/>
 				<xs:element ref="raceOrder"/>
 			</xs:sequence>
@@ -262,7 +72,7 @@
 		</xs:complexType>
 	</xs:element>
 
-	<xs:element name="scoredEvent">
+	<xs:element name="event">
 		<xs:complexType>
 			<xs:sequence/>
 			<xs:attribute name="ref" type="xs:IDREF" use="required"/>
@@ -281,7 +91,7 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="discard" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="penalty" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="data:penalty" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="pilot" type="xs:IDREF" use="required"/>
 			<xs:attribute name="penalties" type="xs:nonNegativeInteger" use="required"/>
@@ -327,7 +137,7 @@
 	<xs:element name="raceScore">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="penalty" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="data:penalty" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="pilot" type="xs:IDREF" use="required"/>
 			<xs:attribute name="laps" type="xs:nonNegativeInteger" use="required"/>

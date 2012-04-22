@@ -15,32 +15,35 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores.data;
+package eu.lp0.cursus.xml.data.entity;
 
 import java.util.ArrayList;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.Penalty;
 import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLPilotRef;
+import eu.lp0.cursus.xml.data.DataXML;
+import eu.lp0.cursus.xml.data.ref.DataXMLPilotRef;
 
+@Namespace(reference = DataXML.DATA_XMLNS)
 @Root(name = "raceAttendee")
-public class ScoresXMLRaceAttendee implements Comparable<ScoresXMLRaceAttendee>, ScoresXMLPilotRef {
-	public ScoresXMLRaceAttendee() {
+public class DataXMLRaceAttendee implements Comparable<DataXMLRaceAttendee>, DataXMLPilotRef {
+	public DataXMLRaceAttendee() {
 	}
 
-	public ScoresXMLRaceAttendee(RaceAttendee attendee) {
+	public DataXMLRaceAttendee(RaceAttendee attendee) {
 		pilot = AbstractXMLEntity.generateId(attendee.getPilot());
 		type = attendee.getType();
 
 		if (!attendee.getPenalties().isEmpty()) {
-			penalties = new ArrayList<ScoresXMLPenalty>();
+			penalties = new ArrayList<DataXMLPenalty>();
 			for (Penalty penalty : attendee.getPenalties()) {
-				penalties.add(new ScoresXMLPenalty(penalty));
+				penalties.add(new DataXMLPenalty(penalty));
 			}
 		}
 	}
@@ -68,18 +71,18 @@ public class ScoresXMLRaceAttendee implements Comparable<ScoresXMLRaceAttendee>,
 	}
 
 	@ElementList(required = false, inline = true)
-	private ArrayList<ScoresXMLPenalty> penalties;
+	private ArrayList<DataXMLPenalty> penalties;
 
-	public ArrayList<ScoresXMLPenalty> getPenalties() {
+	public ArrayList<DataXMLPenalty> getPenalties() {
 		return penalties;
 	}
 
-	public void setPenalties(ArrayList<ScoresXMLPenalty> penalties) {
+	public void setPenalties(ArrayList<DataXMLPenalty> penalties) {
 		this.penalties = penalties;
 	}
 
 	@Override
-	public int compareTo(ScoresXMLRaceAttendee o) {
+	public int compareTo(DataXMLRaceAttendee o) {
 		return getPilot().compareTo(o.getPilot());
 	}
 }

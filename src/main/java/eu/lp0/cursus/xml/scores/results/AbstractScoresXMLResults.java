@@ -20,11 +20,17 @@ package eu.lp0.cursus.xml.scores.results;
 import java.util.ArrayList;
 
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Namespace;
+import org.simpleframework.xml.NamespaceList;
 
 import eu.lp0.cursus.scoring.data.Scores;
+import eu.lp0.cursus.xml.data.DataXML;
+import eu.lp0.cursus.xml.scores.ScoresXML;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLScoredEvent;
+import eu.lp0.cursus.xml.scores.ref.ScoresXMLEvent;
 
+@Namespace(reference = ScoresXML.SCORES_XMLNS)
+@NamespaceList({ @Namespace(prefix = "d", reference = DataXML.DATA_XMLNS) })
 public abstract class AbstractScoresXMLResults {
 	public AbstractScoresXMLResults() {
 	}
@@ -45,7 +51,7 @@ public abstract class AbstractScoresXMLResults {
 		this.scorer = scorer;
 	}
 
-	public abstract ArrayList<ScoresXMLScoredEvent> getEvents();
+	public abstract ArrayList<ScoresXMLEvent> getEvents();
 
 	public abstract ArrayList<ScoresXMLOverallScore> getOverallPilots();
 }

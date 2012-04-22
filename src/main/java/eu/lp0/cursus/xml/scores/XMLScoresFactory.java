@@ -47,8 +47,8 @@ import eu.lp0.cursus.scoring.scores.base.AbstractRacePenaltiesData;
 import eu.lp0.cursus.scoring.scores.base.AbstractRacePointsData;
 import eu.lp0.cursus.scoring.scores.base.AbstractRacePositionsData;
 import eu.lp0.cursus.scoring.scores.base.AbstractScoresFactory;
+import eu.lp0.cursus.xml.data.entity.DataXMLPenalty;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLOverallScore;
-import eu.lp0.cursus.xml.scores.data.ScoresXMLPenalty;
 import eu.lp0.cursus.xml.scores.data.ScoresXMLRaceScore;
 import eu.lp0.cursus.xml.scores.ref.ScoresXMLRaceDiscard;
 
@@ -112,13 +112,13 @@ class XMLScoresFactory extends AbstractScoresFactory {
 
 			@Override
 			protected List<Penalty> calculateSimulatedRacePenalties(Pilot pilot, Race race) {
-				List<ScoresXMLPenalty> xmlPenalties = subset.getRaceScore(pilot, race).getSimulatedPenalties();
+				List<DataXMLPenalty> xmlPenalties = subset.getRaceScore(pilot, race).getSimulatedPenalties();
 				if (xmlPenalties == null) {
 					return Collections.emptyList();
 				}
 
 				List<Penalty> penalties = new ArrayList<Penalty>(xmlPenalties.size());
-				for (ScoresXMLPenalty xmlPenalty : xmlPenalties) {
+				for (DataXMLPenalty xmlPenalty : xmlPenalties) {
 					Penalty penalty = new Penalty(xmlPenalty.getType(), xmlPenalty.getValue(), XMLScores.wrapNull(xmlPenalty.getReason()));
 					penalties.add(penalty);
 				}
@@ -168,13 +168,13 @@ class XMLScoresFactory extends AbstractScoresFactory {
 
 			@Override
 			protected List<Penalty> calculateSimulatedOverallPenalties(Pilot pilot) {
-				List<ScoresXMLPenalty> xmlPenalties = subset.getOverallScore(pilot).getSimulatedPenalties();
+				List<DataXMLPenalty> xmlPenalties = subset.getOverallScore(pilot).getSimulatedPenalties();
 				if (xmlPenalties == null) {
 					return Collections.emptyList();
 				}
 
 				List<Penalty> penalties = new ArrayList<Penalty>(xmlPenalties.size());
-				for (ScoresXMLPenalty xmlPenalty : xmlPenalties) {
+				for (DataXMLPenalty xmlPenalty : xmlPenalties) {
 					Penalty penalty = new Penalty(xmlPenalty.getType(), xmlPenalty.getValue(), XMLScores.wrapNull(xmlPenalty.getReason()));
 					penalties.add(penalty);
 				}

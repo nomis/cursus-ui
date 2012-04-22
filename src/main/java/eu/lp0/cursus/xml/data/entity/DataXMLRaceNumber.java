@@ -15,24 +15,27 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores.data;
+package eu.lp0.cursus.xml.data.entity;
 
-import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
 import eu.lp0.cursus.db.data.RaceNumber;
+import eu.lp0.cursus.xml.data.DataXML;
 
+@Namespace(reference = DataXML.DATA_XMLNS)
 @Root(name = "raceNumber")
-public class ScoresXMLRaceNumber {
-	public ScoresXMLRaceNumber() {
+public class DataXMLRaceNumber {
+	public DataXMLRaceNumber() {
 	}
 
-	public ScoresXMLRaceNumber(RaceNumber raceNumber) {
+	public DataXMLRaceNumber(RaceNumber raceNumber) {
 		organisation = raceNumber.getOrganisation();
 		number = raceNumber.getNumber();
 	}
 
-	@Element
+	@Attribute
 	private String organisation;
 
 	public String getOrganisation() {
@@ -43,7 +46,7 @@ public class ScoresXMLRaceNumber {
 		this.organisation = organisation;
 	}
 
-	@Element
+	@Attribute
 	private int number;
 
 	public int getNumber() {

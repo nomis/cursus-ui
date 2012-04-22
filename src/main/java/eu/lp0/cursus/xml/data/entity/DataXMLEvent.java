@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores.entity;
+package eu.lp0.cursus.xml.data.entity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
 import com.google.common.base.Predicates;
@@ -32,30 +33,52 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLEventAttendee;
+import eu.lp0.cursus.xml.data.DataXML;
+import eu.lp0.cursus.xml.data.ref.DataXMLEventAttendee;
 
+@Namespace(reference = DataXML.DATA_XMLNS)
 @Root(name = "event")
-public class ScoresXMLEvent extends AbstractXMLEntity<Event> {
-	public ScoresXMLEvent() {
+public class DataXMLEvent extends AbstractXMLEntity<Event> {
+	public DataXMLEvent() {
 	}
 
-	public ScoresXMLEvent(Event event, Set<Race> races, Set<Pilot> pilots) {
+	public DataXMLEvent(Event event) {
 		super(event);
 
 		name = event.getName();
 		description = event.getDescription();
 
 		if (!event.getAttendees().isEmpty()) {
-			attendees = new ArrayList<ScoresXMLEventAttendee>(event.getAttendees().size());
-			for (Pilot pilot : Sets.filter(event.getAttendees(), Predicates.in(pilots))) {
-				attendees.add(new ScoresXMLEventAttendee(pilot));
+			attendees = new ArrayList<DataXMLEventAttendee>(event.getAttendees().size());
+			for (Pilot pilot : event.getAttendees()) {
+				attendees.add(new DataXMLEventAttendee(pilot));
 			}
 			Collections.sort(attendees);
 		}
 
-		this.races = new ArrayList<ScoresXMLRace>(races.size());
+		this.races = new ArrayList<DataXMLRace>(event.getRaces().size());
+		for (Race race : event.getRaces()) {
+			this.races.add(new DataXMLRace(race));
+		}
+	}
+
+	public DataXMLEvent(Event event, Set<Race> races, Set<Pilot> pilots) {
+		super(event);
+
+		name = event.getName();
+		description = event.getDescription();
+
+		if (!event.getAttendees().isEmpty()) {
+			attendees = new ArrayList<DataXMLEventAttendee>(event.getAttendees().size());
+			for (Pilot pilot : Sets.filter(event.getAttendees(), Predicates.in(pilots))) {
+				attendees.add(new DataXMLEventAttendee(pilot));
+			}
+			Collections.sort(attendees);
+		}
+
+		this.races = new ArrayList<DataXMLRace>(races.size());
 		for (Race race : races) {
-			this.races.add(new ScoresXMLRace(race, pilots));
+			this.races.add(new DataXMLRace(race, pilots));
 		}
 	}
 
@@ -82,24 +105,24 @@ public class ScoresXMLEvent extends AbstractXMLEntity<Event> {
 	}
 
 	@ElementList(required = false, inline = true)
-	private ArrayList<ScoresXMLEventAttendee> attendees;
+	private ArrayList<DataXMLEventAttendee> attendees;
 
-	public ArrayList<ScoresXMLEventAttendee> getAttendees() {
+	public ArrayList<DataXMLEventAttendee> getAttendees() {
 		return attendees;
 	}
 
-	public void setAttendees(ArrayList<ScoresXMLEventAttendee> attendees) {
+	public void setAttendees(ArrayList<DataXMLEventAttendee> attendees) {
 		this.attendees = attendees;
 	}
 
 	@ElementList
-	private ArrayList<ScoresXMLRace> races;
+	private ArrayList<DataXMLRace> races;
 
-	public ArrayList<ScoresXMLRace> getRaces() {
+	public ArrayList<DataXMLRace> getRaces() {
 		return races;
 	}
 
-	public void setRaces(ArrayList<ScoresXMLRace> race) {
+	public void setRaces(ArrayList<DataXMLRace> race) {
 		this.races = race;
 	}
 }

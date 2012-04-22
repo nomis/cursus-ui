@@ -18,34 +18,33 @@
 package eu.lp0.cursus.xml.scores.ref;
 
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
-import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
+import eu.lp0.cursus.xml.data.ref.DataXMLEventRef;
+import eu.lp0.cursus.xml.scores.ScoresXML;
 
-@Root(name = "eventAttendee")
-public class ScoresXMLEventAttendee implements ScoresXMLPilotRef, Comparable<ScoresXMLEventAttendee> {
-	public ScoresXMLEventAttendee() {
+// Simple won't be able to read this as the name conflicts with the data xmlns
+@Namespace(reference = ScoresXML.SCORES_XMLNS)
+@Root(name = "event")
+public class ScoresXMLEvent implements DataXMLEventRef {
+	public ScoresXMLEvent() {
 	}
 
-	public ScoresXMLEventAttendee(Pilot pilot) {
-		this.pilot = AbstractXMLEntity.generateId(pilot);
+	public ScoresXMLEvent(Event event) {
+		this.event = AbstractXMLEntity.generateId(event);
 	}
 
-	@Attribute
-	private String pilot;
+	@Attribute(name = "ref")
+	private String event;
 
-	@Override
-	public String getPilot() {
-		return pilot;
+	public String getEvent() {
+		return event;
 	}
 
-	public void setPilot(String pilot) {
-		this.pilot = pilot;
-	}
-
-	@Override
-	public int compareTo(ScoresXMLEventAttendee o) {
-		return getPilot().compareTo(o.getPilot());
+	public void setEvent(String event) {
+		this.event = event;
 	}
 }

@@ -29,10 +29,11 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.scoring.data.Scores;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
-import eu.lp0.cursus.xml.scores.ref.ScoresXMLPilotRef;
+import eu.lp0.cursus.xml.data.entity.DataXMLPenalty;
+import eu.lp0.cursus.xml.data.ref.DataXMLPilotRef;
 
 @Root(name = "raceScore")
-public class ScoresXMLRaceScore implements ScoresXMLPilotRef {
+public class ScoresXMLRaceScore implements DataXMLPilotRef {
 	public ScoresXMLRaceScore() {
 	}
 
@@ -49,9 +50,9 @@ public class ScoresXMLRaceScore implements ScoresXMLPilotRef {
 
 		List<Penalty> simulatedPenalties_ = scores.getSimulatedRacePenalties(pilot_, race_);
 		if (!simulatedPenalties_.isEmpty()) {
-			simulatedPenalties = new ArrayList<ScoresXMLPenalty>();
+			simulatedPenalties = new ArrayList<DataXMLPenalty>();
 			for (Penalty penalty : simulatedPenalties_) {
-				simulatedPenalties.add(new ScoresXMLPenalty(penalty));
+				simulatedPenalties.add(new DataXMLPenalty(penalty));
 			}
 		}
 	}
@@ -134,13 +135,13 @@ public class ScoresXMLRaceScore implements ScoresXMLPilotRef {
 	}
 
 	@ElementList(required = false)
-	private ArrayList<ScoresXMLPenalty> simulatedPenalties;
+	private ArrayList<DataXMLPenalty> simulatedPenalties;
 
-	public ArrayList<ScoresXMLPenalty> getSimulatedPenalties() {
+	public ArrayList<DataXMLPenalty> getSimulatedPenalties() {
 		return simulatedPenalties;
 	}
 
-	public void setSimulatedPenalties(ArrayList<ScoresXMLPenalty> simulatedPenalties) {
+	public void setSimulatedPenalties(ArrayList<DataXMLPenalty> simulatedPenalties) {
 		this.simulatedPenalties = simulatedPenalties;
 	}
 }

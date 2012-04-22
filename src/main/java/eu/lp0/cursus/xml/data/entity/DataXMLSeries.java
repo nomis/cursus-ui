@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml.scores.entity;
+package eu.lp0.cursus.xml.data.entity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +26,7 @@ import java.util.TreeSet;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
 import com.google.common.collect.Sets;
@@ -36,13 +37,39 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.xml.common.AbstractXMLEntity;
+import eu.lp0.cursus.xml.data.DataXML;
 
+@Namespace(reference = DataXML.DATA_XMLNS)
 @Root(name = "series")
-public class ScoresXMLSeries extends AbstractXMLEntity<Series> {
-	public ScoresXMLSeries() {
+public class DataXMLSeries extends AbstractXMLEntity<Series> {
+	public DataXMLSeries() {
 	}
 
-	public ScoresXMLSeries(Series series, SortedSet<Event> events, SortedSet<Race> races, Set<Pilot> pilots) {
+	public DataXMLSeries(Series series) {
+		super(series);
+
+		name = series.getName();
+		description = series.getDescription();
+
+		classes = new ArrayList<DataXMLClass>(series.getClasses().size());
+		for (Class class_ : series.getClasses()) {
+			classes.add(new DataXMLClass(class_));
+		}
+		Collections.sort(classes);
+
+		this.pilots = new ArrayList<DataXMLPilot>(series.getPilots().size());
+		for (Pilot pilot : series.getPilots()) {
+			this.pilots.add(new DataXMLPilot(pilot));
+		}
+		Collections.sort(this.pilots);
+
+		this.events = new ArrayList<DataXMLEvent>(series.getEvents().size());
+		for (Event event : series.getEvents()) {
+			this.events.add(new DataXMLEvent(event));
+		}
+	}
+
+	public DataXMLSeries(Series series, SortedSet<Event> events, SortedSet<Race> races, Set<Pilot> pilots) {
 		super(series);
 
 		name = series.getName();
@@ -53,21 +80,21 @@ public class ScoresXMLSeries extends AbstractXMLEntity<Series> {
 			classes_.addAll(pilot.getClasses());
 		}
 
-		classes = new ArrayList<ScoresXMLClass>(classes_.size());
+		classes = new ArrayList<DataXMLClass>(classes_.size());
 		for (Class class_ : classes_) {
-			classes.add(new ScoresXMLClass(class_));
+			classes.add(new DataXMLClass(class_));
 		}
 		Collections.sort(classes);
 
-		this.pilots = new ArrayList<ScoresXMLPilot>(pilots.size());
+		this.pilots = new ArrayList<DataXMLPilot>(pilots.size());
 		for (Pilot pilot : pilots) {
-			this.pilots.add(new ScoresXMLPilot(pilot));
+			this.pilots.add(new DataXMLPilot(pilot));
 		}
 		Collections.sort(this.pilots);
 
-		this.events = new ArrayList<ScoresXMLEvent>(events.size());
+		this.events = new ArrayList<DataXMLEvent>(events.size());
 		for (Event event : events) {
-			this.events.add(new ScoresXMLEvent(event, Sets.intersection(new TreeSet<Race>(event.getRaces()), races), pilots));
+			this.events.add(new DataXMLEvent(event, Sets.intersection(new TreeSet<Race>(event.getRaces()), races), pilots));
 		}
 	}
 
@@ -94,35 +121,35 @@ public class ScoresXMLSeries extends AbstractXMLEntity<Series> {
 	}
 
 	@ElementList
-	private ArrayList<ScoresXMLClass> classes;
+	private ArrayList<DataXMLClass> classes;
 
-	public ArrayList<ScoresXMLClass> getClasses() {
+	public ArrayList<DataXMLClass> getClasses() {
 		return classes;
 	}
 
-	public void setClasses(ArrayList<ScoresXMLClass> classes) {
+	public void setClasses(ArrayList<DataXMLClass> classes) {
 		this.classes = classes;
 	}
 
 	@ElementList
-	private ArrayList<ScoresXMLPilot> pilots;
+	private ArrayList<DataXMLPilot> pilots;
 
-	public ArrayList<ScoresXMLPilot> getPilots() {
+	public ArrayList<DataXMLPilot> getPilots() {
 		return pilots;
 	}
 
-	public void setPilots(ArrayList<ScoresXMLPilot> pilots) {
+	public void setPilots(ArrayList<DataXMLPilot> pilots) {
 		this.pilots = pilots;
 	}
 
 	@ElementList
-	private ArrayList<ScoresXMLEvent> events;
+	private ArrayList<DataXMLEvent> events;
 
-	public ArrayList<ScoresXMLEvent> getEvents() {
+	public ArrayList<DataXMLEvent> getEvents() {
 		return events;
 	}
 
-	public void setEvents(ArrayList<ScoresXMLEvent> events) {
+	public void setEvents(ArrayList<DataXMLEvent> events) {
 		this.events = events;
 	}
 }
