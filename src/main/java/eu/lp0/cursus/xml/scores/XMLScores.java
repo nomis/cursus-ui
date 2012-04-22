@@ -50,6 +50,7 @@ import eu.lp0.cursus.xml.data.entity.DataXMLRaceNumber;
 import eu.lp0.cursus.xml.data.entity.DataXMLSeries;
 import eu.lp0.cursus.xml.data.ref.DataXMLClassMember;
 import eu.lp0.cursus.xml.data.ref.DataXMLClassRef;
+import eu.lp0.cursus.xml.data.ref.DataXMLEventAttendee;
 import eu.lp0.cursus.xml.data.ref.DataXMLEventRef;
 import eu.lp0.cursus.xml.data.ref.DataXMLPilotRef;
 import eu.lp0.cursus.xml.data.ref.DataXMLRaceRef;
@@ -158,6 +159,12 @@ public class XMLScores {
 			Event event = new Event(series_, wrapNull(xmlEvent.getName()), wrapNull(xmlEvent.getDescription()));
 			events.put(xmlEvent.getId(), event);
 			series_.getEvents().add(event);
+
+			if (xmlEvent.getAttendees() != null) {
+				for (DataXMLEventAttendee xmlEventAttendee : xmlEvent.getAttendees()) {
+					event.getAttendees().add(dereference(xmlEventAttendee));
+				}
+			}
 
 			for (DataXMLRace xmlRace : xmlEvent.getRaces()) {
 				Race race = new Race(event, wrapNull(xmlRace.getName()), wrapNull(xmlRace.getDescription()));
