@@ -17,18 +17,17 @@
  */
 package eu.lp0.cursus.scoring.scores.impl;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import com.google.common.base.Predicates;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Ordering;
 
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
@@ -47,27 +46,19 @@ public class GenericRaceDiscardsData<T extends ScoredData & RacePointsData> exte
 
 	@Override
 	protected List<Race> calculateDiscardedRaces(Pilot pilot) {
-		List<Race> pilotDiscards = new ArrayList<Race>(discards);
-
 		if (discards > 0) {
 			final Map<Race, Integer> racePoints = scores.getRacePoints(pilot);
-			SortedSet<Race> pilotRaces = new TreeSet<Race>(new Comparator<Race>() {
+
+			// Discard the highest scoring races
+			return Lists.newArrayList(Iterables.limit(Ordering.from(new Comparator<Race>() {
 				@Override
 				public int compare(Race o1, Race o2) {
 					return ComparisonChain.start().compare(racePoints.get(o2), racePoints.get(o1)).compare(o1, o2).result();
 				}
-			});
-
-			// Use all races where the score is not null
-			pilotRaces.addAll(Maps.filterValues(racePoints, Predicates.notNull()).keySet());
-
-			// Discard the highest scoring races
-			Iterator<Race> it = Iterables.limit(pilotRaces, 2).iterator();
-			for (int i = 1; i <= discards; i++) {
-				pilotDiscards.add(it.hasNext() ? it.next() : null);
-			}
+				// Use all races where the score is not null
+			}).sortedCopy(Maps.filterValues(racePoints, Predicates.notNull()).keySet()), discards));
 		}
 
-		return pilotDiscards;
+		return Collections.emptyList();
 	}
 }
