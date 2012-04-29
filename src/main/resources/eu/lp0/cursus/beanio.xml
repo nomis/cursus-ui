@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beanio xmlns="http://www.beanio.org/2012/03"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2011/03/mapping.xsd">
+		xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2012/03/mapping.xsd">
 
 	<typeHandler type="eu.lp0.cursus.db.data.Gender" class="eu.lp0.cursus.xml.EnumTypeHandler">
 		<property name="enum" value="eu.lp0.cursus.db.data.Gender"/>
