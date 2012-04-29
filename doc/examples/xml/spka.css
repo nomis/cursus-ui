@@ -13,8 +13,10 @@ td { text-align: center; }
 th.type, th.classes, th.event, th.race, th.parent, td.pilot.name, td.notes { text-align: left; }
 tbody tr:hover { background: #ff8; }
 
-.race.pts.dis { color: #0a0; }
-.race.pts.sim { color: #f00; }
+@media screen {
+	.race.pts.dis { color: #0a0; }
+	.race.pts.sim { color: #f00; }
+}
 .over.pts { font-weight: bold; }
 .notes ul.pen { padding: 0; }
 .notes ul.pen, .notes ul.pen li { display: inline; }
@@ -26,3 +28,8 @@ ul.menu, ul.menu li { display: inline; line-height: 2; border-top: 1px solid; bo
 ul.menu li { border-left: 1px solid; padding: 0.2em 0 0.2em 0.75ex; }
 ul.menu li:last-child { border-right: 1px solid; padding-right: 0.75ex; }
 ul.menu li:hover { background: #ff8; }
+
+@media print {
+	.race.pts.dis { text-decoration: line-through; }
+	.race.pts.sim { text-decoration: underline; }
+}

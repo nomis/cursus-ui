@@ -288,4 +288,142 @@ public class Series2011DataTests extends AbstractSeries2011 {
 			db.endSession();
 		}
 	}
+
+	@Test
+	public void checkRace10() throws Exception {
+		createRace10Data();
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+			Event event4 = eventDAO.find(series, EVENT4_NAME);
+			Race race10 = raceDAO.find(event4, RACE10_NAME);
+
+			Assert.assertEquals(RACE10_PILOTS, race10.getAttendees().size());
+			Assert.assertEquals(RaceAttendee.Type.M_RACE_MASTER, race10.getAttendees().get(sco200).getType());
+			Assert.assertEquals(RaceAttendee.Type.M_SCORER, race10.getAttendees().get(sco158).getType());
+			Assert.assertEquals(RaceAttendee.Type.PILOT, race10.getAttendees().get(sco808).getType());
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+	}
+
+	@Test
+	public void checkRace11() throws Exception {
+		createRace11Data();
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+			Event event4 = eventDAO.find(series, EVENT4_NAME);
+			Race race11 = raceDAO.find(event4, RACE11_NAME);
+
+			Assert.assertEquals(RACE10_PILOTS, race11.getAttendees().size());
+			Assert.assertEquals(RaceAttendee.Type.M_RACE_MASTER, race11.getAttendees().get(sco068).getType());
+			Assert.assertEquals(RaceAttendee.Type.M_SCORER, race11.getAttendees().get(sco081).getType());
+			Assert.assertEquals(RaceAttendee.Type.PILOT, race11.getAttendees().get(sco808).getType());
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+	}
+
+	@Test
+	public void checkRace12() throws Exception {
+		createRace12Data();
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+			Event event4 = eventDAO.find(series, EVENT4_NAME);
+			Race race12 = raceDAO.find(event4, RACE12_NAME);
+
+			Assert.assertEquals(RACE10_PILOTS, race12.getAttendees().size());
+			Assert.assertEquals(RaceAttendee.Type.M_RACE_MASTER, race12.getAttendees().get(sco153).getType());
+			Assert.assertEquals(RaceAttendee.Type.M_SCORER, race12.getAttendees().get(sco808).getType());
+			Assert.assertEquals(RaceAttendee.Type.PILOT, race12.getAttendees().get(sco018).getType());
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+	}
+
+	@Test
+	public void checkRace13() throws Exception {
+		createRace13Data();
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+			Event event4 = eventDAO.find(series, EVENT4_NAME);
+			Race race13 = raceDAO.find(event4, RACE13_NAME);
+
+			Assert.assertEquals(RACE10_PILOTS, race13.getAttendees().size());
+			Assert.assertEquals(RaceAttendee.Type.M_RACE_MASTER, race13.getAttendees().get(sco087).getType());
+			Assert.assertEquals(RaceAttendee.Type.V_SCORER, race13.getAttendees().get(sco060).getType());
+			Assert.assertEquals(RaceAttendee.Type.PILOT, race13.getAttendees().get(sco018).getType());
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+	}
+
+	@Test
+	public void checkRace14() throws Exception {
+		createRace14Data();
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+			Event event4 = eventDAO.find(series, EVENT4_NAME);
+			Race race14 = raceDAO.find(event4, RACE14_NAME);
+
+			Assert.assertEquals(RACE14_PILOTS, race14.getAttendees().size());
+			Assert.assertEquals(RaceAttendee.Type.M_RACE_MASTER, race14.getAttendees().get(sco158).getType());
+			Assert.assertEquals(RaceAttendee.Type.M_SCORER, race14.getAttendees().get(sco179).getType());
+			Assert.assertEquals(RaceAttendee.Type.PILOT, race14.getAttendees().get(sco018).getType());
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+	}
+
+	@Test
+	public void checkRace15() throws Exception {
+		createRace15Data();
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+			Event event4 = eventDAO.find(series, EVENT4_NAME);
+			Race race15 = raceDAO.find(event4, RACE15_NAME);
+
+			Assert.assertEquals(RACE15_PILOTS, race15.getAttendees().size());
+			Assert.assertEquals(RaceAttendee.Type.M_RACE_MASTER, race15.getAttendees().get(sco249).getType());
+			Assert.assertEquals(RaceAttendee.Type.M_SCORER, race15.getAttendees().get(sco159).getType());
+			Assert.assertEquals(RaceAttendee.Type.PILOT, race15.getAttendees().get(sco018).getType());
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+	}
 }
