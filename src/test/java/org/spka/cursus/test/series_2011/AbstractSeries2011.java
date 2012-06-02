@@ -2921,6 +2921,7 @@ public abstract class AbstractSeries2011 extends AbstractSeries {
 			race18.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "68", sco068)); //$NON-NLS-1$
 			race18.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "808", sco808)); //$NON-NLS-1$
 			race18.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "179", sco179)); //$NON-NLS-1$
+			race18.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "60", sco060)); //$NON-NLS-1$
 			raceDAO.persist(race18);
 
 			DatabaseSession.commit();
