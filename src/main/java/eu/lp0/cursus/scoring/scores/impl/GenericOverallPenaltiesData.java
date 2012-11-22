@@ -99,10 +99,8 @@ public class GenericOverallPenaltiesData<T extends ScoredData & RacePenaltiesDat
 			}
 		}
 
-		for (int i = 0; i < eventNonAttendanceDiscards; i++) {
-			if (!penalties.isEmpty()) {
-				penalties.remove(penalties.size() - 1);
-			}
+		for (int i = 0; i < eventNonAttendanceDiscards && i < penalties.size(); i++) {
+			penalties.get(penalties.size() - (i + 1)).setValue(0);
 		}
 
 		return penalties;
