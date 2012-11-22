@@ -37,6 +37,7 @@ import eu.lp0.cursus.scoring.scores.impl.GenericRaceLapsData;
 import eu.lp0.cursus.scoring.scores.impl.GenericRacePenaltiesData;
 import eu.lp0.cursus.scoring.scores.impl.GenericRacePointsData;
 import eu.lp0.cursus.scoring.scores.impl.GenericRacePositionsData;
+import eu.lp0.cursus.scoring.scores.impl.NoDiscards;
 import eu.lp0.cursus.scoring.scores.impl.PilotRacePlacingComparator;
 
 public class FISLYScoresFactory2010 extends AbstractScoresFactory {
@@ -70,7 +71,7 @@ public class FISLYScoresFactory2010 extends AbstractScoresFactory {
 
 	@Override
 	public OverallPenaltiesData newOverallPenaltiesData(Scores scores) {
-		return new GenericOverallPenaltiesData<Scores>(scores, 0);
+		return new GenericOverallPenaltiesData<Scores>(scores, 0, new NoDiscards());
 	}
 
 	@Override

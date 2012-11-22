@@ -17,16 +17,22 @@
  */
 package org.spka.cursus.scoring;
 
-public class SPKAConstants {
-	public static final String NAME_2010 = "SPKA 2010/1"; //$NON-NLS-1$
-	public static final String UUID_2010 = "e5420c9f-643f-50ce-95bd-06b24b296d3c"; //$NON-NLS-1$
+import java.util.List;
+import java.util.Set;
 
-	public static final String NAME_2011 = "SPKA 2011/12"; //$NON-NLS-1$
-	public static final String UUID_2011 = "1576b2bb-6506-5665-b37d-cb4d48b4b834"; //$NON-NLS-1$
+import com.google.common.base.Predicate;
 
-	public static final String NAME_2012 = "SPKA 2012/13"; //$NON-NLS-1$
-	public static final String UUID_2012 = "5d14d1e2-78bd-5029-8c84-d379ca196d87"; //$NON-NLS-1$
+import eu.lp0.cursus.db.data.Event;
+import eu.lp0.cursus.db.data.Pilot;
+import eu.lp0.cursus.db.data.Race;
+import eu.lp0.cursus.scoring.data.Scores;
+import eu.lp0.cursus.scoring.scorer.Scorer;
+import eu.lp0.cursus.scoring.scorer.ScoringSystem;
 
-	public static final int EVENT_NON_ATTENDANCE_POINTS_2011 = 1;
-	public static final int EVENT_NON_ATTENDANCE_POINTS_2012 = 1;
+@ScoringSystem(uuid = SPKAConstants.UUID_2012, name = SPKAConstants.NAME_2012)
+public class Scorer2012 extends AbstractSPKAScorer implements Scorer {
+	@Override
+	public Scores scoreRaces(List<Race> races, Set<Pilot> pilots, Set<Event> events, Predicate<Pilot> fleetFilter) {
+		return new SPKAScoresFactory2012().newScores(pilots, races, events, fleetFilter, this);
+	}
 }

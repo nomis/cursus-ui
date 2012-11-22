@@ -50,11 +50,13 @@ public class GenericOverallPenaltiesData<T extends ScoredData & RacePenaltiesDat
 		}
 	});
 	private final int eventNonAttendancePenalty;
+	private final int eventNonAttendanceDiscards;
 
-	public GenericOverallPenaltiesData(T scores, int eventNonAttendancePenalty) {
+	public GenericOverallPenaltiesData(T scores, int eventNonAttendancePenalty, DiscardCalculator eventNonAttendanceDiscardCalculator) {
 		super(scores);
 
 		this.eventNonAttendancePenalty = eventNonAttendancePenalty;
+		this.eventNonAttendanceDiscards = eventNonAttendanceDiscardCalculator.getDiscardsFor(scores.getRaces());
 	}
 
 	@Override
@@ -94,6 +96,12 @@ public class GenericOverallPenaltiesData<T extends ScoredData & RacePenaltiesDat
 				if (!event.getAttendees().contains(pilot) && Sets.intersection(lazyEventRaces.get().get(event), pilot.getRaces().keySet()).isEmpty()) {
 					penalties.add(new Penalty(Penalty.Type.EVENT_NON_ATTENDANCE, eventNonAttendancePenalty, event.getName()));
 				}
+			}
+		}
+
+		for (int i = 0; i < eventNonAttendanceDiscards; i++) {
+			if (!penalties.isEmpty()) {
+				penalties.remove(penalties.size() - 1);
 			}
 		}
 

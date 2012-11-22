@@ -23,6 +23,7 @@ import eu.lp0.cursus.scoring.data.Scores;
 import eu.lp0.cursus.scoring.scores.impl.AveragingRacePointsData;
 import eu.lp0.cursus.scoring.scores.impl.GenericOverallPenaltiesData;
 import eu.lp0.cursus.scoring.scores.impl.GenericRacePointsData;
+import eu.lp0.cursus.scoring.scores.impl.NoDiscards;
 
 public class SPKAScoresFactory2011 extends SPKAScoresFactory2010 {
 	@Override
@@ -33,6 +34,6 @@ public class SPKAScoresFactory2011 extends SPKAScoresFactory2010 {
 
 	@Override
 	public OverallPenaltiesData newOverallPenaltiesData(Scores scores) {
-		return new GenericOverallPenaltiesData<Scores>(scores, SPKAConstants.EVENT_NON_ATTENDANCE_POINTS_2011);
+		return new GenericOverallPenaltiesData<Scores>(scores, SPKAConstants.EVENT_NON_ATTENDANCE_POINTS_2011, new NoDiscards());
 	}
 }
