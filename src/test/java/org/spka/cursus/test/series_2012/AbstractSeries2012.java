@@ -147,6 +147,7 @@ public abstract class AbstractSeries2012 extends AbstractSeries {
 			series.getPilots().add(sco081);
 
 			sco100 = new Pilot(series, "SCO100", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
+			sco100.getClasses().add(_16inWheel);
 			series.getPilots().add(sco100);
 
 			sco116 = new Pilot(series, "SCO116", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -182,6 +183,7 @@ public abstract class AbstractSeries2012 extends AbstractSeries {
 			series.getPilots().add(sco315);
 
 			sco320 = new Pilot(series, "SCO320", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
+			sco320.getClasses().add(_16inWheel);
 			series.getPilots().add(sco320);
 
 			sco467 = new Pilot(series, "SCO467", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
