@@ -96,6 +96,13 @@ public class AveragingRacePointsData<T extends Scores> extends GenericRacePoints
 		this.rounding = rounding;
 	}
 
+	public AveragingRacePointsData(T scores, FleetMethod raceFleetMethod, FleetMethod nonAttendeeFleetMethod, AveragingMethod averagingMethod, Rounding rounding) {
+		super(scores, raceFleetMethod, nonAttendeeFleetMethod);
+
+		this.method = averagingMethod;
+		this.rounding = rounding;
+	}
+
 	@Override
 	protected boolean calculateSimulatedRacePoints(Pilot pilot, Race race) {
 		// Return true even if the points aren't actually simulated but would

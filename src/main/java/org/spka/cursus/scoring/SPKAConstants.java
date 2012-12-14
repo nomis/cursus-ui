@@ -28,5 +28,4 @@ public class SPKAConstants {
 	public static final String UUID_2012 = "5d14d1e2-78bd-5029-8c84-d379ca196d87"; //$NON-NLS-1$
 
 	public static final int EVENT_NON_ATTENDANCE_POINTS_2011 = 1;
-	public static final int EVENT_NON_ATTENDANCE_POINTS_2012 = 1;
 }

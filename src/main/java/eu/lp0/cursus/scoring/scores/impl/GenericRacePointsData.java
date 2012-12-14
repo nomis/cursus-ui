@@ -19,12 +19,15 @@ package eu.lp0.cursus.scoring.scores.impl;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
 import eu.lp0.cursus.db.data.Event;
@@ -35,11 +38,28 @@ import eu.lp0.cursus.scoring.data.ScoredData;
 import eu.lp0.cursus.scoring.scores.base.AbstractRacePointsData;
 
 public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends AbstractRacePointsData<T> {
-	private final FleetMethod fleetMethod;
+	protected final Supplier<Map<Event, Set<Race>>> lazyEventRaces = Suppliers.memoize(new Supplier<Map<Event, Set<Race>>>() {
+		@Override
+		public Map<Event, Set<Race>> get() {
+			Map<Event, Set<Race>> eventRaces = new LinkedHashMap<Event, Set<Race>>(scores.getEvents().size() * 2);
+			for (Event event : Ordering.natural().sortedCopy(scores.getEvents())) {
+				eventRaces.put(event, ImmutableSet.copyOf(event.getRaces()));
+			}
+			return eventRaces;
+		}
+	});
+	private final FleetMethod raceFleetMethod;
 	protected final Supplier<Map<Race, Integer>> lazyRaceFleetSize = Suppliers.memoize(new Supplier<Map<Race, Integer>>() {
 		@Override
 		public Map<Race, Integer> get() {
-			return calculateFleetSizes();
+			return calculateFleetSizes(raceFleetMethod);
+		}
+	});
+	private final FleetMethod nonAttendeeFleetMethod;
+	protected final Supplier<Map<Race, Integer>> lazyNonAttendeeFleetSize = Suppliers.memoize(new Supplier<Map<Race, Integer>>() {
+		@Override
+		public Map<Race, Integer> get() {
+			return calculateFleetSizes(nonAttendeeFleetMethod);
 		}
 	});
 
@@ -48,8 +68,13 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 	}
 
 	public GenericRacePointsData(T scores, FleetMethod fleetMethod) {
+		this(scores, fleetMethod, fleetMethod);
+	}
+
+	public GenericRacePointsData(T scores, FleetMethod raceFleetMethod, FleetMethod nonAttendeeFleetMethod) {
 		super(scores);
-		this.fleetMethod = fleetMethod;
+		this.raceFleetMethod = raceFleetMethod;
+		this.nonAttendeeFleetMethod = nonAttendeeFleetMethod;
 	}
 
 	@Override
@@ -80,7 +105,11 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 	}
 
 	protected int getPointsForNoLaps(Pilot pilot, Race race) {
-		return getFleetSize(race) + 1;
+		if (!pilot.getEvents().contains(pilot) && Sets.intersection(lazyEventRaces.get().get(race.getEvent()), pilot.getRaces().keySet()).isEmpty()) {
+			return getNonAttendeeFleetSize(race) + 1;
+		} else {
+			return getFleetSize(race) + 1;
+		}
 	}
 
 	@Override
@@ -88,7 +117,11 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 		return lazyRaceFleetSize.get().get(race);
 	}
 
-	protected Map<Race, Integer> calculateFleetSizes() {
+	protected int getNonAttendeeFleetSize(Race race) {
+		return lazyNonAttendeeFleetSize.get().get(race);
+	}
+
+	protected Map<Race, Integer> calculateFleetSizes(FleetMethod fleetMethod) {
 		Map<Race, Integer> fleetSizes = new HashMap<Race, Integer>();
 		switch (fleetMethod) {
 		case RACE:

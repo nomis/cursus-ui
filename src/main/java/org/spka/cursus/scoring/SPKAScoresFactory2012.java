@@ -17,14 +17,15 @@
  */
 package org.spka.cursus.scoring;
 
-import eu.lp0.cursus.scoring.data.OverallPenaltiesData;
+import eu.lp0.cursus.scoring.data.RacePointsData;
 import eu.lp0.cursus.scoring.data.Scores;
-import eu.lp0.cursus.scoring.scores.impl.GenericDiscardCalculator;
-import eu.lp0.cursus.scoring.scores.impl.GenericOverallPenaltiesData;
+import eu.lp0.cursus.scoring.scores.impl.AveragingRacePointsData;
+import eu.lp0.cursus.scoring.scores.impl.GenericRacePointsData;
 
-public class SPKAScoresFactory2012 extends SPKAScoresFactory2011 {
+public class SPKAScoresFactory2012 extends SPKAScoresFactory2010 {
 	@Override
-	public OverallPenaltiesData newOverallPenaltiesData(Scores scores) {
-		return new GenericOverallPenaltiesData<Scores>(scores, SPKAConstants.EVENT_NON_ATTENDANCE_POINTS_2012, new GenericDiscardCalculator(4));
+	public RacePointsData newRacePointsData(Scores scores) {
+		return new AveragingRacePointsData<Scores>(scores, GenericRacePointsData.FleetMethod.EVENT, GenericRacePointsData.FleetMethod.EVENTS_SCORED,
+				AveragingRacePointsData.AveragingMethod.AFTER_DISCARDS, AveragingRacePointsData.Rounding.ROUND_HALF_UP);
 	}
 }
