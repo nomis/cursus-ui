@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../../src/main/xml/xsl/results-html-simple.xsl"?>
+<cursus xmlns="urn:oid:1.3.6.1.4.1.39777.1.0.1.2.1">
+	<load href="spka_2012-13.xml"/>
+	<stylesheet href="spka.css"/>
+	<class><name>Junior</name><output>Junior</output></class>
+	<class><name>16&quot; Wheel</name><output>16&quot;</output></class>
+</cursus>
