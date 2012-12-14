@@ -36,9 +36,9 @@ import eu.lp0.cursus.scoring.scorer.ScorerFactory;
 
 public abstract class AbstractSeries2012 extends AbstractSeries {
 	protected final String SERIES_NAME = "SPKA Race Series 2012/13"; //$NON-NLS-1$
-	protected final int SERIES_FLEET = 19;
-	protected final int SERIES_FLEET_AT_NON_EVENT1 = 19;
-	protected final int SERIES_FLEET_AT_EVENT1 = 19;
+	protected final int SERIES_FLEET = 20;
+	protected final int SERIES_FLEET_AT_NON_EVENT1 = 20;
+	protected final int SERIES_FLEET_AT_EVENT1 = 20;
 
 	protected final String NON_EVENT1_NAME = "Non-Event 1"; //$NON-NLS-1$
 	protected final String NON_EVENT1_DESC = "Fraserburgh Esplanade (20/10/2012 and 21/10/2012)"; //$NON-NLS-1$
@@ -74,6 +74,7 @@ public abstract class AbstractSeries2012 extends AbstractSeries {
 	protected Pilot sco068;
 	protected Pilot sco076;
 	protected Pilot sco081;
+	protected Pilot sco100;
 	protected Pilot sco116;
 	protected Pilot sco117;
 	protected Pilot sco136;
@@ -144,6 +145,9 @@ public abstract class AbstractSeries2012 extends AbstractSeries {
 
 			sco081 = new Pilot(series, "SCO081", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
 			series.getPilots().add(sco081);
+
+			sco100 = new Pilot(series, "SCO100", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
+			series.getPilots().add(sco100);
 
 			sco116 = new Pilot(series, "SCO116", Gender.MALE, "Scotland"); //$NON-NLS-1$ //$NON-NLS-2$
 			sco116.getClasses().add(junior);
@@ -249,6 +253,7 @@ public abstract class AbstractSeries2012 extends AbstractSeries {
 			attendEvent(nonEvent1, sco060);
 			attendEvent(nonEvent1, sco076);
 			attendEvent(nonEvent1, sco081);
+			attendEvent(nonEvent1, sco100);
 			attendEvent(nonEvent1, sco116);
 			attendEvent(nonEvent1, sco153);
 			attendEvent(nonEvent1, sco156);
