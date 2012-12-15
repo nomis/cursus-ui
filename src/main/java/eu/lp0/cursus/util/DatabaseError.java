@@ -18,6 +18,7 @@
 package eu.lp0.cursus.util;
 
 import java.awt.Component;
+import java.io.File;
 import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
@@ -31,6 +32,19 @@ public class DatabaseError {
 
 	public static void errorSaving(Component c, String context, Throwable t) {
 		JOptionPane.showMessageDialog(c, Messages.getString("db.error-saving") + ":\n\n" + createMessage(t), Constants.APP_NAME + Constants.EN_DASH + context, //$NON-NLS-1$ //$NON-NLS-2$
+				JOptionPane.ERROR_MESSAGE);
+	}
+
+	public static void errorFileSave(Component c, String context, File file, Throwable t) {
+		String message;
+		if (t instanceof CursusException) {
+			message = t.getMessage();
+		} else {
+			message = createMessage(t);
+		}
+
+		JOptionPane.showMessageDialog(c,
+				Messages.getString("err.saving-db", file.getAbsoluteFile()) + ":\n\n" + message, Constants.APP_NAME + Constants.EN_DASH + context, //$NON-NLS-1$ //$NON-NLS-2$ 
 				JOptionPane.ERROR_MESSAGE);
 	}
 

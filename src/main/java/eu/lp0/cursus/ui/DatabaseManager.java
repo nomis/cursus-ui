@@ -19,16 +19,21 @@ package eu.lp0.cursus.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.sql.SQLException;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.DatabaseVersionException;
+import eu.lp0.cursus.db.FileDatabase;
 import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
+import eu.lp0.cursus.util.DatabaseError;
 
 public class DatabaseManager implements ActionListener {
 	private final MainWindow win;
@@ -66,7 +71,7 @@ public class DatabaseManager implements ActionListener {
 					}
 				} catch (InvalidDatabaseException e) {
 					// TODO handle uncaught exceptions
-					throw new RuntimeException(e);
+					throw e;
 				}
 			}
 		});
@@ -86,8 +91,8 @@ public class DatabaseManager implements ActionListener {
 			switch (JOptionPane.showConfirmDialog(win, Messages.getString("warn.current-db-not-saved", win.getDatabase().getName()), //$NON-NLS-1$
 					Constants.APP_NAME + Constants.EN_DASH + action, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE)) {
 			case JOptionPane.YES_OPTION:
-				if (saveDatabase()) {
-					return win.getMain().close();
+				if (saveDatabase("menu.file.save", false)) { //$NON-NLS-1$
+					return win.getMain().close(true);
 				}
 				return false;
 			case JOptionPane.NO_OPTION:
@@ -106,6 +111,8 @@ public class DatabaseManager implements ActionListener {
 		assert (Background.isExecutorThread());
 
 		if (trySaveDatabase(Messages.getString("menu.file.new"))) { //$NON-NLS-1$
+			win.getMain().close(true);
+
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
@@ -136,30 +143,64 @@ public class DatabaseManager implements ActionListener {
 		}
 	}
 
-	boolean openDatabase() {
+	void openDatabase() {
 		assert (Background.isExecutorThread());
 
 		// TODO open database
 		JOptionPane.showMessageDialog(win, Messages.getString("err.feat-not-impl"), //$NON-NLS-1$
 				Constants.APP_NAME + Constants.EN_DASH + Messages.getString("menu.file.open"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
-		return false;
 	}
 
-	boolean saveDatabase() {
+	void saveDatabase() {
 		assert (Background.isExecutorThread());
 
-		// TODO save database to current or new file
-		JOptionPane.showMessageDialog(win, Messages.getString("err.feat-not-impl"), //$NON-NLS-1$
-				Constants.APP_NAME + Constants.EN_DASH + Messages.getString("menu.file.save"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
-		return false;
+		saveDatabase("menu.file.save", true); //$NON-NLS-1$
 	}
 
-	boolean saveAsDatabase() {
+	void saveAsDatabase() {
 		assert (Background.isExecutorThread());
 
-		// TODO save database to new file
-		JOptionPane.showMessageDialog(win, Messages.getString("err.feat-not-impl"), //$NON-NLS-1$
-				Constants.APP_NAME + Constants.EN_DASH + Messages.getString("menu.file.save-as"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+		saveDatabase("menu.file.save-as", true); //$NON-NLS-1$
+	}
+
+	private boolean saveDatabase(String action, boolean open) {
+		JFileChooser chooser = new JFileChooser();
+
+		chooser.setFileFilter(FileDatabase.FILE_FILTER);
+		chooser.setName(Messages.getString(action));
+		switch (chooser.showSaveDialog(win)) {
+		case JFileChooser.APPROVE_OPTION:
+			break;
+
+		case JFileChooser.CANCEL_OPTION:
+		case JFileChooser.ERROR_OPTION:
+		default:
+			return false;
+		}
+
+		File file = FileDatabase.reformatForSave(chooser.getSelectedFile());
+
+		if (file.exists()) {
+			switch (JOptionPane.showConfirmDialog(win, Messages.getString("warn.file-exists", file.getAbsolutePath()), //$NON-NLS-1$
+					Constants.APP_NAME + Constants.EN_DASH + action, JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE)) {
+			case JOptionPane.OK_OPTION:
+				break;
+			case JOptionPane.NO_OPTION:
+			case JOptionPane.CLOSED_OPTION:
+			default:
+				return false;
+			}
+		}
+
+		try {
+			Database db = win.getDatabase().saveAs(win, file);
+			if (open) {
+				win.getMain().savedAs(db);
+			}
+			return true;
+		} catch (Exception e) {
+			DatabaseError.errorFileSave(win, chooser.getName(), file, e);
+		}
 		return false;
 	}
 
@@ -167,7 +208,9 @@ public class DatabaseManager implements ActionListener {
 		assert (Background.isExecutorThread());
 
 		if (trySaveDatabase(Messages.getString("menu.file.close"))) { //$NON-NLS-1$
-			win.getMain().close();
+			if (!win.getMain().close(true)) {
+				JOptionPane.showMessageDialog(win, Messages.getString("err.unable-to-close-db"), Constants.APP_NAME, JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+			}
 		}
 	}
 }

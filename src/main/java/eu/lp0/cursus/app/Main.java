@@ -21,6 +21,7 @@ import java.sql.SQLException;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.plaf.InsetsUIResource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +63,14 @@ public class Main implements Runnable {
 			log.debug("Unable to select system look and feel", e); //$NON-NLS-1$
 		}
 
-		UIManager.getDefaults().put("SplitPane.continuousLayout", true); //$NON-NLS-1$
+		try {
+			UIManager.setLookAndFeel(new com.jgoodies.looks.plastic.Plastic3DLookAndFeel());
+		} catch (Exception e) {
+			log.debug("Unable to select JGoodies look and feel", e); //$NON-NLS-1$
+		}
+
+		UIManager.put("SplitPane.continuousLayout", true); //$NON-NLS-1$
+		UIManager.put("TabbedPane.tabInsets", new InsetsUIResource(5, 15, 5, 15)); //$NON-NLS-1$
 
 		win = new MainWindow(this);
 
@@ -106,6 +114,19 @@ public class Main implements Runnable {
 
 	protected Database createEmptyDatabase() throws InvalidDatabaseException, SQLException {
 		return new MemoryDatabase();
+	}
+
+	public synchronized boolean savedAs(Database newDB) throws InvalidDatabaseException, SQLException {
+		assert (Background.isExecutorThread());
+
+		// TODO preserve current selection
+		close(true);
+		if (!isOpen()) {
+			this.db = newDB;
+			win.databaseOpened();
+			return true;
+		}
+		return false;
 	}
 
 	public boolean close() {

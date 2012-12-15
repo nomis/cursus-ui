@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2012  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,30 +15,21 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.ui.menu;
+package eu.lp0.cursus.util;
 
-import java.awt.Frame;
-
-import javax.swing.JMenuBar;
-
-import eu.lp0.cursus.i18n.LanguageManager;
-import eu.lp0.cursus.ui.DatabaseManager;
-
-public class MainMenu extends JMenuBar {
-	private final FileMenu mnuFile;
-
-	public MainMenu(Frame win, DatabaseManager dbMgr) {
-		add(mnuFile = new FileMenu(win, dbMgr));
-		add(new LangMenu());
-		add(new HelpMenu(win));
-		LanguageManager.register(this, true);
+public class CursusException extends RuntimeException {
+	public CursusException() {
 	}
 
-	public void enableOpen(boolean enabled) {
-		mnuFile.enableOpen(enabled);
+	public CursusException(String message) {
+		super(message);
 	}
 
-	public void sync(boolean open, boolean saved) {
-		mnuFile.sync(open, saved);
+	public CursusException(Throwable cause) {
+		super(cause);
+	}
+
+	public CursusException(String message, Throwable cause) {
+		super(message, cause);
 	}
 }

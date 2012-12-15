@@ -198,14 +198,14 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 		selMgr = new SelectedTabManager(this, tabbedPane);
 	}
 
-	private void sync(final boolean open, final String title) {
+	private void sync(final boolean open, final boolean saved, final String title) {
 		assert (Background.isExecutorThread());
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				splitPane.setVisible(open);
-				menuBar.sync(open);
+				menuBar.sync(open, saved);
 				getRootPane().validate();
 
 				if (!open) {
@@ -226,11 +226,11 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 	}
 
 	public void databaseOpened() {
-		sync(true, Constants.APP_NAME + Constants.EN_DASH + main.getDatabase().getName());
+		sync(true, main.getDatabase().isSaved(), Constants.APP_NAME + Constants.EN_DASH + main.getDatabase().getName());
 	}
 
 	public void databaseClosed() {
-		sync(false, Constants.APP_DESC);
+		sync(false, false, Constants.APP_DESC);
 	}
 
 	public void refreshRaceList() {

@@ -17,7 +17,9 @@
  */
 package eu.lp0.cursus.db;
 
-public class InvalidDatabaseException extends RuntimeException {
+import eu.lp0.cursus.util.CursusException;
+
+public class InvalidDatabaseException extends CursusException {
 	public InvalidDatabaseException(String message) {
 		super(message);
 	}

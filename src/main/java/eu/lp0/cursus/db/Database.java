@@ -17,6 +17,8 @@
  */
 package eu.lp0.cursus.db;
 
+import java.awt.Component;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
@@ -47,7 +49,22 @@ public abstract class Database {
 	private static final CursusDAO cursusDAO = new CursusDAO();
 	private static final SeriesDAO seriesDAO = new SeriesDAO();
 
-	protected Database(String name, String url, String user, String password, boolean checkSchema) throws SQLException, DatabaseVersionException,
+	public enum Mode {
+		/** Don't initialise any tables */
+		NO_INIT,
+
+		/** Check database version and open */
+		OPEN,
+
+		/** Open database without checking version */
+		FORCE_OPEN;
+	}
+
+	static {
+		System.setProperty("h2.allowedClasses", "none"); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	protected Database(String name, String url, String user, String password, Mode mode) throws SQLException, DatabaseVersionException,
 			InvalidDatabaseException {
 		this.name = name;
 
@@ -58,9 +75,11 @@ public abstract class Database {
 		config.setProperty("javax.persistence.jdbc.user", user); //$NON-NLS-1$
 		config.setProperty("javax.persistence.jdbc.password", password); //$NON-NLS-1$
 
-		sessionFactory = initSession(config, checkSchema);
+		sessionFactory = initSession(config, mode);
 
-		initDatabase();
+		if (mode != Mode.NO_INIT) {
+			initDatabase();
+		}
 	}
 
 	public String getName() {
@@ -75,12 +94,16 @@ public abstract class Database {
 		sessionFactory.endSession();
 	}
 
-	private DatabaseSession initSession(Properties config, boolean checkSchema) throws InvalidDatabaseException {
+	private DatabaseSession initSession(Properties config, Mode mode) throws InvalidDatabaseException {
 		final String CHECK = "/check"; //$NON-NLS-1$
 		final String UPDATE = "/update"; //$NON-NLS-1$
 
-		if (checkSchema) {
+		if (mode != Mode.FORCE_OPEN) {
 			DatabaseSession ro = new DatabaseSession(Persistence.createEntityManagerFactory(getClass().getPackage().getName() + CHECK, config));
+
+			if (mode == Mode.NO_INIT) {
+				return ro;
+			}
 
 			ro.startSession();
 			try {
@@ -150,8 +173,16 @@ public abstract class Database {
 
 	public abstract boolean isSaved();
 
+	public FileDatabase saveAs(Component parent, File file) throws Exception {
+		return FileDatabase.save(parent, this, file);
+	}
+
 	public boolean close(boolean force) {
 		// TODO consider database saved if all connections in the pool are closed
-		return force || !isSaved();
+		return force || isSaved();
+	}
+
+	public void delete() {
+		close(true);
 	}
 }

@@ -68,12 +68,12 @@ public class FileMenu extends TranslatedJMenu {
 		mnuFileOpen.setEnabled(enabled);
 	}
 
-	public void sync(boolean open) {
+	public void sync(boolean open, boolean saved) {
 		assert (SwingUtilities.isEventDispatchThread());
 
 		enableOpen(true);
-		mnuFileSave.setEnabled(open);
-		mnuFileSaveAs.setEnabled(open);
+		mnuFileSave.setEnabled(open && !saved);
+		mnuFileSaveAs.setEnabled(open && saved);
 		mnuFileClose.setEnabled(open);
 	}
 }
