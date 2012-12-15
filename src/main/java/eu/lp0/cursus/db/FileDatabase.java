@@ -152,8 +152,6 @@ public class FileDatabase extends Database {
 
 			db.startSession();
 			try {
-				DatabaseSession.begin();
-
 				for (Object o : script) {
 					String stmt = o.toString();
 
@@ -162,15 +160,15 @@ public class FileDatabase extends Database {
 					}
 
 					log.trace(stmt);
+					DatabaseSession.begin();
 					DatabaseSession.getEntityManager().createNativeQuery(stmt).executeUpdate();
+					DatabaseSession.commit();
 					progress.setProgress(++i);
 
 					if (progress.isCanceled()) {
 						throw new CursusException(Messages.getString("err.operation-canceled")); //$NON-NLS-1$
 					}
 				}
-
-				DatabaseSession.commit();
 			} catch (Exception e) {
 				error = e;
 				return;
