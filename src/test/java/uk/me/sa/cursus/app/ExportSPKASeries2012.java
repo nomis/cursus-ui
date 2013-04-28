@@ -56,6 +56,7 @@ public class ExportSPKASeries2012 {
 			createEvent1Races();
 			createEvent2Races();
 			createEvent3Races();
+			createEvent4Races();
 
 			db.startSession();
 			try {
