@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2012  Simon Arlott
+	Copyright 2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -57,6 +57,7 @@ public class ExportSPKASeries2012 {
 			createEvent2Races();
 			createEvent3Races();
 			createEvent4Races();
+			createEvent5Races();
 
 			db.startSession();
 			try {
