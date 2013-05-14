@@ -33,7 +33,6 @@ public class Series2012NonEvent2Scores extends Series2012NonEvent1Scores {
 	@Before
 	public void createData() throws Exception {
 		super.createData();
-		createNonEvent1Data();
 		createNonEvent2Data();
 	}
 
