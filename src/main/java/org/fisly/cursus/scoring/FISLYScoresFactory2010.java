@@ -27,7 +27,6 @@ import eu.lp0.cursus.scoring.data.RacePointsData;
 import eu.lp0.cursus.scoring.data.RacePositionsData;
 import eu.lp0.cursus.scoring.data.Scores;
 import eu.lp0.cursus.scoring.scores.base.AbstractScoresFactory;
-import eu.lp0.cursus.scoring.scores.impl.AveragingRacePointsData;
 import eu.lp0.cursus.scoring.scores.impl.GenericDiscardCalculator;
 import eu.lp0.cursus.scoring.scores.impl.GenericOverallPenaltiesData;
 import eu.lp0.cursus.scoring.scores.impl.GenericOverallPointsData;
@@ -55,8 +54,7 @@ public class FISLYScoresFactory2010 extends AbstractScoresFactory {
 
 	@Override
 	public RacePointsData newRacePointsData(Scores scores) {
-		return new AveragingRacePointsData<Scores>(scores, GenericRacePointsData.FleetMethod.RACE, AveragingRacePointsData.AveragingMethod.AFTER_DISCARDS,
-				AveragingRacePointsData.Rounding.ROUND_HALF_UP);
+		return new GenericRacePointsData<Scores>(scores, GenericRacePointsData.FleetMethod.EVENT);
 	}
 
 	@Override
