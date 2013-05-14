@@ -53,6 +53,7 @@ public class ExportSPKASeries2012 {
 
 			createDatabase();
 			createNonEvent1Data();
+			createNonEvent2Data();
 			createEvent1Races();
 			createEvent2Races();
 			createEvent3Races();

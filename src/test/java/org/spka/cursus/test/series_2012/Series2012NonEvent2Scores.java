@@ -26,23 +26,26 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Series;
 
 /**
- * Scores at the end of non-event 1 (20/10/2012 to 21/10/2012)
+ * Scores at the end of non-event 2 (16/02/2013 to 17/02/2013)
  */
-public class Series2012NonEvent1Scores extends AbstractSeries2012 {
+public class Series2012NonEvent2Scores extends Series2012NonEvent1Scores {
+	@Override
 	@Before
 	public void createData() throws Exception {
+		super.createData();
 		createNonEvent1Data();
+		createNonEvent2Data();
 	}
 
 	@Test
-	public final void checkNonEvent1() throws Exception {
+	public final void checkNonEvent2() throws Exception {
 		db.startSession();
 		try {
 			DatabaseSession.begin();
 
 			Series series = seriesDAO.find(SERIES_NAME);
-			Event nonEvent1 = eventDAO.find(series, NON_EVENT1_NAME);
-			Assert.assertEquals(0, nonEvent1.getRaces().size());
+			Event nonEvent2 = eventDAO.find(series, NON_EVENT2_NAME);
+			Assert.assertEquals(0, nonEvent2.getRaces().size());
 
 			DatabaseSession.commit();
 		} finally {

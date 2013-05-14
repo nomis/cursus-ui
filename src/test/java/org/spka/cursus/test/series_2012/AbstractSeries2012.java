@@ -37,9 +37,8 @@ import eu.lp0.cursus.scoring.scorer.ScorerFactory;
 public abstract class AbstractSeries2012 extends AbstractSeries {
 	protected final String SERIES_NAME = "SPKA Race Series 2012/13"; //$NON-NLS-1$
 	protected final int SERIES_FLEET = 22;
-	protected final int SERIES_FLEET_AT_NON_EVENT1 = 20;
-	protected final int SERIES_FLEET_AT_EVENT1 = 20;
-	protected final int SERIES_FLEET_AT_EVENT2 = 21;
+	protected final int SERIES_FLEET_AT_EVENT1 = 21;
+	protected final int SERIES_FLEET_AT_EVENT2 = 22;
 	protected final int SERIES_FLEET_AT_EVENT3 = 22;
 	protected final int SERIES_FLEET_AT_EVENT4 = 22;
 	protected final int SERIES_FLEET_AT_EVENT5 = 22;
@@ -55,67 +54,67 @@ public abstract class AbstractSeries2012 extends AbstractSeries {
 	protected final int EVENT1_FLEET = 21;
 	protected final String RACE1_NAME = "Race 1"; //$NON-NLS-1$
 	protected final String RACE1_DESC = "West Sands (17/11/2012)"; //$NON-NLS-1$
-	protected final int RACE1_PILOTS = 21;
+	protected final int RACE1_PILOTS = 16;
 	protected final String RACE2_NAME = "Race 2"; //$NON-NLS-1$
 	protected final String RACE2_DESC = "West Sands (17/11/2012)"; //$NON-NLS-1$
-	protected final int RACE2_PILOTS = 21;
+	protected final int RACE2_PILOTS = 16;
 	protected final String RACE3_NAME = "Race 3"; //$NON-NLS-1$
 	protected final String RACE3_DESC = "West Sands (18/11/2012)"; //$NON-NLS-1$
-	protected final int RACE3_PILOTS = 21;
+	protected final int RACE3_PILOTS = 16;
 	protected final String RACE4_NAME = "Race 4"; //$NON-NLS-1$
 	protected final String RACE4_DESC = "West Sands (18/11/2012)"; //$NON-NLS-1$
-	protected final int RACE4_PILOTS = 21;
+	protected final int RACE4_PILOTS = 16;
 	protected final String RACE5_NAME = "Race 5"; //$NON-NLS-1$
 	protected final String RACE5_DESC = "West Sands (18/11/2012)"; //$NON-NLS-1$
-	protected final int RACE5_PILOTS = 21;
+	protected final int RACE5_PILOTS = 16;
 	protected final String RACE6_NAME = "Race 6"; //$NON-NLS-1$
 	protected final String RACE6_DESC = "West Sands (18/11/2012)"; //$NON-NLS-1$
-	protected final int RACE6_PILOTS = 21;
+	protected final int RACE6_PILOTS = 16;
 
 	protected final String EVENT2_NAME = "Race Event 2"; //$NON-NLS-1$
 	protected final String EVENT2_DESC = "Luce Bay (19/01/2013 and 20/01/2013)"; //$NON-NLS-1$
 	protected final int EVENT2_FLEET = 17;
 	protected final String RACE7_NAME = "Race 7"; //$NON-NLS-1$
 	protected final String RACE7_DESC = "Luce Bay (19/01/2013)"; //$NON-NLS-1$
-	protected final int RACE7_PILOTS = 17;
+	protected final int RACE7_PILOTS = 16;
 	protected final String RACE8_NAME = "Race 8"; //$NON-NLS-1$
 	protected final String RACE8_DESC = "Luce Bay (19/01/2013)"; //$NON-NLS-1$
-	protected final int RACE8_PILOTS = 17;
+	protected final int RACE8_PILOTS = 16;
 	protected final String RACE9_NAME = "Race 9"; //$NON-NLS-1$
 	protected final String RACE9_DESC = "Luce Bay (19/01/2013)"; //$NON-NLS-1$
-	protected final int RACE9_PILOTS = 17;
+	protected final int RACE9_PILOTS = 16;
 	protected final String RACE10_NAME = "Race 10"; //$NON-NLS-1$
 	protected final String RACE10_DESC = "Luce Bay (20/01/2013)"; //$NON-NLS-1$
-	protected final int RACE10_PILOTS = 17;
+	protected final int RACE10_PILOTS = 16;
 	protected final String RACE11_NAME = "Race 11"; //$NON-NLS-1$
 	protected final String RACE11_DESC = "Luce Bay (20/01/2013)"; //$NON-NLS-1$
-	protected final int RACE11_PILOTS = 17;
+	protected final int RACE11_PILOTS = 16;
 	protected final String RACE12_NAME = "Race 12"; //$NON-NLS-1$
 	protected final String RACE12_DESC = "Luce Bay (20/01/2013)"; //$NON-NLS-1$
-	protected final int RACE12_PILOTS = 17;
+	protected final int RACE12_PILOTS = 16;
 
 	protected final String EVENT3_NAME = "Race Event 3"; //$NON-NLS-1$
 	protected final String EVENT3_DESC = "West Sands (16/03/2013 and 17/03/2013)"; //$NON-NLS-1$
 	protected final int EVENT3_FLEET = 19;
 	protected final String RACE13_NAME = "Race 13"; //$NON-NLS-1$
 	protected final String RACE13_DESC = "West Sands (17/03/2013)"; //$NON-NLS-1$
-	protected final int RACE13_PILOTS = 19;
+	protected final int RACE13_PILOTS = 18;
 	protected final String RACE14_NAME = "Race 14"; //$NON-NLS-1$
 	protected final String RACE14_DESC = "West Sands (17/03/2013)"; //$NON-NLS-1$
-	protected final int RACE14_PILOTS = 19;
+	protected final int RACE14_PILOTS = 18;
 	protected final String RACE15_NAME = "Race 15"; //$NON-NLS-1$
 	protected final String RACE15_DESC = "West Sands (17/03/2013)"; //$NON-NLS-1$
-	protected final int RACE15_PILOTS = 19;
+	protected final int RACE15_PILOTS = 18;
 
 	protected final String EVENT4_NAME = "Race Event 4"; //$NON-NLS-1$
 	protected final String EVENT4_DESC = "West Sands (27/04/2013 and 28/04/2013)"; //$NON-NLS-1$
 	protected final int EVENT4_FLEET = 17;
 	protected final String RACE16_NAME = "Race 16"; //$NON-NLS-1$
 	protected final String RACE16_DESC = "West Sands (27/04/2013)"; //$NON-NLS-1$
-	protected final int RACE16_PILOTS = 17;
+	protected final int RACE16_PILOTS = 16;
 	protected final String RACE17_NAME = "Race 17"; //$NON-NLS-1$
 	protected final String RACE17_DESC = "West Sands (27/04/2013)"; //$NON-NLS-1$
-	protected final int RACE17_PILOTS = 17;
+	protected final int RACE17_PILOTS = 16;
 
 	protected final String EVENT5_NAME = "Race Event 5"; //$NON-NLS-1$
 	protected final String EVENT5_DESC = "West Sands (11/05/2013 and 12/05/2013)"; //$NON-NLS-1$
@@ -176,6 +175,7 @@ public abstract class AbstractSeries2012 extends AbstractSeries {
 
 	private Series _series;
 	private Event _nonEvent1;
+	private Event _nonEvent2;
 	private Event _event1;
 	private Race _race1;
 	private Race _race2;
@@ -372,6 +372,51 @@ public abstract class AbstractSeries2012 extends AbstractSeries {
 			DatabaseSession.commit();
 
 			_nonEvent1 = nonEvent1;
+		} finally {
+			db.endSession();
+		}
+	}
+
+	protected void createNonEvent2Data() throws Exception {
+		createSeriesData();
+
+		if (_nonEvent2 != null) {
+			return;
+		}
+
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			Series series = seriesDAO.find(SERIES_NAME);
+
+			Event nonEvent2 = new Event(series, NON_EVENT2_NAME, NON_EVENT2_DESC);
+			series.getEvents().add(nonEvent2);
+			eventDAO.persist(nonEvent2);
+
+			attendEvent(nonEvent2, sco018);
+			attendEvent(nonEvent2, sco060);
+			attendEvent(nonEvent2, sco076);
+			attendEvent(nonEvent2, sco081);
+			attendEvent(nonEvent2, sco100);
+			attendEvent(nonEvent2, sco116);
+			attendEvent(nonEvent2, sco117);
+			attendEvent(nonEvent2, sco153);
+			attendEvent(nonEvent2, sco156);
+			attendEvent(nonEvent2, sco159);
+			attendEvent(nonEvent2, sco179);
+			attendEvent(nonEvent2, sco200);
+			attendEvent(nonEvent2, sco315);
+			attendEvent(nonEvent2, sco528);
+			attendEvent(nonEvent2, sco561);
+			attendEvent(nonEvent2, sco666);
+			attendEvent(nonEvent2, sco777);
+			attendEvent(nonEvent2, sco808);
+			attendEvent(nonEvent2, ir181);
+
+			DatabaseSession.commit();
+
+			_nonEvent2 = nonEvent2;
 		} finally {
 			db.endSession();
 		}
