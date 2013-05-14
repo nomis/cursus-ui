@@ -17,7 +17,15 @@
  */
 package org.fisly.cursus.scoring;
 
+/**
+ * "Reglement International de Roulage et de Course" aka "The International Sailing and Racing Rules"
+ */
 public class FISLYConstants {
-	public static final String NAME_2010 = "FISLY 2010-09-29"; //$NON-NLS-1$
+	/**
+	 * Scoring is defined by the 2010-09-29 rules.
+	 * There are no changes to scoring in the 2011-09-18 rules.
+	 * There are no changes to scoring in the 2012-06-14 rules.
+	 */
+	public static final String NAME_2010 = "FISLY 2010-09-29..2012-06-14+"; //$NON-NLS-1$
 	public static final String UUID_2010 = "306e22d7-027f-55d8-8b02-db8944b742ec"; //$NON-NLS-1$
 }
