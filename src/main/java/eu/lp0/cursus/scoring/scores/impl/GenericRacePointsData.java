@@ -63,8 +63,51 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 		}
 	});
 
+	/**
+	 * Methods of calculating the fleet size for each race.
+	 */
 	public enum FleetMethod {
-		RACE, EVENT, SERIES, RACES_SCORED, EVENTS_SCORED, PILOTS;
+		/**
+		 * The scored pilots who attended the race.
+		 * <p>
+		 * Simplest option but results in a wide disparity of scores for pilots who complete no laps when some races have significantly fewer pilots.
+		 */
+		RACE,
+
+		/**
+		 * The scored pilots who attended the event (or any of its races).
+		 * <p>
+		 * Combines the fleet size of all races that occurred in the event, keeping the event's races isolated from other events.
+		 */
+		EVENT,
+
+		/**
+		 * The scored pilots who attended any event or race.
+		 * <p>
+		 * Combines the total fleet of all races in the series, which may be much larger than any single event.
+		 */
+		SERIES,
+
+		/**
+		 * The scored pilots who attended any scored race.
+		 * <p>
+		 * Combines the fleet size of all races that are being scored, but ignores attendance of the events involved. Unusual because it can make the fleet size
+		 * different between the race scores and the series scores.
+		 */
+		RACES_SCORED,
+
+		/**
+		 * The scored pilots who attended any scored event (or any of their races).
+		 * <p>
+		 * Combines the fleet size of all races for all events that are being scored, including attendance of the events involved. Unusual because it can make
+		 * the fleet size different between the event scores and the series scores.
+		 */
+		EVENTS_SCORED,
+
+		/**
+		 * The scored pilots regardless of whether or not they attended the event or race.
+		 */
+		PILOTS;
 	}
 
 	public GenericRacePointsData(T scores, FleetMethod fleetMethod) {
@@ -137,9 +180,13 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 
 				if (!eventFleetSizes.containsKey(event)) {
 					Set<Pilot> pilots = new HashSet<Pilot>(scores.getSeries().getPilots().size() * 2);
+
+					pilots.addAll(event.getAttendees());
+
 					for (Race race2 : event.getRaces()) {
 						pilots.addAll(race2.getAttendees().keySet());
 					}
+
 					eventFleetSizes.put(event, Sets.intersection(scores.getFleet(), pilots).size());
 				}
 
@@ -186,7 +233,6 @@ public class GenericRacePointsData<T extends ScoredData & RaceLapsData> extends 
 			for (Event event : scores.getEvents()) {
 				pilots.addAll(event.getAttendees());
 
-				// Race attendees implicitly attend the event too
 				for (Race race : event.getRaces()) {
 					pilots.addAll(race.getAttendees().keySet());
 				}
