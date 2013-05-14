@@ -17,6 +17,8 @@
  */
 package org.spka.cursus.scoring;
 
+import org.fisly.cursus.scoring.FISLYScoresFactory2010;
+
 import eu.lp0.cursus.scoring.data.OverallPenaltiesData;
 import eu.lp0.cursus.scoring.data.RacePointsData;
 import eu.lp0.cursus.scoring.data.Scores;
@@ -25,7 +27,7 @@ import eu.lp0.cursus.scoring.scores.impl.GenericOverallPenaltiesData;
 import eu.lp0.cursus.scoring.scores.impl.GenericRacePointsData;
 import eu.lp0.cursus.scoring.scores.impl.NoDiscards;
 
-public class SPKAScoresFactory2011 extends SPKAScoresFactory2010 {
+public class SPKAScoresFactory2011 extends FISLYScoresFactory2010 {
 	@Override
 	public RacePointsData newRacePointsData(Scores scores) {
 		return new AveragingRacePointsData<Scores>(scores, GenericRacePointsData.FleetMethod.EVENTS_SCORED,
