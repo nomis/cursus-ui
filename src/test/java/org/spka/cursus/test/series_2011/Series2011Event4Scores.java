@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2012  Simon Arlott
+	Copyright 2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ import eu.lp0.cursus.test.util.OverallAssertUtil;
 import eu.lp0.cursus.test.util.RaceAssertUtil;
 
 /**
- * Scores at the end of event 4 (28/04/2012)
+ * Scores at the end of event 4 (28/04/2012 to 29/04/2012)
  */
 public class Series2011Event4Scores extends Series2011Event3Scores {
 	@Override
@@ -602,6 +602,167 @@ public class Series2011Event4Scores extends Series2011Event3Scores {
 			Assert.assertEquals(EVENT4_FLEET, scores.getFleetSize(race13));
 			Assert.assertEquals(EVENT4_FLEET, scores.getFleetSize(race14));
 			Assert.assertEquals(EVENT4_FLEET, scores.getFleetSize(race15));
+
+			RaceAssertUtil race10AssertUtil = new RaceAssertUtil(scores, race10);
+			race10AssertUtil.assertPilot(sco068, 7, 0, false, 0, 1);
+			race10AssertUtil.assertPilot(sco200, 0, 0, true, 0, 2);
+			race10AssertUtil.assertPilot(sco081, 7, 0, false, 2, 3);
+			race10AssertUtil.assertPilot(sco808, 7, 0, false, 3, 4);
+			race10AssertUtil.assertPilot(sco159, 7, 0, false, 4, 5);
+			race10AssertUtil.assertPilot(sco179, 7, 0, false, 5, 6);
+			race10AssertUtil.assertPilot(sco116, 6, 0, false, 6, 7);
+			race10AssertUtil.assertPilot(sco248, 6, 0, false, 7, 8);
+			race10AssertUtil.assertPilot(sco528, 6, 0, false, 8, 9);
+			race10AssertUtil.assertPilot(sco087, 6, 0, false, 9, 10);
+			race10AssertUtil.assertPilot(sco467, 5, 0, false, 10, 11);
+			race10AssertUtil.assertPilot(sco320, 5, 0, false, 11, 12);
+			race10AssertUtil.assertPilot(sco060, 5, 0, false, 12, 13);
+			race10AssertUtil.assertPilot(sco158, 0, 0, true, 12, 14);
+			race10AssertUtil.assertPilot(sco018, 5, 0, false, 13, 15);
+			race10AssertUtil.assertPilot(sco315, 5, 0, false, 14, 16);
+			race10AssertUtil.assertPilot(sco249, 4, 0, false, 15, 17);
+			race10AssertUtil.assertPilot(sco529, 4, 0, false, 16, 18);
+			race10AssertUtil.assertPilot(sco153, 4, 0, false, 17, 19);
+			race10AssertUtil.assertPilot(sco156, 2, 0, false, 18, 20);
+			race10AssertUtil.assertDone(2);
+
+			RaceAssertUtil race11AssertUtil = new RaceAssertUtil(scores, race11);
+			race11AssertUtil.assertPilot(sco200, 8, 0, false, 0, 1);
+			race11AssertUtil.assertPilot(sco179, 8, 0, false, 2, 2);
+			race11AssertUtil.assertPilot(sco068, 0, 0, true, 2, 3);
+			race11AssertUtil.assertPilot(sco248, 7, 0, false, 3, 4);
+			race11AssertUtil.assertPilot(sco081, 0, 0, true, 3, 5);
+			race11AssertUtil.assertPilot(sco116, 6, 0, false, 4, 6);
+			race11AssertUtil.assertPilot(sco528, 6, 0, false, 5, 7);
+			race11AssertUtil.assertPilot(sco159, 6, 0, false, 6, 8);
+			race11AssertUtil.assertPilot(sco060, 6, 0, false, 7, 9);
+			race11AssertUtil.assertPilot(sco087, 5, 0, false, 8, 10);
+			race11AssertUtil.assertPilot(sco467, 5, 0, false, 9, 11);
+			race11AssertUtil.assertPilot(sco018, 5, 0, false, 10, 12);
+			race11AssertUtil.assertPilot(sco315, 5, 0, false, 11, 13);
+			race11AssertUtil.assertPilot(sco320, 5, 0, false, 12, 14);
+			race11AssertUtil.assertPilot(sco158, 4, 0, false, 13, 15);
+			race11AssertUtil.assertPilot(sco529, 4, 0, false, 14, 16);
+			race11AssertUtil.assertPilot(sco153, 4, 0, false, 15, 17);
+			race11AssertUtil.assertPilot(sco156, 3, 0, false, 16, 18);
+			race11AssertUtil.assertPilot(sco249, 0, 0, false, 21, 19);
+			race11AssertUtil.assertPilot(sco808, 0, 0, false, 21, 19);
+			race11AssertUtil.assertDone(2);
+
+			RaceAssertUtil race12AssertUtil = new RaceAssertUtil(scores, race12);
+			race12AssertUtil.assertPilot(sco200, 8, 0, false, 0, 1);
+			race12AssertUtil.assertPilot(sco068, 8, 0, false, 2, 2);
+			race12AssertUtil.assertPilot(sco081, 8, 0, false, 3, 3);
+			race12AssertUtil.assertPilot(sco116, 8, 0, false, 4, 4);
+			race12AssertUtil.assertPilot(sco808, 0, 0, true, 4, 5);
+			race12AssertUtil.assertPilot(sco179, 7, 0, false, 5, 6);
+			race12AssertUtil.assertPilot(sco159, 7, 0, false, 6, 7);
+			race12AssertUtil.assertPilot(sco528, 7, 0, false, 7, 8);
+			race12AssertUtil.assertPilot(sco467, 6, 0, false, 8, 9);
+			race12AssertUtil.assertPilot(sco018, 6, 0, false, 9, 10);
+			race12AssertUtil.assertPilot(sco087, 6, 0, false, 10, 11);
+			race12AssertUtil.assertPilot(sco158, 6, 0, false, 11, 12);
+			race12AssertUtil.assertPilot(sco248, 5, 0, false, 12, 13);
+			race12AssertUtil.assertPilot(sco315, 5, 0, false, 13, 14);
+			race12AssertUtil.assertPilot(sco529, 5, 0, false, 14, 15);
+			race12AssertUtil.assertPilot(sco320, 4, 0, false, 15, 16);
+			race12AssertUtil.assertPilot(sco153, 0, 0, true, 15, 17);
+			race12AssertUtil.assertPilot(sco156, 3, 0, false, 16, 18);
+			race12AssertUtil.assertPilot(sco060, 3, 0, false, 17, 19);
+			race12AssertUtil.assertPilot(sco249, 0, 0, false, 21, 20);
+			race12AssertUtil.assertDone(2);
+
+			RaceAssertUtil race13AssertUtil = new RaceAssertUtil(scores, race13);
+			race13AssertUtil.assertPilot(sco200, 12, 0, false, 0, 1);
+			race13AssertUtil.assertPilot(sco081, 12, 0, false, 2, 2);
+			race13AssertUtil.assertPilot(sco179, 11, 0, false, 3, 3);
+			race13AssertUtil.assertPilot(sco808, 11, 0, false, 4, 4);
+			race13AssertUtil.assertPilot(sco159, 11, 0, false, 5, 5);
+			race13AssertUtil.assertPilot(sco068, 10, 0, false, 6, 6);
+			race13AssertUtil.assertPilot(sco528, 10, 0, false, 7, 7);
+			race13AssertUtil.assertPilot(sco116, 9, 0, false, 8, 8);
+			race13AssertUtil.assertPilot(sco248, 9, 0, false, 9, 9);
+			race13AssertUtil.assertPilot(sco087, 0, 0, true, 9, 10);
+			race13AssertUtil.assertPilot(sco018, 9, 0, false, 10, 11);
+			race13AssertUtil.assertPilot(sco158, 9, 0, false, 11, 12);
+			race13AssertUtil.assertPilot(sco320, 8, 0, false, 12, 13);
+			race13AssertUtil.assertPilot(sco467, 6, 0, false, 13, 14);
+			race13AssertUtil.assertPilot(sco529, 6, 0, false, 14, 15);
+			race13AssertUtil.assertPilot(sco156, 6, 0, false, 15, 16);
+			race13AssertUtil.assertPilot(sco315, 5, 0, false, 16, 17);
+			race13AssertUtil.assertPilot(sco153, 4, 0, false, 17, 18);
+			race13AssertUtil.assertPilot(sco060, 0, 0, false, 21, 19);
+			race13AssertUtil.assertPilot(sco249, 0, 0, false, 21, 19);
+			race13AssertUtil.assertDone(1);
+
+			RaceAssertUtil race14AssertUtil = new RaceAssertUtil(scores, race14);
+			race14AssertUtil.assertPilot(sco200, 8, 0, false, 0, 1);
+			race14AssertUtil.assertPilot(sco808, 8, 0, false, 2, 2);
+			race14AssertUtil.assertPilot(sco068, 8, 0, false, 3, 3);
+			race14AssertUtil.assertPilot(sco179, 0, 0, true, 3, 4);
+			race14AssertUtil.assertPilot(sco159, 7, 0, false, 4, 5);
+			race14AssertUtil.assertPilot(sco116, 7, 0, false, 5, 6);
+			race14AssertUtil.assertPilot(sco081, 7, 0, false, 6, 7);
+			race14AssertUtil.assertPilot(sco528, 6, 0, false, 7, 8);
+			race14AssertUtil.assertPilot(sco248, 6, 0, false, 8, 9);
+			race14AssertUtil.assertPilot(sco018, 6, 0, false, 9, 10);
+			race14AssertUtil.assertPilot(sco320, 6, 0, false, 10, 11);
+			race14AssertUtil.assertPilot(sco087, 5, 0, false, 11, 12);
+			race14AssertUtil.assertPilot(sco249, 5, 0, false, 12, 13);
+			race14AssertUtil.assertPilot(sco158, 0, 0, true, 12, 14);
+			race14AssertUtil.assertPilot(sco060, 5, 1, false, 13, 15);
+			race14AssertUtil.assertPilot(sco315, 4, 0, false, 14, 16);
+			race14AssertUtil.assertPilot(sco529, 4, 0, false, 15, 17);
+			race14AssertUtil.assertPilot(sco153, 3, 0, false, 16, 18);
+			race14AssertUtil.assertPilot(sco156, 3, 1, false, 17, 19);
+			race14AssertUtil.assertPilot(sco467, 0, 0, false, 21, 20);
+			race14AssertUtil.assertDone(2);
+
+			RaceAssertUtil race15AssertUtil = new RaceAssertUtil(scores, race15);
+			race15AssertUtil.assertPilot(sco200, 9, 0, false, 0, 1);
+			race15AssertUtil.assertPilot(sco179, 8, 0, false, 2, 2);
+			race15AssertUtil.assertPilot(sco116, 8, 0, false, 3, 3);
+			race15AssertUtil.assertPilot(sco068, 8, 0, false, 4, 4);
+			race15AssertUtil.assertPilot(sco808, 7, 0, false, 5, 5);
+			race15AssertUtil.assertPilot(sco159, 0, 0, true, 5, 6);
+			race15AssertUtil.assertPilot(sco248, 7, 0, false, 6, 7);
+			race15AssertUtil.assertPilot(sco087, 7, 0, false, 7, 8);
+			race15AssertUtil.assertPilot(sco320, 7, 0, false, 8, 9);
+			race15AssertUtil.assertPilot(sco528, 7, 1, false, 9, 10);
+			race15AssertUtil.assertPilot(sco018, 7, 0, false, 10, 11);
+			race15AssertUtil.assertPilot(sco060, 6, 0, false, 11, 12);
+			race15AssertUtil.assertPilot(sco529, 4, 0, false, 12, 13);
+			race15AssertUtil.assertPilot(sco153, 4, 0, false, 13, 14);
+			race15AssertUtil.assertPilot(sco315, 4, 0, false, 14, 15);
+			race15AssertUtil.assertPilot(sco158, 2, 0, false, 15, 16);
+			race15AssertUtil.assertPilot(sco249, 0, 0, true, 17, 17);
+			race15AssertUtil.assertPilot(sco081, 0, 0, false, 21, 18);
+			race15AssertUtil.assertPilot(sco156, 0, 0, false, 21, 18);
+			race15AssertUtil.assertPilot(sco467, 0, 0, false, 21, 18);
+			race15AssertUtil.assertDone(2);
+
+			OverallAssertUtil overallAssertUtil = new OverallAssertUtil(scores);
+			overallAssertUtil.assertPilot(sco200, 0, 0, 1, 0);
+			overallAssertUtil.assertPilot(sco068, 0, 11, 2, 6);
+			overallAssertUtil.assertPilot(sco179, 0, 15, 3, 5);
+			overallAssertUtil.assertPilot(sco081, 0, 16, 4, 21);
+			overallAssertUtil.assertPilot(sco808, 0, 18, 5, 21);
+			overallAssertUtil.assertPilot(sco116, 0, 22, 6, 8);
+			overallAssertUtil.assertPilot(sco159, 0, 24, 7, 6);
+			overallAssertUtil.assertPilot(sco248, 0, 33, 8, 12);
+			overallAssertUtil.assertPilot(sco528, 1, 35, 9, 9);
+			overallAssertUtil.assertPilot(sco087, 0, 43, 10, 11);
+			overallAssertUtil.assertPilot(sco018, 0, 48, 11, 13);
+			overallAssertUtil.assertPilot(sco320, 0, 53, 12, 15);
+			overallAssertUtil.assertPilot(sco158, 0, 59, 13, 15);
+			overallAssertUtil.assertPilot(sco060, 1, 61, 14, 21);
+			overallAssertUtil.assertPilot(sco467, 0, 61, 15, 21);
+			overallAssertUtil.assertPilot(sco315, 0, 66, 16, 16);
+			overallAssertUtil.assertPilot(sco529, 0, 69, 17, 16);
+			overallAssertUtil.assertPilot(sco153, 0, 76, 18, 17);
+			overallAssertUtil.assertPilot(sco156, 1, 83, 19, 21);
+			overallAssertUtil.assertPilot(sco249, 0, 86, 20, 21);
+			overallAssertUtil.assertOrder();
 
 			DatabaseSession.commit();
 		} finally {

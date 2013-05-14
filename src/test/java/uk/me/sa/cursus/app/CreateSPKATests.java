@@ -101,7 +101,7 @@ public class CreateSPKATests extends AbstractSeries {
 			out.println(" */");
 			out.println("package org.spka.cursus.test." + packageName + ";");
 			out.println("");
-			if (!hasRaces) {
+			if (!hasRaces && !anyRaces) {
 				out.println("import org.junit.Assert;");
 				out.println("import org.junit.Before;");
 				out.println("import org.junit.Test;");
@@ -125,7 +125,7 @@ public class CreateSPKATests extends AbstractSeries {
 				out.println("import eu.lp0.cursus.db.data.Series;");
 				out.println("import eu.lp0.cursus.scoring.data.Scores;");
 				out.println("import eu.lp0.cursus.test.util.OverallAssertUtil;");
-				if (!className.contains("NonEvent")) {
+				if (!className.contains("NonEvent") || anyRaces) {
 					out.println("import eu.lp0.cursus.test.util.RaceAssertUtil;");
 				}
 			}
@@ -144,10 +144,7 @@ public class CreateSPKATests extends AbstractSeries {
 			if (!superClass.startsWith("Abstract")) {
 				out.println("		super.createData();");
 			}
-			for (Event event : series.getEvents()) {
-				out.println("		create" + event.getName().replace(" ", "").replace("-", "").replace("RaceEvent", "Event")
-						+ (event.getName().startsWith("Non-Event") ? "Data" : "Races") + "();");
-			}
+			out.println("		create" + eventMethodName + (className.contains("NonEvent") ? "Data" : "Races") + "();");
 			out.println("	}");
 
 			if (hasRaces) {
@@ -185,12 +182,12 @@ public class CreateSPKATests extends AbstractSeries {
 				out.println("");
 				out.println("			Series series = seriesDAO.find(SERIES_NAME);");
 				for (Event event : series.getEvents()) {
-					if (event.getRaces().isEmpty()) {
+					if (event.getRaces().isEmpty() && event != fileEvent) {
 						continue;
 					}
 
-					out.println("			Event " + event.getName().replace("Race Event ", "event") + " = eventDAO.find(series, "
-							+ event.getName().replace("Race Event ", "EVENT") + "_NAME);");
+					out.println("			Event " + event.getName().replace("Race Event ", "event").replace("Non-Event ", "nonEvent") + " = eventDAO.find(series, "
+							+ event.getName().replace("Race Event ", "EVENT").replace("Non-Event ", "NON_EVENT") + "_NAME);");
 				}
 				out.println("");
 				out.println("			List<Race> races = new ArrayList<Race>();");
@@ -391,7 +388,7 @@ public class CreateSPKATests extends AbstractSeries {
 							+ "));");
 
 					out.println("");
-					out.println("			RaceAssertUtil " + raceName + "AssertUtil = new RaceAssertUtil(scores, " + raceName + ");");
+					out.println("			RaceAssertUtil raceAssertUtil = new RaceAssertUtil(scores, " + raceName + ");");
 
 					int simulPilots = 0;
 					for (Pilot pilot : raceScores.getRaceOrder(race)) {
@@ -399,12 +396,12 @@ public class CreateSPKATests extends AbstractSeries {
 							simulPilots++;
 						}
 
-						out.println("			" + raceName + "AssertUtil.assertPilot(" + pilot.getName().toLowerCase() + ", " + raceScores.getLaps(pilot, race)
-								+ ", " + raceScores.getRacePenalties(pilot, race) + ", " + raceScores.hasSimulatedRacePoints(pilot, race) + ", "
+						out.println("			raceAssertUtil.assertPilot(" + pilot.getName().toLowerCase() + ", " + raceScores.getLaps(pilot, race) + ", "
+								+ raceScores.getRacePenalties(pilot, race) + ", " + raceScores.hasSimulatedRacePoints(pilot, race) + ", "
 								+ raceScores.getRacePoints(pilot, race) + ", " + raceScores.getRacePosition(pilot, race) + ");");
 					}
 
-					out.println("			" + raceName + "AssertUtil.assertDone(" + simulPilots + ");");
+					out.println("			raceAssertUtil.assertDone(" + simulPilots + ");");
 
 					out.println("");
 					out.println("			OverallAssertUtil overallAssertUtil = new OverallAssertUtil(scores);");
@@ -424,7 +421,7 @@ public class CreateSPKATests extends AbstractSeries {
 				}
 			}
 
-			out.println("}");
+			out.print("}");
 			out.close();
 
 			DatabaseSession.commit();
