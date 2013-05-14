@@ -18,7 +18,6 @@
 package eu.lp0.cursus.test.scoring;
 
 import org.junit.Test;
-import org.spka.cursus.scoring.SPKAConstants;
 
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
@@ -99,7 +98,7 @@ public class RaceDiscardTest {
 		race4.getEvents().add(new RaceEvent(RaceEvent.Type.START));
 		race4.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "", pilot1)); //$NON-NLS-1$
 
-		Scorer scorer = ScorerFactory.newScorer(SPKAConstants.UUID_2010);
+		Scorer scorer = ScorerFactory.newScorer(TestScorer1.UUID);
 		Scores scores = scorer.scoreSeries(series);
 
 		RaceAssertUtil race1AssertUtil = new RaceAssertUtil(scores, race1);
@@ -216,7 +215,7 @@ public class RaceDiscardTest {
 		race4.getEvents().add(new RaceEvent(RaceEvent.Type.START));
 		race4.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "", pilot1)); //$NON-NLS-1$
 
-		Scorer scorer = ScorerFactory.newScorer(SPKAConstants.UUID_2010);
+		Scorer scorer = ScorerFactory.newScorer(TestScorer1.UUID);
 		Scores scores = scorer.scoreSeries(series);
 
 		RaceAssertUtil race1AssertUtil = new RaceAssertUtil(scores, race1);
@@ -348,7 +347,7 @@ public class RaceDiscardTest {
 		race4.getEvents().add(new RaceEvent(RaceEvent.Type.START));
 		race4.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "", pilot1)); //$NON-NLS-1$
 
-		Scorer scorer = ScorerFactory.newScorer(SPKAConstants.UUID_2010);
+		Scorer scorer = ScorerFactory.newScorer(TestScorer1.UUID);
 		Scores scores = scorer.scoreSeries(series);
 
 		RaceAssertUtil race1AssertUtil = new RaceAssertUtil(scores, race1);
@@ -480,7 +479,7 @@ public class RaceDiscardTest {
 		race4.getEvents().add(new RaceEvent(RaceEvent.Type.START));
 		race4.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "", pilot1)); //$NON-NLS-1$
 
-		Scorer scorer = ScorerFactory.newScorer(SPKAConstants.UUID_2010);
+		Scorer scorer = ScorerFactory.newScorer(TestScorer1.UUID);
 		Scores scores = scorer.scoreSeries(series);
 
 		RaceAssertUtil race1AssertUtil = new RaceAssertUtil(scores, race1);
@@ -612,7 +611,7 @@ public class RaceDiscardTest {
 		race4.getEvents().add(new RaceEvent(RaceEvent.Type.START));
 		race4.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "", pilot1)); //$NON-NLS-1$
 
-		Scorer scorer = ScorerFactory.newScorer(SPKAConstants.UUID_2010);
+		Scorer scorer = ScorerFactory.newScorer(TestScorer1.UUID);
 		Scores scores = scorer.scoreSeries(series);
 
 		RaceAssertUtil race1AssertUtil = new RaceAssertUtil(scores, race1);

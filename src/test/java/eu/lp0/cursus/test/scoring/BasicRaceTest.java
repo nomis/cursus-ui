@@ -60,7 +60,7 @@ public class BasicRaceTest {
 		race1.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "", pilot1)); //$NON-NLS-1$
 		race1.getEvents().add(new RaceEvent(RaceEvent.Type.LAP, "", pilot2)); //$NON-NLS-1$
 
-		Scorer scorer = ScorerFactory.newScorer(SPKAConstants.UUID_2011);
+		Scorer scorer = ScorerFactory.newScorer(TestScorer1.UUID);
 		Scores scores = scorer.scoreSeries(series);
 
 		RaceAssertUtil race1AssertUtil = new RaceAssertUtil(scores, race1);
