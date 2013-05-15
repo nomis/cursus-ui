@@ -148,8 +148,13 @@ public class CreateSPKATests extends AbstractSeries {
 			out.println("	}");
 
 			if (hasRaces) {
-				Scores seriesScores = scorer.scoreSeries(series, getSeriesResultsPilots(series, fileEvent),
-						Predicates.in(getSeriesResultsPilots(series, fileEvent)));
+				Scores seriesScores;
+				if (scorer instanceof Scorer2010) {
+					seriesScores = scorer.scoreSeries(series, Predicates.in(getSeriesResultsPilots(series)));
+				} else {
+					seriesScores = scorer.scoreSeries(series, getSeriesResultsPilots(series, fileEvent),
+							Predicates.in(getSeriesResultsPilots(series, fileEvent)));
+				}
 
 				out.println("");
 				if (anyRaces) {
@@ -162,9 +167,14 @@ public class CreateSPKATests extends AbstractSeries {
 				out.println("			DatabaseSession.begin();");
 				out.println("");
 				out.println("			Series series = seriesDAO.find(SERIES_NAME);");
-				out.println("			Event " + eventFieldName + " = eventDAO.find(series, " + eventConstantName + "_NAME);");
-				out.println("			Scores scores = scorer.scoreSeries(series, getSeriesResultsPilots(series, " + eventFieldName
-						+ "), Predicates.in(getSeriesResultsPilots(series, " + eventFieldName + ")));");
+
+				if (scorer instanceof Scorer2010) {
+					out.println("			Scores scores = scorer.scoreSeries(series, Predicates.in(getSeriesResultsPilots(series)));");
+				} else {
+					out.println("			Event " + eventFieldName + " = eventDAO.find(series, " + eventConstantName + "_NAME);");
+					out.println("			Scores scores = scorer.scoreSeries(series, getSeriesResultsPilots(series, " + eventFieldName
+							+ "), Predicates.in(getSeriesResultsPilots(series, " + eventFieldName + ")));");
+				}
 				out.println("			checkSeriesAt" + eventMethodName + "(scores);");
 				out.println("");
 				out.println("			DatabaseSession.commit();");
@@ -199,9 +209,13 @@ public class CreateSPKATests extends AbstractSeries {
 					out.println("			races.addAll(" + event.getName().replace("Race Event ", "event") + ".getRaces());");
 				}
 				out.println("");
-				out.println("			Scores scores = scorer.scoreRaces(races, getSeriesResultsPilots(series, " + eventFieldName
-						+ "), getSeriesResultsEvents(series, " + eventFieldName + "),");
-				out.println("					Predicates.in(getSeriesResultsPilots(series, " + eventFieldName + ")));");
+				if (scorer instanceof Scorer2010) {
+					out.println("			Scores scores = scorer.scoreRaces(races, getSeriesResultsPilots(series), Predicates.in(getSeriesResultsPilots(series)));");
+				} else {
+					out.println("			Scores scores = scorer.scoreRaces(races, getSeriesResultsPilots(series, " + eventFieldName
+							+ "), getSeriesResultsEvents(series, " + eventFieldName + "),");
+					out.println("					Predicates.in(getSeriesResultsPilots(series, " + eventFieldName + ")));");
+				}
 				out.println("			checkSeriesAt" + eventMethodName + "(scores);");
 				out.println("");
 				out.println("			DatabaseSession.commit();");
@@ -229,13 +243,17 @@ public class CreateSPKATests extends AbstractSeries {
 				}
 
 				out.println("");
-				out.println("		Assert.assertEquals(SERIES_FLEET_AT_" + eventConstantName + ", scores.getPilots().size());");
+				if (scorer instanceof Scorer2010) {
+					out.println("		Assert.assertEquals(SERIES_FLEET, scores.getPilots().size());");
+				} else {
+					out.println("		Assert.assertEquals(SERIES_FLEET_AT_" + eventConstantName + ", scores.getPilots().size());");
+				}
 
 				for (Event event : series.getEvents()) {
 					for (Race race : event.getRaces()) {
 						out.print("		Assert.assertEquals(");
 						if (scorer instanceof Scorer2010) {
-							out.print(eventConstantName + "_FLEET");
+							out.print(event.getName().replace("Race Event ", "EVENT") + "_FLEET");
 						} else if (scorer instanceof Scorer2011) {
 							out.print("SERIES_FLEET_AT_" + eventConstantName);
 						} else {
