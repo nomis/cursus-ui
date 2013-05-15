@@ -30,19 +30,63 @@
 	<xsl:template match="s:eventResults" mode="r:type">Event</xsl:template>
 	<xsl:template match="s:raceResults" mode="r:type">Race</xsl:template>
 
-	<xsl:template match="s:seriesResults" mode="r:index">series<xsl:value-of select="count(./preceding-sibling::s:seriesResults)+1"/></xsl:template>
-	<xsl:template match="s:eventResults" mode="r:index">event<xsl:value-of select="count(./preceding-sibling::s:eventResults)+1"/></xsl:template>
-	<xsl:template match="s:raceResults" mode="r:index">race<xsl:value-of select="count(./preceding-sibling::s:raceResults)+1"/></xsl:template>
+	<xsl:template match="s:seriesResults" mode="r:index">series<xsl:value-of select="count(preceding-sibling::s:seriesResults)+1"/></xsl:template>
+	<xsl:template match="s:eventResults" mode="r:index">event<xsl:value-of select="count(preceding-sibling::s:eventResults)+1"/></xsl:template>
+	<xsl:template match="s:raceResults" mode="r:index">race<xsl:value-of select="count(preceding-sibling::s:raceResults)+1"/></xsl:template>
 
 	<xsl:template match="d:event|d:race" mode="r:th">
 		<span>
 			<xsl:if test="d:description != ''">
 				<xsl:attribute name="title">
-					<xsl:value-of select="d:description"/>
+					<xsl:apply-templates select="." mode="r:description"/>
 				</xsl:attribute>
 			</xsl:if>
-			<xsl:value-of select="d:name"/>
+			<xsl:apply-templates select="." mode="r:name"/>
 		</span>
+	</xsl:template>
+
+	<xsl:template match="d:race" mode="r:name">
+		<xsl:choose>
+			<xsl:when test="$flags[@name='compact-race']">
+				R<xsl:value-of select="count(preceding-sibling::d:race)+count(../../preceding-sibling::d:event/d:races/d:race)+1"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="d:name"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="d:event" mode="r:name">
+		<xsl:choose>
+			<xsl:when test="$flags[@name='compact-event']">
+				E<xsl:value-of select="count(preceding-sibling::d:event[count(d:races/d:race)>0])+1"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="d:name"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="d:race" mode="r:description">
+		<xsl:choose>
+			<xsl:when test="$flags[@name='compact-race']">
+				<xsl:value-of select="d:name"/> — <xsl:value-of select="d:description"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="d:description"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="d:event" mode="r:description">
+		<xsl:choose>
+			<xsl:when test="$flags[@name='compact-event']">
+				<xsl:value-of select="d:name"/> — <xsl:value-of select="d:description"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="d:description"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="d:event|d:race" mode="r:penalty">

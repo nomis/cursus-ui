@@ -92,14 +92,14 @@
 					<xsl:attribute name="href">#<xsl:apply-templates select="$results" mode="r:index"/></xsl:attribute>
 					<xsl:if test="d:description != ''">
 						<xsl:attribute name="title">
-							<xsl:value-of select="d:description"/>
+							<xsl:apply-templates select="." mode="r:description"/>
 						</xsl:attribute>
 					</xsl:if>
-					<xsl:value-of select="d:name"/>
+					<xsl:apply-templates select="." mode="r:name"/>
 				</a>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="d:name"/>
+				<xsl:apply-templates select="." mode="r:name"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
