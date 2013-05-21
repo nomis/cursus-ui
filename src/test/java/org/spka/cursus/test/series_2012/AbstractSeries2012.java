@@ -2933,7 +2933,9 @@ public abstract class AbstractSeries2012 extends AbstractSeries {
 			race20.getAttendees().put(sco159, new RaceAttendee(race20, sco159, RaceAttendee.Type.PILOT));
 			race20.getAttendees().put(sco179, new RaceAttendee(race20, sco179, RaceAttendee.Type.PILOT));
 			race20.getAttendees().put(sco200, new RaceAttendee(race20, sco200, RaceAttendee.Type.PILOT));
-			race20.getAttendees().put(sco315, new RaceAttendee(race20, sco315, RaceAttendee.Type.PILOT));
+			RaceAttendee att315 = new RaceAttendee(race20, sco315, RaceAttendee.Type.PILOT);
+			att315.getPenalties().add(new Penalty(Penalty.Type.AUTOMATIC, "Hit a mark")); //$NON-NLS-1$
+			race20.getAttendees().put(sco315, att315);
 			race20.getAttendees().put(sco528, new RaceAttendee(race20, sco528, RaceAttendee.Type.PILOT));
 			race20.getAttendees().put(sco561, new RaceAttendee(race20, sco561, RaceAttendee.Type.PILOT));
 			race20.getAttendees().put(sco666, new RaceAttendee(race20, sco666, RaceAttendee.Type.PILOT));
