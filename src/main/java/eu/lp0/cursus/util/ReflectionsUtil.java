@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2011,2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 package eu.lp0.cursus.util;
 
 import org.reflections.Reflections;
-import org.reflections.scanners.TypesScanner;
+import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
@@ -28,7 +28,7 @@ public class ReflectionsUtil {
 	static {
 		ConfigurationBuilder config = new ConfigurationBuilder();
 		config.setUrls(ClasspathHelper.forJavaClassPath());
-		config.setScanners(new TypesScanner());
+		config.setScanners(new SubTypesScanner());
 
 		reflections = new Reflections(config);
 	}

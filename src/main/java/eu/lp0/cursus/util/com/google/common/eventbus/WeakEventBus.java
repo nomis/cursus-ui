@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2011,2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -54,9 +54,9 @@ import com.google.common.base.FinalizableReferenceQueue;
 import com.google.common.base.FinalizableWeakReference;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
-import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -167,31 +167,32 @@ public class WeakEventBus {
 	/**
 	 * A thread-safe cache for flattenHierarch(). The Class class is immutable.
 	 */
-	private Cache<Class<?>, Set<Class<?>>> flattenHierarchyCache = CacheBuilder.newBuilder().weakKeys().build(new CacheLoader<Class<?>, Set<Class<?>>>() {
-		@Override
-		public Set<Class<?>> load(Class<?> concreteClass) throws Exception {
-			List<Class<?>> parents = Lists.newLinkedList();
-			Set<Class<?>> classes = Sets.newHashSet();
+	private LoadingCache<Class<?>, Set<Class<?>>> flattenHierarchyCache = CacheBuilder.newBuilder().weakKeys()
+			.build(new CacheLoader<Class<?>, Set<Class<?>>>() {
+				@Override
+				public Set<Class<?>> load(Class<?> concreteClass) throws Exception {
+					List<Class<?>> parents = Lists.newLinkedList();
+					Set<Class<?>> classes = Sets.newHashSet();
 
-			parents.add(concreteClass);
+					parents.add(concreteClass);
 
-			while (!parents.isEmpty()) {
-				Class<?> clazz = parents.remove(0);
-				classes.add(clazz);
+					while (!parents.isEmpty()) {
+						Class<?> clazz = parents.remove(0);
+						classes.add(clazz);
 
-				Class<?> parent = clazz.getSuperclass();
-				if (parent != null) {
-					parents.add(parent);
+						Class<?> parent = clazz.getSuperclass();
+						if (parent != null) {
+							parents.add(parent);
+						}
+
+						for (Class<?> iface : clazz.getInterfaces()) {
+							parents.add(iface);
+						}
+					}
+
+					return classes;
 				}
-
-				for (Class<?> iface : clazz.getInterfaces()) {
-					parents.add(iface);
-				}
-			}
-
-			return classes;
-		}
-	});
+			});
 
 	/**
 	 * Creates a new EventBus named "default".
