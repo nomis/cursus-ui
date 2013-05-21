@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2011,2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,8 +17,12 @@
  */
 package eu.lp0.cursus.i18n;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
@@ -103,7 +107,7 @@ public class LanguageManager {
 	private static void changeLocale(final Locale newLocale) {
 		Locale loadLocale = newLocale.equals(Locale.ROOT) ? Locale.getDefault() : newLocale;
 		try {
-			final ResourceBundle resourceBundle = ResourceBundle.getBundle(Messages.BUNDLE_NAME, newLocale);
+			final ResourceBundle resourceBundle = ResourceBundle.getBundle(Messages.BUNDLE_NAME, newLocale, new UTF8Control());
 
 			log.debug("Loaded resource bundle \"{}\" for locale \"{}\"", resourceBundle.getLocale(), loadLocale); //$NON-NLS-1$ 
 
@@ -132,6 +136,24 @@ public class LanguageManager {
 				log.trace("Set preferred locale to \"" + locale + "\""); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			changeLocale(locale);
+		}
+	}
+
+	private static class UTF8Control extends ResourceBundle.Control {
+		@Override
+		public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) throws IllegalAccessException,
+				InstantiationException, IOException {
+			InputStream stream = loader.getResourceAsStream(toResourceName(toBundleName(baseName, locale), "properties")); //$NON-NLS-1$
+
+			if (stream == null) {
+				return null;
+			}
+
+			try {
+				return new PropertyResourceBundle(new InputStreamReader(stream, "UTF-8")); //$NON-NLS-1$
+			} finally {
+				stream.close();
+			}
 		}
 	}
 }
