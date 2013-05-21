@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2012  Simon Arlott
+	Copyright 2011-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -38,9 +38,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 
-import junit.framework.Assert;
-
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 
 import com.google.common.base.Objects;
