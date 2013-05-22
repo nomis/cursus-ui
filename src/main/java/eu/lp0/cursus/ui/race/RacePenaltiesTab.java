@@ -133,8 +133,14 @@ public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 
 					@Override
 					protected RaceAttendeePenalty newRow() {
-						assert (currentRace != null);
-						return new RaceAttendeePenalty(currentRace);
+						if (table.isEnabled()) {
+							assert (currentRace != null);
+							return new RaceAttendeePenalty(currentRace);
+						} else {
+							JOptionPane.showMessageDialog(win.getFrame(), Messages.getString("menu.penalty.add.no-attendees"), //$NON-NLS-1$
+									Messages.getString("menu.penalty.add"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
+							return null;
+						}
 					}
 				}));
 		model.setupModel(table);

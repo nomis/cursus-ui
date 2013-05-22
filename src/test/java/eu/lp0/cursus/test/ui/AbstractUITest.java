@@ -266,7 +266,12 @@ public class AbstractUITest extends AbstractDataTest {
 		log.debug("Accessible " + accessibleToString(parent)); //$NON-NLS-1$ 
 		for (int i = 0; i < context.getAccessibleChildrenCount(); i++) {
 			Accessible child = context.getAccessibleChild(i);
-			log.debug(" Child " + i + ": " + accessibleToString(child)); //$NON-NLS-1$ //$NON-NLS-2$ 
+			log.debug(" Child " + i + ": " + accessibleToString(child)); //$NON-NLS-1$ //$NON-NLS-2$
+			if (i != child.getAccessibleContext().getAccessibleIndexInParent()) {
+				// JTabbedPane components have inconsistent accessibility tree
+				// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=7115912
+				log.warn("  Inconsistent child to parent index " + child.getAccessibleContext().getAccessibleIndexInParent()); //$NON-NLS-1$
+			}
 			if (predicate.apply(child)) {
 				found.add(child);
 			}
@@ -318,11 +323,19 @@ public class AbstractUITest extends AbstractDataTest {
 				});
 	}
 
-	public Accessible findAccessibleChildByIndex(Accessible parent, final int index) throws Exception {
+	public Accessible findAccessibleChildByIndex(final Accessible parent, final int index) throws Exception {
 		return findAccessibleChild(parent, String.valueOf(index), new Predicate<Accessible>() {
 			@Override
 			public boolean apply(Accessible input) {
-				return Objects.equal(input.getAccessibleContext().getAccessibleIndexInParent(), index);
+				if (input.getAccessibleContext().getAccessibleParent().getClass().getName().equals("javax.swing.JTabbedPane$Page")) { //$NON-NLS-1$
+					AccessibleContext context = parent.getAccessibleContext();
+					if (index < context.getAccessibleChildrenCount()) {
+						return input == context.getAccessibleChild(index);
+					}
+					return false;
+				} else {
+					return Objects.equal(input.getAccessibleContext().getAccessibleIndexInParent(), index);
+				}
 			}
 		});
 	}

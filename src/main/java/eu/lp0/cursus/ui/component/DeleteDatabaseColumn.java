@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2011,2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -114,7 +114,9 @@ public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseCol
 			DatabaseSession.begin();
 
 			row = newRow();
-			dao.persist(row);
+			if (row != null) {
+				dao.persist(row);
+			}
 
 			DatabaseSession.commit();
 		} catch (PersistenceException e) {
@@ -124,6 +126,10 @@ public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseCol
 			DatabaseError.errorSaving(win.getFrame(), Constants.APP_NAME, e);
 		} finally {
 			win.getDatabase().endSession();
+		}
+
+		if (row == null) {
+			return;
 		}
 
 		int mRow = model.getRowCount();
@@ -188,7 +194,7 @@ public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseCol
 		}
 
 		private boolean ourColumn(MouseEvent me) {
-			return table.isEnabled() && getModelIndex() == table.convertColumnIndexToModel(header.columnAtPoint(me.getPoint()));
+			return getModelIndex() == table.convertColumnIndexToModel(header.columnAtPoint(me.getPoint()));
 		}
 
 		@Override
@@ -263,7 +269,7 @@ public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseCol
 
 		@Override
 		public void keyTyped(KeyEvent ke) {
-			if (table.isEnabled() && button.hasFakeFocus()) {
+			if (button.hasFakeFocus()) {
 				button.dispatchEvent(ke);
 			}
 		}
@@ -272,7 +278,7 @@ public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseCol
 		public void keyPressed(KeyEvent ke) {
 			// There's a side effect here in that the button won't
 			// get the key press that was used to change focus
-			if (table.isEnabled() && button.hasFakeFocus()) {
+			if (button.hasFakeFocus()) {
 				// This works but the button's not really visible
 				// so there's no visual feedback when activated
 				button.dispatchEvent(ke);
@@ -283,7 +289,7 @@ public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseCol
 		public void keyReleased(KeyEvent ke) {
 			// There's a side effect here in that the button won't
 			// get the key release that was used to change focus
-			if (table.isEnabled() && button.hasFakeFocus()) {
+			if (button.hasFakeFocus()) {
 				button.dispatchEvent(ke);
 			}
 		}
