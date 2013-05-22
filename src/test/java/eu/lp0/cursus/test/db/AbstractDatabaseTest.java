@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2011,2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ public abstract class AbstractDatabaseTest extends AbstractDataTest {
 
 	@Before
 	public void createDatabase() throws Exception {
-		db = new MemoryDatabase();
+		db = new MemoryDatabase(getClass().getName());
 	}
 
 	@After

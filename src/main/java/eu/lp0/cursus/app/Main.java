@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2012  Simon Arlott
+	Copyright 2011-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 package eu.lp0.cursus.app;
 
 import java.sql.SQLException;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -31,12 +32,14 @@ import com.google.common.annotations.VisibleForTesting;
 import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.MemoryDatabase;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.MainWindow;
 import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
 
 public class Main implements Runnable {
 	private static final Logger log = LoggerFactory.getLogger(Main.class);
+	private static final AtomicLong UNTITLED = new AtomicLong();
 	private final String[] args;
 	private MainWindow win = null; // TODO use EventBus
 	private Database db = null;
@@ -113,7 +116,7 @@ public class Main implements Runnable {
 	}
 
 	protected Database createEmptyDatabase() throws InvalidDatabaseException, SQLException {
-		return new MemoryDatabase();
+		return new MemoryDatabase(Messages.getString("db.untitled", UNTITLED.incrementAndGet())); //$NON-NLS-1$
 	}
 
 	public synchronized boolean savedAs(Database newDB) throws InvalidDatabaseException, SQLException {
