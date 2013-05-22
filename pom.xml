@@ -4,34 +4,30 @@
 	<groupId>eu.lp0</groupId>
 	<artifactId>cursus</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>cursus</name>
 	<description>Race series management program</description>
 	<url>http://cursus.lp0.eu/</url>
+	<licenses>
+		<license>
+			<name>GNU General Public License v3.0</name>
+			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+		</license>
+	</licenses>
+	<scm>
+		<connection>scm:git:git://github.com/lp0/cursus.git</connection>
+		<url>https://github.com/lp0/cursus/</url>
+	</scm>
 	<organization>
 		<name>Simon Arlott</name>
 	</organization>
-	<repositories>
-		<repository>
-			<id>java.net</id>
-			<url>http://download.java.net/maven/2/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-		<repository>
-			<id>jboss</id>
-			<url>https://repository.jboss.org/nexus/content/groups/public/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-	</repositories>
+	<developers>
+		<developer>
+			<id>uk.me.sa</id>
+			<name>Simon Arlott</name>
+			<url>http://sa.me.uk/</url>
+		</developer>
+	</developers>
 	<dependencies>
 		<dependency>
 			<groupId>org.hibernate</groupId>
