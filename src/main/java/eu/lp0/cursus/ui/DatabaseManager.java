@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2012  Simon Arlott
+	Copyright 2011-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@ import java.sql.SQLException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+
+import com.google.common.base.Throwables;
 
 import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.DatabaseVersionException;
@@ -71,7 +73,7 @@ public class DatabaseManager implements ActionListener {
 					}
 				} catch (InvalidDatabaseException e) {
 					// TODO handle uncaught exceptions
-					throw e;
+					throw Throwables.propagate(e);
 				}
 			}
 		});

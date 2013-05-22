@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2012  Simon Arlott
+	Copyright 2012-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,7 +17,8 @@
  */
 package eu.lp0.cursus.util;
 
-public class CursusException extends RuntimeException {
+
+public class CursusException extends Exception {
 	public CursusException() {
 	}
 

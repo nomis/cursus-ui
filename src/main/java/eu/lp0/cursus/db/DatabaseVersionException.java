@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2011,2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -18,13 +18,12 @@
 package eu.lp0.cursus.db;
 
 import eu.lp0.cursus.db.data.Cursus;
-import eu.lp0.cursus.i18n.Messages;
 
 public class DatabaseVersionException extends InvalidDatabaseException {
 	private final Cursus cursus;
 
 	public DatabaseVersionException(Cursus cursus) {
-		super(Messages.getString("db.version-not-supported", DatabaseVersion.parseLong(cursus.getVersion()))); //$NON-NLS-1$
+		super("Unsupported database version " + cursus.getVersion()); //$NON-NLS-1$
 		this.cursus = cursus;
 	}
 
