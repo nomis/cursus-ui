@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2012  Simon Arlott
+	Copyright 2011-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.i18n.TranslatedEnum;
 
 /**
@@ -106,8 +105,8 @@ public final class RaceAttendee extends AbstractEntity {
 		}
 
 		@Override
-		public String toString() {
-			return Messages.getString(key);
+		public String getMessagesKey() {
+			return key;
 		}
 	}
 

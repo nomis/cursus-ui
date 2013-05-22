@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2012  Simon Arlott
+	Copyright 2011-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,12 +21,11 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Transient;
 
 import com.google.common.collect.ComparisonChain;
 
-import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.i18n.TranslatedEnum;
-import eu.lp0.cursus.ui.common.HiddenEnumConstant;
 import eu.lp0.cursus.util.Constants;
 
 /**
@@ -45,7 +44,7 @@ public final class Penalty implements Comparable<Penalty>, Cloneable {
 		LAPS ("penalty.laps", 0), //$NON-NLS-1$
 
 		/** Non-attendance at event penalty */
-		@HiddenEnumConstant
+		@Transient
 		EVENT_NON_ATTENDANCE ("penalty.event-non-attendance", 1); //$NON-NLS-1$
 
 		private final String key;
@@ -61,8 +60,8 @@ public final class Penalty implements Comparable<Penalty>, Cloneable {
 		}
 
 		@Override
-		public String toString() {
-			return Messages.getString(key);
+		public String getMessagesKey() {
+			return key;
 		}
 	}
 

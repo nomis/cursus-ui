@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2011,2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.db.data;
 
-import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.i18n.TranslatedEnum;
 
 public enum Gender implements TranslatedEnum {
@@ -33,16 +32,12 @@ public enum Gender implements TranslatedEnum {
 		this.key = key;
 	}
 
-	public String toLongString() {
-		return Messages.getString(key + ".long"); //$NON-NLS-1$
-	}
-
-	public String toShortString() {
-		return Messages.getString(key + ".short"); //$NON-NLS-1$
-	}
-
 	@Override
-	public String toString() {
-		return toLongString();
+	public String getMessagesKey() {
+		return key + ".long"; //$NON-NLS-1$
+	}
+
+	public String getShortMessagesKey() {
+		return key + ".short"; //$NON-NLS-1$
 	}
 }

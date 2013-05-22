@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2012  Simon Arlott
+	Copyright 2011-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -18,10 +18,13 @@
 package eu.lp0.cursus.ui.component;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.Transient;
 import javax.swing.JComboBox;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -30,8 +33,8 @@ import com.google.common.eventbus.Subscribe;
 import eu.lp0.cursus.db.dao.EntityDAO;
 import eu.lp0.cursus.db.data.Entity;
 import eu.lp0.cursus.i18n.LocaleChangeEvent;
+import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.i18n.TranslatedEnum;
-import eu.lp0.cursus.ui.common.HiddenEnumConstant;
 
 public abstract class EnumDatabaseColumn<T extends Entity, V extends Enum<?>> extends DatabaseColumn<T, Object> {
 	private final MutableListComboBoxModel<Object> values;
@@ -64,21 +67,28 @@ public abstract class EnumDatabaseColumn<T extends Entity, V extends Enum<?>> ex
 	}
 
 	private List<Object> generateValues() {
+		Iterable<Object> constants = Iterables.transform(Iterables.filter(Arrays.asList(type.getEnumConstants()), new Predicate<V>() {
+			@Override
+			public boolean apply(V input) {
+				return !isTransient(input);
+			}
+		}), new Function<V, Object>() {
+			@Override
+			public Object apply(V input) {
+				return new WrappedEnum(input);
+			}
+		});
+
 		if (nullable) {
-			return Lists.<Object>asList("", type.getEnumConstants()); //$NON-NLS-1$
+			return Lists.<Object>newArrayList(Iterables.concat(Collections.singletonList(""), constants)); //$NON-NLS-1$
 		} else {
-			return Lists.<Object>newArrayList(Iterables.filter(Arrays.asList(type.getEnumConstants()), new Predicate<V>() {
-				@Override
-				public boolean apply(V input) {
-					return !isHiddenEnumConstant(input);
-				}
-			}));
+			return Lists.<Object>newArrayList(constants);
 		}
 	}
 
-	public static boolean isHiddenEnumConstant(Enum<?> value) {
+	public static boolean isTransient(Enum<?> value) {
 		try {
-			return value.getClass().getField(value.name()).isAnnotationPresent(HiddenEnumConstant.class);
+			return value.getClass().getField(value.name()).isAnnotationPresent(Transient.class);
 		} catch (SecurityException e) {
 			throw new RuntimeException(e);
 		} catch (NoSuchFieldException e) {
@@ -88,12 +98,13 @@ public abstract class EnumDatabaseColumn<T extends Entity, V extends Enum<?>> ex
 
 	@Override
 	protected final Object getValue(T row, boolean editing) {
-		Object value = getEnumValue(row);
+		V value = getEnumValue(row);
 		if (value == null) {
 			assert (nullable);
-			value = ""; //$NON-NLS-1$
+			return ""; //$NON-NLS-1$
+		} else {
+			return new WrappedEnum(value);
 		}
-		return value;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -102,6 +113,8 @@ public abstract class EnumDatabaseColumn<T extends Entity, V extends Enum<?>> ex
 		if (value.equals("")) { //$NON-NLS-1$
 			assert (nullable);
 			value = null;
+		} else {
+			value = ((WrappedEnum)value).getValue();
 		}
 		return setEnumValue(row, (V)value);
 	}
@@ -109,4 +122,25 @@ public abstract class EnumDatabaseColumn<T extends Entity, V extends Enum<?>> ex
 	protected abstract V getEnumValue(T row);
 
 	protected abstract boolean setEnumValue(T row, V value);
+
+	class WrappedEnum {
+		private V value;
+
+		public WrappedEnum(V value) {
+			this.value = value;
+		}
+
+		public V getValue() {
+			return value;
+		}
+
+		@Override
+		public String toString() {
+			if (value instanceof TranslatedEnum) {
+				return Messages.getString(((TranslatedEnum)value).getMessagesKey());
+			} else {
+				return value.toString();
+			}
+		}
+	}
 }
