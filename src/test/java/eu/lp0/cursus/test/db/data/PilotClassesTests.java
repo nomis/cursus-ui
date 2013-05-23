@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2011,2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ package eu.lp0.cursus.test.db.data;
 import java.util.Arrays;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.collect.Ordering;
@@ -31,6 +32,13 @@ import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.test.db.AbstractDatabaseTest;
 
 public class PilotClassesTests extends AbstractDatabaseTest {
+	@Override
+	@Before
+	public void createDatabase() throws Exception {
+		super.createDatabase();
+		populateDefaultData();
+	}
+
 	@Test
 	public void pilotClasses() {
 		// Save data

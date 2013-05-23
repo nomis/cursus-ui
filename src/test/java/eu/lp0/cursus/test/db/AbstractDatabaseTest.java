@@ -31,6 +31,10 @@ public abstract class AbstractDatabaseTest extends AbstractDataTest {
 		db = new MemoryDatabase(getClass().getName());
 	}
 
+	protected void populateDefaultData() {
+		populateDefaultData(db);
+	}
+
 	@After
 	public void closeDatabase() {
 		db.close(true);

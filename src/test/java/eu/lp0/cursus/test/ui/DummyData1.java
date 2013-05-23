@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2012  Simon Arlott
+	Copyright 2012-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -50,7 +50,6 @@ import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.i18n.Messages;
 
 public class DummyData1 {
 	private static final ClassDAO classDAO = new ClassDAO();
@@ -96,12 +95,10 @@ public class DummyData1 {
 		try {
 			DatabaseSession.begin();
 
-			Series series = seriesDAO.find(Messages.getString(Database.UNTITLED_SERIES));
-			series.setName("Series 1"); //$NON-NLS-1$
-			Event event1 = series.getEvents().get(0);
-			event1.setName("Event 1"); //$NON-NLS-1$
-			Race race1 = event1.getRaces().get(0);
-			race1.setName("Race 1"); //$NON-NLS-1$
+			Series series = new Series("Series 1"); //$NON-NLS-1$
+			Event event1 = new Event(series, "Event 1"); //$NON-NLS-1$
+			series.getEvents().add(event1);
+			event1.getRaces().add(new Race(event1, "Race 1")); //$NON-NLS-1$
 			event1.getRaces().add(new Race(event1, "Race 2")); //$NON-NLS-1$
 			event1.getRaces().add(new Race(event1, "Race 3")); //$NON-NLS-1$
 			event1.getRaces().add(new Race(event1, "Race 4")); //$NON-NLS-1$

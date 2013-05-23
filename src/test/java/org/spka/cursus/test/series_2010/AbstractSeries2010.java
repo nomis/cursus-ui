@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2012  Simon Arlott
+	Copyright 2011-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -116,11 +116,6 @@ public abstract class AbstractSeries2010 extends AbstractSeries {
 		db.startSession();
 		try {
 			DatabaseSession.begin();
-
-			// Remove the default series
-			for (Series series : seriesDAO.findAll()) {
-				seriesDAO.remove(series);
-			}
 
 			// Create the 2010/11 series
 			Series series = new Series(SERIES_NAME);

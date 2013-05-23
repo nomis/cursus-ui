@@ -17,22 +17,30 @@
  */
 package eu.lp0.cursus.test.ui;
 
+import java.sql.SQLException;
+
 import javax.accessibility.Accessible;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import eu.lp0.cursus.db.Database;
+import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceEntity;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.i18n.Messages;
 
 public class SelectRaceEntityTests extends AbstractUITest {
+	@Override
+	protected Database createEmptyDatabase(Database database) throws InvalidDatabaseException, SQLException {
+		populateDefaultData(database);
+		return database;
+	}
+
 	@Test
 	public void selectSeries() throws Exception {
-		Accessible seriesNode = findAccessibleChildByName(raceTree, Messages.getString(Database.UNTITLED_SERIES));
+		Accessible seriesNode = findAccessibleChildByName(raceTree, DEFAULT_SERIES);
 
 		Assert.assertNull(getSelectedRaceEntity());
 		accessibleSelect(seriesNode, true);
@@ -42,13 +50,13 @@ public class SelectRaceEntityTests extends AbstractUITest {
 		Assert.assertEquals(Series.class, raceEntity.getClass());
 
 		Series series = (Series)raceEntity;
-		Assert.assertEquals(Messages.getString(Database.UNTITLED_SERIES), series.getName());
+		Assert.assertEquals(DEFAULT_SERIES, series.getName());
 	}
 
 	@Test
 	public void selectEvent() throws Exception {
-		Accessible seriesNode = findAccessibleChildByName(raceTree, Messages.getString(Database.UNTITLED_SERIES));
-		Accessible eventNode = findAccessibleChildByName(seriesNode, Messages.getString(Database.UNTITLED_EVENT));
+		Accessible seriesNode = findAccessibleChildByName(raceTree, DEFAULT_SERIES);
+		Accessible eventNode = findAccessibleChildByName(seriesNode, DEFAULT_EVENT);
 
 		Assert.assertNull(getSelectedRaceEntity());
 		accessibleSelect(eventNode, true);
@@ -58,14 +66,14 @@ public class SelectRaceEntityTests extends AbstractUITest {
 		Assert.assertEquals(Event.class, raceEntity.getClass());
 
 		Event event = (Event)raceEntity;
-		Assert.assertEquals(Messages.getString(Database.UNTITLED_EVENT), event.getName());
+		Assert.assertEquals(DEFAULT_EVENT, event.getName());
 	}
 
 	@Test
 	public void selectRace() throws Exception {
-		Accessible seriesNode = findAccessibleChildByName(raceTree, Messages.getString(Database.UNTITLED_SERIES));
-		Accessible eventNode = findAccessibleChildByName(seriesNode, Messages.getString(Database.UNTITLED_EVENT));
-		Accessible raceNode = findAccessibleChildByName(eventNode, Messages.getString(Database.UNTITLED_RACE));
+		Accessible seriesNode = findAccessibleChildByName(raceTree, DEFAULT_SERIES);
+		Accessible eventNode = findAccessibleChildByName(seriesNode, DEFAULT_EVENT);
+		Accessible raceNode = findAccessibleChildByName(eventNode, DEFAULT_RACE);
 
 		Assert.assertNull(getSelectedRaceEntity());
 		accessibleSelect(raceNode, true);
@@ -75,6 +83,6 @@ public class SelectRaceEntityTests extends AbstractUITest {
 		Assert.assertEquals(Race.class, raceEntity.getClass());
 
 		Race race = (Race)raceEntity;
-		Assert.assertEquals(Messages.getString(Database.UNTITLED_RACE), race.getName());
+		Assert.assertEquals(DEFAULT_RACE, race.getName());
 	}
 }

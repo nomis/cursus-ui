@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2012  Simon Arlott
+	Copyright 2011-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ package eu.lp0.cursus.db;
 import java.awt.Component;
 import java.io.File;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Properties;
 
 import javax.persistence.Persistence;
@@ -29,25 +28,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.lp0.cursus.db.dao.CursusDAO;
-import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Cursus;
-import eu.lp0.cursus.db.data.Event;
-import eu.lp0.cursus.db.data.Race;
-import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.util.Constants;
 
 public abstract class Database {
-	public static final String UNTITLED_SERIES = "series.untitled"; //$NON-NLS-1$
-	public static final String UNTITLED_EVENT = "event.untitled"; //$NON-NLS-1$
-	public static final String UNTITLED_RACE = "race.untitled"; //$NON-NLS-1$
-
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final String name;
 	private final DatabaseSession sessionFactory;
 
 	private static final CursusDAO cursusDAO = new CursusDAO();
-	private static final SeriesDAO seriesDAO = new SeriesDAO();
 
 	public enum Mode {
 		/** Don't initialise any tables */
@@ -76,10 +65,6 @@ public abstract class Database {
 		config.setProperty("javax.persistence.jdbc.password", password); //$NON-NLS-1$
 
 		sessionFactory = initSession(config, mode);
-
-		if (mode != Mode.NO_INIT) {
-			initDatabase();
-		}
 	}
 
 	public String getName() {
@@ -145,29 +130,6 @@ public abstract class Database {
 					log.info("Database \"" + name + "\" version record upgraded to " + DatabaseVersion.getLatest()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
-		}
-	}
-
-	private void initDatabase() throws InvalidDatabaseException {
-		startSession();
-		try {
-			DatabaseSession.begin();
-
-			List<Series> seriesList = seriesDAO.findAll();
-			if (seriesList.isEmpty()) {
-				log.info("Database \"" + name + "\" has no series, creating untitled series"); //$NON-NLS-1$ //$NON-NLS-2$
-
-				Series series = new Series(Messages.getString(UNTITLED_SERIES));
-				Event event = new Event(series, Messages.getString(UNTITLED_EVENT));
-				series.getEvents().add(event);
-				Race race = new Race(event, Messages.getString(UNTITLED_RACE));
-				event.getRaces().add(race);
-				seriesDAO.persist(series);
-			}
-
-			DatabaseSession.commit();
-		} finally {
-			endSession();
 		}
 	}
 

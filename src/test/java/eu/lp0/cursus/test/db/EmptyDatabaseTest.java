@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2011,2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -22,18 +22,41 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import eu.lp0.cursus.db.Database;
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.data.Cursus;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.i18n.Messages;
 
 public class EmptyDatabaseTest extends AbstractDatabaseTest {
 	@Test
 	public void defaultData() {
+		db.startSession();
+		try {
+			DatabaseSession.begin();
+
+			List<Cursus> cursus = cursusDAO.findAll();
+
+			Assert.assertEquals(1, cursus.size());
+
+			List<Series> series = seriesDAO.findAll();
+			List<Event> events = eventDAO.findAll();
+			List<Race> races = raceDAO.findAll();
+			List<Pilot> pilots = pilotDAO.findAll();
+
+			Assert.assertEquals(0, series.size());
+			Assert.assertEquals(0, events.size());
+			Assert.assertEquals(0, races.size());
+			Assert.assertEquals(0, pilots.size());
+
+			DatabaseSession.commit();
+		} finally {
+			db.endSession();
+		}
+
+		populateDefaultData();
+
 		db.startSession();
 		try {
 			DatabaseSession.begin();
@@ -59,9 +82,9 @@ public class EmptyDatabaseTest extends AbstractDatabaseTest {
 			Assert.assertEquals(1, events.get(0).getRaces().size());
 			Assert.assertSame(races.get(0), events.get(0).getRaces().get(0));
 
-			Assert.assertEquals(Messages.getString(Database.UNTITLED_SERIES), series.get(0).getName());
-			Assert.assertEquals(Messages.getString(Database.UNTITLED_EVENT), events.get(0).getName());
-			Assert.assertEquals(Messages.getString(Database.UNTITLED_RACE), races.get(0).getName());
+			Assert.assertEquals(DEFAULT_SERIES, series.get(0).getName());
+			Assert.assertEquals(DEFAULT_EVENT, events.get(0).getName());
+			Assert.assertEquals(DEFAULT_RACE, races.get(0).getName());
 
 			List<Pilot> pilots = pilotDAO.findAll();
 

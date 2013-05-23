@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2012  Simon Arlott
+	Copyright 2012-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,7 +40,6 @@ import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.i18n.Messages;
 
 public class RacePilotSortTest extends AbstractUITest {
-
 	@Override
 	protected Database createEmptyDatabase(Database database) throws InvalidDatabaseException, SQLException {
 		return DummyData1.createEmptyDatabase(super.createEmptyDatabase(database));

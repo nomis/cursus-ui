@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2012  Simon Arlott
+	Copyright 2011-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
-import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.actions.MoveRaceDownAction;
 import eu.lp0.cursus.ui.actions.MoveRaceUpAction;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
@@ -54,17 +53,12 @@ public class MoveRaceEntityTests extends AbstractUITest {
 		try {
 			DatabaseSession.begin();
 
-			Series series1 = seriesDAO.find(Messages.getString(Database.UNTITLED_SERIES));
-			series1.setName("Series 1"); //$NON-NLS-1$
-			Event invEvent1 = series1.getEvents().get(0);
-			invEvent1.setName("Invalid Event 1"); //$NON-NLS-1$
-			Race race0 = invEvent1.getRaces().get(0);
-			invEvent1.getRaces().remove(race0);
-			raceDAO.remove(race0);
+			Series series1 = new Series("Series 1"); //$NON-NLS-1$
+			Event invEvent1 = new Event(series1, "Invalid Event 1"); //$NON-NLS-1$
+			series1.getEvents().add(invEvent1);
 			seriesDAO.persist(series1);
 
 			Series series2 = new Series("Series 2"); //$NON-NLS-1$
-
 			Event event0 = new Event(series2, "Event 0"); //$NON-NLS-1$
 			series2.getEvents().add(event0);
 			Event event1 = new Event(series2, "Event 1"); //$NON-NLS-1$

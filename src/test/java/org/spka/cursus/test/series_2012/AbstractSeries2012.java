@@ -214,11 +214,6 @@ public abstract class AbstractSeries2012 extends AbstractSeries {
 		try {
 			DatabaseSession.begin();
 
-			// Remove the default series
-			for (Series series : seriesDAO.findAll()) {
-				seriesDAO.remove(series);
-			}
-
 			// Create the 2012/13 series
 			Series series = new Series(SERIES_NAME);
 
