@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileFilter;
 
 import com.google.common.base.Throwables;
 
@@ -40,6 +41,18 @@ import eu.lp0.cursus.util.CursusException;
 import eu.lp0.cursus.util.DatabaseError;
 
 public class DatabaseManager implements ActionListener {
+	public static final FileFilter FILE_FILTER = new FileFilter() {
+		@Override
+		public String getDescription() {
+			return Messages.getString("db.filetype-desc", FileDatabase.FILENAME_SUFFIX); //$NON-NLS-1$
+		}
+
+		@Override
+		public boolean accept(File f) {
+			return FileDatabase.FILE_FILTER.accept(f);
+		}
+	};
+
 	private final MainWindow win;
 
 	DatabaseManager(MainWindow win) {
@@ -170,7 +183,7 @@ public class DatabaseManager implements ActionListener {
 	private boolean saveDatabase(String action, boolean open) {
 		JFileChooser chooser = new JFileChooser();
 
-		chooser.setFileFilter(FileDatabase.FILE_FILTER);
+		chooser.setFileFilter(FILE_FILTER);
 		chooser.setName(Messages.getString(action));
 		switch (chooser.showSaveDialog(win)) {
 		case JFileChooser.APPROVE_OPTION:

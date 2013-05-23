@@ -18,11 +18,11 @@
 package eu.lp0.cursus.db;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.sql.SQLException;
 import java.util.List;
 
 import javax.persistence.Query;
-import javax.swing.filechooser.FileFilter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,11 +33,6 @@ import eu.lp0.cursus.util.ProgressMonitor;
 public class FileDatabase extends Database {
 	public static final String FILENAME_SUFFIX = ".h2.db"; //$NON-NLS-1$
 	public static final FileFilter FILE_FILTER = new FileFilter() {
-		@Override
-		public String getDescription() {
-			return Messages.getString("db.filetype-desc", FILENAME_SUFFIX); //$NON-NLS-1$
-		}
-
 		@Override
 		public boolean accept(File f) {
 			try {
