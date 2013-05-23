@@ -25,6 +25,8 @@ import javax.swing.JOptionPane;
 
 import eu.lp0.cursus.db.DatabaseVersion;
 import eu.lp0.cursus.db.DatabaseVersionException;
+import eu.lp0.cursus.db.InvalidDatabaseException;
+import eu.lp0.cursus.db.TooManyCursusRowsException;
 import eu.lp0.cursus.i18n.Messages;
 
 public class DatabaseError {
@@ -40,11 +42,7 @@ public class DatabaseError {
 	public static void errorFileSave(Component c, String context, File file, Throwable t) {
 		String message;
 		if (t instanceof CursusException) {
-			if (t instanceof DatabaseVersionException) {
-				message = Messages.getString("db.version-not-supported", DatabaseVersion.parseLong(((DatabaseVersionException)t).getCursus().getVersion())); //$NON-NLS-1$
-			} else {
-				message = t.getMessage();
-			}
+			message = translateMessage(t);
 		} else {
 			message = createMessage(t);
 		}
@@ -61,7 +59,7 @@ public class DatabaseError {
 		do {
 			if (t == first || t.getCause() == null || t.getCause() == t) {
 				lines.addFirst(""); //$NON-NLS-1$
-				lines.addFirst(t.getLocalizedMessage());
+				lines.addFirst(translateMessage(t));
 				lines.addFirst(t.getClass().getName() + ":"); //$NON-NLS-1$
 			}
 
@@ -73,5 +71,18 @@ public class DatabaseError {
 			sb.append(line).append("\n"); //$NON-NLS-1$
 		}
 		return sb.toString();
+	}
+
+	private static String translateMessage(Throwable t) {
+		if (t instanceof CursusException) {
+			if (t instanceof InvalidDatabaseException) {
+				if (t instanceof DatabaseVersionException) {
+					return Messages.getString("db.version-not-supported", DatabaseVersion.parseLong(((DatabaseVersionException)t).getCursus().getVersion())); //$NON-NLS-1$
+				} else if (t instanceof TooManyCursusRowsException) {
+					return Messages.getString("db.too-many-database-identifier-rows", ((TooManyCursusRowsException)t).getRows()); //$NON-NLS-1$
+				}
+			}
+		}
+		return t.getLocalizedMessage();
 	}
 }

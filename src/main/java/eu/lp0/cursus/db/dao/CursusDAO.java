@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2011,2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,8 +26,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import eu.lp0.cursus.db.InvalidDatabaseException;
+import eu.lp0.cursus.db.TooManyCursusRowsException;
 import eu.lp0.cursus.db.data.Cursus;
-import eu.lp0.cursus.i18n.Messages;
 
 public class CursusDAO extends AbstractEntityDAO<Cursus> {
 	public CursusDAO() {
@@ -46,7 +46,7 @@ public class CursusDAO extends AbstractEntityDAO<Cursus> {
 		List<Cursus> rs = tq.getResultList();
 
 		if (rs.size() > 1) {
-			throw new InvalidDatabaseException(Messages.getString("db.too-many-database-identifier-rows", rs.size())); //$NON-NLS-1$
+			throw new TooManyCursusRowsException(rs.size());
 		}
 
 		return rs.isEmpty() ? null : rs.get(0);
