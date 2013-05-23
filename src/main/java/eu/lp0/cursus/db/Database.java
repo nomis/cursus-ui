@@ -17,7 +17,6 @@
  */
 package eu.lp0.cursus.db;
 
-import java.awt.Component;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -30,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import eu.lp0.cursus.db.dao.CursusDAO;
 import eu.lp0.cursus.db.data.Cursus;
 import eu.lp0.cursus.util.Constants;
+import eu.lp0.cursus.util.ProgressMonitor;
 
 public abstract class Database {
 	private final Logger log = LoggerFactory.getLogger(getClass());
@@ -135,8 +135,8 @@ public abstract class Database {
 
 	public abstract boolean isSaved();
 
-	public FileDatabase saveAs(Component parent, File file) throws Exception {
-		return FileDatabase.save(parent, this, file);
+	public FileDatabase saveAs(ProgressMonitor progress, File file) throws Exception {
+		return FileDatabase.save(progress, this, file);
 	}
 
 	public boolean close(boolean force) {

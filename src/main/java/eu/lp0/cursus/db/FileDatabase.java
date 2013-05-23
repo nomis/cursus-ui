@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2012  Simon Arlott
+	Copyright 2011-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,20 +17,18 @@
  */
 package eu.lp0.cursus.db;
 
-import java.awt.Component;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 
 import javax.persistence.Query;
-import javax.swing.ProgressMonitor;
 import javax.swing.filechooser.FileFilter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.lp0.cursus.i18n.Messages;
-import eu.lp0.cursus.util.CursusException;
+import eu.lp0.cursus.util.ProgressMonitor;
 
 public class FileDatabase extends Database {
 	public static final String FILENAME_SUFFIX = ".h2.db"; //$NON-NLS-1$
@@ -97,7 +95,7 @@ public class FileDatabase extends Database {
 		return new File(name + FILENAME_SUFFIX);
 	}
 
-	public static FileDatabase save(Component parent, Database src, File file) throws Exception {
+	public static FileDatabase save(ProgressMonitor progress, Database src, File file) throws Exception {
 		FileDatabase dst = new FileDatabase(file, Mode.NO_INIT);
 		Saver s = null;
 
@@ -105,10 +103,16 @@ public class FileDatabase extends Database {
 		try {
 			DatabaseSession.begin();
 
+			progress.start(dst.getName(), 0, 1);
+
 			Query q = DatabaseSession.getEntityManager().createNativeQuery("SCRIPT DROP"); //$NON-NLS-1$
 			final List<?> rl = q.getResultList();
 
-			s = new Saver(parent, rl, dst);
+			if (progress.isCanceled()) {
+				throw new InterruptedException();
+			}
+
+			s = new Saver(progress, rl, dst);
 			s.start();
 			s.join();
 
@@ -140,10 +144,12 @@ public class FileDatabase extends Database {
 		private ProgressMonitor progress;
 		private Logger log = LoggerFactory.getLogger(getClass());
 
-		public Saver(Component parent, List<?> script, Database db) {
-			progress = new ProgressMonitor(parent, Messages.getString("db.saving-file", db.getName()), null, 0, script.size()); //$NON-NLS-1$
+		public Saver(ProgressMonitor progress, List<?> script, Database db) {
+			this.progress = progress;
 			this.script = script;
 			this.db = db;
+
+			progress.setMaximum(script.size());
 		}
 
 		@Override
@@ -166,14 +172,17 @@ public class FileDatabase extends Database {
 					progress.setProgress(++i);
 
 					if (progress.isCanceled()) {
-						throw new CursusException(Messages.getString("err.operation-canceled")); //$NON-NLS-1$
+						throw new InterruptedException();
 					}
+
+					Thread.sleep(100);
 				}
 			} catch (Exception e) {
 				error = e;
 				return;
 			} finally {
 				db.endSession();
+				progress.stop();
 			}
 
 			success = true;

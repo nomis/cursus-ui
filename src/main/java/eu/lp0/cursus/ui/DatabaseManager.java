@@ -33,8 +33,10 @@ import eu.lp0.cursus.db.DatabaseVersionException;
 import eu.lp0.cursus.db.FileDatabase;
 import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.i18n.Messages;
+import eu.lp0.cursus.ui.util.ProgressMonitorWrapper;
 import eu.lp0.cursus.util.Background;
 import eu.lp0.cursus.util.Constants;
+import eu.lp0.cursus.util.CursusException;
 import eu.lp0.cursus.util.DatabaseError;
 
 public class DatabaseManager implements ActionListener {
@@ -195,11 +197,18 @@ public class DatabaseManager implements ActionListener {
 		}
 
 		try {
-			Database db = win.getDatabase().saveAs(win, file);
+			Database db = win.getDatabase().saveAs(new ProgressMonitorWrapper(win) {
+				@Override
+				protected String buildMessage(String message) {
+					return Messages.getString("db.saving-file", message); //$NON-NLS-1$
+				}
+			}, file);
 			if (open) {
 				win.getMain().savedAs(db);
 			}
 			return true;
+		} catch (InterruptedException e) {
+			DatabaseError.errorFileSave(win, chooser.getName(), file, new CursusException(Messages.getString("err.operation-canceled"), e)); //$NON-NLS-1$
 		} catch (Exception e) {
 			DatabaseError.errorFileSave(win, chooser.getName(), file, e);
 		}
