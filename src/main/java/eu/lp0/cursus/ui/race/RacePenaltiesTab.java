@@ -167,7 +167,7 @@ public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 			}
 		});
 
-		table.setEnabled(false);
+		// table.setEnabled(false);
 	}
 
 	private void updateModel(Race race) {
@@ -183,7 +183,7 @@ public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 		raceAttendeesColumn.setRace(race);
 		model.updateModel(generateRaceAttendeePenalties(race));
 
-		table.setEnabled(race != null && !race.getAttendees().isEmpty());
+		// table.setEnabled(race != null && !race.getAttendees().isEmpty());
 	}
 
 	private List<RaceAttendeePenalty> generateRaceAttendeePenalties(Race race) {
@@ -208,6 +208,9 @@ public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {
 					// as it would require the model to fire an update... but the pilot
 					// must be null otherwise the penalty should have been saved
 					if (penalty.getPilot() == null || race.getAttendees().containsKey(penalty.getPilot())) {
+						// Must refresh the race, as the attendees may have changed
+						penalty.setRace(race);
+
 						penalties.add(penalty);
 					}
 				}

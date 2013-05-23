@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2011,2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ import eu.lp0.cursus.i18n.Messages;
 public final class RaceAttendeePenalty implements Entity {
 	private RaceAttendee dbAttendee;
 	private Pilot pilot;
-	private final Race race;
+	private Race race;
 	private Penalty dbPenalty;
 	private final Penalty penalty;
 
@@ -78,6 +78,11 @@ public final class RaceAttendeePenalty implements Entity {
 
 	public Race getRace() {
 		return race;
+	}
+
+	public void setRace(Race race) {
+		assert (this.race.equals(race));
+		this.race = race;
 	}
 
 	public Penalty getPenalty() {
