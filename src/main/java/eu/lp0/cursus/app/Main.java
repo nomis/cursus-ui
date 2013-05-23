@@ -126,9 +126,9 @@ public class Main implements Runnable {
 	}
 
 	protected Database createEmptyDatabase() throws InvalidDatabaseException, SQLException {
-		Database db = new MemoryDatabase(Messages.getString("db.untitled", UNTITLED.incrementAndGet())); //$NON-NLS-1$
+		Database mem = new MemoryDatabase(Messages.getString("db.untitled", UNTITLED.incrementAndGet())); //$NON-NLS-1$
 
-		db.startSession();
+		mem.startSession();
 		try {
 			DatabaseSession.begin();
 
@@ -141,10 +141,10 @@ public class Main implements Runnable {
 
 			DatabaseSession.commit();
 		} finally {
-			db.endSession();
+			mem.endSession();
 		}
 
-		return db;
+		return mem;
 	}
 
 	public synchronized boolean savedAs(Database newDB) throws InvalidDatabaseException, SQLException {
