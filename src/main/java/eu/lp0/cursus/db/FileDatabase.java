@@ -27,7 +27,6 @@ import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.util.ProgressMonitor;
 
 public class FileDatabase extends Database {
@@ -63,10 +62,10 @@ public class FileDatabase extends Database {
 	public static String filenameToURL(File file) throws InvalidDatabaseException {
 		String name = file.getAbsolutePath();
 		if (name.contains(";")) { //$NON-NLS-1$
-			throw new InvalidDatabaseException(Messages.getString("db.filename-invalid.semicolon", name)); //$NON-NLS-1$
+			throw new InvalidFilenameException.Semicolon(name);
 		}
 		if (!name.endsWith(FILENAME_SUFFIX)) {
-			throw new InvalidDatabaseException(Messages.getString("db.filename-invalid.suffix", name, FILENAME_SUFFIX)); //$NON-NLS-1$
+			throw new InvalidFilenameException.Suffix(name, FILENAME_SUFFIX);
 		}
 		return name.substring(0, name.length() - FILENAME_SUFFIX.length());
 	}

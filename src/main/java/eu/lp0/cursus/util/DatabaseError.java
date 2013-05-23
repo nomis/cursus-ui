@@ -23,13 +23,19 @@ import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.lp0.cursus.db.DatabaseVersion;
 import eu.lp0.cursus.db.DatabaseVersionException;
 import eu.lp0.cursus.db.InvalidDatabaseException;
+import eu.lp0.cursus.db.InvalidFilenameException;
 import eu.lp0.cursus.db.TooManyCursusRowsException;
 import eu.lp0.cursus.i18n.Messages;
 
 public class DatabaseError {
+	private static final Logger log = LoggerFactory.getLogger(DatabaseError.class);
+
 	public static void unableToSave(Component c, String context, String message) {
 		JOptionPane.showMessageDialog(c, message, Constants.APP_NAME + Constants.EN_DASH + context, JOptionPane.ERROR_MESSAGE);
 	}
@@ -80,8 +86,16 @@ public class DatabaseError {
 					return Messages.getString("db.version-not-supported", DatabaseVersion.parseLong(((DatabaseVersionException)t).getCursus().getVersion())); //$NON-NLS-1$
 				} else if (t instanceof TooManyCursusRowsException) {
 					return Messages.getString("db.too-many-database-identifier-rows", ((TooManyCursusRowsException)t).getRows()); //$NON-NLS-1$
+				} else if (t instanceof InvalidFilenameException) {
+					if (t instanceof InvalidFilenameException.Semicolon) {
+						return Messages.getString("db.filename-invalid.semicolon", ((InvalidFilenameException)t).getName()); //$NON-NLS-1$
+					} else if (t instanceof InvalidFilenameException.Suffix) {
+						return Messages.getString("db.filename-invalid.suffix", ((InvalidFilenameException)t).getName(), //$NON-NLS-1$
+								((InvalidFilenameException.Suffix)t).getSuffix());
+					}
 				}
 			}
+			log.warn("Untranslated exception: " + t); //$NON-NLS-1$
 		}
 		return t.getLocalizedMessage();
 	}
