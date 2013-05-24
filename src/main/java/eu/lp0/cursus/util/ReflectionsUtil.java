@@ -27,7 +27,7 @@ public class ReflectionsUtil {
 
 	static {
 		ConfigurationBuilder config = new ConfigurationBuilder();
-		config.setUrls(ClasspathHelper.forJavaClassPath());
+		config.setUrls(ClasspathHelper.forClass(ReflectionsUtil.class));
 		config.setScanners(new SubTypesScanner());
 
 		reflections = new Reflections(config);
