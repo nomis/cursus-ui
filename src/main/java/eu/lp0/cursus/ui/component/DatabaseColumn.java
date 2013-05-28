@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2011,2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ import eu.lp0.cursus.db.dao.EntityDAO;
 import eu.lp0.cursus.db.data.Entity;
 import eu.lp0.cursus.i18n.LocaleChangeEvent;
 import eu.lp0.cursus.i18n.Messages;
-import eu.lp0.cursus.util.Constants;
+import eu.lp0.cursus.ui.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 
 public abstract class DatabaseColumn<T extends Entity, V> extends TableColumn implements DatabaseTableCellEditor.Column<T, V> {

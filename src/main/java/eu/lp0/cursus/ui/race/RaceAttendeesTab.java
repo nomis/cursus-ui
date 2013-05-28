@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2012  Simon Arlott
+	Copyright 2011-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.db.data.RaceAttendee.Type;
 import eu.lp0.cursus.db.data.RaceNumber;
+import eu.lp0.cursus.ui.Constants;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseColumn;
 import eu.lp0.cursus.ui.component.DatabaseTableModel;
@@ -55,7 +56,6 @@ import eu.lp0.cursus.ui.component.EnumDatabaseColumn;
 import eu.lp0.cursus.ui.component.StringDatabaseColumn;
 import eu.lp0.cursus.ui.table.RaceNumbersDatabaseColumnModel;
 import eu.lp0.cursus.util.Background;
-import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 
 public class RaceAttendeesTab extends AbstractDatabaseTab<Race> {

@@ -48,6 +48,7 @@ import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
 import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.i18n.Messages;
+import eu.lp0.cursus.ui.Constants;
 import eu.lp0.cursus.ui.component.AbstractDatabaseTab;
 import eu.lp0.cursus.ui.component.DatabaseColumn;
 import eu.lp0.cursus.ui.component.DatabaseTableModel;
@@ -59,7 +60,6 @@ import eu.lp0.cursus.ui.table.RaceAttendeePenalty;
 import eu.lp0.cursus.ui.table.RaceAttendeePenaltyDAO;
 import eu.lp0.cursus.ui.table.RaceAttendeesDatabaseColumn;
 import eu.lp0.cursus.util.Background;
-import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 
 public class RacePenaltiesTab extends AbstractDatabaseTab<Race> {

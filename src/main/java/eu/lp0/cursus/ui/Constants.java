@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2012  Simon Arlott
+	Copyright 2011-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,10 +15,15 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.lp0.cursus.xml;
+package eu.lp0.cursus.ui;
 
-public class ExportException extends Exception {
-	public ExportException(Throwable cause) {
-		super(cause);
-	}
+public class Constants {
+	public static final String APP_NAME = "cursus"; //$NON-NLS-1$
+	public static final String APP_VERSION = "0.1.0"; //$NON-NLS-1$
+	public static final String APP_URL = "http://cursus.lp0.eu/"; //$NON-NLS-1$
+	public static final String APP_DESC = APP_NAME + " " + APP_VERSION; //$NON-NLS-1$
+
+	public static final String EN_DASH = " \u2013 "; //$NON-NLS-1$
+
+	public static final int MAX_STRING_LEN = eu.lp0.cursus.db.Constants.MAX_STRING_LEN;
 }

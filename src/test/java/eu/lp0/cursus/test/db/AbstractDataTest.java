@@ -34,7 +34,7 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
 
-public class AbstractDataTest {
+public abstract class AbstractDataTest {
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 
 	protected ClassDAO classDAO = new ClassDAO();

@@ -32,6 +32,7 @@ import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.db.InvalidFilenameException;
 import eu.lp0.cursus.db.TooManyCursusRowsException;
 import eu.lp0.cursus.i18n.Messages;
+import eu.lp0.cursus.ui.Constants;
 
 public class DatabaseError {
 	private static final Logger log = LoggerFactory.getLogger(DatabaseError.class);

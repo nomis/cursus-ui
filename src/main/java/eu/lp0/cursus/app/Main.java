@@ -38,9 +38,9 @@ import eu.lp0.cursus.db.data.Event;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.Series;
 import eu.lp0.cursus.i18n.Messages;
+import eu.lp0.cursus.ui.Constants;
 import eu.lp0.cursus.ui.MainWindow;
 import eu.lp0.cursus.util.Background;
-import eu.lp0.cursus.util.Constants;
 
 public class Main implements Runnable {
 	public static final String UNTITLED_SERIES = "series.untitled"; //$NON-NLS-1$

@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2011,2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,9 +20,9 @@ package eu.lp0.cursus.ui.actions;
 import java.awt.event.ActionEvent;
 
 import eu.lp0.cursus.db.data.Series;
+import eu.lp0.cursus.ui.Constants;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.series.SeriesDetailDialog;
-import eu.lp0.cursus.util.Constants;
 
 public class EditSeriesAction extends AbstractTranslatedAction {
 	private final DatabaseWindow win;

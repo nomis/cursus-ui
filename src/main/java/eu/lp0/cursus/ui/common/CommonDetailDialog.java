@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2011,2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -44,13 +44,13 @@ import eu.lp0.cursus.db.dao.NamedEntityDAO;
 import eu.lp0.cursus.db.data.AbstractEntity;
 import eu.lp0.cursus.db.data.NamedEntity;
 import eu.lp0.cursus.i18n.Messages;
+import eu.lp0.cursus.ui.Constants;
 import eu.lp0.cursus.ui.actions.CancelDialogAction;
 import eu.lp0.cursus.ui.actions.SaveDialogAction;
 import eu.lp0.cursus.ui.component.DatabaseTextField;
 import eu.lp0.cursus.ui.component.DatabaseWindow;
 import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.preferences.WindowAutoPrefs;
-import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 import eu.lp0.cursus.util.SwingHacks;
 

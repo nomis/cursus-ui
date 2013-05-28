@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2012  Simon Arlott
+	Copyright 2011-2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -60,7 +60,6 @@ import eu.lp0.cursus.ui.series.SeriesResultsTab;
 import eu.lp0.cursus.ui.tree.RaceTree;
 import eu.lp0.cursus.ui.util.AccessibleComponents;
 import eu.lp0.cursus.util.Background;
-import eu.lp0.cursus.util.Constants;
 
 public final class MainWindow extends JFrame implements Displayable, DatabaseWindow {
 	private final Main main;

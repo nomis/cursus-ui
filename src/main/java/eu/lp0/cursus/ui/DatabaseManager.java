@@ -36,7 +36,6 @@ import eu.lp0.cursus.db.InvalidDatabaseException;
 import eu.lp0.cursus.i18n.Messages;
 import eu.lp0.cursus.ui.util.ProgressMonitorWrapper;
 import eu.lp0.cursus.util.Background;
-import eu.lp0.cursus.util.Constants;
 import eu.lp0.cursus.util.CursusException;
 import eu.lp0.cursus.util.DatabaseError;
 

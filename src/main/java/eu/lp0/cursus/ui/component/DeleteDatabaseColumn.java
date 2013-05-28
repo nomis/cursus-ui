@@ -48,7 +48,7 @@ import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.EntityDAO;
 import eu.lp0.cursus.db.data.Entity;
 import eu.lp0.cursus.i18n.Messages;
-import eu.lp0.cursus.util.Constants;
+import eu.lp0.cursus.ui.Constants;
 import eu.lp0.cursus.util.DatabaseError;
 
 public abstract class DeleteDatabaseColumn<T extends Entity> extends DatabaseColumn<T, String> {

@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011  Simon Arlott
+	Copyright 2011,2013  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -51,7 +51,6 @@ import eu.lp0.cursus.ui.actions.CloseDialogAction;
 import eu.lp0.cursus.ui.component.Displayable;
 import eu.lp0.cursus.ui.component.LinkJButton;
 import eu.lp0.cursus.ui.preferences.WindowAutoPrefs;
-import eu.lp0.cursus.util.Constants;
 
 public class AboutDialog extends JDialog implements Displayable {
 	private static final String TEXT_SPLIT = "\n------------------------------------------------------------------------\n\n"; //$NON-NLS-1$
