@@ -61,10 +61,10 @@
 						<mainClass>eu.lp0.cursus.app.Main</mainClass>
 					</jnlp>
 					<sign>
-						<keystore>${user.home}/.keystore-cursus.jks</keystore>
-						<alias>cursus</alias>
-						<storepass>password</storepass>
-						<keypass>password</keypass>
+						<keystore>${sign.keystore}</keystore>
+						<alias>${sign.alias}</alias>
+						<storepass>${sign.storepass}</storepass>
+						<keypass>${sign.keypass}</keypass>
 					</sign>
 					<resourcesDirectory>${project.basedir}/src/main/jnlp/resources</resourcesDirectory>
 					<pack200>true</pack200>
