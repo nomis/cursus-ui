@@ -1,26 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>eu.lp0.cursus</groupId>
 	<artifactId>cursus-ui</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>cursus (User Interface)</name>
-	<description>Race series management program</description>
-	<url>http://cursus.lp0.eu/</url>
-	<licenses>
-		<license>
-			<name>GNU General Public License v3.0</name>
-			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
-		</license>
-	</licenses>
+	<description>Race series management program (Swing Graphical User Interface)</description>
+	<parent>
+		<groupId>eu.lp0.cursus</groupId>
+		<artifactId>cursus</artifactId>
+		<version>0</version>
+	</parent>
 	<scm>
 		<connection>scm:git:git://github.com/lp0/cursus-ui.git</connection>
 		<url>https://github.com/lp0/cursus-ui/</url>
 	</scm>
-	<organization>
-		<name>Simon Arlott</name>
-	</organization>
 	<developers>
 		<developer>
 			<id>uk.me.sa</id>
@@ -36,25 +30,9 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.5</version>
-		</dependency>
-		<dependency>
 			<groupId>com.jgoodies</groupId>
 			<artifactId>forms</artifactId>
 			<version>1.2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>14.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -74,35 +52,6 @@
 	</dependencies>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.5</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.10</version>
-				<configuration>
-					<includes>
-						<include>**/*.java</include>
-					</includes>
-					<parallel>methods</parallel>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo.webstart</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
