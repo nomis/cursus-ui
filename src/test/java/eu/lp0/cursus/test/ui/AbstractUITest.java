@@ -88,7 +88,7 @@ public class AbstractUITest extends AbstractDataTest {
 		Assert.assertTrue(executeWithTimeout(new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
-				return main.open();
+				return main.newDatabase();
 			}
 		}));
 

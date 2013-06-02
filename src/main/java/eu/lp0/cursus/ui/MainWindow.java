@@ -225,7 +225,8 @@ public final class MainWindow extends JFrame implements Displayable, DatabaseWin
 	}
 
 	public void databaseOpened() {
-		sync(true, main.getDatabase().isSaved(), Constants.APP_NAME + Constants.EN_DASH + main.getDatabase().getName());
+		String prefix = main.getDatabase().isSaved() ? "" : "*";  //$NON-NLS-1$//$NON-NLS-2$
+		sync(true, main.getDatabase().isSaved(), Constants.APP_NAME + Constants.EN_DASH + prefix + main.getDatabase().getName());
 	}
 
 	public void databaseClosed() {

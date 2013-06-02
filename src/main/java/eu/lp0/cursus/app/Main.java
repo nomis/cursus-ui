@@ -20,6 +20,7 @@ package eu.lp0.cursus.app;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.InsetsUIResource;
@@ -113,12 +114,40 @@ public class Main implements Runnable {
 		this.win = win;
 	}
 
-	public synchronized boolean open() throws InvalidDatabaseException, SQLException {
+	public synchronized boolean newDatabase() {
 		assert (Background.isExecutorThread());
 
 		close();
 		if (!isOpen()) {
-			db = createEmptyDatabase();
+			boolean ok = true;
+
+			try {
+				db = createEmptyDatabase();
+			} catch (SQLException e) {
+				// TODO log
+				ok = false;
+			} catch (InvalidDatabaseException e) {
+				// TODO log
+				ok = false;
+			}
+
+			if (ok) {
+				win.databaseOpened();
+			} else {
+				JOptionPane.showMessageDialog(win, Messages.getString("err.unable-to-create-new-db"), Constants.APP_NAME, JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+			}
+			return ok;
+		}
+		return false;
+	}
+
+	public synchronized boolean openDatabase(Database newDB) {
+		assert (Background.isExecutorThread());
+
+		// TODO preserve current selection
+		close(true);
+		if (!isOpen()) {
+			this.db = newDB;
 			win.databaseOpened();
 			return true;
 		}
