@@ -115,7 +115,9 @@ public class AbstractUITest extends AbstractDataTest {
 			@Override
 			public void run() {
 				main.close(true);
-				((Window)mainWindow).dispose();
+				if (mainWindow != null) {
+					((Window)mainWindow).dispose();
+				}
 			}
 		});
 	}
