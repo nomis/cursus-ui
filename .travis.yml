@@ -10,5 +10,8 @@ install:
   - mvn -B -V -DskipTests=true install
   - cd ..
   - rm -rf __cursus-core__
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
 after_script:
   - "[ $TRAVIS_TEST_RESULT -ne 0 ] && head -n 500 target/surefire-reports/*.txt"
