@@ -2,12 +2,12 @@ language: java
 install:
   - git clone --depth=1 git://github.com/lp0/cursus.git __cursus__
   - cd __cursus__
-  - mvn -B -V install
+  - mvn -q -B -V install
   - cd ..
   - rm -rf __cursus__
   - git clone --depth=1 git://github.com/lp0/cursus-core.git __cursus-core__
   - cd __cursus-core__
-  - mvn -B -V -DskipTests=true install
+  - mvn -q -B -V -DskipTests=true install
   - cd ..
   - rm -rf __cursus-core__
 before_script:
