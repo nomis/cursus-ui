@@ -10,3 +10,5 @@ install:
   - mvn -B -V -DskipTests=true install
   - cd ..
   - rm -rf __cursus-core__
+after_script:
+  - "[ $TRAVIS_TEST_RESULT -ne 0 ] && head -n 500 target/surefire-reports/*.txt"
