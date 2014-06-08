@@ -10,6 +10,7 @@
 		<groupId>eu.lp0.cursus</groupId>
 		<artifactId>cursus</artifactId>
 		<version>0</version>
+		<relativePath></relativePath>
 	</parent>
 	<scm>
 		<connection>scm:git:git://github.com/lp0/cursus-ui.git</connection>
