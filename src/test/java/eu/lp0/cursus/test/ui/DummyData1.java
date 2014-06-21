@@ -17,8 +17,8 @@
  */
 package eu.lp0.cursus.test.ui;
 
-import static eu.lp0.cursus.db.data.Gender.FEMALE;
-import static eu.lp0.cursus.db.data.Gender.MALE;
+import static eu.lp0.cursus.db.data.Sex.FEMALE;
+import static eu.lp0.cursus.db.data.Sex.MALE;
 import static eu.lp0.cursus.test.ui.DummyData1.Country.ARMBONIA;
 import static eu.lp0.cursus.test.ui.DummyData1.Country.EARBONIA;
 import static eu.lp0.cursus.test.ui.DummyData1.Country.ELBONIA;
@@ -45,7 +45,7 @@ import eu.lp0.cursus.db.dao.RaceNumberDAO;
 import eu.lp0.cursus.db.dao.SeriesDAO;
 import eu.lp0.cursus.db.data.Class;
 import eu.lp0.cursus.db.data.Event;
-import eu.lp0.cursus.db.data.Gender;
+import eu.lp0.cursus.db.data.Sex;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceNumber;
@@ -169,8 +169,8 @@ public class DummyData1 {
 		return db;
 	}
 
-	private static Pilot makePilot(Series series, String name, Gender gender, Country country, Country org, int raceNo, Class... classes) {
-		Pilot pilot = new Pilot(series, name, gender, country.name);
+	private static Pilot makePilot(Series series, String name, Sex sex, Country country, Country org, int raceNo, Class... classes) {
+		Pilot pilot = new Pilot(series, name, sex, country.name);
 		pilot.setRaceNumber(new RaceNumber(pilot, org.org, raceNo));
 		if (classes != null) {
 			pilot.getClasses().addAll(Arrays.asList(classes));

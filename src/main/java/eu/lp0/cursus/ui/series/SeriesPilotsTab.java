@@ -44,7 +44,7 @@ import com.google.common.primitives.Ints;
 import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.PilotDAO;
 import eu.lp0.cursus.db.dao.SeriesDAO;
-import eu.lp0.cursus.db.data.Gender;
+import eu.lp0.cursus.db.data.Sex;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.RaceNumber;
 import eu.lp0.cursus.db.data.Series;
@@ -100,15 +100,15 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 						row.setName(value);
 						return true;
 					}
-				}, new EnumDatabaseColumn<Pilot, Gender>("pilot.gender", win, pilotDAO, Gender.class, true) { //$NON-NLS-1$
+				}, new EnumDatabaseColumn<Pilot, Sex>("pilot.sex", win, pilotDAO, Sex.class, true) { //$NON-NLS-1$
 					@Override
-					protected Gender getEnumValue(Pilot row) {
-						return row.getGender();
+					protected Sex getEnumValue(Pilot row) {
+						return row.getSex();
 					}
 
 					@Override
-					protected boolean setEnumValue(Pilot row, Gender value) {
-						row.setGender(value);
+					protected boolean setEnumValue(Pilot row, Sex value) {
+						row.setSex(value);
 						return true;
 					}
 				}, new StringDatabaseColumn<Pilot>("pilot.country", win, pilotDAO, Constants.MAX_STRING_LEN) { //$NON-NLS-1$

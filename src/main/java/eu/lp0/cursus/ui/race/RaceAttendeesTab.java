@@ -41,7 +41,7 @@ import eu.lp0.cursus.db.DatabaseSession;
 import eu.lp0.cursus.db.dao.PilotDAO;
 import eu.lp0.cursus.db.dao.RaceAttendeeDAO;
 import eu.lp0.cursus.db.dao.RaceDAO;
-import eu.lp0.cursus.db.data.Gender;
+import eu.lp0.cursus.db.data.Sex;
 import eu.lp0.cursus.db.data.Pilot;
 import eu.lp0.cursus.db.data.Race;
 import eu.lp0.cursus.db.data.RaceAttendee;
@@ -123,15 +123,15 @@ public class RaceAttendeesTab extends AbstractDatabaseTab<Race> {
 						row.setName(value);
 						return true;
 					}
-				}, new EnumDatabaseColumn<Pilot, Gender>("pilot.gender", Gender.class, true) { //$NON-NLS-1$
+				}, new EnumDatabaseColumn<Pilot, Sex>("pilot.sex", Sex.class, true) { //$NON-NLS-1$
 					@Override
-					protected Gender getEnumValue(Pilot row) {
-						return row.getGender();
+					protected Sex getEnumValue(Pilot row) {
+						return row.getSex();
 					}
 
 					@Override
-					protected boolean setEnumValue(Pilot row, Gender value) {
-						row.setGender(value);
+					protected boolean setEnumValue(Pilot row, Sex value) {
+						row.setSex(value);
 						return true;
 					}
 				}, new StringDatabaseColumn<Pilot>("pilot.country") { //$NON-NLS-1$
