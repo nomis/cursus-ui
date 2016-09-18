@@ -45,6 +45,6 @@ public class ClassListTreeNode extends HierarchicalTreeRoot<Series, Class, Class
 
 	@Override
 	public List<Class> getChildItems(Series series) {
-		return Ordering.natural().sortedCopy(series.getClasses());
+		return Ordering.natural().immutableSortedCopy(series.getClasses());
 	}
 }

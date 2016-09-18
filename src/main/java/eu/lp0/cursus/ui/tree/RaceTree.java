@@ -172,7 +172,7 @@ public class RaceTree extends AbstractTree<DatabaseTreeNode, RaceEntity> impleme
 		try {
 			DatabaseSession.begin();
 
-			seriesList = Ordering.natural().sortedCopy(seriesDAO.findAll());
+			seriesList = Ordering.natural().immutableSortedCopy(seriesDAO.findAll());
 			for (Series series : seriesList) {
 				for (Event event : series.getEvents()) {
 					event.getRaces();

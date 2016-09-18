@@ -49,10 +49,10 @@ public class RaceNumbersDatabaseColumnModel extends StringDatabaseColumn<Pilot> 
 
 	private Iterable<RaceNumber> getRaceNumberList(Pilot row) {
 		if (row.getRaceNumber() == null) {
-			return Ordering.natural().sortedCopy(row.getRaceNumbers());
+			return Ordering.natural().immutableSortedCopy(row.getRaceNumbers());
 		} else {
 			return Iterables.concat(Collections.singletonList(row.getRaceNumber()),
-					Ordering.natural().sortedCopy(Sets.difference(row.getRaceNumbers(), Collections.singleton(row.getRaceNumber()))));
+					Ordering.natural().immutableSortedCopy(Sets.difference(row.getRaceNumbers(), Collections.singleton(row.getRaceNumber()))));
 		}
 	}
 

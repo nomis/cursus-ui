@@ -160,7 +160,7 @@ public class MoveRaceEntityTests extends AbstractUITest {
 				try {
 					DatabaseSession.begin();
 
-					List<Series> seriesList = Ordering.natural().sortedCopy(seriesDAO.findAll());
+					List<Series> seriesList = Ordering.natural().immutableSortedCopy(seriesDAO.findAll());
 					// log.debug("Series: " + Arrays.toString(seriesList.toArray())); //$NON-NLS-1$
 					for (int s = 0; s < seriesList.size(); s++) {
 						Series series = seriesList.get(s);

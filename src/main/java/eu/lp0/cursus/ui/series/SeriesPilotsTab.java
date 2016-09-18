@@ -171,7 +171,7 @@ public class SeriesPilotsTab extends AbstractDatabaseTab<Series> {
 			deleteRows(rows);
 
 			// Delete in reverse order as each row removed affects the indexes of the rows after it
-			for (int mRow : Ordering.natural().reverse().sortedCopy(Ints.asList(selected))) {
+			for (int mRow : Ordering.natural().reverse().immutableSortedCopy(Ints.asList(selected))) {
 				model.deleteRow(mRow);
 			}
 		}

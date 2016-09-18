@@ -280,7 +280,7 @@ public class SeriesClassesTab extends AbstractDatabaseTab<Series> implements Tre
 			DatabaseSession.begin();
 
 			newSeries = seriesDAO.get(series);
-			newClasses = Ordering.natural().sortedCopy(newSeries.getClasses());
+			newClasses = Ordering.natural().immutableSortedCopy(newSeries.getClasses());
 			newPilots = new ArrayList<Pilot>(newSeries.getPilots());
 			for (Pilot pilot : newPilots) {
 				for (RaceNumber raceNumber : pilot.getRaceNumbers()) {

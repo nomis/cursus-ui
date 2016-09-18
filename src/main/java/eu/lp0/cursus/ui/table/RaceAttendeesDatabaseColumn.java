@@ -64,7 +64,7 @@ public class RaceAttendeesDatabaseColumn extends DatabaseColumn<RaceAttendeePena
 
 	public void setRace(Race race) {
 		if (race != null) {
-			pilots.replaceAll(Collections2.transform(Ordering.from(new PilotRaceNumberComparator()).sortedCopy(race.getAttendees().keySet()),
+			pilots.replaceAll(Collections2.transform(Ordering.from(new PilotRaceNumberComparator()).immutableSortedCopy(race.getAttendees().keySet()),
 					PilotWrapper.getFunction()));
 		} else {
 			pilots.replaceAll(Collections.<PilotWrapper>emptySet());
