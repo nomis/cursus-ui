@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2012, 2014  Simon Arlott
+	Copyright 2011, 2014  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as published by
@@ -15,27 +15,28 @@
 	You should have received a copy of the GNU Affero General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.me.sa.cursus.app;
+package uk.uuid.lp0.cursus.ui.actions;
 
-import java.sql.SQLException;
+import uk.uuid.lp0.cursus.ui.component.DatabaseWindow;
+import uk.uuid.cursus.db.dao.RaceDAO;
+import uk.uuid.cursus.db.data.Race;
 
-import uk.uuid.cursus.test.ui.DummyData1;
-import uk.uuid.lp0.cursus.app.Main;
-import uk.uuid.lp0.cursus.util.Background;
-import uk.uuid.cursus.db.Database;
-import uk.uuid.cursus.db.InvalidDatabaseException;
+public class DeleteRaceAction extends AbstractDeleteAction<Race> {
+	private static final RaceDAO raceDAO = new RaceDAO();
 
-public class MainTest extends Main {
-	public static void main(String[] args) {
-		Background.execute(new MainTest(args));
-	}
-
-	public MainTest(String[] args) {
-		super(args);
+	public DeleteRaceAction(DatabaseWindow win, Race race) {
+		super("menu.race.delete", false, win, race); //$NON-NLS-1$
 	}
 
 	@Override
-	protected Database createEmptyDatabase() throws InvalidDatabaseException, SQLException {
-		return DummyData1.createEmptyDatabase(super.createEmptyDatabase());
+	protected void doDelete(Race item) {
+		Race race = raceDAO.get(item);
+		race.getEvent().getRaces().remove(race);
+		raceDAO.remove(race);
+	}
+
+	@Override
+	protected void doRefresh(DatabaseWindow win) {
+		win.refreshRaceList();
 	}
 }

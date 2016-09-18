@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2012, 2014  Simon Arlott
+	Copyright 2011, 2014  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as published by
@@ -15,27 +15,22 @@
 	You should have received a copy of the GNU Affero General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.me.sa.cursus.app;
+package uk.uuid.lp0.cursus.ui.component;
 
-import java.sql.SQLException;
+import java.awt.Component;
 
-import uk.uuid.cursus.test.ui.DummyData1;
-import uk.uuid.lp0.cursus.app.Main;
-import uk.uuid.lp0.cursus.util.Background;
-import uk.uuid.cursus.db.Database;
-import uk.uuid.cursus.db.InvalidDatabaseException;
+import javax.swing.JTable;
 
-public class MainTest extends Main {
-	public static void main(String[] args) {
-		Background.execute(new MainTest(args));
-	}
+import uk.uuid.cursus.db.data.Entity;
 
-	public MainTest(String[] args) {
-		super(args);
+public class StringDatabaseTableCellRenderer<T extends Entity, V> extends DatabaseDefaultTableCellRenderer<T, V> {
+	public StringDatabaseTableCellRenderer(DatabaseTableCellRenderer.Column<T, V> column) {
+		super(column);
 	}
 
 	@Override
-	protected Database createEmptyDatabase() throws InvalidDatabaseException, SQLException {
-		return DummyData1.createEmptyDatabase(super.createEmptyDatabase());
+	protected Component getTableCellRendererComponent_(JTable table, V value, boolean isSelected, boolean hasFocus, int vRow, int vCol) {
+		setEnabled(table.isEnabled());
+		return super.getTableCellRendererComponent_(table, value, isSelected, hasFocus, vRow, vCol);
 	}
 }

@@ -7,13 +7,13 @@
 	<name>cursus (User Interface)</name>
 	<description>Race series management program (Swing Graphical User Interface)</description>
 	<parent>
-		<groupId>eu.lp0.cursus</groupId>
+		<groupId>uk.uuid.cursus</groupId>
 		<artifactId>cursus</artifactId>
 		<version>0</version>
 		<relativePath></relativePath>
 	</parent>
 	<scm>
-		<connection>scm:git:git://github.com/lp0/cursus-ui.git</connection>
+		<connection>scm:git:https://github.com/lp0/cursus-ui.git</connection>
 		<url>https://github.com/lp0/cursus-ui/</url>
 	</scm>
 	<developers>
@@ -46,7 +46,7 @@
 			<version>2.2.2</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.lp0.cursus</groupId>
+			<groupId>uk.uuid.cursus</groupId>
 			<artifactId>cursus-core</artifactId>
 			<version>0.5.0-SNAPSHOT</version>
 		</dependency>
@@ -59,7 +59,7 @@
 				<version>1.0-beta-2</version>
 				<configuration>
 					<jnlp>
-						<mainClass>eu.lp0.cursus.app.Main</mainClass>
+						<mainClass>uk.uuid.cursus.app.Main</mainClass>
 					</jnlp>
 					<sign>
 						<keystore>${sign.keystore}</keystore>
@@ -86,7 +86,7 @@
 		<profile>
 			<id>run</id>
 			<properties>
-				<mainClass>eu.lp0.cursus.app.Main</mainClass>
+				<mainClass>uk.uuid.cursus.app.Main</mainClass>
 			</properties>
 			<build>
 				<defaultGoal>compile</defaultGoal>
