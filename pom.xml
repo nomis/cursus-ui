@@ -9,25 +9,25 @@
 	<parent>
 		<groupId>uk.uuid.cursus</groupId>
 		<artifactId>cursus</artifactId>
-		<version>0</version>
+		<version>0-SNAPSHOT</version>
 		<relativePath></relativePath>
 	</parent>
 	<scm>
-		<connection>scm:git:https://github.com/lp0/cursus-ui.git</connection>
-		<url>https://github.com/lp0/cursus-ui/</url>
+		<connection>scm:git:https://github.com/nomis/cursus-ui.git</connection>
+		<url>https://github.com/nomis/cursus-ui/</url>
 	</scm>
 	<developers>
 		<developer>
 			<id>uk.me.sa</id>
 			<name>Simon Arlott</name>
-			<url>http://sa.me.uk/</url>
+			<url>https://sa.me.uk/</url>
 		</developer>
 	</developers>
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.5</version>
+			<version>${slf4j.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
