@@ -1,0 +1,5 @@
+@Library("uuid") _
+
+mavenPipeline {
+	requiresDisplay = true
+}
