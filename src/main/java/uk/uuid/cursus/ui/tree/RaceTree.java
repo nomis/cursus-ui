@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011, 2014  Simon Arlott
+	Copyright 2011, 2014, 2022  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as published by
@@ -247,10 +247,10 @@ public class RaceTree extends AbstractTree<DatabaseTreeNode, RaceEntity> impleme
 		}
 		assert (series != null);
 
-		@SuppressWarnings("unchecked")
-		Enumeration<HierarchicalTreeNode<Series>> en = root.children();
+		Enumeration en = root.children();
 		while (en.hasMoreElements()) {
-			HierarchicalTreeNode<Series> node = en.nextElement();
+			@SuppressWarnings("unchecked")
+			HierarchicalTreeNode<Series> node = (HierarchicalTreeNode<Series>)en.nextElement();
 			if (node.getUserObject().equals(series)) {
 				if (selected instanceof Series) {
 					return new TreePath(new Object[] { root, node });
@@ -268,10 +268,10 @@ public class RaceTree extends AbstractTree<DatabaseTreeNode, RaceEntity> impleme
 	}
 
 	private TreePath findPathFromSeriesTo(HierarchicalTreeNode<Series> series, RaceEntity selected) {
-		@SuppressWarnings("unchecked")
-		Enumeration<HierarchicalTreeNode<Event>> en = series.children();
+		Enumeration en = series.children();
 		while (en.hasMoreElements()) {
-			HierarchicalTreeNode<Event> node = en.nextElement();
+			@SuppressWarnings("unchecked")
+			HierarchicalTreeNode<Event> node = (HierarchicalTreeNode<Event>)en.nextElement();
 			if (selected instanceof Event) {
 				if (node.getUserObject().equals(selected)) {
 					return new TreePath(node);
@@ -289,10 +289,10 @@ public class RaceTree extends AbstractTree<DatabaseTreeNode, RaceEntity> impleme
 	}
 
 	private TreeNode findNodeFromEventTo(HierarchicalTreeNode<Event> event, RaceEntity selected) {
-		@SuppressWarnings("unchecked")
-		Enumeration<HierarchicalTreeNode<Race>> en = event.children();
+		Enumeration en = event.children();
 		while (en.hasMoreElements()) {
-			HierarchicalTreeNode<Race> node = en.nextElement();
+			@SuppressWarnings("unchecked")
+			HierarchicalTreeNode<Race> node = (HierarchicalTreeNode<Race>)en.nextElement();
 			if (node.getUserObject().equals(selected)) {
 				return node;
 			}

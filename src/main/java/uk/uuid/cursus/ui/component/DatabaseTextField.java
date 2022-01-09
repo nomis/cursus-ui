@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011, 2014  Simon Arlott
+	Copyright 2011, 2014, 2022  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as published by

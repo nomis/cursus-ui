@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2014  Simon Arlott
+	Copyright 2011-2014, 2022  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as published by
@@ -56,7 +56,7 @@ public abstract class EnumDatabaseColumn<T extends Entity, V extends Enum<?>> ex
 		this.nullable = nullable;
 		values = new MutableListComboBoxModel<Object>(generateValues());
 		cellRenderer = new StringDatabaseTableCellRenderer<T, Object>(this);
-		cellEditor = new DatabaseTableCellEditor<T, Object>(this, new JComboBox(values));
+		cellEditor = new DatabaseTableCellEditor<T, Object>(this, new JComboBox<Object>(values));
 	}
 
 	// Uses DatabaseTableModel's EventBus

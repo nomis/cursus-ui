@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011-2012, 2014  Simon Arlott
+	Copyright 2011-2012, 2014, 2022  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as published by
@@ -45,7 +45,7 @@ public class RaceAttendeesDatabaseColumn extends DatabaseColumn<RaceAttendeePena
 	public RaceAttendeesDatabaseColumn(String name, DatabaseWindow win, EntityDAO<RaceAttendeePenalty> dao) {
 		super(name, win, dao);
 		cellRenderer = new StringDatabaseTableCellRenderer<RaceAttendeePenalty, PilotWrapper>(this);
-		cellEditor = new DatabaseTableCellEditor<RaceAttendeePenalty, PilotWrapper>(this, new JComboBox(pilots));
+		cellEditor = new DatabaseTableCellEditor<RaceAttendeePenalty, PilotWrapper>(this, new JComboBox<PilotWrapper>(pilots));
 	}
 
 	@Override

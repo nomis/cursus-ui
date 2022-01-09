@@ -1,6 +1,6 @@
 /*
 	cursus - Race series management program
-	Copyright 2011, 2014  Simon Arlott
+	Copyright 2011, 2014, 2022  Simon Arlott
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as published by
@@ -26,7 +26,7 @@ import javax.swing.ComboBoxModel;
 
 import com.google.common.base.Objects;
 
-public class MutableListComboBoxModel<T> extends AbstractListModel implements ComboBoxModel {
+public class MutableListComboBoxModel<T> extends AbstractListModel<T> implements ComboBoxModel<T> {
 	private final ArrayList<T> list = new ArrayList<T>();
 	private T selected;
 
@@ -43,7 +43,7 @@ public class MutableListComboBoxModel<T> extends AbstractListModel implements Co
 	}
 
 	@Override
-	public Object getElementAt(int index) {
+	public T getElementAt(int index) {
 		return list.get(index);
 	}
 
