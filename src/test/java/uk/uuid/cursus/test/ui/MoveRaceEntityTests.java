@@ -26,9 +26,9 @@ import javax.accessibility.Accessible;
 import org.junit.Assert;
 import org.junit.Test;
 
-import uk.uuid.lp0.cursus.ui.actions.MoveRaceDownAction;
-import uk.uuid.lp0.cursus.ui.actions.MoveRaceUpAction;
-import uk.uuid.lp0.cursus.ui.component.DatabaseWindow;
+import uk.uuid.cursus.ui.actions.MoveRaceDownAction;
+import uk.uuid.cursus.ui.actions.MoveRaceUpAction;
+import uk.uuid.cursus.ui.component.DatabaseWindow;
 
 import com.google.common.collect.Ordering;
 

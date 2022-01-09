@@ -43,13 +43,13 @@ import org.junit.Assert;
 import org.junit.Before;
 
 import uk.uuid.cursus.test.db.AbstractDataTest;
-import uk.uuid.lp0.cursus.app.Main;
-import uk.uuid.lp0.cursus.i18n.Messages;
-import uk.uuid.lp0.cursus.ui.MainWindow;
-import uk.uuid.lp0.cursus.ui.component.DatabaseWindow;
-import uk.uuid.lp0.cursus.ui.menu.MainMenu;
-import uk.uuid.lp0.cursus.ui.util.AccessibleComponents;
-import uk.uuid.lp0.cursus.util.Background;
+import uk.uuid.cursus.app.Main;
+import uk.uuid.cursus.i18n.Messages;
+import uk.uuid.cursus.ui.MainWindow;
+import uk.uuid.cursus.ui.component.DatabaseWindow;
+import uk.uuid.cursus.ui.menu.MainMenu;
+import uk.uuid.cursus.ui.util.AccessibleComponents;
+import uk.uuid.cursus.util.Background;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;

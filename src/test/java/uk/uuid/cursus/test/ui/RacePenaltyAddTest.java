@@ -30,7 +30,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import uk.uuid.lp0.cursus.i18n.Messages;
+import uk.uuid.cursus.i18n.Messages;
 import uk.uuid.cursus.db.Database;
 import uk.uuid.cursus.db.InvalidDatabaseException;
 

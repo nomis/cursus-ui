@@ -20,8 +20,8 @@ package uk.me.sa.cursus.app;
 import java.sql.SQLException;
 
 import uk.uuid.cursus.test.ui.DummyData1;
-import uk.uuid.lp0.cursus.app.Main;
-import uk.uuid.lp0.cursus.util.Background;
+import uk.uuid.cursus.app.Main;
+import uk.uuid.cursus.util.Background;
 import uk.uuid.cursus.db.Database;
 import uk.uuid.cursus.db.InvalidDatabaseException;
 

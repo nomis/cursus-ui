@@ -27,7 +27,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import uk.uuid.lp0.cursus.ui.util.AccessibleJTreeFix;
+import uk.uuid.cursus.ui.util.AccessibleJTreeFix;
 
 /**
  * JTree AccessibleSelection ignores isRootVisible()
