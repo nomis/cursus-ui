@@ -54,9 +54,9 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo.webstart</groupId>
+				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
-				<version>1.0-beta-2</version>
+				<version>1.0-beta-7</version>
 				<configuration>
 					<jnlp>
 						<mainClass>uk.uuid.cursus.app.Main</mainClass>
@@ -68,7 +68,6 @@
 						<keypass>${sign.keypass}</keypass>
 					</sign>
 					<resourcesDirectory>${project.basedir}/src/main/jnlp/resources</resourcesDirectory>
-					<pack200>true</pack200>
 					<gzip>true</gzip>
 				</configuration>
 				<executions>
