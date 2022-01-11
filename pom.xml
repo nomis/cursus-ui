@@ -57,6 +57,13 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
 				<version>1.0-beta-7</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>keytool-api-1.7</artifactId>
+						<version>1.5</version>
+					</dependency>
+				</dependencies>
 				<configuration>
 					<jnlp>
 						<mainClass>uk.uuid.cursus.app.Main</mainClass>
